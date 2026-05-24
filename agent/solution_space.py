@@ -1,15 +1,15 @@
 import json
 import os
 import re
-from .llm_client import LLMClient
-from .ltm_client import LTMClient
-from .prompt_templates import (
+from llm_client import LLMClient
+from ltm_client import LTMClient
+from prompt_templates import (
     SOLUTION_SPACE_SYSTEM_PROMPT, 
     SOLUTION_SPACE_USER_PROMPT,
     SOLUTION_SPACE_FILTER_SYSTEM_PROMPT,
     SOLUTION_SPACE_FILTER_USER_PROMPT
 )
-from .logger_utils import AgentLogger
+from logger_utils import AgentLogger
 
 class SolutionSpaceAnalyzer:
     def __init__(self, llm_client: LLMClient, logger: AgentLogger):

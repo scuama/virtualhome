@@ -177,3 +177,5 @@ virtualhome/simulation/unity_simulator/*exec*
 
 # Generated Artifacts
 virtualhome_advanced_tasks_guide.md
+agent/logs/
+agent/EmbodiedLTM/MemoryKB/

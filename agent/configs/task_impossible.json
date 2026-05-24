@@ -1,0 +1,19 @@
+{
+  "task_name": "Impossible_HeatMilk",
+  "task_type": "impossible",
+  "scene_id": 1,
+  "instruction": "I want to drink hot milk.",
+  "init_graph_modifiers": [
+    {
+      "target": "microwave",
+      "action": "add_property",
+      "property": "BROKEN"
+    }
+  ],
+  "triggers": [],
+  "goal": {
+    "target_node_contains": "milk",
+    "required_state": "hot"
+  },
+  "max_steps": 50
+}

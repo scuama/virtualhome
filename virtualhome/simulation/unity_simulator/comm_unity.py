@@ -34,7 +34,7 @@ class UnityCommunication(object):
     """
 
     def __init__(self, url='127.0.0.1', port='8080', file_name=None, x_display=None, no_graphics=False, logging=True,
-                 timeout_wait=30, docker_enabled=False):
+                 timeout_wait=300, docker_enabled=False):
         self._address = 'http://' + url + ':' + port
         self.port = port
         self.graphics = no_graphics
@@ -272,10 +272,11 @@ class UnityCommunication(object):
         :param int environment: integer between 0 and 49, corresponding to the apartment we want to load
         :return: succes (bool)
         """
+        env_param = [0] if environment is None else [environment]
         response = self.post_command({'id': str(time.time()), 'action': 'clear',
-                                  'intParams': [] if environment is None else [environment]})
+                                  'intParams': env_param})
         response = self.post_command({'id': str(time.time()), 'action': 'environment',
-                                    'intParams': [] if environment is None else [environment]})
+                                    'intParams': env_param})
         return response['success']
 
     def fast_reset(self, environment=None):

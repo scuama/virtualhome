@@ -1,10 +1,10 @@
 import json
-from .llm_client import LLMClient
-from .logger_utils import AgentLogger
-from .goal_reasoner import GoalReasoner
-from .solution_space import SolutionSpaceAnalyzer
-from .task_validator import TaskValidator
-from .memory_manager import MemoryManager
+from llm_client import LLMClient
+from logger_utils import AgentLogger
+from goal_reasoner import GoalReasoner
+from solution_space import SolutionSpaceAnalyzer
+from task_validator import TaskValidator
+from memory_manager import MemoryManager
 
 class IntentReasoningAgent:
     def __init__(self, episode_id=None, model_name="gpt-4o-mini", scene_id=None, inject_priors=False, log_dir=None):
@@ -53,8 +53,7 @@ class IntentReasoningAgent:
         self.logger.info(f"\n========== STARTING STEP {step_idx} ==========")
         
         # 0. 错误恢复与容错机制 (Error Recovery Mechanism)
-        # 环境反馈格式: 失败 → "Last action is invalid..."  成功 → "Last action executed successfully..."
-        action_failed = "last action is invalid" in observation_text.lower()
+        action_failed = "last action is invalid" in observation_text.lower() or "failed" in observation_text.lower()
         
         if action_failed:
             if len(self.action_history) > 0:
@@ -80,7 +79,7 @@ class IntentReasoningAgent:
                 last_act = self.action_history[-1].lower()
                 state_msg = ""
                 
-                if last_act.startswith("place ") or last_act.startswith("put ") or last_act.startswith("drop "):
+                if "[putback]" in last_act or "[putin]" in last_act or last_act.startswith("place ") or last_act.startswith("put ") or last_act.startswith("drop "):
                     obj = self.held_object if self.held_object else "object"
                     state_msg = f"Object('{obj}') is located at Location('{self.current_location}')."
                     
@@ -88,6 +87,15 @@ class IntentReasoningAgent:
                     self.memory_manager.ltm.update_state(state_msg)
                     self.logger.info(f"[CoreAgent] Sent EPISODIC UPDATE to LTM: {state_msg}")
         
+        # 提取目标名称的辅助函数
+        def extract_target(act_str):
+            import re
+            act_str = act_str.lower()
+            match = re.search(r'\[.*?\]\s*<(.*?)>', act_str)
+            if match:
+                return match.group(1).strip()
+            return act_str.replace("navigate to the ", "").replace("navigate to ", "").replace("nav_", "").replace("pick up the ", "").replace("pick up ", "").replace("pick the ", "").replace("pick ", "").replace("open the ", "").replace("open ", "").replace("close the ", "").replace("close ", "").strip()
+
         # 1. 目标提取 (仅在第一步执行)
         if step_idx == 0 and not self.global_intent:
             import os
@@ -138,49 +146,43 @@ class IntentReasoningAgent:
         navigated_locs = []
         for action in self.action_history:
             action_lower = action.lower()
-            if action_lower.startswith("nav_") or "navigate to" in action_lower:
-                loc = action_lower.replace("navigate to the ", "").replace("navigate to ", "").replace("nav_", "").strip()
+            if "[walk]" in action_lower or action_lower.startswith("nav_") or "navigate to" in action_lower:
+                loc = extract_target(action_lower)
                 if loc not in navigated_locs:
                     navigated_locs.append(loc)
 
-        # 2. 判定每个去过的地点是否已经探索完 (open 了，或者根本不是容器)
-        # 获取所有可 open 的地点前缀集合
+        # 2. 判定每个去过的地点是否已经探索完
         openable_locs = set()
         for cap in skill_set:
-            if cap.lower().startswith("open "):
-                openable_locs.add(cap.lower().replace("open the ", "").replace("open ", "").strip())
+            if "[open]" in cap.lower() or cap.lower().startswith("open "):
+                openable_locs.add(extract_target(cap))
 
         # 3. 实时判断状态
         for loc in navigated_locs:
             if loc in openable_locs:
-                # 是个容器，检查历史中是否有过 open
                 has_opened = False
                 for action in self.action_history:
-                    if action.lower().startswith("open ") and (loc in action.lower() or action.lower().replace("open the ", "").replace("open ", "").strip() in loc):
+                    if ("[open]" in action.lower() or action.lower().startswith("open ")) and (loc in action.lower() or extract_target(action) in loc):
                         has_opened = True
                         break
                 if has_opened:
                     visited_locations_state[loc] = "visited_open"
             else:
-                # 只是普通表面，到达即完全探索完
                 visited_locations_state[loc] = "visited_open"
 
-        # 解析 held_object 并推断容器开关状态 (receptacle_states)
+        # 解析 held_object 并推断容器开关状态
         self.held_object = None
-        receptacle_states = {}  # {"refrigerator": "open", "cabinet 1": "closed", ...}
+        receptacle_states = {}
         for action in self.action_history:
             action_lower = action.lower()
-            if action_lower.startswith("pick "):
-                obj = action_lower.replace("pick up the ", "").replace("pick up ", "").replace("pick the ", "").replace("pick ", "").strip()
-                self.held_object = obj
-            elif "place " in action_lower or "put " in action_lower or "drop " in action_lower:
+            if "[grab]" in action_lower or action_lower.startswith("pick "):
+                self.held_object = extract_target(action_lower)
+            elif "[putback]" in action_lower or "[putin]" in action_lower or "place " in action_lower or "put " in action_lower or "drop " in action_lower:
                 self.held_object = None
-            elif action_lower.startswith("open "):
-                loc = action_lower.replace("open the ", "").replace("open ", "").strip()
-                receptacle_states[loc] = "open"
-            elif action_lower.startswith("close "):
-                loc = action_lower.replace("close the ", "").replace("close ", "").strip()
-                receptacle_states[loc] = "closed"
+            elif "[open]" in action_lower or action_lower.startswith("open "):
+                receptacle_states[extract_target(action_lower)] = "open"
+            elif "[close]" in action_lower or action_lower.startswith("close "):
+                receptacle_states[extract_target(action_lower)] = "closed"
                 
         # 在 self.visited_locations 被单步临时字典覆盖之前，先创建一个真正的历史已探索地点快照，
         # 以便在 Step 结尾施加【记忆单调递增约束】合并时使用，防止记忆随着 LTM 注意力稀释而减少！
@@ -311,8 +313,7 @@ class IntentReasoningAgent:
         )
         
         # Check if navigate action to update current_location
-        if "navigate to" in action_str.lower():
-            target_loc = action_str.lower().replace("navigate to the", "").replace("navigate to", "").strip()
-            self.current_location = target_loc
+        if "[walk]" in action_str.lower() or "navigate to" in action_str.lower() or action_str.lower().startswith("nav_"):
+            self.current_location = extract_target(action_str)
             
         return validation_result

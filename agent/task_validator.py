@@ -1,7 +1,7 @@
 import json
-from .llm_client import LLMClient
-from .logger_utils import AgentLogger
-from .solution_ranker import SolutionRanker
+from llm_client import LLMClient
+from logger_utils import AgentLogger
+from solution_ranker import SolutionRanker
 
 class TaskValidator:
     def __init__(self, llm_client: LLMClient, logger: AgentLogger):

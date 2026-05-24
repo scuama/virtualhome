@@ -1,6 +1,6 @@
-from .llm_client import LLMClient
-from .logger_utils import AgentLogger
-from .ltm_client import LTMClient
+from llm_client import LLMClient
+from logger_utils import AgentLogger
+from ltm_client import LTMClient
 
 class MemoryManager:
     def __init__(self, llm_client: LLMClient, logger: AgentLogger, **kwargs):

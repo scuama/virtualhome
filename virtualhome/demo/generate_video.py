@@ -11,10 +11,10 @@ print('Starting Unity...')
 comm = UnityCommunication()
 
 print('Starting scene...')
-comm.reset()
+comm.reset(0)
 comm.add_character('Chars/Female1')
 
 print('Generating video...')
-comm.render_script(script, recording=True, find_solution=True)
+comm.render_script(script, recording=True, find_solution=True, file_name_prefix='new_demo_output', processing_time_limit=300)
 
 print('Generated, find video in simulation/unity_simulator/output/')

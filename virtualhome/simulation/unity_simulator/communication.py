@@ -108,6 +108,9 @@ class UnityLauncher(object):
                 self.check_x_display(env['DISPLAY'])
             elif 'DISPLAY' not in env:
                 env['DISPLAY'] = ''
+            
+            env['HOME'] = '/home/decom'
+            env['XDG_RUNTIME_DIR'] = '/tmp/runtime-decom'
 
 
             self.check_port(self.port_number)
@@ -165,11 +168,10 @@ class UnityLauncher(object):
                 subprocess_args = [launch_string]
                 if self.batchmode:
                     subprocess_args += ["-batchmode"]
-                if no_graphics:
-                    subprocess_args += ["-nographics"]
+                subprocess_args += ["-force-opengl"]
 
                 file_path = os.getcwd()
-                subprocess_args += ["-http-port=" + str(self.port_number), "-logFile {}/Player_{}.log".format(file_path, str(self.port_number))]
+                subprocess_args += ["-http-port=" + str(self.port_number), "-logFile", "{}/Player_{}.log".format(file_path, str(self.port_number))]
                 subprocess_args += args
 
                 if logging:
