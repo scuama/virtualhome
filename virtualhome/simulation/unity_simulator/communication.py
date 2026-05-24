@@ -176,6 +176,9 @@ class UnityLauncher(object):
                     f = open('{}/port_{}.txt'.format(file_path, self.port_number), 'w+')
                 else:
                     f = subprocess.DEVNULL
+                
+
+
                 try:
                     self.proc = subprocess.Popen(
                         subprocess_args,
