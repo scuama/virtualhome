@@ -1,0 +1,16 @@
+{
+    "task_name": "maintenance_stove_preheat",
+    "instruction": "If the stove is off, go and turn it on for preheat.",
+    "max_steps": 50,
+    "use_state_machine": true,
+    "init_graph_modifiers": [],
+    "npc_scripts": [
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WALK] <stove> (1)",
+        "[SWITCHOFF] <stove> (1)"
+    ]
+}

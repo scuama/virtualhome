@@ -180,3 +180,8 @@ virtualhome_advanced_tasks_guide.md
 agent/logs/
 agent/EmbodiedLTM/MemoryKB/
 agent/EmbodiedLTM/*.log*
+
+# Temporary files and Unity ports
+agent/port_*.txt
+agent/test_npc_images/
+agent/Player_*.log

@@ -1,0 +1,16 @@
+{
+    "task_name": "maintenance_microwave_open",
+    "instruction": "It is good for maintenance if the microwave is always open.",
+    "max_steps": 50,
+    "use_state_machine": true,
+    "init_graph_modifiers": [],
+    "npc_scripts": [
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WALK] <microwave> (1)",
+        "[CLOSE] <microwave> (1)"
+    ]
+}

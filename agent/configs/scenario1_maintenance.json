@@ -1,0 +1,13 @@
+{
+  "task_name": "scenario1_maintenance",
+  "instruction": "If someone reads a book and doesn't tidy it up, put it back.",
+  "max_steps": 50,
+  "use_state_machine": true,
+  "init_graph_modifiers": [],
+  "npc_scripts": [
+    "[WALK] <book> (1)",
+    "[GRAB] <book> (1)",
+    "[WALK] <sofa> (1)",
+    "[DROP] <book> (1)"
+  ]
+}

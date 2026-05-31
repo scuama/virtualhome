@@ -1,0 +1,16 @@
+{
+    "task_name": "maintenance_radio_turn_on",
+    "instruction": "If the radio is off, turn it on",
+    "max_steps": 50,
+    "use_state_machine": true,
+    "init_graph_modifiers": [],
+    "npc_scripts": [
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WALK] <radio> (1)",
+        "[SWITCHOFF] <radio> (1)"
+    ]
+}

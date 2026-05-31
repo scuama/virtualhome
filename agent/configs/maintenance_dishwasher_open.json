@@ -1,0 +1,16 @@
+{
+    "task_name": "maintenance_dishwasher_open",
+    "instruction": "The dishwasher must always be open to dry the dishwasher.",
+    "max_steps": 50,
+    "use_state_machine": true,
+    "init_graph_modifiers": [],
+    "npc_scripts": [
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WALK] <dishwasher> (1)",
+        "[CLOSE] <dishwasher> (1)"
+    ]
+}

@@ -1,86 +1,40 @@
-# VirtualHome 任务配置指南 (Task Configuration Guide)
+# Agent 测试场景配置说明
 
-为了让其他研究人员或开发者能够快速上手构造 Agent 的评测任务，我们将所有的任务环境初始化、动态干扰规则以及目标判定都抽象为了 JSON 配置文件。
+当前目录下存放了一系列场景配置文件，用于测试 Agent 在 Embodied AI 环境下的决策与反应能力。
+我们重点支持并测试了以下三种具有代表性的场景：
 
-本指南将教你如何编写一个规范的 `task_*.json`，并深入解析我们的配置体系所支持的三大核心任务类型。
+## 1. 持续指令跟随 (Continuous Instruction Following)
+**示例配置**：`scenario1_maintenance.json` 以及所有的 `maintenance_xxx.json`
+**场景说明**：
+Agent 接受一个长期的后台维护类指令（例如：“如果有人看书没收，就把它放好”）。在场景中，会有动态的 NPC 执行动作（例如走过去看书并乱丢在沙发上），或者通过环境注入制造混乱现场。Agent 必须在多步交互中持续观察环境，识别出违反维护规则的现场并去修复它。
 
----
+## 2. 场景中不可完成的任务，需要寻找替代方案 (Unachievable Task & Alternative Finding)
+**示例配置**：`scenario2_missing_item.json`
+**场景说明**：
+指令要求 Agent 去执行一项在当前物理空间下根本不可能的任务，例如“去卧室拿一个钻石戒指（diamond ring）”。在这个场景中，目标物品在全图都不存在。这主要测试 Agent 的探索容错机制、视觉感知模块的防幻觉能力。Agent 需要在遍历相关区域无果后，通过 `Action 9999` (Proactive Communication) 主动向用户汇报异常，或寻找相近的替代品。
 
-## 一、 配置文件基本结构
+## 3. 人类（NPC）活动导致的意外阻断 (NPC Disruption)
+**示例配置**：`scenario3_npc_disruption.json`
+**场景说明**：
+原本是可以正常完成的任务，但因为环境中其他实体的动态行为导致了意外失败。在 `scenario3` 中，用户的指令是“把馅饼（pie）放进微波炉加热”。原本馅饼在桌子上，大模型规划了一条正常的路径去拿馅饼；但在并发执行时，环境中的 NPC 会抢在大模型之前，跑过去把馅饼拿走并且扔进垃圾桶（trashcan）。这测试了 Agent 能够基于动作失败反馈或视野重判，重新定位被人类转移走的目标，展现出极强的动态环境适应性和重新规划能力。
 
-每个 JSON 配置文件都必须包含以下基础结构：
+## 4. 环境运行最佳实践与踩坑记录 (Best Practices & Troubleshooting)
 
-```json
-{
-  "task_name": "HeatMilk_BrokenMicrowave",  // 任务的唯一名称
-  "task_type": "impossible",                // 任务类型（决定了评测的侧重点）
-  "scene_id": 1,                            // VirtualHome 初始场景编号 (1~7)
-  "instruction": "I want to drink hot milk.",// 给 Agent 接收的自然语言指令
-  "max_steps": 50,                          // 允许的最大步数（防死循环）
-  
-  // (可选) 初始环境修饰器：在第 0 步强行修改物理引擎的物体属性
-  "init_graph_modifiers": [
-    {
-      "target": "microwave",
-      "action": "remove_property",          // 支持 add_property 或 remove_property
-      "property": "CAN_OPEN"
-    }
-  ],
-  
-  // (可选) 动态触发器：在特定条件满足时触发环境或 NPC 干扰
-  "triggers": [
-    {
-      "condition": "lambda time_step: time_step == 15",
-      "event_type": "graph_injection",
-      "target_node": "tv",
-      "action": "inject_property('ON')"
-    }
-  ],
-  
-  // 目标判定条件
-  "goal": {
-    "target_node_contains": "milk",
-    "required_state": "hot"
-  }
-}
-```
+由于 VirtualHome 底层依赖于吃资源的 3D 物理引擎（Unity `linux_exec`），我们在引入多 Agent (NPC) 时遇到了诸多环境卡死与越界报错，总结出以下工业界标准实践与填坑记录：
 
----
+### 最佳实践：Client-Server 分离模式
+**绝对不要**在 Python 测试脚本中通过指定 `file_name` 让代码去后台反复拉起新的 Unity 进程。在无外设（headless）的云服务器中反复拉起引擎极易导致僵尸进程堆积并耗尽 8080 端口，甚至报出 `Desktop is 0 x 0 @ 0 Hz` 永久卡死。
+*   **Server 端（引擎守护进程）**：在本地图形界面终端（或搭配 XServer 的 tmux）中，**预先手动运行一次**引擎作为常驻守护进程：
+    ```bash
+    /mnt/disk1/decom/virtualhome/virtualhome/simulation/unity_simulator/linux_exec.v2.3.0.x86_64 -batchmode -http-port=8080
+    ```
+*   **Client 端（Python Agent）**：在跑测试代码（如 `vh_runner.py`）时，永远将传入 `UnityEnvironment` 的 `executable_args={'file_name': None}`。这样 Python 会像调用 API 一样直接轻量化连接到 8080 端口，再也不会引发卡死或资源冲突。
 
-## 二、 推荐支持的三种核心类型 (`task_type`)
-
-为了全面评测 Agent 的**意图理解**、**常识推理**和**临场应变**能力，我们的配置文件在设计上支持且仅划分为以下三种核心类型：
-
-### 1. 静态基础任务 (`static`)
-这是最传统的具身智能评测任务类型。
-* **特点**：环境是友好的、静态的，所需物品全部都在预期的位置。物理引擎不会有任何阻碍。
-* **侧重点**：测试 Agent 基础的“指令拆解”和“寻路抓取”能力。
-* **配置写法**：`init_graph_modifiers` 和 `triggers` 必须为空。
-* **示例**：“去厨房拿个苹果”。（苹果就乖乖放在桌上）
-
-### 2. 先天不可能 / 平替推理任务 (`impossible`)
-这是为了测试大模型常识与容错能力的高级任务。
-* **特点**：在 Agent 出生前（第 0 步），上帝（测试者）就已经把必需的物品拿走、或者把核心工具弄坏了。
-* **侧重点**：测试 Agent 遇到物理死胡同（如 `[Open] <microwave>` 失败）时，能否不崩溃，而是主动触发 Fallback 机制去寻找**平替方案**（例如用平底锅和炉灶加热）。
-* **配置写法**：严重依赖 `init_graph_modifiers`。在初始化时对关键物体执行 `remove_property` 或直接删除节点。
-* **示例**：“热一杯牛奶”，但微波炉一开始就被设定为门坏了（被移除了 `CAN_OPEN` 属性）。
-
-### 3. 动态干扰 / 重新规划任务 (`dynamic`)
-这是最贴近真实物理世界、最难的任务类型。
-* **特点**：任务刚开始时一切正常（环境可行），但随着时间推移或 Agent 的移动，突发事件会破坏原定计划。
-* **侧重点**：测试 Agent 在执行计划一半时，面对突发状况的**动态重规划（Dynamic Replanning）**能力。
-* **配置写法**：严重依赖 `triggers`。使用 `lambda` 表达式绑定时间步或空间距离触发条件，触发时强制修改 Graph（比如 NPC 截胡）。
-* **示例**：“去厨房拿桌上的苹果”。当 Agent 走到厨房门口时（触发空间 `distance` 阈值），NPC 突然出现把桌上的苹果吃掉了（节点消失）。Agent 必须立刻重新扫描环境，去打开冰箱找其他的苹果。
-
----
-
-## 三、 编写新任务的避坑指南
-
-1. **环境探针（Target 名称核对）**
-   VirtualHome 对物体名称是严格的。在写 `target: "microwave"` 之前，最好先确认对应 `scene_id` 的场景里到底有没有微波炉，以及它的确切 `class_name` 是什么（有可能是 `microwaveoven`）。
-
-2. **动作连贯性设定**
-   当使用 `init_graph_modifiers` 时，剥夺一个物体的 `CAN_OPEN` 会导致引擎不再生成 `[Open]` 技能。您需要在验证脚本（如 `vh_runner.py`）中确保这种底层改动能真实地反馈给 Agent，而不是被外壳代码强行标记为 `action_success = True`。
-
-3. **目标函数不要写死位置**
-   `goal` 的设定最好是基于**最终状态**（如 `required_state: "hot"`），而不是基于固定路径（比如要求 Agent 必须走特定路线），因为高智商 Agent 可能会利用常识找到你意想不到的捷径（例如用咖啡机加热水来隔水温牛奶），只要最终状态符合，任务就算成功。
+### 核心踩坑记录 (Troubleshooting)
+1.  **多智能体初始化崩溃 (`IndexError: list index out of range`)**：
+    *   **现象**：最初接入 `num_agents=2` 跑 NPC 时，一初始化就崩溃，误以为是引擎不支持两小人。
+    *   **真凶**：`vh_runner.py` 初始化时硬编码传了单元素的观测列表 `observation_types=['partial']`。导致在取 NPC（agent 1）的观测类型时触发列表越界。
+    *   **修复**：直接移除了 `observation_types` 参数，让源码根据智能体数量自动生成对应长度的列表即可。
+2.  **NPC 并发动作报错**：
+    *   **现象**：底层的 `utils.py` 解析器如果拿到不带括号的动词会崩溃。
+    *   **修复**：对于空闲占位符 `[WAIT]`，在送入 `env.step()` 前已统一过滤并映射为 `None`，完美支持双边智能体的空闲状态。

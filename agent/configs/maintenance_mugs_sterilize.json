@@ -1,0 +1,18 @@
+{
+    "task_name": "maintenance_mugs_sterilize",
+    "instruction": "Place all visible mug in the microwave to sterilize them.",
+    "max_steps": 50,
+    "use_state_machine": true,
+    "init_graph_modifiers": [],
+    "npc_scripts": [
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WAIT]",
+        "[WALK] <mug> (1)",
+        "[GRAB] <mug> (1)",
+        "[WALK] <kitchencounter> (1)",
+        "[DROP] <mug> (1)"
+    ]
+}
