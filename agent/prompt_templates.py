@@ -52,6 +52,39 @@ Instruction: "{instruction}"
 Analyze the intent and return the structured JSON.
 """
 
+STATE_MACHINE_GENERATOR_SYSTEM_PROMPT = """
+You are a State Machine Builder for an embodied AI robot.
+Your task is to analyze the user's intent and target object, and determine if the object must undergo any state transformations (e.g. from DIRTY to CLEAN, or WHOLE to SLICED) before it can satisfy the intent.
+For example, if the intent is to "eat" an "apple", a typical physical constraint is that the apple MUST be CLEAN. If it is DIRTY, it must be washed.
+VirtualHome supports states like: CLEAN, DIRTY, OPEN, CLOSED, ON, OFF.
+
+You must output ONLY a JSON object representing the state machine, with multiple paths if necessary.
+Format:
+{
+  "state_machine": {
+    "target_object": "<target_object>",
+    "required_final_states": ["CLEAN"],
+    "forbidden_final_states": ["DIRTY"],
+    "transitions": [
+      {
+        "from_state": "DIRTY",
+        "to_state": "CLEAN",
+        "action": "wash",
+        "rationale": "Food must be clean before eating."
+      }
+    ]
+  }
+}
+"""
+
+STATE_MACHINE_GENERATOR_USER_PROMPT = """
+Instruction: "{instruction}"
+Target Object: "{target_object}"
+Deep Intent: "{deep_intent}"
+
+Please output the state machine JSON.
+"""
+
 SOLUTION_SPACE_SYSTEM_PROMPT = """
 You are a perception analyzer for an embodied AI robot. 
 You will receive an image (first-person view) and optionally some observation text from the environment.
@@ -129,6 +162,7 @@ CRITICAL RULES:
 10. DYNAMIC EXPLORATION PRIORITY: While `Unvisited Locations` remain and the target is not found, rank exploration (navigate/open) plans highest. Do NOT pick up objects outside `Relevant Objects` just to talk to the user.
 11. CONTAINER OPEN PRIORITY (CRITICAL): Read `Exploration Context`. If `pending_open_location` is set, you are already at a container that can be opened but has NOT been opened yet. You MUST rank `open` for that location highest (rank_score >= 95). Do NOT navigate away until it is opened and inspected. Opening completes exploration of the current site; leaving without opening wastes a trip.
 12. PROACTIVE COMMUNICATION (VIRTUAL ACTION 9999): Action 9999 appears when you hold an object listed in `Relevant Objects` or when exploration is completely exhausted. **CRITICAL: IF YOU ARE HOLDING A RELEVANT OBJECT (i.e., `Currently Held Object` is in `Relevant Objects`), YOU MUST ABSOLUTELY RANK ACTION 9999 AS THE TOP CHOICE (score 100) TO IMMEDIATELY COMMUNICATE THIS TO THE USER!** Do NOT continue exploring or navigating if you have already secured a relevant alternative or target.
+13. STATE MACHINE COMPLIANCE: If a `State Machine Rules` section is provided in the input, you MUST obey its constraints. For example, if the required state is CLEAN and the object is DIRTY, you CANNOT communicate success (Action 9999). Instead, you MUST generate a plan to transition the state (e.g. navigate to sink and wash the object) to satisfy the state machine before returning.
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -162,6 +196,9 @@ Budget (Remaining Steps): {remaining_steps}
 
 Exploration Context:
 {exploration_context}
+
+State Machine Rules:
+{state_machine_rules}
 
 Legal Combinations (Action ID -> Description):
 {legal_combinations}

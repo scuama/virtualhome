@@ -193,6 +193,7 @@ class SolutionRanker:
             held_object=held_object or "None",
             relevant_objects=json.dumps(solution_space.get("relevant_objects", []), ensure_ascii=False),
             exploration_context=json.dumps(exploration_context, ensure_ascii=False),
+            state_machine_rules=json.dumps(global_intent.get("state_machine_rules", {}), ensure_ascii=False)
         )
         
         result_dict = self.llm.generate_json(

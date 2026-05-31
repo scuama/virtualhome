@@ -7,7 +7,7 @@ from task_validator import TaskValidator
 from memory_manager import MemoryManager
 
 class IntentReasoningAgent:
-    def __init__(self, episode_id=None, model_name="gpt-4o-mini", scene_id=None, inject_priors=False, log_dir=None):
+    def __init__(self, episode_id=None, model_name="gpt-4o-mini", scene_id=None, inject_priors=False, log_dir=None, use_state_machine=False):
         self.logger = AgentLogger(episode_id, log_dir=log_dir)
         self.llm = LLMClient(model_name=model_name)
 
@@ -21,6 +21,7 @@ class IntentReasoningAgent:
         self.current_location = "unknown starting location"
         self.held_object = None
         self.inject_priors = inject_priors
+        self.use_state_machine = use_state_machine
         self.failed_actions = {}
         self.visited_locations = []
 
@@ -118,7 +119,7 @@ class IntentReasoningAgent:
                 except Exception as e:
                     self.logger.error(f"Failed to load clarification context: {e}")
 
-            intent_dict = self.goal_reasoner.extract_intent(combined_instruction)
+            intent_dict = self.goal_reasoner.extract_intent(combined_instruction, use_state_machine=self.use_state_machine)
             
             if intent_dict.get("is_instruction_obviously_vague", False):
                 msg = intent_dict.get("clarification_question", "Could you please clarify your request? I need more specific details.")

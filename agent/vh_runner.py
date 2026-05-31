@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import re
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 from core_agent import IntentReasoningAgent
 
@@ -38,36 +38,69 @@ def build_skill_set(action_space_ids, partial_graph):
     return list(set(skills))
 
 def run_task(config_path):
-    with open(config_path, 'r') as f:
+    with open(config_path, 'r', encoding='utf-8') as f:
         config = json.load(f)
     
     instruction = config.get("instruction", "None")
+    npc_scripts = config.get("npc_scripts", [])
+    num_agents = 2 if npc_scripts else 1
     
     # file_name=None 表示直接连接已运行的 Unity 进程，不重新启动
-    env = UnityEnvironment(num_agents=1, observation_types=['partial'], executable_args={'file_name': None})
+    env = UnityEnvironment(num_agents=num_agents, executable_args={'file_name': None})
     obs = env.reset()
+    
+    use_state_machine = config.get("use_state_machine", False)
     
     modifiers = config.get("init_graph_modifiers", [])
     if modifiers:
         s, graph = env.comm.environment_graph()
         for mod in modifiers:
-            target = mod["target"]
-            prop = mod["property"]
+            target = mod["target_class"]
             action = mod.get("action", "add_property")
+            target_node = None
             for node in graph["nodes"]:
                 if node["class_name"] == target:
+                    target_node = node
                     if action == "add_property":
+                        prop = mod["property"]
                         if prop not in node["properties"]:
                             node["properties"].append(prop)
                     elif action == "remove_property":
+                        prop = mod["property"]
                         if prop in node["properties"]:
                             node["properties"].remove(prop)
+                    elif action == "change_state":
+                        if "add_states" in mod:
+                            for st in mod["add_states"]:
+                                if st not in node["states"]:
+                                    node["states"].append(st)
+                        if "remove_states" in mod:
+                            for st in mod["remove_states"]:
+                                if st in node["states"]:
+                                    node["states"].remove(st)
+                                    
+            if action == "teleport" and target_node:
+                dest_class = mod["destination_class"]
+                dest_node = None
+                for node in graph["nodes"]:
+                    if node["class_name"] == dest_class:
+                        dest_node = node
+                        break
+                if dest_node:
+                    # Remove old edges
+                    graph["edges"] = [e for e in graph["edges"] if not (e["from_id"] == target_node["id"] and e["relation_type"] in ["ON", "INSIDE"])]
+                    # Add new edge
+                    graph["edges"].append({
+                        "from_id": target_node["id"],
+                        "to_id": dest_node["id"],
+                        "relation_type": "ON"
+                    })
         obs = env.reset(environment_graph=graph)
 
     from datetime import datetime
     run_log_dir = os.path.join("logs", f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
     os.makedirs(run_log_dir, exist_ok=True)
-    agent = IntentReasoningAgent(episode_id="impossible_01", log_dir=run_log_dir)
+    agent = IntentReasoningAgent(episode_id="impossible_01", log_dir=run_log_dir, use_state_machine=use_state_machine)
     
     action_success = True
     
@@ -93,6 +126,18 @@ def run_task(config_path):
                 stitched_img = np.concatenate(images, axis=1)
                 im = Image.fromarray(stitched_img)
                 im.save(img_path)
+            
+            # 顺便也保存 NPC 的视角，供人类审查
+            if num_agents == 2:
+                npc_base_cam = env.num_static_cameras + 1 * env.num_camera_per_agent
+                npc_cam_ids = [npc_base_cam + 0, npc_base_cam + 1, npc_base_cam + 2]
+                s_npc, npc_images = env.comm.camera_image(npc_cam_ids, mode='normal', image_width=400, image_height=300)
+                if s_npc and len(npc_images) > 0:
+                    npc_stitched = np.concatenate(npc_images, axis=1)
+                    npc_im = Image.fromarray(npc_stitched)
+                    npc_img_path = os.path.join(run_log_dir, f"step_{step_idx}_npc.png")
+                    npc_im.save(npc_img_path)
+                    
         except Exception as e:
             print(f"Failed to save stitched image: {e}")
             
@@ -128,6 +173,27 @@ def run_task(config_path):
         
         # 真正执行物理动作
         action_dict = {0: selected_action}
+        if npc_scripts:
+            npc_action = npc_scripts[step_idx] if step_idx < len(npc_scripts) else "[WAIT]"
+        agent_action = selected_action
+        npc_action = npc_scripts[step_idx] if step_idx < len(npc_scripts) else "[WAIT]"
+        
+        try:
+            npc_partial_graph = env.get_observation(1, 'partial')
+            npc_obs_text = build_observation_text(npc_partial_graph, agent_id=1)
+            print(f"Step {step_idx} NPC Observation: {npc_obs_text}")
+        except Exception as e:
+            pass
+
+        env_agent_action = None if agent_action == "[WAIT]" else agent_action
+        env_npc_action = None if npc_action == "[WAIT]" else npc_action
+        
+        action_dict = {0: env_agent_action}
+        if num_agents == 2:
+            action_dict[1] = env_npc_action
+            
+        print(f"[{datetime.now().strftime('%H:%M:%S')}] Step {step_idx}: Agent 0 -> {agent_action}, Agent 1 (NPC) -> {npc_action}")
+        
         obs, reward, done, info = env.step(action_dict)
         
         # 解析真实物理引擎成功标志
