@@ -111,25 +111,27 @@ class SolutionSpaceAnalyzer:
 
     def _detect_composition(self, skill_set: list):
         """1. 组成判断层"""
-        self.composition_elements = {"actions": set(), "locations": set(), "objects": set(), "pickable_objects": set()}
+        self.composition_elements = {
+            "actions": set(["walk", "grab", "open", "close", "putback", "putin", "done", "switchon", "switchoff"]),
+            "objects": set(),
+            "locations": set(),
+            "pickable_objects": set()
+        }
         for cap in skill_set:
-            cap_clean = cap.replace("navigate to the ", "nav_").replace("navigate to ", "nav_")
-            if cap_clean.startswith("nav_"):
-                loc = cap_clean[4:].strip()
-                if "push point" in loc.lower():
-                    continue
-                self.composition_elements["actions"].add("navigate")
-                self.composition_elements["locations"].add(loc)
-            else:
-                for prefix in ["pick up the ", "open the ", "close the ", "interact with the ", "place at the "]:
-                    if cap.startswith(prefix):
-                        action = prefix.split()[0].strip()
-                        obj = cap[len(prefix):].strip()
-                        self.composition_elements["actions"].add(action)
-                        self.composition_elements["objects"].add(obj)
-                        if action == "pick":
-                            self.composition_elements["pickable_objects"].add(obj)
-                        break
+            if cap == "done":
+                self.composition_elements["actions"].add("done")
+                continue
+            match = re.search(r'\[(.*?)\]\s*<(.*?)>\s*\(.*?\)', cap)
+            if match:
+                action = match.group(1).lower().strip()
+                target = match.group(2).lower().strip()
+                self.composition_elements["actions"].add(action)
+                if action in ["walk", "open", "close", "switchon", "switchoff"]:
+                    self.composition_elements["locations"].add(target)
+                elif action in ["grab", "putback", "putin"]:
+                    self.composition_elements["objects"].add(target)
+                    if action == "grab":
+                        self.composition_elements["pickable_objects"].add(target)
 
     def _refine_and_filter(self, global_intent: dict, held_object: str = None):
         """2. 选项细化与筛选层（物体相关性完全由 LLM 判定）"""
@@ -185,42 +187,53 @@ class SolutionSpaceAnalyzer:
             if obj.lower() in relevant_lower:
                 allowed_explored_locs.add(loc.lower())
                 
+        import re
         for i, cap in enumerate(skill_set):
             cap_lower = cap.lower()
-            cap_clean = cap_lower.replace("navigate to the ", "nav_").replace("navigate to ", "nav_")
             
             # 过滤黑名单
-            if cap_lower in blacklist_lower or cap_clean in blacklist_lower:
+            if cap_lower in blacklist_lower:
                 continue
                 
+            if cap_lower == "done":
+                valid_combinations[i] = cap
+                continue
+                
+            match = re.search(r'\[(.*?)\]\s*<(.*?)>\s*\(.*?\)', cap_lower)
+            if not match:
+                continue
+                
+            action = match.group(1).strip()
+            target = match.group(2).strip()
+            
             is_valid = False
             
-            if cap_clean.startswith("nav_"):
-                loc = cap_clean[4:].strip()
-                if "push point" in loc:
-                    continue
+            if action == "walk":
+                loc = target
                 if loc != current_location.lower() and loc in [l.lower() for l in self.relevant_locations]:
                     is_valid = True
                     
                     # World Model 死循环拦截规则 1:
-                    # 如果目的地已经 explored，且里面没有我们要找的目标物品，强行屏蔽 nav_
+                    # 如果目的地已经 explored，且里面没有我们要找的目标物品，强行屏蔽 walk
                     if loc in explored_locs and loc not in allowed_explored_locs:
                         is_valid = False
             else:
                 # 交互动作的物理硬约束
-                if cap_lower.startswith("pick "):
-                    obj = cap_lower.replace("pick up the ", "").replace("pick up ", "").strip()
+                if action == "grab":
+                    obj = target
                     visible_lower = [v.lower() for v in getattr(self, "current_visible_objects", [])]
                     if obj in visible_lower and obj in relevant_lower and not held_object:
                         is_valid = True
-                elif cap_lower.startswith("place ") or cap_lower.startswith("put ") or cap_lower.startswith("drop "):
+                elif action in ["putback", "putin"]:
                     if held_object:
                         is_valid = True
-                elif cap_lower.startswith("open "):
-                    loc = cap_lower.replace("open the ", "").replace("open ", "").strip()
+                elif action == "open":
+                    loc = target
+                    obj_id = match.group(3).strip() if len(match.groups()) > 2 else ""
+                    instance = f"{loc}_{obj_id}" if obj_id else loc
                     if loc in current_location.lower() or current_location.lower() in loc:
                         # 物理状态硬拦截：如果已经是 open 状态，不允许再 open
-                        if self.receptacle_states.get(loc) == "open":
+                        if self.receptacle_states.get(instance) == "open":
                             is_valid = False
                         else:
                             is_valid = True
@@ -228,13 +241,15 @@ class SolutionSpaceAnalyzer:
                             # 如果它已经被 explored，且里面没有我们要的目标，没必要再 open
                             if loc in explored_locs and loc not in allowed_explored_locs:
                                 is_valid = False
-                elif cap_lower.startswith("close "):
-                    loc = cap_lower.replace("close the ", "").replace("close ", "").strip()
+                elif action == "close":
+                    loc = target
+                    obj_id = match.group(3).strip() if len(match.groups()) > 2 else ""
+                    instance = f"{loc}_{obj_id}" if obj_id else loc
                     if loc in current_location.lower() or current_location.lower() in loc:
                         # 物理状态硬拦截：如果已经是 closed 状态，不允许再 close
-                        if self.receptacle_states.get(loc) == "closed":
+                        if self.receptacle_states.get(instance) == "closed":
                             is_valid = False
-                        elif self.receptacle_states.get(loc) == "open":
+                        elif self.receptacle_states.get(instance) == "open":
                             # 只有在 open 状态下才允许 close
                             is_valid = True
                             # World Model 死循环拦截规则 3:
@@ -244,11 +259,7 @@ class SolutionSpaceAnalyzer:
                         else:
                             # 状态未知，允许 close（保守策略）
                             is_valid = True
-                elif cap_lower.startswith("interact "):
-                    loc = cap_lower.replace("interact with the ", "").replace("interact with ", "").strip()
-                    if loc in current_location.lower() or current_location.lower() in loc:
-                        is_valid = True
-                elif cap_lower == "done":
+                else:
                     is_valid = True
                     
             if is_valid:
@@ -275,9 +286,12 @@ class SolutionSpaceAnalyzer:
             current_location, visited_locations_state, held_object
         )
 
-    def update_capabilities(self, skill_set: list, inject_priors: bool = False):
+    def update_capabilities(self, skill_set: list, available_rooms: list = None, inject_priors: bool = False):
         """更新动作能力并提取原子要素，且仅在第一次调用时初始化环境先验至 LTM"""
         self.capabilities = [str(skill) for skill in skill_set]
+        if available_rooms:
+            self.capabilities.extend([str(room) for room in available_rooms])
+            
         self._detect_composition(self.capabilities)
         
         # 将静态的 Locations 和基础 Actions 作为先验知识写入 LTM（仅一次）
@@ -350,23 +364,21 @@ class SolutionSpaceAnalyzer:
             self.capabilities, current_location, visited_locations_state, held_object
         )
         
-        output_data = {
-            "composition": {
-                "actions": list(self.composition_elements["actions"]),
-                "objects": list(self.composition_elements["objects"]),
-                "locations": list(self.composition_elements["locations"])
-            },
-            "refined_items": self.refined_items,
-            "legal_combinations_count": len(self.legal_combinations),
-            "legal_combinations_sample": list(self.legal_combinations.values())[:5],
-            "currently_visible": self.current_visible_objects,
-            "memory_objects": self.memory_objects
-        }
-        
         self.logger.log_module_output(
             module_name="SolutionSpaceAnalyzer (Module B - 3 Layers)",
             step=step,
-            output_data=json.dumps(output_data, indent=2, ensure_ascii=False),
+            output_data=json.dumps({
+                "refined_items": {
+                    "visible": self.refined_items.get("visible", []),
+                    "in_memory_only": self.refined_items.get("in_memory_only", []),
+                    "relevant_objects": self.refined_items.get("relevant_objects", []),
+                    "relevant_locations": self.refined_items.get("relevant_locations", [])
+                },
+                "legal_combinations_count": len(self.legal_combinations),
+                "legal_combinations_sample": list(self.legal_combinations.values())[:5],
+                "currently_visible": self.current_visible_objects,
+                "memory_objects": self.memory_objects
+            }, indent=2, ensure_ascii=False),
             img_path=dual_img_path if dual_img_path else img_path
         )
 

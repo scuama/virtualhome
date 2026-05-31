@@ -3,46 +3,53 @@ from llm_client import LLMClient
 from prompt_templates import SOLUTION_RANKING_SYSTEM_PROMPT, SOLUTION_RANKING_USER_PROMPT
 from logger_utils import AgentLogger
 
+import re
+
 def is_action_aligned(plan_desc: str, action_str: str) -> bool:
     plan_desc_lower = plan_desc.lower()
     action_str_lower = action_str.lower()
     
-    # 1. 动词类别匹配
-    verb_categories = ["pick", "place", "put", "navigate", "nav", "open", "close"]
-    matched_verb = None
-    for verb in verb_categories:
-        if verb in action_str_lower:
-            matched_verb = verb
+    # 1. 提取目标实体 (e.g. from "[SwitchOn] <stove> (311)" -> "stove")
+    target_match = re.search(r'<(.*?)>', action_str_lower)
+    target_entity = target_match.group(1).strip() if target_match else ""
+    
+    # 2. 提取核心动词 (e.g. "switchon")
+    verb_match = re.search(r'\[(.*?)\]', action_str_lower)
+    core_verb = verb_match.group(1).strip() if verb_match else ""
+    
+    # 将连写的动词进行拆解容错
+    if core_verb == "switchon":
+        verb_hints = ["switch", "on", "turn"]
+    elif core_verb == "switchoff":
+        verb_hints = ["switch", "off", "turn"]
+    elif core_verb == "putback":
+        verb_hints = ["put", "back", "return"]
+    elif core_verb == "putin":
+        verb_hints = ["put", "in", "place"]
+    elif core_verb == "walk":
+        verb_hints = ["walk", "go", "nav", "move", "head"]
+    elif core_verb == "grab":
+        verb_hints = ["grab", "pick", "take", "get"]
+    else:
+        verb_hints = [core_verb]
+        
+    # 如果目标实体不在计划描述中，很可能不对齐
+    if target_entity:
+        # 去掉空格进行匹配，应对 "kitchencounter" 和 "kitchen counter" 的差异
+        if target_entity.replace(" ", "") not in plan_desc_lower.replace(" ", ""):
+            return False
+            
+    # 如果动词的任何近义词或拆解词都在描述中，认为动词对齐
+    verb_matched = False
+    for hint in verb_hints:
+        if hint in plan_desc_lower:
+            verb_matched = True
             break
             
-    if matched_verb:
-        if matched_verb in ["navigate", "nav"]:
-            if "nav" not in plan_desc_lower and "go to" not in plan_desc_lower and "move" not in plan_desc_lower and "travel" not in plan_desc_lower and "explore" not in plan_desc_lower:
-                return False
-        elif matched_verb == "pick":
-            if "pick" not in plan_desc_lower and "take" not in plan_desc_lower and "get" not in plan_desc_lower and "grab" not in plan_desc_lower:
-                return False
-        elif matched_verb in ["open", "close"]:
-            if matched_verb not in plan_desc_lower:
-                return False
-                
-    # 2. 关键名词实体匹配
-    stopwords = {"the", "a", "an", "to", "in", "at", "of", "up", "on", "from", "with", "navigate", "pick", "place", "put", "open", "close", "nav"}
-    action_words = [w for w in action_str_lower.split() if w not in stopwords]
-    
-    if not action_words:
-        return True
+    if core_verb and not verb_matched:
+        return False
         
-    has_match = False
-    for word in action_words:
-        if word.isdigit():
-            if word in plan_desc_lower:
-                has_match = True
-        else:
-            if word in plan_desc_lower:
-                has_match = True
-                
-    return has_match
+    return True
 
 OPEN_PRIORITY_SCORE_BOOST = 40
 NAVIGATE_AWAY_PENALTY = 25

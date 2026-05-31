@@ -1,10 +1,10 @@
 import os
 import sys
 import json
+import re
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 from core_agent import IntentReasoningAgent
-from PIL import Image
 
 def build_observation_text(partial_graph, agent_id=1):
     visible_nodes = partial_graph['nodes']
@@ -21,15 +21,19 @@ def build_skill_set(action_space_ids, partial_graph):
     for nid in action_space_ids:
         if nid not in id2node: continue
         node = id2node[nid]
-        name = node['class_name']
-        skills.append(f"[Walk] <{name}> ({nid})")
+        name = node['class_name'].lower()
+        # USE LOWERCASE actions as VirtualHome unity engine expects
+        skills.append(f"[walk] <{name}> ({nid})")
         if 'GRABBABLE' in node['properties']:
-            skills.append(f"[Grab] <{name}> ({nid})")
+            skills.append(f"[grab] <{name}> ({nid})")
         if 'CAN_OPEN' in node['properties']:
-            skills.append(f"[Open] <{name}> ({nid})")
-            skills.append(f"[Close] <{name}> ({nid})")
-        skills.append(f"[PutBack] <{name}> ({nid})")
-        skills.append(f"[PutIn] <{name}> ({nid})")
+            skills.append(f"[open] <{name}> ({nid})")
+            skills.append(f"[close] <{name}> ({nid})")
+        if 'HAS_SWITCH' in node['properties']:
+            skills.append(f"[switchon] <{name}> ({nid})")
+            skills.append(f"[switchoff] <{name}> ({nid})")
+        skills.append(f"[putback] <{name}> ({nid})")
+        skills.append(f"[putin] <{name}> ({nid})")
     skills.append("done")
     return list(set(skills))
 
@@ -49,13 +53,23 @@ def run_task(config_path):
         for mod in modifiers:
             target = mod["target"]
             prop = mod["property"]
+            action = mod.get("action", "add_property")
             for node in graph["nodes"]:
                 if node["class_name"] == target:
-                    if prop not in node["properties"]:
-                        node["properties"].append(prop)
+                    if action == "add_property":
+                        if prop not in node["properties"]:
+                            node["properties"].append(prop)
+                    elif action == "remove_property":
+                        if prop in node["properties"]:
+                            node["properties"].remove(prop)
         obs = env.reset(environment_graph=graph)
 
-    agent = IntentReasoningAgent(episode_id="impossible_01", log_dir="./logs")
+    from datetime import datetime
+    run_log_dir = os.path.join("logs", f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}")
+    os.makedirs(run_log_dir, exist_ok=True)
+    agent = IntentReasoningAgent(episode_id="impossible_01", log_dir=run_log_dir)
+    
+    action_success = True
     
     for step_idx in range(50):
         partial_graph = env.get_observation(0, 'partial')
@@ -64,21 +78,30 @@ def run_task(config_path):
         obs_text = build_observation_text(partial_graph)
         skills = build_skill_set(action_space, partial_graph)
         
-        env.observation_types[0] = 'image'
-        img_np = env.get_observation(0, 'image')
-        env.observation_types[0] = 'partial'
+        # 获取所有的房间信息
+        available_rooms = [f"[walk] <{r[0].lower()}> ({r[1]})" for r in env.rooms]
         
-        os.makedirs("logs", exist_ok=True)
-        img_path = f"logs/step_{step_idx}_agent_0.png"
-        
-        if img_np is not None:
-            im = Image.fromarray(img_np)
-            im.save(img_path)
+        img_path = os.path.join(run_log_dir, f"step_{step_idx}_agent_0.png")
+        try:
+            agent_id = 0
+            base_cam = env.num_static_cameras + agent_id * env.num_camera_per_agent
+            cam_ids = [base_cam + 0, base_cam + 1, base_cam + 2]
+            s, images = env.comm.camera_image(cam_ids, mode='normal', image_width=400, image_height=300)
+            if s and len(images) > 0:
+                import numpy as np
+                from PIL import Image
+                stitched_img = np.concatenate(images, axis=1)
+                im = Image.fromarray(stitched_img)
+                im.save(img_path)
+        except Exception as e:
+            print(f"Failed to save stitched image: {e}")
             
         result = agent.step(
             instruction=instruction,
             observation_text=obs_text,
             skill_set=skills,
+            available_rooms=available_rooms,
+            action_success=action_success,
             step_idx=step_idx,
             img_path=img_path
         )
@@ -88,13 +111,29 @@ def run_task(config_path):
             break
             
         action_id = result.get("action_id", 0)
-        if action_id >= len(skills):
-            action_id = 0
-        selected_action = skills[action_id]
+        
+        # 修正: 从 agent 的 solution_space 的 legal_combinations 取字典，不要当下标
+        current_solution_space = agent.solution_space.get_solution_space_dict()
+        legal_combinations = current_solution_space.get("legal_combinations", {})
+        
+        selected_action = legal_combinations.get(action_id)
+        if not selected_action:
+            print(f"Warning: action_id {action_id} not found in legal_combinations! Falling back to 0")
+            selected_action = skills[0] if skills else "done"
+            
         if selected_action == "done":
             break
             
         print(f"Step {step_idx}: Agent selected {selected_action}")
+        
+        # 真正执行物理动作
+        action_dict = {0: selected_action}
+        obs, reward, done, info = env.step(action_dict)
+        
+        # 解析真实物理引擎成功标志
+        action_success = info.get('action_success', True)
+        if not action_success:
+            print(f"Engine rejected action: {info.get('action_message', '')}")
 
 if __name__ == "__main__":
     import argparse

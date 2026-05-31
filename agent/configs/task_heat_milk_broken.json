@@ -1,0 +1,19 @@
+{
+  "task_name": "HeatMilk_BrokenMicrowave",
+  "task_type": "dynamic",
+  "scene_id": 1,
+  "instruction": "I want to drink hot milk.",
+  "init_graph_modifiers": [
+    {
+      "target": "microwave",
+      "action": "remove_property",
+      "property": "CAN_OPEN"
+    }
+  ],
+  "triggers": [],
+  "goal": {
+    "target_node_contains": "milk",
+    "required_state": "hot"
+  },
+  "max_steps": 50
+}

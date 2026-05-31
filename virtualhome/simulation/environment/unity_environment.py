@@ -149,6 +149,8 @@ class UnityEnvironment(BaseEnvironment):
 
         info['finished'] = done
         info['graph'] = graph
+        info['action_success'] = success if 'success' in locals() else True
+        info['action_message'] = message if 'message' in locals() else ""
         if self.steps == self.max_episode_length:
             done = True
         return obs, reward, done, info

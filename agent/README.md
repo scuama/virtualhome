@@ -1,114 +1,70 @@
-# EmbodiedBench Intent Agent
+# IntentAgent for VirtualHome
 
-针对 [EmbodiedBench](https://github.com/scuama/EmbodiedBench) 的**意图推理智能体 (Intent Reasoning Agent)**。区别于传统指令执行 Agent，本模块通过「五层 Why」挖掘深层意图，在目标缺失时主动挂起并与用户对话，并结合 **EmbodiedLTM**（GraphRAG 长期记忆服务）跨任务积累场景知识与用户偏好。
-
-> 此目录 (`agent/`) 是在原始仓库 `origin/master` 基础上的增量实现，可放入已配置好 EmbodiedBench 环境的机器中独立运行。
-
----
+针对 [VirtualHome](https://github.com/xavierpuigf/virtualhome) 仿真的**意图推理智能体 (Intent Reasoning Agent)**。
+本模块从原 EmbodiedBench 架构平移而来，通过「五层 Why」挖掘深层意图，在目标缺失或物理引擎报错（动作执行失败）时主动挂起并与用户对话，并结合 **EmbodiedLTM**（GraphRAG 长期记忆服务）跨任务积累场景知识与探索状态（如防止死循环探索）。
 
 ## 核心特性
 
-1. **五层 “Why” 意图解析** (`goal_reasoner.py`)：对指令进行反思，提取深层意图与可接受的物理替代物。
-2. **解空间建模** (`solution_space.py`)：从观测与技能集构建合法动作组合，并通过 LTM 同步物品/地点状态。
-3. **方案排序与决策** (`solution_ranker.py` + `task_validator.py`)：多方案打分排序，选取 Top-1 动作；支持 Action 9999 触发用户对话。
-4. **长期记忆** (`memory_manager.py` + `ltm_client.py`)：通过 EmbodiedLTM HTTP API（默认 `http://127.0.0.1:8000`）写入情景记忆、状态更新与 checkpoint。
-5. **运行日志** (`logger_utils.py`)：每步生成双视角截图、`agent_decision.log` 与 `run_summary.md` 战报。
-
----
+1. **环境适配引擎** (`vh_runner.py`)：直接驱动 VirtualHome Unity 物理引擎，实时获取 `partial_graph` 节点及 `available_rooms` 全局房间数据。
+2. **五层 “Why” 意图解析** (`goal_reasoner.py`)：对指令进行反思，提取深层意图与可接受的物理替代物。
+3. **解空间严格过滤** (`solution_space.py`)：结合环境节点和 LTM `explored_locs` 记忆，利用 LLM 对 VirtualHome `[Action] <Target> (ID)` 语法格式的技能树进行语义与防死循环过滤。
+4. **方案排序与决策** (`solution_ranker.py` + `task_validator.py`)：多方案打分排序，选取 Top-1 动作；支持 Action 9999 触发用户对话。
+5. **长期记忆** (`memory_manager.py` + `ltm_client.py`)：写入情景记忆、状态更新与 checkpoint。
+6. **运行日志** (`logger_utils.py`)：动态创建带时间戳的 `logs/run_YYYYMMDD_HHMMSS/` 目录，每步生成环境截图与决策全量日志。
 
 ## 架构与模块依赖
 
 ```text
-interactive_test.py          # 入口：连接 EBHabEnv，驱动主循环
+vh_runner.py                 # 入口：连接 VirtualHome Unity，驱动主循环
         │
         ▼
 core_agent.py                # 调度：错误恢复 → 意图 → 解空间 → 排序决策
    ├── goal_reasoner.py      # 意图提取（LLM + prompt_templates）
-   ├── solution_space.py     # 解空间更新（LLM + LTMClient）
+   ├── solution_space.py     # 动作过滤与解析（适配 [Walk] <kitchen> (1) 语法）
    ├── task_validator.py     # 调用 SolutionRanker 选动作
    │     └── solution_ranker.py
    ├── memory_manager.py     # LTM checkpoint
    ├── llm_client.py         # OpenAI 兼容接口
-   └── logger_utils.py       # 日志与 Markdown 战报
+   └── logger_utils.py       # 日志、截图与输出统一落盘
 ```
-
-**外部依赖**：运行前需启动 `agent/EmbodiedLTM` 服务。
-
----
-
-## 目录结构
-
-```text
-agent/
-├── core_agent.py            # Agent 核心调度与状态机
-├── goal_reasoner.py         # 五层 Why 意图推理
-├── solution_space.py        # 解空间 / 世界模型 / LTM 同步
-├── solution_ranker.py       # 多方案生成与排序
-├── task_validator.py        # 决策执行器（封装 Ranker）
-├── memory_manager.py        # LTM 记忆读写与 checkpoint
-├── ltm_client.py            # EmbodiedLTM HTTP 客户端
-├── llm_client.py            # LLM JSON 生成封装
-├── logger_utils.py          # 日志、截图、run_summary.md
-├── prompt_templates.py      # 各模块 System/User Prompt
-├── interactive_test.py      # [入口] 交互式测试框架
-├── quick_start.sh           # [入口] 一键启动测试
-├── config_patch/
-│   └── visual.yaml          # 需覆盖到 EB 源码的观测配置
-├── EmbodiedLTM/             # GraphRAG 长期记忆服务
-│   ├── app.py               # FastAPI 入口
-│   ├── reset_ltm.sh         # 清空图谱并重启服务
-│   └── MemoryKB/            # 图谱与记忆数据
-└── logs/                    # 运行产物（.gitignore，可定期清理）
-```
-
----
 
 ## 快速上手
 
-### 步骤 0：启动 / 重置 EmbodiedLTM
-
+### 步骤 0：启动 VirtualHome Unity 仿真器
+由于需要在后台渲染物理环境，首先需要启动 Unity 可执行文件（需配置显卡与显示环境变量）：
 ```bash
-cd agent/EmbodiedLTM
+export DISPLAY=:0
+export XAUTHORITY=/run/user/1002/gdm/Xauthority
+cd /mnt/disk1/decom/virtualhome/virtualhome/simulation/unity_simulator
+killall -9 linux_exec.v2.3.0.x86_64 || true
+./linux_exec.v2.3.0.x86_64 -screen-fullscreen 0 -screen-quality 4 &
+```
+
+### 步骤 1：启动 / 重置 EmbodiedLTM（长期记忆服务）
+```bash
+cd /mnt/disk1/decom/virtualhome/agent/EmbodiedLTM
+source /home/decom/anaconda3/etc/profile.d/conda.sh
 conda activate embodiedltm
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
+*(如需清空跨任务污染的记忆图谱，执行 `bash reset_ltm.sh`)*
 
-如需清空跨任务污染的记忆图谱：
-
+### 步骤 2：启动 Agent 任务测试
+使用 `embench` 环境来运行 Agent 主循环（支持加载 json 任务配置）：
 ```bash
-cd agent/EmbodiedLTM
-bash reset_ltm.sh
-```
-
-### 步骤 1：覆盖底层环境配置
-
-```bash
-cp agent/config_patch/visual.yaml embodiedbench/envs/eb_habitat/config/task/task_obs/visual.yaml
-```
-
-### 步骤 2：启动测试
-
-```bash
-cd agent
+cd /mnt/disk1/decom/virtualhome/agent
+source /home/decom/anaconda3/etc/profile.d/conda.sh
 conda activate embench
-xvfb-run -a python interactive_test.py --instruction "Get me a can of coke."
+export DISPLAY=:0
+export XAUTHORITY=/run/user/1002/gdm/Xauthority
+python vh_runner.py --config configs/task_impossible.json
 ```
 
-或使用快捷脚本（需已启动 LTM）：
+运行产生的日志与交互图像截图会实时写入每次动态创建的 `agent/logs/run_<timestamp>/` 目录中。
 
-```bash
-cd agent
-bash quick_start.sh
-# 自定义指令: bash quick_start.sh "Bring me an apple"
-```
-
-运行日志写入 `agent/logs/run_<episode_id>_<timestamp>/`。
-
----
-
-## 环境变量
+## 环境变量配置
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `EMBODIED_LTM_URL` | `http://127.0.0.1:8000` | EmbodiedLTM 服务地址 |
-| `OPENAI_API_KEY` | — | LLM 调用密钥（由 `llm_client.py` 使用） |
+| `EMBODIED_LTM_URL` | `http://127.0.0.1:8000` | EmbodiedLTM 知识图谱服务地址 |
+| `OPENAI_API_KEY` | — | LLM 调用的核心鉴权密钥（由 `llm_client.py` 内部使用） |

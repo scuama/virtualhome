@@ -39,7 +39,7 @@ class IntentReasoningAgent:
             return aid
         return next(iter(legal_combinations.keys()))
 
-    def step(self, instruction: str, observation_text: str, skill_set: list, step_idx: int, img_path: str = None, dual_img_path: str = None) -> dict:
+    def step(self, instruction: str, observation_text: str, skill_set: list, step_idx: int, img_path: str = None, dual_img_path: str = None, action_success: bool = True, available_rooms: list = None) -> dict:
         """
         核心调度循环
         :param instruction: 当前关卡的文本指令
@@ -53,7 +53,7 @@ class IntentReasoningAgent:
         self.logger.info(f"\n========== STARTING STEP {step_idx} ==========")
         
         # 0. 错误恢复与容错机制 (Error Recovery Mechanism)
-        action_failed = "last action is invalid" in observation_text.lower() or "failed" in observation_text.lower()
+        action_failed = not action_success
         
         if action_failed:
             if len(self.action_history) > 0:
@@ -95,6 +95,14 @@ class IntentReasoningAgent:
             if match:
                 return match.group(1).strip()
             return act_str.replace("navigate to the ", "").replace("navigate to ", "").replace("nav_", "").replace("pick up the ", "").replace("pick up ", "").replace("pick the ", "").replace("pick ", "").replace("open the ", "").replace("open ", "").replace("close the ", "").replace("close ", "").strip()
+            
+        def extract_instance(act_str):
+            import re
+            act_str = act_str.lower()
+            match = re.search(r'\[.*?\]\s*<(.*?)>\s*\((.*?)\)', act_str)
+            if match:
+                return f"{match.group(1).strip()}_{match.group(2).strip()}"
+            return extract_target(act_str)
 
         # 1. 目标提取 (仅在第一步执行)
         if step_idx == 0 and not self.global_intent:
@@ -180,9 +188,9 @@ class IntentReasoningAgent:
             elif "[putback]" in action_lower or "[putin]" in action_lower or "place " in action_lower or "put " in action_lower or "drop " in action_lower:
                 self.held_object = None
             elif "[open]" in action_lower or action_lower.startswith("open "):
-                receptacle_states[extract_target(action_lower)] = "open"
+                receptacle_states[extract_instance(action_lower)] = "open"
             elif "[close]" in action_lower or action_lower.startswith("close "):
-                receptacle_states[extract_target(action_lower)] = "closed"
+                receptacle_states[extract_instance(action_lower)] = "closed"
                 
         # 在 self.visited_locations 被单步临时字典覆盖之前，先创建一个真正的历史已探索地点快照，
         # 以便在 Step 结尾施加【记忆单调递增约束】合并时使用，防止记忆随着 LTM 注意力稀释而减少！
@@ -194,7 +202,7 @@ class IntentReasoningAgent:
         self.logger.info(f"[Receptacle States] {receptacle_states}")
 
         # 2. 解空间更新
-        self.solution_space.update_capabilities(skill_set, inject_priors=self.inject_priors)
+        self.solution_space.update_capabilities(skill_set, available_rooms=available_rooms, inject_priors=self.inject_priors)
         # 生成当前黑名单（连续失败 >= 2 次的动作直接被屏蔽）
         blacklisted = [act for act, count in self.failed_actions.items() if count >= 2]
         
@@ -293,9 +301,14 @@ class IntentReasoningAgent:
             # Default to 0 or some valid format to avoid crashing, or return a special termination signal.
             # Usually we return a stop action. If no stop action is known, return 0 as dummy.
             validation_result["action_id"] = 0
+            action_id = validation_result.get("action_id", 0)
             return validation_result
         
-        action_str = skill_set[action_id] if action_id < len(skill_set) else "UNKNOWN"
+        # 从 SolutionSpace 的合法动作中提取
+        current_solution_space = self.solution_space.get_solution_space_dict()
+        legal = current_solution_space.get("legal_combinations", {})
+        action_str = legal.get(action_id, "UNKNOWN")
+        
         self.action_history.append(action_str)
         
         self.logger.info(f"[Step {step_idx}] CoreAgent Final Decision: Action_ID {action_id} -> {action_str}")
