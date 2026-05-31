@@ -179,3 +179,4 @@ virtualhome/simulation/unity_simulator/*exec*
 virtualhome_advanced_tasks_guide.md
 agent/logs/
 agent/EmbodiedLTM/MemoryKB/
+agent/EmbodiedLTM/*.log*
