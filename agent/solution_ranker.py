@@ -172,7 +172,7 @@ class SolutionRanker:
         plans.sort(key=lambda x: x.get("rank_score", 0), reverse=True)
         return plans
 
-    def generate_and_rank_solutions(self, global_intent: dict, solution_space: dict, current_location: str, visited_locations: dict, unvisited_locations: list, step: int, remaining_steps: int, held_object: str = None) -> dict:
+    def generate_and_rank_solutions(self, global_intent: dict, solution_space: dict, current_location: str, visited_locations: dict, unvisited_locations: list, step: int, remaining_steps: int, held_object: str = None, global_rules: list = None) -> dict:
         """
         方案生成与多维排序机制
         """
@@ -193,7 +193,8 @@ class SolutionRanker:
             held_object=held_object or "None",
             relevant_objects=json.dumps(solution_space.get("relevant_objects", []), ensure_ascii=False),
             exploration_context=json.dumps(exploration_context, ensure_ascii=False),
-            state_machine_rules=json.dumps(global_intent.get("state_machine_rules", {}), ensure_ascii=False)
+            state_machine_rules=json.dumps(global_intent.get("state_machine_rules", {}), ensure_ascii=False),
+            global_rules=json.dumps(global_rules or [], ensure_ascii=False)
         )
         
         result_dict = self.llm.generate_json(

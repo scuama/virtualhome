@@ -1,0 +1,17 @@
+{
+    "id": "scene_11",
+    "instruction": "如果有盘子乱放，就把它们收了。",
+    "tags": [
+        "G1",
+        "P2"
+    ],
+    "setup": {
+        "init_room": "kitchen",
+        "modify_states": {
+            "plate": [
+                "DIRTY"
+            ]
+        }
+    },
+    "environment_id": 0
+}

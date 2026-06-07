@@ -20,7 +20,7 @@ class GoalReasoner:
         result_dict = self.llm.generate_json(
             system_prompt=GOAL_REASONER_SYSTEM_PROMPT,
             user_prompt=user_prompt,
-            model_override="gpt-4o"
+            model_override="gpt-5.4-mini"
         )
         
         if result_dict:
@@ -42,7 +42,7 @@ class GoalReasoner:
                 sm_result = self.llm.generate_json(
                     system_prompt=STATE_MACHINE_GENERATOR_SYSTEM_PROMPT,
                     user_prompt=sm_user_prompt,
-                    model_override="gpt-4o"
+                    model_override="gpt-5.4-mini"
                 )
                 if sm_result and "state_machine" in sm_result:
                     self.global_intent["state_machine_rules"] = sm_result["state_machine"]

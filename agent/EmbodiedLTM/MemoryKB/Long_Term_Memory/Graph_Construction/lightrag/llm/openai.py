@@ -92,6 +92,13 @@ def create_openai_async_client(
         merged_configs["base_url"] = os.environ.get(
             "OPENAI_API_BASE", "https://api.openai.com/v1"
         )
+        
+    import os
+    os.environ["HTTP_PROXY"] = "http://127.0.0.1:7890"
+    os.environ["HTTPS_PROXY"] = "http://127.0.0.1:7890"
+    
+    merged_configs["timeout"] = 60.0
+    merged_configs["max_retries"] = 5
 
     return AsyncOpenAI(**merged_configs)
 
@@ -409,6 +416,27 @@ async def gpt_4o_mini_complete(
     )
 
 
+async def gpt_5_4_mini_complete(
+    prompt,
+    system_prompt=None,
+    history_messages=None,
+    keyword_extraction=False,
+    **kwargs,
+) -> str:
+    if history_messages is None:
+        history_messages = []
+    keyword_extraction = kwargs.pop("keyword_extraction", None)
+    if keyword_extraction:
+        kwargs["response_format"] = GPTKeywordExtractionFormat
+    return await openai_complete_if_cache(
+        "gpt-5.4-mini",
+        prompt,
+        system_prompt=system_prompt,
+        history_messages=history_messages,
+        **kwargs,
+    )
+
+
 async def nvidia_openai_complete(
     prompt,
     system_prompt=None,
@@ -466,17 +494,20 @@ async def openai_embed(
         RateLimitError: If the OpenAI API rate limit is exceeded.
         APITimeoutError: If the OpenAI API request times out.
     """
-    # Create the OpenAI client
-    openai_async_client = create_openai_async_client(
-        api_key=api_key, base_url=base_url, client_configs=client_configs
+    import httpx
+    from openai import AsyncOpenAI
+    client = AsyncOpenAI(
+        api_key=api_key or os.environ.get("OPENAI_API_KEY"),
+        base_url=base_url,
+        http_client=httpx.AsyncClient(proxy="http://127.0.0.1:7890", timeout=60.0)
     )
 
-    async with openai_async_client:
-        response = await openai_async_client.embeddings.create(
-            model=model, input=texts, encoding_format="base64"
-        )
-        return np.array(
-            [
+    response = await client.embeddings.create(
+        model=model, input=texts, encoding_format="base64"
+    )
+    
+    return np.array(
+        [
                 np.array(dp.embedding, dtype=np.float32)
                 if isinstance(dp.embedding, list)
                 else np.frombuffer(base64.b64decode(dp.embedding), dtype=np.float32)

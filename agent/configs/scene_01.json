@@ -1,0 +1,21 @@
+{
+    "id": "scene_01",
+    "instruction": "擦干净电视。",
+    "tags": [
+        "M3",
+        "P3"
+    ],
+    "setup": {
+        "init_room": "livingroom",
+        "modify_states": {
+            "tv": [
+                "ON",
+                "DIRTY"
+            ]
+        }
+    },
+    "global_rules": [
+        "NO_WIPE_WHILE_ON"
+    ],
+    "environment_id": 0
+}

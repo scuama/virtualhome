@@ -7,7 +7,7 @@ from task_validator import TaskValidator
 from memory_manager import MemoryManager
 
 class IntentReasoningAgent:
-    def __init__(self, episode_id=None, model_name="gpt-4o-mini", scene_id=None, inject_priors=False, log_dir=None, use_state_machine=False):
+    def __init__(self, episode_id=None, model_name="gpt-5.4-mini", scene_id=None, inject_priors=False, log_dir=None, use_state_machine=False):
         self.logger = AgentLogger(episode_id, log_dir=log_dir)
         self.llm = LLMClient(model_name=model_name)
 
@@ -40,7 +40,7 @@ class IntentReasoningAgent:
             return aid
         return next(iter(legal_combinations.keys()))
 
-    def step(self, instruction: str, observation_text: str, skill_set: list, step_idx: int, img_path: str = None, dual_img_path: str = None, action_success: bool = True, available_rooms: list = None) -> dict:
+    def step(self, instruction: str, observation_text: str, skill_set: list, step_idx: int, img_path: str = None, dual_img_path: str = None, action_success: bool = True, available_rooms: list = None, global_rules: list = None) -> dict:
         """
         核心调度循环
         :param instruction: 当前关卡的文本指令
@@ -250,6 +250,7 @@ class IntentReasoningAgent:
             max_steps=50,
             persistent_memory_text=self.memory_manager.get_full_memory_context(),
             held_object=self.held_object,
+            global_rules=global_rules
         )
         
         # 4. 提取动作并更新状态

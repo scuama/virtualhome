@@ -1,0 +1,11 @@
+{
+    "id": "scene_18",
+    "instruction": "拿两个苹果过来。",
+    "tags": [
+        "P2"
+    ],
+    "setup": {
+        "init_room": "kitchen"
+    },
+    "environment_id": 0
+}

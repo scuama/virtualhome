@@ -4,7 +4,8 @@ from fastapi import FastAPI, UploadFile, Form
 from memory_coordinator import (
     initialize_rag,
     handle_insert,
-    handle_query
+    handle_query,
+    handle_reset
 )
 
 app = FastAPI()
@@ -26,3 +27,11 @@ async def insert(query: str = Form(...), video: UploadFile = None, audio: Upload
 async def query_api(query: str = Form(...), mode: str = Form("hybrid"), use_pm: bool = Form(False)):
     result = await handle_query(query, mode, use_pm)
     return {"status": "ok", **result}
+
+@app.post("/reset")
+async def reset_api():
+    try:
+        result = await handle_reset()
+        return result
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

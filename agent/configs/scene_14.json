@@ -1,0 +1,18 @@
+{
+    "id": "scene_14",
+    "instruction": "如果抽屉开着，就把书锁进抽屉。",
+    "tags": [
+        "G3"
+    ],
+    "setup": {
+        "init_room": "bedroom",
+        "modify_properties": {
+            "drawer": {
+                "remove": [
+                    "CAN_OPEN"
+                ]
+            }
+        }
+    },
+    "environment_id": 0
+}

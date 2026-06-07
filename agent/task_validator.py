@@ -9,7 +9,7 @@ class TaskValidator:
         self.logger = logger
         self.ranker = SolutionRanker(llm_client, logger)
 
-    def validate_action_feasibility(self, global_intent: dict, solution_space: dict, action_history: list, visited_locations: dict, current_location: str, step: int, max_steps: int = 50, persistent_memory_text: str = "", held_object: str = None) -> dict:
+    def validate_action_feasibility(self, global_intent: dict, solution_space: dict, action_history: list, visited_locations: dict, current_location: str, step: int, max_steps: int = 50, persistent_memory_text: str = "", held_object: str = None, global_rules: list = None) -> dict:
         """
         作为决策执行器，调用 SolutionRanker 拿到排序后的方案列表，并选择 Top-1 方案的首个动作
         """
@@ -28,6 +28,7 @@ class TaskValidator:
             step=step,
             remaining_steps=remaining_steps,
             held_object=held_object,
+            global_rules=global_rules
         )
         
         action_id = ranking_result.get("selected_action_id", 0)

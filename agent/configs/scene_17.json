@@ -1,0 +1,30 @@
+{
+    "id": "scene_17",
+    "instruction": "如果你的电脑没开，把它打开。",
+    "tags": [
+        "G1",
+        "M4",
+        "P1"
+    ],
+    "setup": {
+        "init_room": "bedroom",
+        "modify_states": {
+            "computer": [
+                "OFF"
+            ]
+        },
+        "agent_inventory": [
+            "book",
+            "book"
+        ]
+    },
+    "dynamic_events": [
+        {
+            "target_class": "computer",
+            "trigger_distance": 2.5,
+            "action": "teleport",
+            "destination_class": "floor"
+        }
+    ],
+    "environment_id": 0
+}

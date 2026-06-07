@@ -1,0 +1,14 @@
+{
+    "id": "scene_19",
+    "instruction": "把这几个盘子处理一下。",
+    "tags": [
+        "M3"
+    ],
+    "setup": {
+        "init_room": "kitchen"
+    },
+    "global_rules": [
+        "STERILIZE_PLATES_IN_MICROWAVE"
+    ],
+    "environment_id": 0
+}

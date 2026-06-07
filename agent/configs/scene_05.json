@@ -1,0 +1,19 @@
+{
+    "id": "scene_05",
+    "instruction": "去把桌上的盘子拿过来。",
+    "tags": [
+        "M1"
+    ],
+    "setup": {
+        "init_room": "kitchen"
+    },
+    "dynamic_events": [
+        {
+            "target_class": "plate",
+            "trigger_distance": 2.5,
+            "action": "vanish_reappear",
+            "duration_steps": 2
+        }
+    ],
+    "environment_id": 0
+}

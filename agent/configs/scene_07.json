@@ -1,0 +1,37 @@
+{
+    "id": "scene_07",
+    "instruction": "把水杯拿给我。",
+    "tags": [
+        "M2"
+    ],
+    "setup": {
+        "init_room": "kitchen",
+        "add_nodes": [
+            {
+                "class_name": "waterglass",
+                "states": [
+                    "CLEAN"
+                ]
+            },
+            {
+                "class_name": "waterglass",
+                "states": [
+                    "DIRTY"
+                ]
+            },
+            {
+                "class_name": "waterglass",
+                "states": [
+                    "DIRTY"
+                ]
+            },
+            {
+                "class_name": "waterglass",
+                "states": [
+                    "DIRTY"
+                ]
+            }
+        ]
+    },
+    "environment_id": 0
+}

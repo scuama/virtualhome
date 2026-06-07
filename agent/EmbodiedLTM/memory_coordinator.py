@@ -8,6 +8,7 @@ from pathlib import Path
 import asyncio
 from datetime import datetime
 from openai import OpenAI
+import shutil
 
 # ===== Load Your Modules =====
 from MemoryKB.User_Conversation import process_image as pi
@@ -16,7 +17,7 @@ from MemoryKB.User_Conversation import process_audio as pa
 from MemoryKB import build_memory as bm
 from MemoryKB.Long_Term_Memory.Graph_Construction import lightrag_openai_demo as Lgraph
 from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag import LightRAG, QueryParam
-from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag.llm.openai import openai_embed, gpt_4o_mini_complete
+from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag.llm.openai import openai_embed, gpt_5_4_mini_complete
 from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag.kg.shared_storage import initialize_pipeline_status
 from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag.utils import logger, set_verbose_debug
 from MemoryKB.Long_Term_Memory.Graph_Construction.lightrag.kg.shared_storage import initialize_share_data
@@ -114,7 +115,7 @@ async def initialize_single_rag(working_dir):
     rag = LightRAG(
         working_dir=working_dir,
         embedding_func=openai_embed,
-        llm_model_func=gpt_4o_mini_complete,
+        llm_model_func=gpt_5_4_mini_complete,
     )
     await rag.initialize_storages()
     return rag
@@ -193,7 +194,7 @@ async def call_parametric_memory(query: str):
 async def check_pm_relevance(query: str, pm_memory: str) -> bool:
     try:
         relevance_check = await client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             messages=[
                 {
                     "role": "system",
@@ -238,7 +239,7 @@ def generate_final_answer(query: str, memory: str):
         """
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5.4-mini",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant with long-term memory."},
                 {"role": "user", "content": prompt}
@@ -299,3 +300,18 @@ async def handle_query(query: str, mode: str, use_pm: bool):
         "rag_memory": rag_memory,
         "final_answer": final_answer,
     }
+
+async def handle_reset():
+    global mem_epi, mem_sem
+    print("[Reset] Clearing Long-Term Memory...")
+    shutil.rmtree(EPISODIC_DIR, ignore_errors=True)
+    shutil.rmtree(SEMANTIC_DIR, ignore_errors=True)
+    shutil.rmtree(MEMORY_JSON_DIR, ignore_errors=True)
+    shutil.rmtree(USER_CONV_DIR / "image", ignore_errors=True)
+    shutil.rmtree(USER_CONV_DIR / "video", ignore_errors=True)
+    shutil.rmtree(USER_CONV_DIR / "audio", ignore_errors=True)
+    if CONV_JSON.exists():
+        CONV_JSON.unlink()
+    
+    await initialize_rag()
+    return {"status": "ok", "message": "LTM has been successfully reset."}

@@ -186,6 +186,9 @@ SOLUTION_RANKING_USER_PROMPT = """
 Global Intent:
 {global_intent}
 
+Global Rules / Physical Constraints:
+{global_rules}
+
 Current Location: {current_location}
 Held Object: {held_object}
 Relevant Objects (LLM-filtered): {relevant_objects}

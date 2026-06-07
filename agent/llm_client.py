@@ -17,7 +17,12 @@ class LLMClient:
         if not self.api_key:
             raise ValueError("Environment variable OPENAI_API_KEY is not set.")
         
-        self.client = openai.OpenAI(api_key=self.api_key)
+        self.is_v1 = hasattr(openai, "OpenAI")
+        if self.is_v1:
+            self.client = openai.OpenAI(api_key=self.api_key)
+        else:
+            openai.api_key = self.api_key
+        
         self.model_name = model_name
 
     def generate_response(self, system_prompt: str, user_prompt: str, response_format="text", model_override=None) -> str:
@@ -39,8 +44,14 @@ class LLMClient:
             kwargs["response_format"] = {"type": "json_object"}
 
         try:
-            response = self.client.chat.completions.create(**kwargs)
-            return response.choices[0].message.content
+            if self.is_v1:
+                response = self.client.chat.completions.create(**kwargs)
+                return response.choices[0].message.content
+            else:
+                if "response_format" in kwargs:
+                    del kwargs["response_format"]  # Old version doesn't support this
+                response = openai.ChatCompletion.create(**kwargs)
+                return response.choices[0].message["content"]
         except Exception as e:
             print(f"LLM API Call failed: {e}")
             return "{}" if response_format == "json_object" else ""
@@ -75,15 +86,21 @@ class LLMClient:
         ]
         
         kwargs = {
-            "model": "gpt-4o",  # Force high-fidelity model for vision
+            "model": "gpt-5.4-mini",  # Force high-fidelity model for vision
             "messages": messages,
             "temperature": 0.2,
             "response_format": {"type": "json_object"}
         }
         
         try:
-            response = self.client.chat.completions.create(**kwargs)
-            result_str = response.choices[0].message.content
+            if self.is_v1:
+                response = self.client.chat.completions.create(**kwargs)
+                result_str = response.choices[0].message.content
+            else:
+                if "response_format" in kwargs:
+                    del kwargs["response_format"]
+                response = openai.ChatCompletion.create(**kwargs)
+                result_str = response.choices[0].message["content"]
             return json.loads(result_str)
         except Exception as e:
             print(f"Vision API Call failed: {e}")

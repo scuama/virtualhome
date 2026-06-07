@@ -1,0 +1,14 @@
+{
+    "id": "scene_04",
+    "instruction": "去书房拿一本书。",
+    "tags": [
+        "M3"
+    ],
+    "setup": {
+        "init_room": "bedroom"
+    },
+    "global_rules": [
+        "MUST_CLOSE_DOORS"
+    ],
+    "environment_id": 0
+}

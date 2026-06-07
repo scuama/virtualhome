@@ -1,8 +1,0 @@
-{
-  "task_name": "scenario2_missing_item",
-  "instruction": "Bring me the diamond ring from the bedroom.",
-  "max_steps": 50,
-  "use_state_machine": true,
-  "init_graph_modifiers": [],
-  "npc_scripts": []
-}
