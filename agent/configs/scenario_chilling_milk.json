@@ -1,0 +1,11 @@
+{
+  "scenario_name": "Vague Instruction Chilling Test",
+  "environment_id": 2,
+  "init_rooms": ["kitchen"],
+  "instruction_flow": {
+    "initial": "如果看到牛奶，帮我用那个冰镇一下。",
+    "expected_vague": true,
+    "user_clarification_reply": "冰箱。"
+  },
+  "log_mode": "text"
+}

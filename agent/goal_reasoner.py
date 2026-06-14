@@ -1,10 +1,9 @@
 import json
-from llm_client import LLMClient
-from prompt_templates import GOAL_REASONER_SYSTEM_PROMPT, GOAL_REASONER_USER_PROMPT, STATE_MACHINE_GENERATOR_SYSTEM_PROMPT, STATE_MACHINE_GENERATOR_USER_PROMPT
-from logger_utils import AgentLogger
+from .llm_client import LLMClient
+from .prompt_templates import GOAL_REASONER_SYSTEM_PROMPT, GOAL_REASONER_USER_PROMPT, STATE_MACHINE_GENERATOR_SYSTEM_PROMPT, STATE_MACHINE_GENERATOR_USER_PROMPT
 
 class GoalReasoner:
-    def __init__(self, llm_client: LLMClient, logger: AgentLogger):
+    def __init__(self, llm_client: LLMClient, logger):
         self.llm = llm_client
         self.logger = logger
         self.global_intent = {}

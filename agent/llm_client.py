@@ -3,6 +3,10 @@ import json
 import openai
 import base64
 
+# Bypass dead local proxies
+for k in ['http_proxy', 'https_proxy', 'HTTP_PROXY', 'HTTPS_PROXY', 'all_proxy', 'ALL_PROXY']:
+    os.environ.pop(k, None)
+
 def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
@@ -37,9 +41,12 @@ class LLMClient:
         kwargs = {
             "model": model_override if model_override else self.model_name,
             "messages": messages,
-            "temperature": 0.2,
         }
         
+        # Only add temperature if it's not a gpt-5 model (which often strictly requires default)
+        if "gpt-5" not in kwargs["model"]:
+            kwargs["temperature"] = 0.2
+            
         if response_format == "json_object":
             kwargs["response_format"] = {"type": "json_object"}
 
@@ -88,7 +95,6 @@ class LLMClient:
         kwargs = {
             "model": "gpt-5.4-mini",  # Force high-fidelity model for vision
             "messages": messages,
-            "temperature": 0.2,
             "response_format": {"type": "json_object"}
         }
         

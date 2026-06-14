@@ -1,0 +1,11 @@
+{
+  "scenario_name": "Vague Instruction Temperature Test",
+  "environment_id": 2,
+  "init_rooms": ["kitchen"],
+  "instruction_flow": {
+    "initial": "如果看到牛奶，弄到合适温度后给我。",
+    "expected_vague": true,
+    "user_clarification_reply": "热的。"
+  },
+  "log_mode": "text"
+}

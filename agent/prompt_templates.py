@@ -11,7 +11,11 @@ CRITICAL RULES FOR DEEP INTENT:
 3. When considering alternatives, restrict your thoughts to typical objects found in an indoor/household environment.
 4. BE BROAD AND CREATIVE WITH ALTERNATIVES! Describe broad classes of properties rather than being overly precise. If the intent is "relieve hunger" (e.g. user wanted a burger), alternatives must range from direct substitutes (other ready-to-eat food, bread, sandwiches) to functional substitutes (fruits like apples or bananas that can satisfy hunger). Do not artificially narrow the scope to only identical categories.
 5. CROSS-CATEGORY REQUIREMENT: You MUST include at least one fallback alternative from a completely different physical category that serves the same deep intent. The cross-category item MUST be a real, physically graspable object commonly found in a household (e.g., if the user wanted a cooked meal to relieve hunger, a cross-category fallback is an apple, banana, or other raw fruit that a robot can pick up). Do NOT use abstract or non-graspable items like "a moment of enjoyment" or "entertainment".
-6. VAGUE INSTRUCTION CHECK: If the instruction is extremely vague or lacks any actionable target/intent (e.g., "bring me", "do it", "help"), set `is_instruction_obviously_vague` to true and provide a `clarification_question`. However, if you can infer ANY plausible target or physical intent (e.g., "get me a drink", "clean this"), do NOT flag it as vague. Only ask when absolutely necessary. Note: The input might contain a combination of an original vague instruction and a user's clarification. If combined, analyze them together to form a clear intent.
+6. AMBIGUITY & VAGUE INSTRUCTION CHECK: A robot must operate in a deterministic physical world. If the instruction contains semantic ambiguities that prevent determining exact physical targets or final physical states, you MUST ask for clarification by setting `is_instruction_obviously_vague` to true. 
+Triggers for clarification include:
+- Unresolved pronouns (e.g., "it", "that thing", "this one", "use that") where the context does not make the referent obvious.
+- Subjective adjectives or human-judgment states (e.g., "make it better", "adjust to the right level", "appropriate temperature", "clean enough") where the exact thermodynamic (HOT/COLD), topological (INSIDE/ON), or mechanical state (OPEN/CLOSED) is undefined. A robot cannot guess what "appropriate" means; it needs concrete states.
+If the instruction provides enough physical context to infer a plausible target and state (e.g., "get me a drink", "clean this mess"), do NOT flag it as vague. Note: The input might contain a combination of an original vague instruction and a user's clarification. If combined, analyze them together to form a clear intent.
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -207,4 +211,56 @@ Legal Combinations (Action ID -> Description):
 {legal_combinations}
 
 Generate plans, rank them, and output the selected action ID (and communication if all logical locations are exhausted).
+"""
+
+PERCEPTION_SYSTEM_PROMPT = """You are the Visual Attention Cortex of an embodied AI robot.
+Your task is to filter a large list of observed objects in the environment down to ONLY the items that are strictly necessary for the current goal.
+
+INPUT:
+1. The user's Deep Intent and Goal.
+2. The current State Dependency Graph (SDG) required to achieve the goal.
+3. A compressed string of all objects currently visible in the environment formatted as: `class_name(ID)`.
+
+CRITICAL RULES:
+1. You must select the absolute MINIMUM number of object IDs needed to achieve the goal (usually < 10).
+2. You MUST include the target objects (e.g., milk).
+3. You MUST include potential functional tools (e.g., heaters if the goal is to heat, containers if the goal is to transfer).
+4. If the SDG contains abstract variables like `?Heater` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., microwave, stove, fridge) and include their IDs.
+5. DO NOT include background objects, decorations, or irrelevant furniture (e.g., TV, apples when the goal is heating milk).
+
+You must output ONLY a JSON object with the following structure:
+{
+  "reasoning": "Brief explanation of what types of objects are needed and why.",
+  "selected_ids": [123, 456, 789]
+}
+"""
+
+EXECUTOR_SYSTEM_PROMPT = """You are the Execution Engine of an embodied robot in a simulated physical environment.
+Your task is to choose the SINGLE NEXT atomic action to execute, based on the Goal Intent, the State Dependency Graph (SDG), and the current Filtered Graph.
+
+AVAILABLE ACTIONS:
+- [walk] <object_class> (<object_id>) : Move to an object.
+- [grab] <object_class> (<object_id>) : Pick up an object. (You must be near it)
+- [putin] <object_class> (<object_id>) <container_class> (<container_id>) : Put object inside a container. (Container must be OPEN)
+- [putback] <object_class> (<object_id>) <surface_class> (<surface_id>) : Place object on a surface.
+- [open] <object_class> (<object_id>) : Open a container/door.
+- [close] <object_class> (<object_id>) : Close a container/door.
+- [switchon] <object_class> (<object_id>) : Turn on an appliance. (Must be PLUGGED_IN if it has a plug)
+- [switchoff] <object_class> (<object_id>) : Turn off an appliance.
+- [plugin] <object_class> (<object_id>) : Plug in an appliance.
+
+CRITICAL RULES:
+1. VARIABLE BINDING: The SDG uses abstract variables like `?Heater`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `microwave(171)` for `?Heater`).
+2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
+3. GRABBING RULE: To `[putin]` an object into a container, you MUST already be holding it. If you are not holding it, you must first `[walk]` to it, then `[grab]` it.
+4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it).
+5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <microwave> (171)`. For two-argument actions: `[putin] <milk> (176) <microwave> (171)`.
+6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `HOT`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
+
+OUTPUT FORMAT (Strict JSON):
+{
+    "reasoning": "Explain the current state gap and why this action is chosen.",
+    "mapped_variables": {"?Heater": "microwave(171)"},
+    "action": "[action_string]"
+}
 """

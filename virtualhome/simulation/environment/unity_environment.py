@@ -276,6 +276,17 @@ class UnityEnvironment(BaseEnvironment):
                     self.custom_states[item_id] = set()
                 self.custom_states[item_id].add('HOT')
                 
+            cooling_appliances_inside = ['fridge']
+            items_to_cool = set()
+            for cooler in graph.get('nodes', []):
+                if cooler['class_name'].lower() in cooling_appliances_inside:
+                    items_to_cool.update(get_related_items(cooler['id'], 'INSIDE'))
+                    
+            for item_id in items_to_cool:
+                if item_id not in self.custom_states:
+                    self.custom_states[item_id] = set()
+                self.custom_states[item_id].add('COLD')
+                
             # Merge custom states back into the graph natively
             for node in graph.get('nodes', []):
                 nid = node['id']
@@ -283,7 +294,9 @@ class UnityEnvironment(BaseEnvironment):
                     current_states = set(node.get('states', []))
                     current_states.update(self.custom_states[nid])
                     if 'COLD' in current_states and 'HOT' in self.custom_states[nid]:
-                        current_states.discard('COLD') # Thermal replacement
+                        current_states.discard('COLD') # Heating overrides
+                    elif 'HOT' in current_states and 'COLD' in self.custom_states[nid]:
+                        current_states.discard('HOT') # Cooling overrides
                     node['states'] = list(current_states)
             # ==========================================
             
