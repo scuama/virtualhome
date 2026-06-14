@@ -223,10 +223,10 @@ INPUT:
 
 CRITICAL RULES:
 1. You must select the absolute MINIMUM number of object IDs needed to achieve the goal (usually < 10).
-2. You MUST include the target objects (e.g., milk).
+2. You MUST include the target objects (e.g., apple).
 3. You MUST include potential functional tools (e.g., heaters if the goal is to heat, containers if the goal is to transfer).
-4. If the SDG contains abstract variables like `?Heater` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., microwave, stove, fridge) and include their IDs.
-5. DO NOT include background objects, decorations, or irrelevant furniture (e.g., TV, apples when the goal is heating milk).
+4. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their IDs if multiple options exist. Do NOT filter out less common alternatives because the primary choices might be broken. The Execution Engine needs ALL alternatives.
+5. DO NOT include background objects, decorations, or irrelevant furniture (e.g., TV, milk when the goal is washing an apple).
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -250,17 +250,20 @@ AVAILABLE ACTIONS:
 - [plugin] <object_class> (<object_id>) : Plug in an appliance.
 
 CRITICAL RULES:
-1. VARIABLE BINDING: The SDG uses abstract variables like `?Heater`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `microwave(171)` for `?Heater`).
+1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
 2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
 3. GRABBING RULE: To `[putin]` an object into a container, you MUST already be holding it. If you are not holding it, you must first `[walk]` to it, then `[grab]` it.
 4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it).
-5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <microwave> (171)`. For two-argument actions: `[putin] <milk> (176) <microwave> (171)`.
-6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `HOT`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
+5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`.
+6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
+7. PROPERTY VERIFICATION (CRITICAL): 
+- BROKEN CHECK: An appliance is BROKEN if it lacks the `HAS_SWITCH` property IN ITS `Props:` list. Do NOT hallucinate properties based on the object's name (e.g., a dishwasher might be broken and lack a switch). When binding a variable like `?Washer`, you MUST verify the chosen object explicitly has `HAS_SWITCH` in its `Props:`. If missing, it is BROKEN. You CANNOT bind it, you CANNOT put things inside it, and you CANNOT use it. Pick an alternative.
+- PLUGGING: The SDG might require the appliance to be POWERED or PLUGGED_IN. However, some appliances (like `stove` or `sink`) are hardwired and do NOT have the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to execute `[plugin]`. Consider it naturally powered and skip straight to `[switchon]`. ONLY execute `[plugin]` if the object explicitly has the `HAS_PLUG` property in its `Props:`.
 
 OUTPUT FORMAT (Strict JSON):
 {
-    "reasoning": "Explain the current state gap and why this action is chosen.",
-    "mapped_variables": {"?Heater": "microwave(171)"},
+    "reasoning": "Explain the current state gap, verify properties if needed, and why this action/object is chosen.",
+    "mapped_variables": {"?Washer": "sink(10)"},
     "action": "[action_string]"
 }
 """

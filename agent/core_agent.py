@@ -155,14 +155,18 @@ class VirtualHomeAgent:
                 return True
                 
             # Execute logic using the filtered graph
-            next_action = self.llm_executor.decide_next_action(
+            next_action, reasoning = self.llm_executor.decide_next_action(
                 filtered_graph, goal_intent, self.current_sdg, self.action_history
             )
             
             if next_action and next_action != "WAIT":
                 obs, reward, done, info = env.step({0: next_action})
                 success = info.get('action_success', False)
-                self.action_history.append({"step": steps, "action": next_action, "success": success})
+                msg = info.get('action_message', '')
+                history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
+                if not success and msg:
+                    history_entry["error"] = msg
+                self.action_history.append(history_entry)
             else:
                 next_action = "WAIT"
                 

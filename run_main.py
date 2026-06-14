@@ -32,8 +32,16 @@ def main():
             for node in graph['nodes']:
                 if node['class_name'].lower() in t_classes:
                     st = set(node.get('states', []))
+                    props = node.get('properties', [])
                     for rs in rm_states: st.discard(rs)
-                    for as_ in add_states: st.add(as_)
+                    for as_ in add_states:
+                        # Only add PLUGGED_OUT if it actually supports plugs
+                        if as_ == 'PLUGGED_OUT' and 'HAS_PLUG' not in props:
+                            continue
+                        # Only add OFF if it actually supports switches
+                        if as_ == 'OFF' and 'HAS_SWITCH' not in props:
+                            continue
+                        st.add(as_)
                     node['states'] = list(st)
         return graph
     env.get_graph = sabotaged_get_graph

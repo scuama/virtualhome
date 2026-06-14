@@ -7,7 +7,7 @@
   "log_mode": "visual",
   "sabotage": {
     "target_class": "microwave",
-    "remove_properties": ["HAS_SWITCH", "HAS_PLUG"]
+    "remove_properties": ["HAS_SWITCH"]
   },
   "initial_states_override": [
     {

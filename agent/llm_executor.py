@@ -37,9 +37,9 @@ class LLMExecutor:
         graph_str = self._compress_filtered_graph(filtered_graph)
         sdg_str = json.dumps(current_sdg, ensure_ascii=False) if current_sdg else "No SDG available."
         intent_str = json.dumps(intent_dict, ensure_ascii=False)
-        history_str = json.dumps(action_history[-3:], ensure_ascii=False) if action_history else "None"
+        history_str = json.dumps(action_history[-10:], ensure_ascii=False) if action_history else "None"
         
-        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 3):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
         
         try:
             result_str = self.llm.generate_response(
@@ -65,4 +65,4 @@ class LLMExecutor:
             "action": action
         })
         
-        return action
+        return action, reasoning
