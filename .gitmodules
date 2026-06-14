@@ -1,0 +1,3 @@
+[submodule "agent/EmbodiedLTM"]
+	path = agent/EmbodiedLTM
+	url = git@github.com:scuama/EmbodiedLTM.git
