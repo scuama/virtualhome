@@ -122,17 +122,40 @@ class UnityEnvironment(BaseEnvironment):
     def step(self, action_dict):
         script_list = utils_environment.convert_action(action_dict)
         if len(script_list[0]) > 0:
-            if self.recording_options['recording']:
-                success, message = self.comm.render_script(script_list,
-                                                           recording=True,
-                                                           skip_animation=False,
-                                                           camera_mode=self.recording_options['cameras'],
-                                                           file_name_prefix='task_{}'.format(self.task_id),
-                                                           image_synthesis=self.recording_optios['modality'])
+            action_str = script_list[0].lower()
+            if '[plugin]' in action_str or '[plugout]' in action_str:
+                # Fake plugin/plugout in python layer because Unity C# lacks this action
+                success = True
+                message = "Faked plug operation in Python layer"
+                obj_id_str = action_str.split('(')[-1].split(')')[0]
+                try:
+                    obj_id = int(obj_id_str)
+                    if getattr(self, 'custom_states', None) is None:
+                        self.custom_states = {}
+                    if obj_id not in self.custom_states:
+                        self.custom_states[obj_id] = set()
+                    
+                    if '[plugin]' in action_str:
+                        self.custom_states[obj_id].add('PLUGGED_IN')
+                        self.custom_states[obj_id].discard('PLUGGED_OUT')
+                    else:
+                        self.custom_states[obj_id].add('PLUGGED_OUT')
+                        self.custom_states[obj_id].discard('PLUGGED_IN')
+                    self.changed_graph = True
+                except ValueError:
+                    pass
             else:
-                success, message = self.comm.render_script(script_list,
-                                                           recording=False,
-                                                           skip_animation=True)
+                if self.recording_options['recording']:
+                    success, message = self.comm.render_script(script_list,
+                                                               recording=True,
+                                                               skip_animation=False,
+                                                               camera_mode=self.recording_options['cameras'],
+                                                               file_name_prefix='task_{}'.format(self.task_id),
+                                                               image_synthesis=self.recording_optios['modality'])
+                else:
+                    success, message = self.comm.render_script(script_list,
+                                                               recording=False,
+                                                               skip_animation=True)
             if not success:
                 print(message)
             else:
@@ -163,6 +186,7 @@ class UnityEnvironment(BaseEnvironment):
         """
         self.env_id = environment_id
         print("Resetting env", self.env_id)
+        self.custom_states = {}
 
         if self.env_id is not None:
             self.comm.reset(self.env_id)
@@ -215,10 +239,54 @@ class UnityEnvironment(BaseEnvironment):
         return obs
 
     def get_graph(self):
+        if getattr(self, 'custom_states', None) is None:
+            self.custom_states = {}
+            
         if self.changed_graph:
             s, graph = self.comm.environment_graph()
             if not s:
                 pdb.set_trace()
+                
+            # === Thermal State Transition Extension ===
+            heating_appliances_inside = ['microwave', 'oven', 'toaster', 'coffe_maker', 'kettle', 'stove']
+            heating_appliances_on = ['stove']
+            
+            active_heaters = [n for n in graph.get('nodes', []) if 'ON' in n.get('states', [])]
+            
+            def get_related_items(target_id, relation_type):
+                return [e['from_id'] for e in graph.get('edges', []) if e['to_id'] == target_id and e['relation_type'] == relation_type]
+            
+            items_to_heat = set()
+            for heater in active_heaters:
+                cname = heater['class_name'].lower()
+                if cname in heating_appliances_inside:
+                    items_to_heat.update(get_related_items(heater['id'], 'INSIDE'))
+                elif cname in heating_appliances_on:
+                    items_on = get_related_items(heater['id'], 'ON')
+                    items_to_heat.update(items_on)
+                    # Propagate heat to items inside/on cookware
+                    for item_id in items_on:
+                        item_node = next((n for n in graph['nodes'] if n['id'] == item_id), None)
+                        if item_node and item_node['class_name'].lower() in ['fryingpan', 'pot', 'cookingpot', 'sauce_pan', 'plate', 'bowl']:
+                            items_to_heat.update(get_related_items(item_id, 'INSIDE'))
+                            items_to_heat.update(get_related_items(item_id, 'ON'))
+                            
+            for item_id in items_to_heat:
+                if item_id not in self.custom_states:
+                    self.custom_states[item_id] = set()
+                self.custom_states[item_id].add('HOT')
+                
+            # Merge custom states back into the graph natively
+            for node in graph.get('nodes', []):
+                nid = node['id']
+                if nid in self.custom_states:
+                    current_states = set(node.get('states', []))
+                    current_states.update(self.custom_states[nid])
+                    if 'COLD' in current_states and 'HOT' in self.custom_states[nid]:
+                        current_states.discard('COLD') # Thermal replacement
+                    node['states'] = list(current_states)
+            # ==========================================
+            
             self.graph = graph
             self.changed_graph = False
         return self.graph
