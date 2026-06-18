@@ -11,7 +11,15 @@ def main():
         
     env = UnityEnvironment(num_agents=1, executable_args={'file_name': None})
     env.reset(environment_id=config['environment_id'])
-    
+    env.hidden_broken_ids = set()
+    hidden_broken_classes = config.get('hidden_broken_classes', [])
+    if hidden_broken_classes:
+        _, initial_graph = env.comm.environment_graph()
+        if initial_graph:
+            for node in initial_graph['nodes']:
+                if node['class_name'].lower() in [c.lower() for c in hidden_broken_classes]:
+                    env.hidden_broken_ids.add(node['id'])
+
     # Apply sabotage
     original_get_graph = env.get_graph
     def sabotaged_get_graph(*args, **kwargs):
@@ -30,7 +38,11 @@ def main():
             rm_states = override.get('remove_states', [])
             add_states = override.get('add_states', [])
             for node in graph['nodes']:
-                if node['class_name'].lower() in t_classes:
+                if node['class_name'].lower() in [t.lower() for t in t_classes]:
+                    # Skip override if the Python layer has explicitly modified this object's state
+                    if getattr(env, 'custom_states', None) is not None and node['id'] in env.custom_states:
+                        continue
+                        
                     st = set(node.get('states', []))
                     props = node.get('properties', [])
                     for rs in rm_states: st.discard(rs)

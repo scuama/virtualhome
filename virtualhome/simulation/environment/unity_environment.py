@@ -123,7 +123,94 @@ class UnityEnvironment(BaseEnvironment):
         script_list = utils_environment.convert_action(action_dict)
         if len(script_list[0]) > 0:
             action_str = script_list[0].lower()
-            if '[plugin]' in action_str or '[plugout]' in action_str or '[switchon]' in action_str or '[switchoff]' in action_str:
+            import re
+            if any(act in action_str for act in ['[wash]', '[cut]', '[pour]']):
+                # --- MOCK EXTENSIONS: WASH, CUT, POUR ---
+                ids = re.findall(r'\(\s*(\d+)\s*\)', action_str)
+                current_graph = self.get_graph()
+                char_id = next((n['id'] for n in current_graph['nodes'] if n['class_name'] == 'character'), 1)
+                
+                success = False
+                message = "Failed: Preconditions not met."
+                
+                if getattr(self, 'custom_states', None) is None: self.custom_states = {}
+                
+                if '[wash]' in action_str and len(ids) >= 1:
+                    obj_id = int(ids[0])
+                    target_node = next((n for n in current_graph['nodes'] if n['id'] == obj_id), None)
+                    if target_node:
+                        props = target_node.get('properties', [])
+                        if 'GRABBABLE' in props:
+                            held_by_agent = any(e['from_id'] == char_id and e['relation_type'].startswith('HOLDS') and e['to_id'] == obj_id for e in current_graph['edges'])
+                            near_sink = any(e['from_id'] == char_id and e['relation_type'] == 'CLOSE' and next((n for n in current_graph['nodes'] if n['id'] == e['to_id']), {}).get('class_name') in ['sink', 'dishwasher'] for e in current_graph['edges'])
+                            if held_by_agent and near_sink:
+                                success = True
+                                message = "Washed successfully."
+                                if obj_id not in self.custom_states: self.custom_states[obj_id] = set()
+                                self.custom_states[obj_id].add('CLEAN')
+                                self.custom_states[obj_id].discard('DIRTY')
+                            else:
+                                message = "Failed: Must hold the object and be near a sink."
+                        else:
+                            message = "Failed: Object is not grabbable/washable."
+                            
+                elif '[cut]' in action_str and len(ids) >= 1:
+                    obj_id = int(ids[0])
+                    target_node = next((n for n in current_graph['nodes'] if n['id'] == obj_id), None)
+                    if target_node:
+                        props = target_node.get('properties', [])
+                        if 'CUTTABLE' in props:
+                            holding_knife = any(e['from_id'] == char_id and e['relation_type'].startswith('HOLDS') and next((n for n in current_graph['nodes'] if n['id'] == e['to_id']), {}).get('class_name') == 'knife' for e in current_graph['edges'])
+                            close_to_target = any(e['from_id'] == char_id and (e['relation_type'] == 'CLOSE' or e['relation_type'].startswith('HOLDS')) and e['to_id'] == obj_id for e in current_graph['edges'])
+                            if holding_knife and close_to_target:
+                                success = True
+                                message = "Sliced successfully."
+                                if obj_id not in self.custom_states: self.custom_states[obj_id] = set()
+                                self.custom_states[obj_id].add('SLICED')
+                            else:
+                                message = "Failed: Must hold a knife and be close to the object."
+                        else:
+                            message = "Failed: Object is not CUTTABLE."
+                            
+                elif '[pour]' in action_str and len(ids) >= 2:
+                    src_id = int(ids[0])
+                    dest_id = int(ids[1])
+                    src_node = next((n for n in current_graph['nodes'] if n['id'] == src_id), None)
+                    dest_node = next((n for n in current_graph['nodes'] if n['id'] == dest_id), None)
+                    if src_node and dest_node:
+                        src_props = src_node.get('properties', [])
+                        dest_props = dest_node.get('properties', [])
+                        held_src = any(e['from_id'] == char_id and e['relation_type'].startswith('HOLDS') and e['to_id'] == src_id for e in current_graph['edges'])
+                        close_dest = any(e['from_id'] == char_id and (e['relation_type'] == 'CLOSE' or e['relation_type'].startswith('HOLDS')) and e['to_id'] == dest_id for e in current_graph['edges'])
+                        if not (held_src and close_dest):
+                            message = "Failed: Must hold source object and be close to target."
+                        elif dest_node['class_name'] == 'sink':
+                            if src_id not in self.custom_states: self.custom_states[src_id] = set()
+                            filled_states = [s for s in self.custom_states[src_id] if s.startswith('FILLED_')]
+                            if filled_states:
+                                for s in filled_states:
+                                    self.custom_states[src_id].discard(s)
+                                    if s != 'FILLED_WATER':
+                                        self.custom_states[src_id].add('DIRTY')
+                                self.custom_states[src_id].add('EMPTY')
+                                success = True
+                                message = "Poured into sink successfully."
+                            else:
+                                message = "Failed: Source is already empty or has no liquid."
+                        elif 'POURABLE' in src_props and 'POURABLE' in dest_props:
+                            success = True
+                            message = "Poured into container successfully."
+                            liquid_name = src_node['class_name'].upper()
+                            if dest_id not in self.custom_states: self.custom_states[dest_id] = set()
+                            self.custom_states[dest_id].add(f'FILLED_{liquid_name}')
+                            self.custom_states[dest_id].discard('EMPTY')
+                        else:
+                            message = "Failed: Both source and destination must be POURABLE for transfer."
+                if not success:
+                    print(message)
+                else:
+                    self.changed_graph = True
+            elif '[plugin]' in action_str or '[plugout]' in action_str or '[switchon]' in action_str or '[switchoff]' in action_str:
                 # Intercept actions in python layer to check properties
                 obj_id_str = action_str.split('(')[-1].split(')')[0]
                 try:
@@ -136,7 +223,23 @@ class UnityEnvironment(BaseEnvironment):
                     if target_node:
                         props = target_node.get('properties', [])
                         
-                        if ('[plugin]' in action_str or '[plugout]' in action_str) and 'HAS_PLUG' not in props:
+                        is_interaction = any(act in action_str for act in ['[switchon]', '[switchoff]', '[open]', '[close]', '[plugin]', '[plugout]', '[putin]', '[putback]'])
+                        
+                        if 'BROKEN' in target_node.get('states', []):
+                            success = False
+                            message = f"Failed: {target_node['class_name']} is BROKEN and cannot be used."
+                        elif is_interaction and obj_id in getattr(self, 'hidden_broken_ids', set()):
+                            # Reveal the hidden broken state upon interaction
+                            if getattr(self, 'custom_states', None) is None:
+                                self.custom_states = {}
+                            if obj_id not in self.custom_states:
+                                self.custom_states[obj_id] = set()
+                            self.custom_states[obj_id].add('BROKEN')
+                            self.changed_graph = True
+                            
+                            success = False
+                            message = f"Failed: You discover that the {target_node['class_name']} is BROKEN and does not respond."
+                        elif ('[plugin]' in action_str or '[plugout]' in action_str) and 'HAS_PLUG' not in props:
                             success = False
                             message = f"Failed: {target_node['class_name']} does not have HAS_PLUG property."
                         elif ('[switchon]' in action_str or '[switchoff]' in action_str) and 'HAS_SWITCH' not in props:

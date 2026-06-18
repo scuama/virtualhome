@@ -10,7 +10,7 @@ SDG_SYSTEM_PROMPT = """你是一个具身智能体的 SDG (State Dependency Grap
 ### 动作与状态能力限制：
 1. 只能使用基础动作带来的状态改变，如走动、拿取、开关门、放入取出、插电、开关电器。
 2. 热力学法则（温度改变）：
-   - 加热（HOT）：必须将物品放入/放在热源（如 microwave/oven/toaster/stove）内部/表面，并开启热源（switchon）。且热源必须有电（plugin）。
+   - 加热（HOT）：必须将物品放入/放在热源（如 microwave/oven/toaster/stove）内部/表面，并开启热源（switchon）。（注意：某些热源如 microwave 需要插电 plugin，而有些热源如 stove 是硬接线不需要插电，因此你的 SDG 中通电状态应标记为可能需要，或者由下游决定）
    - 冰镇（COLD）：必须将物品放入制冷源（如 fridge）内部。制冷源通常需要关闭门（close）以生效。
 3. 容器法则：放入东西前必须先打开（open）。
 

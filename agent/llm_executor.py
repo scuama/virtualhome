@@ -52,17 +52,23 @@ class LLMExecutor:
             action = result_dict.get("action", "WAIT")
             reasoning = result_dict.get("reasoning", "")
             mapped_vars = result_dict.get("mapped_variables", {})
+            satisfied_nodes = result_dict.get("satisfied_nodes", [])
+            current_node_focus = result_dict.get("current_node_focus", "")
             
         except Exception as e:
             self.logger.error(f"LLMExecutor failed: {e}")
             action = "WAIT"
             reasoning = "Fallback due to error."
             mapped_vars = {}
+            satisfied_nodes = []
+            current_node_focus = ""
             
         self.logger.log_module_output("LLMExecutor", 0, {
             "reasoning": reasoning,
+            "satisfied_nodes": satisfied_nodes,
+            "current_node_focus": current_node_focus,
             "mapped_variables": mapped_vars,
             "action": action
         })
         
-        return action, reasoning
+        return action, reasoning, current_node_focus, satisfied_nodes

@@ -37,7 +37,7 @@ class AgentLogger:
                 formatted_data = json.dumps(output_data, ensure_ascii=False, indent=2)
             f.write(f"\n### [{module_name}] Output\n```json\n{formatted_data}\n```\n")
         
-    def write_step(self, step, action, sdg, observed_items):
+    def write_step(self, step, action, sdg, observed_items, current_node_focus=None, satisfied_nodes=None):
         with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(f"## Step {step}\n")
             f.write(f"- **Action**: `{action}`\n")
@@ -45,14 +45,17 @@ class AgentLogger:
             # Always output the Mermaid graph for SDG
             f.write(f"- **SDG Status**:\n")
             if sdg:
-                f.write(f"```mermaid\n{self._generate_mermaid(sdg)}\n```\n")
+                f.write(f"```mermaid\n{self._generate_mermaid(sdg, current_node_focus, satisfied_nodes)}\n```\n")
             else:
                 f.write("No SDG active.\n")
                 
             f.write(f"- **Observed Items ({len(observed_items)})**: {', '.join(observed_items[:15])}{'...' if len(observed_items) > 15 else ''}\n")
             f.write("\n")
 
-    def _generate_mermaid(self, sdg):
+    def _generate_mermaid(self, sdg, current_node_focus=None, satisfied_nodes=None):
+        if satisfied_nodes is None:
+            satisfied_nodes = []
+            
         lines = ["graph TD"]
         nodes = sdg.get("nodes", [])
         edges = sdg.get("edges", [])
@@ -68,7 +71,14 @@ class AgentLogger:
             
             # Escape quotes in label to avoid syntax errors
             label = label.replace('"', '\\"')
-            lines.append(f'    {nid}["{label}"]')
+            
+            style_str = ""
+            if current_node_focus and nid == current_node_focus:
+                style_str = f"\n    style {nid} fill:#ff9,stroke:#333,stroke-width:4px"
+            elif nid in satisfied_nodes:
+                style_str = f"\n    style {nid} fill:#9f9,stroke:#333,stroke-width:2px"
+                
+            lines.append(f'    {nid}["{label}"]{style_str}')
 
         for edge in edges:
             reason = edge.get('reason', '')
@@ -155,7 +165,7 @@ class VirtualHomeAgent:
                 return True
                 
             # Execute logic using the filtered graph
-            next_action, reasoning = self.llm_executor.decide_next_action(
+            next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
                 filtered_graph, goal_intent, self.current_sdg, self.action_history
             )
             
@@ -171,7 +181,7 @@ class VirtualHomeAgent:
                 next_action = "WAIT"
                 
             # Log current step
-            self.logger.write_step(steps, next_action, self.current_sdg, observed)
+            self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
             
             steps += 1
             

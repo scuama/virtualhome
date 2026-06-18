@@ -5,10 +5,6 @@
   "goal_instruction": "如果看到牛奶，帮我加热它。",
   "max_steps": 30,
   "log_mode": "visual",
-  "sabotage": {
-    "target_class": "microwave",
-    "remove_properties": ["HAS_SWITCH"]
-  },
   "initial_states_override": [
     {
       "target_classes": ["toaster", "coffe_maker", "stove", "oven"],
@@ -16,6 +12,7 @@
       "add_states": ["PLUGGED_OUT", "OFF"]
     }
   ],
+  "hidden_broken_classes": ["microwave"],
   "success_condition": {
     "target_class": "milk",
     "require_state": "HOT",

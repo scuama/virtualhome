@@ -248,6 +248,9 @@ AVAILABLE ACTIONS:
 - [switchon] <object_class> (<object_id>) : Turn on an appliance. (Must be PLUGGED_IN if it has a plug)
 - [switchoff] <object_class> (<object_id>) : Turn off an appliance.
 - [plugin] <object_class> (<object_id>) : Plug in an appliance.
+- [wash] <object_class> (<object_id>) : Wash a dirty object. (Must be holding the object AND near a sink/dishwasher)
+- [cut] <object_class> (<object_id>) : Cut or slice an object. (Must be holding a knife AND near the target object)
+- [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target)
 
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
@@ -256,13 +259,19 @@ CRITICAL RULES:
 4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it).
 5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`.
 6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
-7. PROPERTY VERIFICATION (CRITICAL): 
-- BROKEN CHECK: An appliance is BROKEN if it lacks the `HAS_SWITCH` property IN ITS `Props:` list. Do NOT hallucinate properties based on the object's name (e.g., a dishwasher might be broken and lack a switch). When binding a variable like `?Washer`, you MUST verify the chosen object explicitly has `HAS_SWITCH` in its `Props:`. If missing, it is BROKEN. You CANNOT bind it, you CANNOT put things inside it, and you CANNOT use it. Pick an alternative.
+7. MOCKED ACTIONS & PRECONDITIONS (CRITICAL): 
+   - To [wash], you MUST first [grab] the object, then [walk] to a sink, then [wash].
+   - To [cut], you MUST first [grab] a knife, then [walk] to the food, then [cut].
+   - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
+8. PROPERTY VERIFICATION (CRITICAL): 
+- INTERACTIVE DISCOVERY: Objects may appear perfectly normal in the graph but can actually be broken. If you try to use an object (e.g. `[switchon]`, `[open]`, `[plugin]`) and receive a failure message stating that it is 'BROKEN', it means you have discovered a defective object. The object will then be marked with `[BROKEN]` in subsequent graphs. You MUST immediately abandon this defective object, do NOT try to interact with it again, and pick an alternative device instead.
 - PLUGGING: The SDG might require the appliance to be POWERED or PLUGGED_IN. However, some appliances (like `stove` or `sink`) are hardwired and do NOT have the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to execute `[plugin]`. Consider it naturally powered and skip straight to `[switchon]`. ONLY execute `[plugin]` if the object explicitly has the `HAS_PLUG` property in its `Props:`.
 
 OUTPUT FORMAT (Strict JSON):
 {
     "reasoning": "Explain the current state gap, verify properties if needed, and why this action/object is chosen.",
+    "satisfied_nodes": ["List of SDG node IDs (e.g. 'N2') that are ALREADY satisfied in the current Filtered Graph"],
+    "current_node_focus": "The ID of the single SDG node (e.g. 'N1') that this action is actively trying to satisfy",
     "mapped_variables": {"?Washer": "sink(10)"},
     "action": "[action_string]"
 }
