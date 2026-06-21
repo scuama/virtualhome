@@ -8,10 +8,11 @@ from .perception_filter import PerceptionFilter
 from .llm_executor import LLMExecutor
 
 class AgentLogger:
-    def __init__(self, log_mode="text"):
+    def __init__(self, log_mode="text", scenario_id=""):
         self.log_mode = log_mode
         os.makedirs("agent/logs", exist_ok=True)
-        self.log_file = f"agent/logs/run_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+        prefix = f"run_{scenario_id}_" if scenario_id else "run_"
+        self.log_file = f"agent/logs/{prefix}{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
         
         # Initialize markdown file
         with open(self.log_file, "w", encoding="utf-8") as f:
@@ -65,7 +66,7 @@ class AgentLogger:
             if node["type"] == "State":
                 label = f"{node['object']}<br>({node['value']})"
             elif node["type"] == "Relation":
-                label = f"{node['object']}<br>{node['relation']}<br>{node.get('target', '')}"
+                label = f"{node.get('object', '')}<br>{node.get('relation', node.get('state', node.get('value', '')))}<br>{node.get('target', '')}"
             else:
                 label = f"{node['object']}"
             
@@ -88,7 +89,7 @@ class AgentLogger:
 
 
 class VirtualHomeAgent:
-    def __init__(self, model_name="gpt-5.4-mini"):
+    def __init__(self, model_name="gpt-5.4-mini", scenario_id=""):
         self.llm = LLMClient(model_name=model_name)
         self.action_history = []
         self.current_sdg = None
@@ -96,7 +97,8 @@ class VirtualHomeAgent:
         self.sdg_planner = None
         self.perception_filter = None
         self.llm_executor = None
-        self.logger = None
+        self.scenario_id = scenario_id
+        self.logger = AgentLogger(log_mode="markdown", scenario_id=scenario_id)
 
     def _get_observed_items(self, graph):
         items = []
@@ -106,25 +108,82 @@ class VirtualHomeAgent:
             items.append(f"{n['class_name']}({n['id']}){state_str}")
         return items
 
-    def _check_success(self, graph, condition):
+    def _check_success(self, graph, condition, action_history=None):
         if not condition: return False
-        req_state = condition['require_state']
-        quantifier = condition.get('quantifier', 'any')
-        target_class = condition['target_class']
         
-        target_nodes = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
-        if not target_nodes: return False
+        mode = condition.get('mode', 'SINGLE')
+        conditions = condition.get('conditions', [condition]) if mode == 'AND' else [condition]
+        
+        for cond in conditions:
+            check_type = cond.get('check_type', 'state')
             
-        hot_count = sum(1 for n in target_nodes if req_state in n.get('states', []))
-        if quantifier == 'any':
-            return hot_count > 0
-        elif quantifier == 'all':
-            return hot_count == len(target_nodes)
-        return False
+            if check_type == 'state':
+                req_state = cond['require_state']
+                quantifier = cond.get('quantifier', 'any')
+                target_class = cond['target_class']
+                instance_filter = cond.get('instance_filter', {})
+                
+                target_nodes = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
+                if 'color' in instance_filter:
+                    color = instance_filter['color'].upper()
+                    target_nodes = [n for n in target_nodes if color in [p.upper() for p in n.get('properties', [])] or color in [s.upper() for s in n.get('states', [])]]
+                if not target_nodes: return False
+                    
+                hot_count = sum(1 for n in target_nodes if req_state in n.get('states', []))
+                if quantifier == 'any' and hot_count == 0: return False
+                if quantifier == 'all' and hot_count != len(target_nodes): return False
+                
+            elif check_type == 'relation':
+                target_class = cond.get('target_class', cond.get('subject', ''))
+                relation = cond['relation']
+                dest_class = cond.get('destination_class', cond.get('object', ''))
+                min_count = cond.get('min_count', 1)
+                req_state = cond.get('subject_must_have_state', None)
+                
+                target_nodes = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
+                dest_nodes = [n['id'] for n in graph['nodes'] if n['class_name'].lower() == dest_class.lower()]
+                
+                if req_state:
+                    target_nodes = [n for n in target_nodes if req_state.upper() in [s.upper() for s in n.get('states', [])]]
+                
+                target_ids = [n['id'] for n in target_nodes]
+                
+                match_count = 0
+                for t_id in target_ids:
+                    for e in graph['edges']:
+                        if e['from_id'] == t_id and e['relation_type'] == relation and e['to_id'] in dest_nodes:
+                            match_count += 1
+                            break
+                            
+                if match_count < min_count: return False
+                
+            elif check_type == 'agent_action':
+                if not action_history: return False
+                last_entry = action_history[-1]
+                last_action = last_entry.get('action', '').lower()
+                last_reasoning = last_entry.get('reasoning', '').lower()
+                
+                req_action = cond.get('require_action')
+                if req_action and req_action.lower() not in last_action:
+                    return False
+                    
+                req_msgs = cond.get('require_message_contains', [])
+                if req_msgs:
+                    matched = False
+                    for msg in req_msgs:
+                        if msg.lower() in last_action or msg.lower() in last_reasoning:
+                            matched = True
+                            break
+                    if not matched:
+                        return False
+            else:
+                # Unknown condition types should not accidentally pass
+                return False
+        return True
 
     def run_episode(self, env, config):
         log_mode = config.get("log_mode", "text")
-        self.logger = AgentLogger(log_mode=log_mode)
+        self.logger = AgentLogger(log_mode=log_mode, scenario_id=self.scenario_id)
         
         # Instantiate sub-modules with the logger
         self.goal_reasoner = GoalReasoner(self.llm, self.logger)
@@ -142,7 +201,7 @@ class VirtualHomeAgent:
             
         # 3. Execution Loop
         steps = 0
-        max_steps = config.get('max_steps', 30)
+        max_steps = config.get('max_steps', 20)
         
         while steps < max_steps:
             raw_obs = env.get_observations()
@@ -159,17 +218,49 @@ class VirtualHomeAgent:
             observed = self._get_observed_items(filtered_graph)
             
             # Check success BEFORE action using raw_graph to avoid perception filter drops
-            if self._check_success(raw_graph, config.get('success_condition')):
+            if self._check_success(raw_graph, config.get('success_condition'), self.action_history):
                 self.logger.info("✅ SUCCESS! Goal condition met.")
                 self.logger.write_step(steps, "FINISH (Goal Reached)", self.current_sdg, observed)
                 return True
                 
+            if config.get('failure_condition'):
+                fail_cond = config.get('failure_condition')
+                if fail_cond.get('start_step', 0) <= steps <= fail_cond.get('end_step', 9999):
+                    if self._check_success(raw_graph, fail_cond, self.action_history):
+                        self.logger.error("❌ FAILED: Failure condition met (e.g. violated rule).")
+                        return False
             # Execute logic using the filtered graph
             next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
-                filtered_graph, goal_intent, self.current_sdg, self.action_history
+                filtered_graph, goal_intent, self.current_sdg, self.action_history, config.get('scheduled_rules')
             )
             
+            import re
             if next_action and next_action != "WAIT":
+                # Ensure class names have < > around them.
+                # Format is [action] class_name (id) or [action] <class_name> (id)
+                # We want to replace " class_name (" with " <class_name> ("
+                # But handle two arguments as well: [putin] apple (1) fridge (2)
+                def add_brackets(match):
+                    cls_name = match.group(1).strip()
+                    if not cls_name.startswith('<'):
+                        cls_name = f"<{cls_name}>"
+                    return f" {cls_name} ({match.group(2)})"
+                
+                next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
+                
+                if next_action.lower().startswith("[ask]"):
+                    success = True
+                    msg = "Agent asked for help."
+                    history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
+                    self.action_history.append(history_entry)
+                    self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
+                    if self._check_success(config, env, self.action_history):
+                        self.logger.info("✅ SUCCESS: Agent correctly requested help as defined in success_condition.")
+                        return True
+                    else:
+                        self.logger.error("❌ FAILED: Agent requested help, but success condition was not met.")
+                        return False
+                
                 obs, reward, done, info = env.step({0: next_action})
                 success = info.get('action_success', False)
                 msg = info.get('action_message', '')

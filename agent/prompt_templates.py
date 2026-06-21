@@ -9,9 +9,8 @@ CRITICAL RULES FOR DEEP INTENT:
 1. The `deep_intent` must be a pure, functional human need (e.g., "The user wants to relieve hunger" or "The user wants to illuminate a dark room").
 2. The `deep_intent` MUST NOT contain specific physical objects mentioned in the original instruction (e.g., do NOT say "bring me a burger", just say "relieve hunger").
 3. When considering alternatives, restrict your thoughts to typical objects found in an indoor/household environment.
-4. BE BROAD AND CREATIVE WITH ALTERNATIVES! Describe broad classes of properties rather than being overly precise. If the intent is "relieve hunger" (e.g. user wanted a burger), alternatives must range from direct substitutes (other ready-to-eat food, bread, sandwiches) to functional substitutes (fruits like apples or bananas that can satisfy hunger). Do not artificially narrow the scope to only identical categories.
-5. CROSS-CATEGORY REQUIREMENT: You MUST include at least one fallback alternative from a completely different physical category that serves the same deep intent. The cross-category item MUST be a real, physically graspable object commonly found in a household (e.g., if the user wanted a cooked meal to relieve hunger, a cross-category fallback is an apple, banana, or other raw fruit that a robot can pick up). Do NOT use abstract or non-graspable items like "a moment of enjoyment" or "entertainment".
-6. AMBIGUITY & VAGUE INSTRUCTION CHECK: A robot must operate in a deterministic physical world. If the instruction contains semantic ambiguities that prevent determining exact physical targets or final physical states, you MUST ask for clarification by setting `is_instruction_obviously_vague` to true. 
+4. ALTERNATIVES SCOPE: Describe practical and closely related substitutes. If the exact object is unavailable, suggest items that share the same primary physical category and function (e.g., if the user wants an apple, suggest other fruits; if the user wants a burger, suggest other ready-to-eat cooked foods). Do NOT suggest wildly different objects or abstract concepts.
+5. AMBIGUITY & VAGUE INSTRUCTION CHECK: A robot must operate in a deterministic physical world. If the instruction contains semantic ambiguities that prevent determining exact physical targets or final physical states, you MUST ask for clarification by setting `is_instruction_obviously_vague` to true. 
 Triggers for clarification include:
 - Unresolved pronouns (e.g., "it", "that thing", "this one", "use that") where the context does not make the referent obvious.
 - Subjective adjectives or human-judgment states (e.g., "make it better", "adjust to the right level", "appropriate temperature", "clean enough") where the exact thermodynamic (HOT/COLD), topological (INSIDE/ON), or mechanical state (OPEN/CLOSED) is undefined. A robot cannot guess what "appropriate" means; it needs concrete states.
@@ -118,7 +117,7 @@ Your task is to review the currently visible objects, memory objects, and all av
 CRITICAL RULES:
 1. STRICT OBJECT FILTERING: Remove any objects that are clearly irrelevant to the 'target_object', 'deep_intent', or acceptable_alternatives_properties. For example, if looking for a beverage, discard toys, tools, blocks, lids, etc. Include only objects that could be the target or a physical alternative (e.g., other drinks, cups, or fruits that quench thirst).
 2. When in doubt about borderline items, omit them rather than including obvious toys/tools. An empty `relevant_objects` list is acceptable if no candidate plausibly satisfies the intent yet—exploration should continue.
-3. LOOSE LOCATION FILTERING: Objects can be placed anywhere. Do NOT aggressively filter out locations. Keep all logical locations that could potentially contain the target object or alternatives. Only filter out locations that are physically impossible or absurd for the given task.
+3. LOCATION RETENTION (CRITICAL): You MUST retain all locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent (e.g. if the intent says 'put remote on sofa', you MUST keep the sofa!). Do NOT filter out locations just because they don't currently contain the target object. Keep all logical receptacles that could serve as destinations.
 4. HELD OBJECT (CRITICAL): Check the `Currently Held Object`. If the agent is holding something, you MUST include its exact name in `relevant_objects` IF AND ONLY IF it is a valid target or acceptable alternative. Do not forget to output it!
 
 You must output ONLY a JSON object with:
@@ -251,21 +250,31 @@ AVAILABLE ACTIONS:
 - [wash] <object_class> (<object_id>) : Wash a dirty object. (Must be holding the object AND near a sink/dishwasher)
 - [cut] <object_class> (<object_id>) : Cut or slice an object. (Must be holding a knife AND near the target object)
 - [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target)
-
+- [ask] <message> : Ask the human for clarification or report physical impossibility.
+- [wait] : Wait in place for one time step.
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
 2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
 3. GRABBING RULE: To `[putin]` an object into a container, you MUST already be holding it. If you are not holding it, you must first `[walk]` to it, then `[grab]` it.
-4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it).
+4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it). If a target receptacle (e.g., `sink`, `table`) does NOT have the `CAN_OPEN` property, you CANNOT use `[open]` or `[putin]`. You MUST use `[putback]` to place the object in/on it.
 5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`.
 6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
-7. MOCKED ACTIONS & PRECONDITIONS (CRITICAL): 
+7. FAILURE & LOOPS: If an execution step returns an error, OR if you find yourself repeating the same cycle of actions (e.g. repeatedly switching something on and off, or walking to the same object) without progress toward the SDG, you MUST output the action `[ask]` and explain what is failing in the `reasoning` field.
    - To [wash], you MUST first [grab] the object, then [walk] to a sink, then [wash].
    - To [cut], you MUST first [grab] a knife, then [walk] to the food, then [cut].
    - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
-8. PROPERTY VERIFICATION (CRITICAL): 
-- INTERACTIVE DISCOVERY: Objects may appear perfectly normal in the graph but can actually be broken. If you try to use an object (e.g. `[switchon]`, `[open]`, `[plugin]`) and receive a failure message stating that it is 'BROKEN', it means you have discovered a defective object. The object will then be marked with `[BROKEN]` in subsequent graphs. You MUST immediately abandon this defective object, do NOT try to interact with it again, and pick an alternative device instead.
-- PLUGGING: The SDG might require the appliance to be POWERED or PLUGGED_IN. However, some appliances (like `stove` or `sink`) are hardwired and do NOT have the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to execute `[plugin]`. Consider it naturally powered and skip straight to `[switchon]`. ONLY execute `[plugin]` if the object explicitly has the `HAS_PLUG` property in its `Props:`.
+8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
+   You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
+   - SITUATION 1 (Ambiguity): If the instruction is vague or there are multiple identical target candidates and you cannot deduce which one to choose, use `[ask] <question>` to request clarification.
+   - SITUATION 2 (Inherently False Preconditions): If the fundamental premise of the task is physically impossible (e.g., you are asked to interact with an appliance's state, but it lacks the required property like `HAS_SWITCH` or `CONTAINERS`), the condition is permanently false. You cannot bypass missing affordances with unrelated items (like remote controls). In this exact case, use `[ask] <reason>` to report the invalid condition.
+   - PLUGGING EXCEPTION: Some appliances (like `stove` or `sink`) are hardwired and lack the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to `[plugin]`. Consider it powered and skip to `[switchon]`.
+   
+   For ALL OTHER FAILURES (e.g., an object is BROKEN, a pathway is blocked, or an item is temporarily missing):
+   Do NOT give up and do NOT output `[ask]`. You must demonstrate autonomy by exploring the environment for functional equivalents or alternative pathways (e.g., finding another sink if one is broken, or waiting if someone took an item).
+9. HANDS & PARALLEL OPTIMIZATION (P2): You have two hands (HOLDS_RH, HOLDS_LH). If you need to transport or process multiple items and both hands are empty, you should `[grab]` the first item, then `[grab]` the second item, and THEN `[walk]` to the destination. Do not waste steps by transporting them one by one.
+10. DISAPPEARING OBJECTS STRATEGY & SUBSTITUTION (M1): SUBSTITUTION FORBIDDEN: You must strictly interact with the exact object class requested by the user or the SDG (e.g., if asked for 'remotecontrol', do NOT use 'cellphone'). If an object you need to interact with suddenly disappears from the graph when you approach it, it means ANOTHER PERSON in the house is temporarily using it! Do NOT abort the task and do NOT substitute it. Instead, output the `[wait]` action to stay in place, and it will be returned shortly.
+11. DYNAMIC GLOBAL RULES (M3): You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route.
+12. INSTANCE DISAMBIGUATION (M2): When there are multiple instances of the same object class (e.g. two cups), carefully check their `states` and `properties`. NEVER blindly grab the first one you see. You MUST pick the exact instance that matches the SDG requirements.
 
 OUTPUT FORMAT (Strict JSON):
 {

@@ -124,6 +124,77 @@ class UnityEnvironment(BaseEnvironment):
         if len(script_list[0]) > 0:
             action_str = script_list[0].lower()
             import re
+            
+            if '[wait]' in action_str or '[ask]' in action_str:
+                msg = "Time passes. You waited for a while." if '[wait]' in action_str else "Message delivered to human."
+                self.changed_graph = True
+                
+                # --- PROCESS DYNAMIC EVENTS MANUALLY BEFORE EARLY RETURN ---
+                if getattr(self, 'dynamic_events', None):
+                    self.current_step = getattr(self, 'current_step', 0) + 1
+                    if getattr(self, 'active_hidden_nodes', None) is None: self.active_hidden_nodes = {}
+                    if getattr(self, 'active_teleports', None) is None: self.active_teleports = {}
+                    
+                    to_restore = []
+                    for nid, restore_step in self.active_hidden_nodes.items():
+                        if self.current_step >= restore_step:
+                            to_restore.append(nid)
+                    for nid in to_restore:
+                        del self.active_hidden_nodes[nid]
+                        self.changed_graph = True
+                        
+                    current_graph = self.get_graph()
+                    char_node = next((n for n in current_graph['nodes'] if n['class_name'] == 'character'), None)
+                    
+                    for event in self.dynamic_events:
+                        if event.get('triggered', False): continue
+                        
+                        trigger = event['trigger']
+                        condition_met = False
+                        
+                        if trigger['type'] == 'step':
+                            if self.current_step >= trigger.get('target_step', 0):
+                                condition_met = True
+                        elif trigger['type'] == 'distance' and char_node:
+                            target_class = trigger['target_class']
+                            threshold = trigger['threshold_meters']
+                            target = next((n for n in current_graph['nodes'] if n['class_name'].lower() == target_class.lower() and n['id'] not in self.active_hidden_nodes), None)
+                            if target and 'bounding_box' in target and 'bounding_box' in char_node:
+                                c1 = char_node['bounding_box']['center']
+                                c2 = target['bounding_box']['center']
+                                import math
+                                dist = math.sqrt((c1[0]-c2[0])**2 + (c1[1]-c2[1])**2 + (c1[2]-c2[2])**2)
+                                if dist <= threshold:
+                                    condition_met = True
+                                    event['target_id_resolved'] = target['id']
+                        
+                        if condition_met:
+                            event['triggered'] = True
+                            action = event['action']
+                            if action['type'] == 'hide':
+                                tid = event.get('target_id_resolved')
+                                if tid:
+                                    self.active_hidden_nodes[tid] = self.current_step + action.get('duration_steps', 3)
+                                    self.changed_graph = True
+                            elif action['type'] == 'teleport':
+                                tid = event.get('target_id_resolved')
+                                dest_class = action.get('destination_surface')
+                                dest_node = next((n for n in current_graph['nodes'] if n['class_name'].lower() == dest_class.lower()), None)
+                                if tid and dest_node:
+                                    self.active_teleports[tid] = dest_node['id']
+                                    self.changed_graph = True
+                            elif action['type'] == 'add_rule':
+                                if getattr(self, 'scheduled_rules', None) is None: self.scheduled_rules = []
+                                self.scheduled_rules.append({
+                                    'start_step': self.current_step,
+                                    'end_step': self.current_step + action.get('duration_steps', 9999),
+                                    'rule_text': action['rule_text']
+                                })
+                
+                self.steps += 1
+                return None, 0, False, {'action_success': True, 'action_message': msg, 'success_rate': 0.0, 'graph': self.get_graph()}
+                
+            import re
             if any(act in action_str for act in ['[wash]', '[cut]', '[pour]']):
                 # --- MOCK EXTENSIONS: WASH, CUT, POUR ---
                 ids = re.findall(r'\(\s*(\d+)\s*\)', action_str)
@@ -315,6 +386,68 @@ class UnityEnvironment(BaseEnvironment):
             else:
                 self.changed_graph = True
 
+            # --- DYNAMIC EVENTS ENGINE ---
+            if getattr(self, 'dynamic_events', None):
+                self.current_step = getattr(self, 'current_step', 0) + 1
+                if getattr(self, 'active_hidden_nodes', None) is None: self.active_hidden_nodes = {}
+                if getattr(self, 'active_teleports', None) is None: self.active_teleports = {}
+                
+                to_restore = []
+                for nid, restore_step in self.active_hidden_nodes.items():
+                    if self.current_step >= restore_step:
+                        to_restore.append(nid)
+                for nid in to_restore:
+                    del self.active_hidden_nodes[nid]
+                    self.changed_graph = True
+                    
+                current_graph = self.get_graph()
+                char_node = next((n for n in current_graph['nodes'] if n['class_name'] == 'character'), None)
+                
+                for event in self.dynamic_events:
+                    if event.get('triggered', False): continue
+                    
+                    trigger = event['trigger']
+                    condition_met = False
+                    
+                    if trigger['type'] == 'step':
+                        if self.current_step >= trigger.get('target_step', 0):
+                            condition_met = True
+                    elif trigger['type'] == 'distance' and char_node:
+                        target_class = trigger['target_class']
+                        threshold = trigger['threshold_meters']
+                        target = next((n for n in current_graph['nodes'] if n['class_name'].lower() == target_class.lower() and n['id'] not in self.active_hidden_nodes), None)
+                        if target and 'bounding_box' in target and 'bounding_box' in char_node:
+                            c1 = char_node['bounding_box']['center']
+                            c2 = target['bounding_box']['center']
+                            import math
+                            dist = math.sqrt((c1[0]-c2[0])**2 + (c1[1]-c2[1])**2 + (c1[2]-c2[2])**2)
+                            if dist <= threshold:
+                                condition_met = True
+                                event['target_id_resolved'] = target['id']
+                    
+                    if condition_met:
+                        event['triggered'] = True
+                        action = event['action']
+                        if action['type'] == 'hide':
+                            tid = event.get('target_id_resolved')
+                            if tid:
+                                self.active_hidden_nodes[tid] = self.current_step + action.get('duration_steps', 3)
+                                self.changed_graph = True
+                        elif action['type'] == 'teleport':
+                            tid = event.get('target_id_resolved')
+                            dest_class = action.get('destination_surface')
+                            dest_node = next((n for n in current_graph['nodes'] if n['class_name'].lower() == dest_class.lower()), None)
+                            if tid and dest_node:
+                                self.active_teleports[tid] = dest_node['id']
+                                self.changed_graph = True
+                        elif action['type'] == 'add_rule':
+                            if getattr(self, 'scheduled_rules', None) is None: self.scheduled_rules = []
+                            self.scheduled_rules.append({
+                                'start_step': self.current_step,
+                                'end_step': self.current_step + action.get('duration_steps', 9999),
+                                'rule_text': action['rule_text']
+                            })
+
         # Obtain reward
         reward, done, info = self.reward()
 
@@ -400,6 +533,18 @@ class UnityEnvironment(BaseEnvironment):
             s, graph = self.comm.environment_graph()
             if not s:
                 pdb.set_trace()
+                
+            # --- DYNAMIC EVENTS GRAPH MODIFICATIONS ---
+            if getattr(self, 'active_hidden_nodes', None):
+                graph['nodes'] = [n for n in graph['nodes'] if n['id'] not in self.active_hidden_nodes]
+                graph['edges'] = [e for e in graph['edges'] if e['from_id'] not in self.active_hidden_nodes and e['to_id'] not in self.active_hidden_nodes]
+                
+            if getattr(self, 'active_teleports', None):
+                for n in graph['nodes']:
+                    if n['id'] in self.active_teleports:
+                        dest_id = self.active_teleports[n['id']]
+                        graph['edges'] = [e for e in graph['edges'] if not (e['from_id'] == n['id'] and e['relation_type'] in ['ON', 'INSIDE', 'HOLDS_RH', 'HOLDS_LH', 'HOLDS'])]
+                        graph['edges'].append({'from_id': n['id'], 'relation_type': 'ON', 'to_id': dest_id})
                 
             # === Thermal State Transition Extension ===
             heating_appliances_inside = ['microwave', 'oven', 'toaster', 'coffe_maker', 'kettle', 'stove']

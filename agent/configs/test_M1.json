@@ -1,0 +1,37 @@
+{
+    "environment_id": 1,
+    "goal_instruction": "If the television is on, bring the remotecontrol to the sofa.",
+    "initial_states_override": [
+        {
+            "target_classes": ["television"],
+            "add_states": ["ON"]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "remotecontrol",
+            "relation": "ON",
+            "object": "tvstand",
+            "count": 1
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "type": "distance",
+                "target_class": "remotecontrol",
+                "threshold_meters": 1.5
+            },
+            "action": {
+                "type": "hide",
+                "duration": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "subject": "remotecontrol",
+        "relation": "ON",
+        "object": "sofa"
+    }
+}

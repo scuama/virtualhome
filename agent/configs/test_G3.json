@@ -1,0 +1,27 @@
+{
+    "environment_id": 1,
+    "goal_instruction": "If the television is on, turn it off.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": ["tv"],
+            "remove_states": ["OFF"],
+            "add_states": ["ON"]
+        }
+    ],
+    "sabotage": {
+        "target_class": "tv",
+        "remove_properties": ["HAS_SWITCH"]
+    },
+    "success_condition": {
+        "check_type": "agent_action",
+        "require_action": "[ask]",
+        "require_message_contains": ["remote", "unplug", "how", "switch", "button"]
+    }
+}

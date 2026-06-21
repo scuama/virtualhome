@@ -31,7 +31,7 @@ class LLMExecutor:
             
         return "\n".join(items)
 
-    def decide_next_action(self, filtered_graph, intent_dict, current_sdg, action_history):
+    def decide_next_action(self, filtered_graph, intent_dict, current_sdg, action_history, scheduled_rules=None):
         self.logger.info("LLMExecutor: Analyzing filtered graph to decide next action...")
         
         graph_str = self._compress_filtered_graph(filtered_graph)
@@ -39,7 +39,16 @@ class LLMExecutor:
         intent_str = json.dumps(intent_dict, ensure_ascii=False)
         history_str = json.dumps(action_history[-10:], ensure_ascii=False) if action_history else "None"
         
-        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+        current_step = len(action_history)
+        active_rules = []
+        if scheduled_rules:
+            for rule in scheduled_rules:
+                if rule.get('start_step', 0) <= current_step <= rule.get('end_step', 9999):
+                    active_rules.append(rule['rule_text'])
+        
+        rules_str = "\n".join([f"- {r}" for r in active_rules]) if active_rules else "None"
+        
+        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
         
         try:
             result_str = self.llm.generate_response(
