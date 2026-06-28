@@ -1060,6 +1060,9 @@ class PlugExecutor(ActionExecutor):
             new_node = node.copy()
             new_node.states.discard(State.PLUGGED_OUT if self.plug_in else State.PLUGGED_IN)
             new_node.states.add(State.PLUGGED_IN if self.plug_in else State.PLUGGED_OUT)
+            if not self.plug_in:
+                new_node.states.discard(State.ON)
+                new_node.states.add(State.OFF)
             if modify:
                 yield state.change_state([ChangeNode(new_node)], in_place=in_place)
             else:
@@ -1079,8 +1082,6 @@ class PlugExecutor(ActionExecutor):
         if s not in node.states:
             info.error('{} is not {}', node, s.name.lower())
             return False
-        if not self.plug_in and State.ON in node.states:
-            info.error('{} is still on', node)
         return True
     
 

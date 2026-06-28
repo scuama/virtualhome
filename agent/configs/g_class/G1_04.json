@@ -1,0 +1,35 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果灯亮着，就关掉它。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "physical_state",
+        "target_class": "tablelamp",
+        "require_states": [
+            "OFF"
+        ],
+        "quantifier": "all"
+    }
+}

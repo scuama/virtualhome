@@ -115,7 +115,7 @@ You are a relevance filter for an embodied AI robot.
 Your task is to review the currently visible objects, memory objects, and all available locations, and filter them based on the Global Intent.
 
 CRITICAL RULES:
-1. STRICT OBJECT FILTERING: Remove any objects that are clearly irrelevant to the 'target_object', 'deep_intent', or acceptable_alternatives_properties. For example, if looking for a beverage, discard toys, tools, blocks, lids, etc. Include only objects that could be the target or a physical alternative (e.g., other drinks, cups, or fruits that quench thirst).
+1. STRICT OBJECT FILTERING: Remove any objects that are clearly irrelevant to the 'target_object', 'deep_intent', or acceptable_alternatives_properties. For example, if looking for a beverage, discard toys, tools, blocks, lids, etc. CRITICAL: You MUST retain ANY objects that could serve as functional tools or physical backups (e.g., if the intent involves heating, retain ALL heating appliances like stove and microwave; if it involves holding liquid, retain ALL valid containers like cup, mug, dishbowl, pot). Do not filter out backups just because they aren't the primary target.
 2. When in doubt about borderline items, omit them rather than including obvious toys/tools. An empty `relevant_objects` list is acceptable if no candidate plausibly satisfies the intent yet—exploration should continue.
 3. LOCATION RETENTION (CRITICAL): You MUST retain all locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent (e.g. if the intent says 'put remote on sofa', you MUST keep the sofa!). Do NOT filter out locations just because they don't currently contain the target object. Keep all logical receptacles that could serve as destinations.
 4. HELD OBJECT (CRITICAL): Check the `Currently Held Object`. If the agent is holding something, you MUST include its exact name in `relevant_objects` IF AND ONLY IF it is a valid target or acceptable alternative. Do not forget to output it!
@@ -223,7 +223,7 @@ INPUT:
 CRITICAL RULES:
 1. You must select the absolute MINIMUM number of object IDs needed to achieve the goal (usually < 10).
 2. You MUST include the target objects (e.g., apple).
-3. You MUST include potential functional tools (e.g., heaters if the goal is to heat, containers if the goal is to transfer).
+3. ALTERNATIVES RETENTION (CRITICAL): You MUST include ALL potential functional tools and physical backups (e.g., if the goal is to heat, keep BOTH microwave and stove; if the goal is to hold water, keep BOTH cup and dishbowl). Do NOT filter out alternative tools just because a primary tool is present. You need backups in case the primary tool is broken!
 4. LOCATION RETENTION (CRITICAL): You MUST include ALL locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent (e.g. if the intent says 'put remote on sofa', you MUST keep the sofa and the remote! If it says 'television', you MUST keep the television!). Do NOT filter out mentioned furniture.
 5. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their IDs if multiple options exist.
 6. DO NOT include background objects, decorations, or irrelevant furniture that are NOT related to the task (e.g., bed when the goal is washing an apple in the kitchen).
@@ -248,6 +248,8 @@ AVAILABLE ACTIONS:
 - [switchon] <object_class> (<object_id>) : Turn on an appliance. (Must be PLUGGED_IN if it has a plug)
 - [switchoff] <object_class> (<object_id>) : Turn off an appliance.
 - [plugin] <object_class> (<object_id>) : Plug in an appliance.
+- [plugout] <object_class> (<object_id>) : Unplug an appliance. If an appliance's switch is broken, you can forcefully unplug it to turn it OFF.
+- [wipe] <object_class> (<object_id>) : Manually wipe an object to clean it without water or sink. (Must be near it)
 - [wash] <object_class> (<object_id>) : Wash a dirty object. (Must be holding the object AND near a sink/dishwasher)
 - [cut] <object_class> (<object_id>) : Cut or slice an object. (Must be holding a knife AND near the target object)
 - [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target)
@@ -270,11 +272,11 @@ CRITICAL RULES:
 8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
    You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
    - SITUATION 1 (Ambiguity): If the instruction is vague or there are multiple identical target candidates and you cannot deduce which one to choose, use `[ask] <question>` to request clarification.
-   - SITUATION 2 (Inherently False Preconditions): If the fundamental premise of the task is physically impossible (e.g., you are asked to interact with an appliance's state, but it lacks the required property like `HAS_SWITCH` or `CONTAINERS`), the condition is permanently false. VirtualHome DOES NOT support using remote controls to bypass missing switches on appliances. If the appliance itself lacks `HAS_SWITCH`, it is permanently impossible. In this exact case, use `[ask] <reason>` to report the invalid condition.
+   - SITUATION 2 (Inherently False Preconditions): If the instruction's fundamental premise or condition is permanently impossible (e.g., "If the TV is on" but the TV is clearly marked as 'BROKEN' in your initial observation), the condition is eternally unsatisfied. In this exact case, use `[ask] <reason>` to report that the task is impossible.
    - PLUGGING EXCEPTION: Some appliances (like `stove` or `sink`) are hardwired and lack the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to `[plugin]`. Consider it powered and skip to `[switchon]`.
    
-   For ALL OTHER FAILURES (e.g., an object is BROKEN, jammed, a pathway is blocked, or an item is temporarily missing):
-   You MUST autonomously handle the situation by choosing an alternative object, finding another route, or using `[wait]` if you expect the environment to change. DO NOT OUTPUT `[ask]` FOR THESE.
+   For ALL OTHER FAILURES during execution (e.g., you try to operate a tool and suddenly receive an unexpected 'BROKEN' error feedback from the environment):
+   You MUST autonomously handle the situation by finding an alternative route or object to achieve the goal. DO NOT OUTPUT `[ask]` FOR THESE.
 9. HANDS & PARALLEL OPTIMIZATION (P2): You have two hands (HOLDS_RH, HOLDS_LH). If you need to transport or process multiple items and both hands are empty, you should `[grab]` the first item, then `[grab]` the second item, and THEN `[walk]` to the destination. Do not waste steps by transporting them one by one.
 10. DISAPPEARING OBJECTS STRATEGY & SUBSTITUTION (M1): SUBSTITUTION FORBIDDEN: You must strictly interact with the exact object class requested by the user or the SDG (e.g., if asked for 'remotecontrol', do NOT use 'cellphone'). If an object you need to interact with suddenly disappears from the graph when you approach it, it means ANOTHER PERSON in the house is temporarily using it! Do NOT abort the task and do NOT substitute it. Instead, output the `[wait]` action to stay in place, and it will be returned shortly.
 11. DYNAMIC GLOBAL RULES (M3): You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route.

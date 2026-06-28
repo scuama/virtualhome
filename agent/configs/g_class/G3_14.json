@@ -1,0 +1,45 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果灯亮着，就关掉它。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF",
+                "BROKEN"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "agent_action",
+        "require_action": "[ask]",
+        "require_message_contains": [
+            "impossible",
+            "broken",
+            "not exist",
+            "cannot",
+            "fail",
+            "坏",
+            "不可能",
+            "没有"
+        ]
+    }
+}

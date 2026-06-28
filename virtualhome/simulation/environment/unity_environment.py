@@ -294,7 +294,7 @@ class UnityEnvironment(BaseEnvironment):
                     if target_node:
                         props = target_node.get('properties', [])
                         
-                        is_interaction = any(act in action_str for act in ['[switchon]', '[switchoff]', '[open]', '[close]', '[plugin]', '[plugout]', '[putin]', '[putback]'])
+                        is_interaction = any(act in action_str for act in ['[switchon]', '[switchoff]', '[open]', '[close]', '[plugin]', '[plugout]', '[putin]', '[putback]', '[grab]'])
                         
                         if 'BROKEN' in target_node.get('states', []):
                             success = False

@@ -186,6 +186,18 @@ class VirtualHomeAgent:
             else:
                 # Unknown condition types should not accidentally pass
                 return False
+                
+            # If the condition requires an ask anywhere in the history, verify it
+            if cond.get('require_ask', False):
+                if not action_history: return False
+                asked = False
+                for entry in action_history:
+                    if entry.get('action', '').lower().startswith('[ask]'):
+                        asked = True
+                        break
+                if not asked:
+                    return False
+
         return True
 
     def run_episode(self, env, config):
@@ -208,7 +220,7 @@ class VirtualHomeAgent:
             
         # 3. Execution Loop
         steps = 0
-        max_steps = config.get('max_steps', 20)
+        max_steps = config.get('max_steps', 30)
         
         while steps < max_steps:
             raw_obs = env.get_observations()
@@ -228,14 +240,14 @@ class VirtualHomeAgent:
             if self._check_success(raw_graph, config.get('success_condition'), self.action_history):
                 self.logger.info("✅ SUCCESS! Goal condition met.")
                 self.logger.write_step(steps, "FINISH (Goal Reached)", self.current_sdg, observed)
-                return True
+                return True, "Goal Reached"
                 
             if config.get('failure_condition'):
                 fail_cond = config.get('failure_condition')
                 if fail_cond.get('start_step', 0) <= steps <= fail_cond.get('end_step', 9999):
                     if self._check_success(raw_graph, fail_cond, self.action_history):
                         self.logger.error("❌ FAILED: Failure condition met (e.g. violated rule).")
-                        return False
+                        return False, "Failure condition met (Constraint Violated)"
             # Execute logic using the filtered graph
             next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
                 filtered_graph, goal_intent, self.current_sdg, self.action_history, config.get('scheduled_rules')
@@ -261,12 +273,33 @@ class VirtualHomeAgent:
                     history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
                     self.action_history.append(history_entry)
                     self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
+                    
+                    if "user_clarification_reply" in config:
+                        # Append the user's clarification to the original instruction to resolve ambiguity
+                        clarification = config["user_clarification_reply"]
+                        new_goal_instruction = config['goal_instruction'] + " User Clarification: " + clarification
+                        self.logger.info(f"User provided clarification: {clarification}. Re-evaluating intent and SDG.")
+                        
+                        # Regenerate intent and SDG based on the clarified instruction
+                        goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
+                        self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
+                        
+                        # Add a fake action to history to let LLM Executor know we got a reply
+                        self.action_history.append({
+                            "step": steps + 0.5, 
+                            "action": f"[USER_REPLY] {clarification}",
+                            "success": True, 
+                            "reasoning": "User clarified the ambiguity."
+                        })
+                        steps += 1
+                        continue
+
                     if self._check_success(raw_graph, config.get('success_condition'), self.action_history):
                         self.logger.info("✅ SUCCESS: Agent correctly requested help as defined in success_condition.")
-                        return True
+                        return True, "Goal Reached (Help Asked)"
                     else:
                         self.logger.error("❌ FAILED: Agent requested help, but success condition was not met.")
-                        return False
+                        return False, "Agent requested help, but success condition was not met"
                 
                 obs, reward, done, info = env.step({0: next_action})
                 success = info.get('action_success', False)
@@ -284,4 +317,4 @@ class VirtualHomeAgent:
             steps += 1
             
         self.logger.error("❌ FAILED: Max steps reached.")
-        return False
+        return False, "Max steps reached"

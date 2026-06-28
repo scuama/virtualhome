@@ -1,0 +1,31 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果电视开着，就用遥控器把电视关了。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "hidden_broken_classes": [
+        "remote_control"
+    ],
+    "success_condition": {
+        "check_type": "physical_state",
+        "target_class": "tv",
+        "require_states": [
+            "OFF"
+        ]
+    }
+}

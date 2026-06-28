@@ -8,7 +8,7 @@ from unity_simulator.comm_unity import UnityCommunication
 script = ['<char0> [Walk] <tv> (1)', '<char0> [switchon] <tv> (1)', '<char0> [Walk] <sofa> (1)', '<char0> [Sit] <sofa> (1)', '<char0> [Watch] <tv> (1)'] # Add here your script
 
 print('Starting Unity...')
-comm = UnityCommunication()
+comm = UnityCommunication(file_name=None)
 
 print('Starting scene...')
 comm.reset(0)

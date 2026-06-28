@@ -50,7 +50,7 @@ class UnityCommunication(object):
                 print('Getting connection...')
                 succeeded = False
                 tries = 0
-                while tries < 5 and not succeeded:
+                while tries < 30 and not succeeded:
                     tries += 1
                     try:
                         self.check_connection()

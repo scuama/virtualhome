@@ -1,0 +1,48 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果电视开着，把灯调到合适的状态。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF"
+            ]
+        }
+    ],
+    "user_clarification_reply": "把灯打开就行。",
+    "success_condition": {
+        "check_type": "physical_state",
+        "target_class": "tablelamp",
+        "require_states": [
+            "ON"
+        ],
+        "quantifier": "all",
+        "require_ask": true
+    }
+}

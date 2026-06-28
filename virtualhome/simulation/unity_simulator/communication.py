@@ -168,7 +168,8 @@ class UnityLauncher(object):
                 subprocess_args = [launch_string]
                 if self.batchmode:
                     subprocess_args += ["-batchmode"]
-                subprocess_args += ["-force-opengl"]
+                if platform != "darwin":
+                    subprocess_args += ["-force-opengl"]
 
                 file_path = os.getcwd()
                 subprocess_args += ["-http-port=" + str(self.port_number), "-logFile", "{}/Player_{}.log".format(file_path, str(self.port_number))]

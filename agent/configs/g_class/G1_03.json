@@ -1,0 +1,40 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果电视机开着，就把遥控器拿过来。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "remotecontrol",
+            "relation": "ON",
+            "object": "sofa",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "require_relation": [
+            "HOLDS_RH",
+            "character",
+            "remote_control"
+        ],
+        "fallback_relation": [
+            "HOLDS_LH",
+            "character",
+            "remote_control"
+        ]
+    }
+}

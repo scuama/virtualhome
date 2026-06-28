@@ -1,0 +1,32 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果桌子上有水壶，就给我倒杯水过来。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "dishbowl",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "hidden_broken_classes": [
+        "mug",
+        "mug"
+    ],
+    "success_condition": {
+        "check_type": "physical_state",
+        "target_class": "dishbowl",
+        "require_states": [
+            "FILLED",
+            "FULL"
+        ],
+        "fallback_require_states": [
+            "WATER"
+        ]
+    }
+}

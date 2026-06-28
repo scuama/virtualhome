@@ -1,0 +1,46 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果杯子里有水，就倒掉放进柜子里。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "cabinet"
+            ],
+            "remove_states": [
+                "OPEN"
+            ],
+            "add_states": [
+                "CLOSED"
+            ]
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "add_states": [
+                "FULL"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "require_relation": [
+            "INSIDE",
+            "mug",
+            "cabinet"
+        ]
+    }
+}
