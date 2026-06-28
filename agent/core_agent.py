@@ -268,7 +268,7 @@ class VirtualHomeAgent:
             
         # 3. Execution Loop
         steps = 0
-        max_steps = config.get('max_steps', 30)
+        max_steps = config.get('max_steps', 15)
         
         while steps < max_steps:
             raw_obs = env.get_observations()

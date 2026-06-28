@@ -13,15 +13,20 @@ from agent.core_agent import VirtualHomeAgent
 
 
 def get_raw_graph(env):
-    """get_observations() returns dict keyed by agent_id (int). Agent 0's graph is the scene graph."""
+    """get_observations() returns dict keyed by agent_id (int). Agent 0's graph is the scene graph.
+    NOTE: this is a PARTIAL (vision-limited) graph. Only use for perception simulation.
+    For scene setup, always use env.get_graph() which returns the FULL scene graph."""
     obs_dict = env.get_observations()
     return obs_dict.get(0)
 
 
 def apply_overrides(env, config, debug=False):
-    raw_graph = get_raw_graph(env)
+    # IMPORTANT: Must use env.get_graph() (full scene graph), NOT get_raw_graph() (partial/visible).
+    # After env.reset() the character spawns at a room entrance; most objects are out of sight
+    # in the partial graph, so find_node() would silently return None and skip all overrides.
+    raw_graph = env.get_graph()
     if not raw_graph:
-        print("  [Override] WARNING: Could not retrieve graph – skipping overrides.")
+        print("  [Override] WARNING: Could not retrieve full scene graph – skipping overrides.")
         return False
 
     nodes = raw_graph['nodes']
