@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果电视开着，把灯调到合适的状态。",
+    "goal_instruction": "如果电视开着，把台灯调到合适的状态。",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -9,8 +9,8 @@
         },
         {
             "subject": "tablelamp",
-            "relation": "INSIDE",
-            "object": "livingroom",
+            "relation": "ON",
+            "object": "coffeetable",
             "count": 1
         }
     ],
@@ -35,7 +35,7 @@
             ]
         }
     ],
-    "user_clarification_reply": "把灯打开就行。",
+    "user_clarification_reply": "打开就行。",
     "success_condition": {
         "check_type": "physical_state",
         "target_class": "tablelamp",

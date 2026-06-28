@@ -323,12 +323,19 @@ class VirtualHomeAgent:
                     self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
                     
                     if "user_clarification_reply" in config:
-                        # Append the user's clarification to the original instruction to resolve ambiguity
-                        clarification = config["user_clarification_reply"]
-                        new_goal_instruction = config['goal_instruction'] + " User Clarification: " + clarification
-                        self.logger.info(f"User provided clarification: {clarification}. Re-evaluating intent and SDG.")
+                        clarification = config.pop("user_clarification_reply")
                         
-                        # Regenerate intent and SDG based on the clarified instruction
+                        rewrite_sys = "You are a helpful assistant rewriting instructions."
+                        rewrite_user = f"Original instruction: '{config['goal_instruction']}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in Chinese. Output ONLY the instruction."
+                        try:
+                            new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
+                        except Exception:
+                            new_goal_instruction = config['goal_instruction'] + " " + clarification
+                            
+                        self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
+                        
+                        # Update config and regenerate intent and SDG based on the clarified instruction
+                        config['goal_instruction'] = new_goal_instruction
                         goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
                         self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
                         

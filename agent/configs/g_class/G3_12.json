@@ -1,17 +1,17 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果电视开着，就把它关了。",
+    "goal_instruction": "如果电脑开着，就把台灯关掉。",
     "initial_relations_override": [
         {
             "subject": "character",
             "relation": "INSIDE",
-            "object": "livingroom"
+            "object": "bedroom"
         }
     ],
     "initial_states_override": [
         {
             "target_classes": [
-                "tv"
+                "computer"
             ],
             "remove_states": [
                 "ON"

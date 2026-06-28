@@ -6,6 +6,7 @@ import argparse
 import traceback
 
 import sys
+import signal
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
@@ -21,147 +22,151 @@ def get_raw_graph(env):
 
 
 def apply_overrides(env, config, debug=False):
-    # IMPORTANT: Must use env.get_graph() (full scene graph), NOT get_raw_graph() (partial/visible).
-    # After env.reset() the character spawns at a room entrance; most objects are out of sight
-    # in the partial graph, so find_node() would silently return None and skip all overrides.
-    raw_graph = env.get_graph()
-    if not raw_graph:
-        print("  [Override] WARNING: Could not retrieve full scene graph – skipping overrides.")
-        return False
+    """
+    Applies scenario overrides using monkey-patching for states and physical actions for relations.
+    """
+    def _install_state_patch(env, overrides, debug):
+        original = env.get_graph
+        def patched(*args, **kwargs):
+            graph = original(*args, **kwargs)
+            custom = getattr(env, 'custom_states', {}) or {}
+            for ov in overrides:
+                rm, add = ov.get('remove_states', []), ov.get('add_states', [])
+                i_filter = ov.get('instance_filter')
+                in_room  = ov.get('in_room')
+                for cls in ov.get('target_classes', []):
+                    candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
+                    if in_room:
+                        room_ids  = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
+                        inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
+                        candidates = [n for n in candidates if n['id'] in inside_ids]
+                    if i_filter and 'index' in i_filter:
+                        idx = i_filter['index']
+                        candidates = [candidates[idx]] if idx < len(candidates) else []
+                    
+                    for node in candidates:
+                        if node['id'] in custom: continue  # 真实动作优先
+                        st = set(node.get('states', []))
+                        props = node.get('properties', [])
+                        for s in rm: st.discard(s)
+                        for s in add:
+                            if s == 'PLUGGED_OUT' and 'HAS_PLUG' not in props: continue
+                            if s == 'OFF' and 'HAS_SWITCH' not in props: continue
+                            st.add(s)
+                        node['states'] = list(st)
+                        if debug:
+                            print(f"    [Setup] Patched state on {node['class_name']}({node['id']}): {node['states']}")
+            return graph
+        env.get_graph = patched
+        if debug:
+            print("    [Setup] Installed get_graph monkey-patch for state overrides.")
 
-    nodes = raw_graph['nodes']
-
-    # Build room membership lookup: node_id -> room_class_name
-    room_classes = {'kitchen', 'bedroom', 'livingroom', 'bathroom'}
-    node_room = {}
-    for e in raw_graph['edges']:
-        if e['relation_type'] == 'INSIDE':
-            dest = next((n for n in nodes if n['id'] == e['to_id']), None)
-            if dest and dest['class_name'].lower() in room_classes:
-                node_room[e['from_id']] = dest['class_name'].lower()
-
-    def find_node(cls_name, in_room=None):
-        """Find first node matching cls_name, optionally filtered by room."""
-        cls_name = cls_name.lower()
-        candidates = [n for n in nodes if n['class_name'].lower() == cls_name]
+    def _find_node(graph, cls, in_room=None):
+        candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
         if in_room:
-            in_room_l = in_room.lower()
-            room_candidates = [n for n in candidates if node_room.get(n['id']) == in_room_l]
-            if room_candidates:
-                return room_candidates[0]
+            room_ids = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
+            inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
+            candidates = [n for n in candidates if n['id'] in inside_ids]
         return candidates[0] if candidates else None
 
+    def _find_all(graph, cls):
+        return [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
+        
+    def _hide_extra_nodes(env, nodes_to_hide):
+        if not hasattr(env, 'active_hidden_nodes'):
+            env.active_hidden_nodes = {}
+        for n in nodes_to_hide:
+            env.active_hidden_nodes[n['id']] = 999999
+
+    def _get_scene_without_chars(env):
+        _, raw = env.comm.environment_graph()
+        char_ids = {n['id'] for n in raw['nodes'] if n['class_name'].lower() == 'character'}
+        return {
+            'nodes': [n for n in raw['nodes'] if n['id'] not in char_ids],
+            'edges': [e for e in raw['edges'] if e['from_id'] not in char_ids and e['to_id'] not in char_ids]
+        }
+
+    def _add_virtual_nodes(scene_graph, subj_class, obj_id, count):
+        max_id = max(n['id'] for n in scene_graph['nodes']) if scene_graph['nodes'] else 0
+        for i in range(count):
+            new_id = max_id + 1 + i
+            scene_graph['nodes'].append({'id': new_id, 'class_name': subj_class, 'category': 'Decor', 'states': []})
+            scene_graph['edges'].append({'from_id': new_id, 'relation_type': 'ON', 'to_id': obj_id})
+
+    def _readd_characters(env):
+        for i in range(env.num_agents):
+            if hasattr(env, 'agent_info') and i in env.agent_info:
+                env.comm.add_character(env.agent_info[i])
+            else:
+                env.comm.add_character()
+        env.changed_graph = True
+
+    def _already_has_relation(graph, s_node, rel, obj_node):
+        return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
 
     def execute(action_str):
-        if debug:
-            print(f"    [Setup] {action_str}")
+        print(f"    [Setup] {action_str}")
         obs, reward, done, info = env.step({0: action_str})
         success = info.get('action_success', False)
-        if not success and debug:
+        if not success:
             print(f"      -> FAILED: {info.get('action_message', '')}")
         return success
 
-    # 1. Apply initial_relations_override
-    for rel in config.get('initial_relations_override', []):
-        subj = rel.get('subject')
-        rel_type = rel.get('relation')
-        obj = rel.get('object')
+    # 1. 状态覆盖
+    state_overrides = config.get('initial_states_override', [])
+    if state_overrides:
+        _install_state_patch(env, state_overrides, debug)
 
-        if subj == 'character' and rel_type == 'INSIDE':
-            obj_node = find_node(obj)
+    # 2. 关系覆盖 (位置)
+    graph = env.get_graph()
+    for ro in config.get('initial_relations_override', []):
+        subj   = ro['subject'].lower()
+        rel    = ro.get('relation', 'ON').upper()
+        obj    = ro['object'].lower()
+        count  = ro.get('count', 1)
+        in_room = ro.get('in_room')
+
+        # 角色初始位置特殊处理
+        if subj == 'character':
+            obj_node = _find_node(graph, obj)
             if obj_node:
-                execute(f"[walk] <{obj_node['class_name']}> ({obj_node['id']})")
+                execute(f'[walk] <{obj}> ({obj_node["id"]})')
+            graph = env.get_graph()
             continue
 
-        if subj and obj and rel_type in ['ON', 'INSIDE']:
-            s_node = find_node(subj)
-            o_node = find_node(obj)
-            if s_node and o_node:
-                if not execute(f"[walk] <{s_node['class_name']}> ({s_node['id']})"): continue
-                if not execute(f"[grab] <{s_node['class_name']}> ({s_node['id']})"): continue
-                if not execute(f"[walk] <{o_node['class_name']}> ({o_node['id']})"): continue
-                if rel_type == 'ON':
-                    execute(f"[putback] <{s_node['class_name']}> ({s_node['id']}) <{o_node['class_name']}> ({o_node['id']})")
-                elif rel_type == 'INSIDE':
-                    execute(f"[putin] <{s_node['class_name']}> ({s_node['id']}) <{o_node['class_name']}> ({o_node['id']})")
+        subj_nodes = _find_all(graph, subj)
+        obj_node   = _find_node(graph, obj, in_room)
+        if not obj_node: continue
 
-    # 2. Apply initial_states_override
-    # States that can be set via physical actions:
-    ACTION_STATES = {'OPEN', 'CLOSED', 'ON', 'OFF'}
-    # States that CANNOT be set via physical actions → need expand_scene graph injection
-    GRAPH_STATES = {'DIRTY', 'CLEAN', 'HOT', 'COLD', 'WARM', 'FULL', 'EMPTY',
-                    'BROKEN', 'FILLED', 'PLUGGED_IN', 'PLUGGED_OUT', 'COOKED'}
+        # 隐藏多余的对象实例
+        if len(subj_nodes) > count:
+            _hide_extra_nodes(env, subj_nodes[count:])
+            subj_nodes = subj_nodes[:count]
 
-    # Collect all graph-level state changes first, apply in one expand_scene call
-    graph_state_changes = []  # list of (node_id, add_states, remove_states)
+        # 若对象不足，用 expand_scene 补充
+        if len(subj_nodes) < count:
+            missing = count - len(subj_nodes)
+            scene_graph = _get_scene_without_chars(env)
+            _add_virtual_nodes(scene_graph, subj, obj_node['id'], missing)
+            env.comm.expand_scene(scene_graph)
+            _readd_characters(env)          
+            graph = env.get_graph()
+            subj_nodes = _find_all(graph, subj)
 
-    for state_override in config.get('initial_states_override', []):
-        states_to_add = state_override.get('add_states', [])
-        states_to_remove = state_override.get('remove_states', [])
-        if not states_to_add and state_override.get('state'):
-            states_to_add = [state_override['state']]
-
-        for cls in state_override.get('target_classes', []):
-            in_room = state_override.get('in_room', None)
-            node = find_node(cls, in_room=in_room)
-            if not node:
-                if debug:
-                    print(f"    [Setup] WARNING: Class '{cls}' not found in graph{' (room: ' + in_room + ')' if in_room else ''}.")
-                continue
-
-            # Split into action-based vs graph-based
-            action_adds = [s for s in states_to_add if s.upper() in ACTION_STATES]
-            graph_adds  = [s for s in states_to_add if s.upper() in GRAPH_STATES]
-            graph_removes = [s for s in states_to_remove if s.upper() in GRAPH_STATES]
-
-            # Physical actions
-            for state in action_adds:
-                s = state.upper()
-                execute(f"[walk] <{node['class_name']}> ({node['id']})")
-                if s == 'OPEN':
-                    execute(f"[open] <{node['class_name']}> ({node['id']})")
-                elif s == 'CLOSED':
-                    execute(f"[close] <{node['class_name']}> ({node['id']})")
-                elif s == 'ON':
-                    execute(f"[switchon] <{node['class_name']}> ({node['id']})")
-                elif s == 'OFF':
-                    execute(f"[switchoff] <{node['class_name']}> ({node['id']})")
-
-            # Collect graph-level changes
-            if graph_adds or graph_removes:
-                graph_state_changes.append((node['id'], graph_adds, graph_removes))
-
-    # Apply all graph-level state changes via expand_scene
-    if graph_state_changes:
-        current_graph = env.get_graph()
-        modified = False
-        for node_id, adds, removes in graph_state_changes:
-            for n in current_graph['nodes']:
-                if n['id'] == node_id:
-                    current_states = set(n.get('states', []))
-                    for r in removes:
-                        current_states.discard(r.upper())
-                    for a in adds:
-                        current_states.add(a.upper())
-                    n['states'] = list(current_states)
-                    if debug:
-                        print(f"    [Setup] Graph-inject states on {n['class_name']}({node_id}): +{adds} -{removes} → {n['states']}")
-                    modified = True
-                    break
-        if modified:
-            # CRITICAL: expand_scene requires a graph WITHOUT characters.
-            # Passing character nodes causes Unity to hang indefinitely.
-            char_ids = {n['id'] for n in current_graph['nodes'] if n['class_name'].lower() == 'character'}
-            scene_graph = {
-                'nodes': [n for n in current_graph['nodes'] if n['id'] not in char_ids],
-                'edges': [e for e in current_graph['edges']
-                          if e['from_id'] not in char_ids and e['to_id'] not in char_ids]
-            }
-            success, msg = env.comm.expand_scene(scene_graph)
-            if not success:
-                print(f"    [Setup] WARNING: expand_scene failed: {msg}")
-            elif debug:
-                print(f"    [Setup] expand_scene: OK")
+        # 依靠物理动作将物品就位
+        for s_node in subj_nodes[:count]:
+            if _already_has_relation(graph, s_node, rel, obj_node): continue
+            execute(f'[walk] <{subj}> ({s_node["id"]})')
+            execute(f'[grab] <{subj}> ({s_node["id"]})')
+            execute(f'[walk] <{obj}> ({obj_node["id"]})')
+            if rel == 'INSIDE':
+                execute(f'[open] <{obj}> ({obj_node["id"]})')
+                execute(f'[putin] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
+                execute(f'[close] <{obj}> ({obj_node["id"]})')
+            else:
+                execute(f'[putback] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
+        graph = env.get_graph()
+        
     return True
 
 
@@ -227,6 +232,8 @@ def main():
                         help='Debug mode: stop and analyze on each failure')
     parser.add_argument('--scenario', type=str, default=None,
                         help='Run a single scenario by ID (e.g. G1_01)')
+    parser.add_argument('--category', type=str, default=None,
+                        help='Run a specific category of scenarios (e.g. G2)')
     args = parser.parse_args()
 
     base_dir = os.path.dirname(__file__)
@@ -246,15 +253,13 @@ def main():
         target_dir = os.path.join(configs_dir, cls_dir)
         if os.path.exists(target_dir):
             for path in glob.glob(os.path.join(target_dir, '*.json')):
-                all_configs.append(path)
+                scenario_id = os.path.splitext(os.path.basename(path))[0]
+                if args.scenario and scenario_id != args.scenario:
+                    continue
+                if args.category and not scenario_id.startswith(args.category):
+                    continue
+                all_configs.append((scenario_id, path))
     all_configs = sorted(all_configs)
-
-    # Filter by --scenario if specified
-    if args.scenario:
-        all_configs = [p for p in all_configs if os.path.basename(p).replace('.json', '') == args.scenario]
-        if not all_configs:
-            print(f"ERROR: Scenario '{args.scenario}' not found.")
-            return
 
     # Init engine
     exec_path = os.path.abspath(os.path.join(
@@ -262,14 +267,12 @@ def main():
     env = UnityEnvironment(
         num_agents=1,
         observation_types=['partial'],
-        executable_args={'file_name': exec_path, 'no_graphics': True}
+        executable_args={'file_name': None}
     )
 
     summary = {"total": len(all_configs), "skipped": 0, "success": 0, "fail": 0, "failures": []}
 
-    for config_path in all_configs:
-        scenario_id = os.path.basename(config_path).replace('.json', '')
-
+    for scenario_id, config_path in all_configs:
         # Skip already-succeeded
         if os.path.exists(os.path.join(success_dir, scenario_id)):
             print(f"[SKIP] {scenario_id} — already succeeded.")
@@ -298,9 +301,24 @@ def main():
         apply_overrides(env, config, debug=args.debug)
 
         agent = VirtualHomeAgent(model_name="gpt-5.4-mini", scenario_id=scenario_id)
+
+        class TimeoutException(Exception):
+            pass
+
+        def timeout_handler(signum, frame):
+            raise TimeoutException("Episode timed out after 5 minutes")
+
         try:
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(300) # 5 minutes
             success, reason = agent.run_episode(env, config)
+            signal.alarm(0)
+        except TimeoutException as e:
+            success = False
+            reason = str(e)
+            print(f"  [TIMEOUT] Scenario {scenario_id} exceeded 5 minutes.")
         except Exception as e:
+            signal.alarm(0)
             success = False
             reason = f"Exception: {e}"
             if args.debug:

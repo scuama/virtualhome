@@ -19,7 +19,7 @@
         "check_type": "relation",
         "subject": "mug",
         "relation": "INSIDE",
-        "object": "cabinet",
+        "object": "kitchencabinet",
         "require_ask": true
     }
 }

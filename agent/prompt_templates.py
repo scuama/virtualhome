@@ -241,8 +241,8 @@ Your task is to choose the SINGLE NEXT atomic action to execute, based on the Go
 AVAILABLE ACTIONS:
 - [walk] <object_class> (<object_id>) : Move to an object.
 - [grab] <object_class> (<object_id>) : Pick up an object. (You must be near it)
-- [putin] <object_class> (<object_id>) <container_class> (<container_id>) : Put object inside a container. (Container must be OPEN)
-- [putback] <object_class> (<object_id>) <surface_class> (<surface_id>) : Place object on a surface.
+- [putin] <object_class> (<object_id>) <container_class> (<container_id>) : Put object inside a container. (Container must be OPEN. You MUST explicitly [walk] to the container FIRST if you aren't already there.)
+- [putback] <object_class> (<object_id>) <surface_class> (<surface_id>) : Place object on a surface. (You MUST explicitly [walk] to the surface FIRST if you aren't already there.)
 - [open] <object_class> (<object_id>) : Open a container/door.
 - [close] <object_class> (<object_id>) : Close a container/door.
 - [switchon] <object_class> (<object_id>) : Turn on an appliance. (Must be PLUGGED_IN if it has a plug)
@@ -261,7 +261,7 @@ HANDS FULL RULE: The robot only has TWO hands. If you are already holding 2 obje
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
 2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
-3. GRABBING RULE: To `[putin]` an object into a container, you MUST already be holding it. If you are not holding it, you must first `[walk]` to it, then `[grab]` it.
+3. NO MAGIC MACROS (CRITICAL): You cannot perform actions on objects you do not hold. To `[putin]`, `[putback]`, or `[pour]` an object, you MUST already be holding it (i.e. your state must show `HOLDS_RH` or `HOLDS_LH` for that object). If you are not holding it, you must output `[walk]` and then `[grab]` in previous steps. DO NOT output `[putin]` directly assuming the system will auto-grab it for you.
 4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it). If a target receptacle (e.g., `sink`, `table`) does NOT have the `CAN_OPEN` property, you CANNOT use `[open]` or `[putin]`. You MUST use `[putback]` to place the object in/on it.
 5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`.
 6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
@@ -271,7 +271,7 @@ CRITICAL RULES:
    - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
 8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
    You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
-   - SITUATION 1 (Ambiguity): If the instruction is vague or there are multiple identical target candidates and you cannot deduce which one to choose, use `[ask] <question>` to request clarification.
+   - SITUATION 1 (Ambiguity): If the instruction contains vague, subjective, or ambiguous words (e.g., "suitable", "safe", "proper place") that make it impossible to determine the exact target state or object among multiple candidates, you MUST NOT guess. You MUST use `[ask] <question>` to request clarification from the user before taking physical actions.
    - SITUATION 2 (Inherently False Preconditions): If the instruction's fundamental premise or condition is permanently impossible (e.g., "If the TV is on" but the TV is clearly marked as 'BROKEN' in your initial observation), the condition is eternally unsatisfied. In this exact case, use `[ask] <reason>` to report that the task is impossible.
    - PLUGGING EXCEPTION: Some appliances (like `stove` or `sink`) are hardwired and lack the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to `[plugin]`. Consider it powered and skip to `[switchon]`.
    
