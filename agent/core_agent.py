@@ -124,8 +124,11 @@ class VirtualHomeAgent:
         for cond in conditions:
             check_type = cond.get('check_type', 'state')
             
-            if check_type == 'state':
-                req_state = cond['require_state']
+            if check_type == 'state' or check_type == 'physical_state':
+                # Support both 'require_state' (str) and 'require_states' (list)
+                req_states = cond.get('require_states', [])
+                if not req_states and cond.get('require_state'):
+                    req_states = [cond['require_state']]
                 quantifier = cond.get('quantifier', 'any')
                 target_class = cond['target_class']
                 instance_filter = cond.get('instance_filter', {})
@@ -135,33 +138,60 @@ class VirtualHomeAgent:
                     color = instance_filter['color'].upper()
                     target_nodes = [n for n in target_nodes if color in [p.upper() for p in n.get('properties', [])] or color in [s.upper() for s in n.get('states', [])]]
                 if not target_nodes: return False
-                    
-                hot_count = sum(1 for n in target_nodes if req_state in n.get('states', []))
-                if quantifier == 'any' and hot_count == 0: return False
-                if quantifier == 'all' and hot_count != len(target_nodes): return False
+                
+                for req_state in req_states:
+                    hot_count = sum(1 for n in target_nodes if req_state.upper() in [s.upper() for s in n.get('states', [])])
+                    if quantifier == 'any' and hot_count == 0: return False
+                    if quantifier == 'all' and hot_count != len(target_nodes): return False
                 
             elif check_type == 'relation':
-                target_class = cond.get('target_class', cond.get('subject', ''))
-                relation = cond['relation']
-                dest_class = cond.get('destination_class', cond.get('object', ''))
+                # Support both flat fields and require_relation: [relation, subject, object] array
+                req_rel_arr = cond.get('require_relation')
+                if req_rel_arr and isinstance(req_rel_arr, list) and len(req_rel_arr) == 3:
+                    relation, target_class, dest_class = req_rel_arr
+                else:
+                    target_class = cond.get('target_class', cond.get('subject', ''))
+                    relation = cond.get('relation', '')
+                    dest_class = cond.get('destination_class', cond.get('object', ''))
+
                 min_count = cond.get('min_count', 1)
                 req_state = cond.get('subject_must_have_state', None)
-                
+
                 target_nodes = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
                 dest_nodes = [n['id'] for n in graph['nodes'] if n['class_name'].lower() == dest_class.lower()]
-                
+
+                # Also handle special 'character' target using id=1
+                if target_class.lower() == 'character':
+                    target_nodes = [n for n in graph['nodes'] if n.get('id') == 1 or n['class_name'].lower() == 'character']
+
                 if req_state:
                     target_nodes = [n for n in target_nodes if req_state.upper() in [s.upper() for s in n.get('states', [])]]
-                
+
                 target_ids = [n['id'] for n in target_nodes]
-                
+
                 match_count = 0
                 for t_id in target_ids:
                     for e in graph['edges']:
                         if e['from_id'] == t_id and e['relation_type'] == relation and e['to_id'] in dest_nodes:
                             match_count += 1
                             break
-                            
+
+                # Check fallback_relation if primary fails
+                if match_count < min_count:
+                    fallback = cond.get('fallback_relation')
+                    if fallback and isinstance(fallback, list) and len(fallback) == 3:
+                        fb_relation, fb_subject, fb_object = fallback
+                        fb_targets = [n for n in graph['nodes'] if n['class_name'].lower() == fb_subject.lower()]
+                        if fb_subject.lower() == 'character':
+                            fb_targets = [n for n in graph['nodes'] if n.get('id') == 1 or n['class_name'].lower() == 'character']
+                        fb_dests = [n['id'] for n in graph['nodes'] if n['class_name'].lower() == fb_object.lower()]
+                        fb_ids = [n['id'] for n in fb_targets]
+                        for t_id in fb_ids:
+                            for e in graph['edges']:
+                                if e['from_id'] == t_id and e['relation_type'] == fb_relation and e['to_id'] in fb_dests:
+                                    match_count += 1
+                                    break
+
                 if match_count < min_count: return False
                 
             elif check_type == 'agent_action':
