@@ -44,7 +44,10 @@ class LLMExecutor:
         if scheduled_rules:
             for rule in scheduled_rules:
                 if rule.get('start_step', 0) <= current_step <= rule.get('end_step', 9999):
-                    active_rules.append(rule['rule_text'])
+                    rule_text = rule['rule_text']
+                    if rule.get('end_step', 9999) < 999:
+                        rule_text += f" (Note: This rule is temporary and will expire at step {rule.get('end_step')+1}. If this blocks your required preconditions, you MUST output [wait] until it expires.)"
+                    active_rules.append(rule_text)
         
         rules_str = "\n".join([f"- {r}" for r in active_rules]) if active_rules else "None"
         

@@ -224,8 +224,9 @@ CRITICAL RULES:
 1. You must select the absolute MINIMUM number of object IDs needed to achieve the goal (usually < 10).
 2. You MUST include the target objects (e.g., apple).
 3. You MUST include potential functional tools (e.g., heaters if the goal is to heat, containers if the goal is to transfer).
-4. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their IDs if multiple options exist. Do NOT filter out less common alternatives because the primary choices might be broken. The Execution Engine needs ALL alternatives.
-5. DO NOT include background objects, decorations, or irrelevant furniture (e.g., TV, milk when the goal is washing an apple).
+4. LOCATION RETENTION (CRITICAL): You MUST include ALL locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent (e.g. if the intent says 'put remote on sofa', you MUST keep the sofa and the remote! If it says 'television', you MUST keep the television!). Do NOT filter out mentioned furniture.
+5. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their IDs if multiple options exist.
+6. DO NOT include background objects, decorations, or irrelevant furniture that are NOT related to the task (e.g., bed when the goal is washing an apple in the kitchen).
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -251,7 +252,10 @@ AVAILABLE ACTIONS:
 - [cut] <object_class> (<object_id>) : Cut or slice an object. (Must be holding a knife AND near the target object)
 - [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target)
 - [ask] <message> : Ask the human for clarification or report physical impossibility.
-- [wait] : Wait in place for one time step.
+- [wait] : Do nothing for 1 step. Use ONLY when waiting for a dynamic event, temporary ban, or moving object.
+
+HANDS FULL RULE: The robot only has TWO hands. If you are already holding 2 objects and need to grab a 3rd, you MUST first `[putback]` or `[putin]` one of the currently held objects!
+
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
 2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
@@ -266,11 +270,11 @@ CRITICAL RULES:
 8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
    You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
    - SITUATION 1 (Ambiguity): If the instruction is vague or there are multiple identical target candidates and you cannot deduce which one to choose, use `[ask] <question>` to request clarification.
-   - SITUATION 2 (Inherently False Preconditions): If the fundamental premise of the task is physically impossible (e.g., you are asked to interact with an appliance's state, but it lacks the required property like `HAS_SWITCH` or `CONTAINERS`), the condition is permanently false. You cannot bypass missing affordances with unrelated items (like remote controls). In this exact case, use `[ask] <reason>` to report the invalid condition.
+   - SITUATION 2 (Inherently False Preconditions): If the fundamental premise of the task is physically impossible (e.g., you are asked to interact with an appliance's state, but it lacks the required property like `HAS_SWITCH` or `CONTAINERS`), the condition is permanently false. VirtualHome DOES NOT support using remote controls to bypass missing switches on appliances. If the appliance itself lacks `HAS_SWITCH`, it is permanently impossible. In this exact case, use `[ask] <reason>` to report the invalid condition.
    - PLUGGING EXCEPTION: Some appliances (like `stove` or `sink`) are hardwired and lack the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to `[plugin]`. Consider it powered and skip to `[switchon]`.
    
-   For ALL OTHER FAILURES (e.g., an object is BROKEN, a pathway is blocked, or an item is temporarily missing):
-   Do NOT give up and do NOT output `[ask]`. You must demonstrate autonomy by exploring the environment for functional equivalents or alternative pathways (e.g., finding another sink if one is broken, or waiting if someone took an item).
+   For ALL OTHER FAILURES (e.g., an object is BROKEN, jammed, a pathway is blocked, or an item is temporarily missing):
+   You MUST autonomously handle the situation by choosing an alternative object, finding another route, or using `[wait]` if you expect the environment to change. DO NOT OUTPUT `[ask]` FOR THESE.
 9. HANDS & PARALLEL OPTIMIZATION (P2): You have two hands (HOLDS_RH, HOLDS_LH). If you need to transport or process multiple items and both hands are empty, you should `[grab]` the first item, then `[grab]` the second item, and THEN `[walk]` to the destination. Do not waste steps by transporting them one by one.
 10. DISAPPEARING OBJECTS STRATEGY & SUBSTITUTION (M1): SUBSTITUTION FORBIDDEN: You must strictly interact with the exact object class requested by the user or the SDG (e.g., if asked for 'remotecontrol', do NOT use 'cellphone'). If an object you need to interact with suddenly disappears from the graph when you approach it, it means ANOTHER PERSON in the house is temporarily using it! Do NOT abort the task and do NOT substitute it. Instead, output the `[wait]` action to stay in place, and it will be returned shortly.
 11. DYNAMIC GLOBAL RULES (M3): You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route.

@@ -530,10 +530,19 @@ class UnityEnvironment(BaseEnvironment):
             self.custom_states = {}
             
         if self.changed_graph:
-            s, graph = self.comm.environment_graph()
+            s, raw_graph = self.comm.environment_graph()
             if not s:
                 pdb.set_trace()
                 
+            import copy
+            graph = copy.deepcopy(raw_graph)
+                
+            # --- CUSTOM MOCKED NODES RESTORATION ---
+            if getattr(self, 'custom_nodes', None):
+                graph['nodes'].extend(copy.deepcopy(self.custom_nodes))
+            if getattr(self, 'custom_edges', None):
+                graph['edges'].extend(copy.deepcopy(self.custom_edges))
+
             # --- DYNAMIC EVENTS GRAPH MODIFICATIONS ---
             if getattr(self, 'active_hidden_nodes', None):
                 graph['nodes'] = [n for n in graph['nodes'] if n['id'] not in self.active_hidden_nodes]

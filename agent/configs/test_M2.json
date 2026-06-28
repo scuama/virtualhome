@@ -1,6 +1,6 @@
 {
     "environment_id": 1,
-    "goal_instruction": "If there is a dishbowl on the table, put the dirty dishbowl into the sink.",
+    "goal_instruction": "If there is a dishbowl on the table, put the dirty dishbowl on the sink.",
     "initial_relations_override": [
         {
             "subject": "dishbowl",

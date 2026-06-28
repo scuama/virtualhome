@@ -86,26 +86,40 @@ def main():
         if not obj_nodes: continue
         obj_id = obj_nodes[0]['id']
 
+        # HIDE EXTRA INSTANCES PERMANENTLY
+        if len(subj_nodes) > count:
+            if getattr(env, 'active_hidden_nodes', None) is None:
+                env.active_hidden_nodes = {}
+            for extra_node in subj_nodes[count:]:
+                env.active_hidden_nodes[extra_node['id']] = 999999
+            subj_nodes = subj_nodes[:count]
+
         # Add missing objects via expand_scene
         missing_count = count - len(subj_nodes)
         if missing_count > 0:
+            if getattr(env, 'custom_nodes', None) is None:
+                env.custom_nodes = []
+            if getattr(env, 'custom_edges', None) is None:
+                env.custom_edges = []
             max_id = max([n['id'] for n in graph['nodes']]) if graph['nodes'] else 0
             for i in range(missing_count):
                 new_id = max_id + 1 + i
                 new_node = {
                     'id': new_id,
-                    'class_name': ro['subject'],
-                    'category': 'Unknown',
-                    'prefab_name': '',
-                    'properties': [],
+                    'class_name': subj_class,
+                    'category': 'Decor',
                     'states': []
                 }
                 graph['nodes'].append(new_node)
-                graph['edges'].append({
+                env.custom_nodes.append(new_node)
+                subj_nodes.append(new_node)
+                new_edge = {
                     'from_id': new_id,
                     'relation_type': 'ON',
                     'to_id': obj_id
-                })
+                }
+                graph['edges'].append(new_edge)
+                env.custom_edges.append(new_edge)
             
             success, msg = env.comm.expand_scene(graph)
             if not success:
@@ -133,6 +147,7 @@ def main():
     
     env.dynamic_events = config.get('dynamic_events', [])
     env.scheduled_rules = config.get('scheduled_rules', [])
+    env.current_step = 0
     
     if '--test-init' in sys.argv:
         print(f"\n--- TEST INIT GRAPH for {config_path} ---")

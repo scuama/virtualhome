@@ -19,6 +19,7 @@
         "target_class": "tv",
         "remove_properties": ["HAS_SWITCH"]
     },
+    "hidden_broken_classes": ["remotecontrol"],
     "success_condition": {
         "check_type": "agent_action",
         "require_action": "[ask]",

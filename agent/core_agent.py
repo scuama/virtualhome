@@ -11,8 +11,8 @@ class AgentLogger:
     def __init__(self, log_mode="text", scenario_id=""):
         self.log_mode = log_mode
         os.makedirs("agent/logs", exist_ok=True)
-        prefix = f"run_{scenario_id}_" if scenario_id else "run_"
-        self.log_file = f"agent/logs/{prefix}{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+        prefix = f"run_{scenario_id}" if scenario_id else "run_log"
+        self.log_file = f"agent/logs/{prefix}.md"
         
         # Initialize markdown file
         with open(self.log_file, "w", encoding="utf-8") as f:
@@ -100,7 +100,14 @@ class VirtualHomeAgent:
         self.scenario_id = scenario_id
         self.logger = AgentLogger(log_mode="markdown", scenario_id=scenario_id)
 
-    def _get_observed_items(self, graph):
+    def _get_observed_items(self, graph, current_step=0):
+        active_rules = []
+        for r in getattr(self, 'env_rules', []):
+            if r['start_step'] <= current_step <= r['end_step']:
+                rule_text = r['rule_text']
+                if r['end_step'] < 999:
+                    rule_text += f" (Note: This rule is temporary and will expire at step {r['end_step']+1}. If this rule blocks your required preconditions, you MUST output [wait] until it expires instead of giving up.)"
+                active_rules.append(rule_text)
         items = []
         for n in graph.get('nodes', []):
             states = n.get('states', [])
@@ -254,7 +261,7 @@ class VirtualHomeAgent:
                     history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
                     self.action_history.append(history_entry)
                     self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
-                    if self._check_success(config, env, self.action_history):
+                    if self._check_success(raw_graph, config.get('success_condition'), self.action_history):
                         self.logger.info("✅ SUCCESS: Agent correctly requested help as defined in success_condition.")
                         return True
                     else:
