@@ -14,19 +14,10 @@
             "count": 1
         }
     ],
-    "hidden_broken_classes": [
-        "mug",
-        "mug"
-    ],
+    "hidden_broken_classes": ["mug"],
     "success_condition": {
         "check_type": "physical_state",
         "target_class": "dishbowl",
-        "require_states": [
-            "FILLED",
-            "FULL"
-        ],
-        "fallback_require_states": [
-            "WATER"
-        ]
+        "require_states": ["FULL"]
     }
 }

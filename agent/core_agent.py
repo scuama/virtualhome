@@ -169,18 +169,35 @@ class VirtualHomeAgent:
 
                 target_ids = [n['id'] for n in target_nodes]
 
+                # Filter by require_target_state (the dest object must have this state)
+                req_target_state = cond.get('require_target_state')
+
                 match_count = 0
                 for t_id in target_ids:
                     for e in graph['edges']:
                         if e['from_id'] == t_id and e['relation_type'] == relation and e['to_id'] in dest_nodes:
+                            if req_target_state:
+                                dest_node = next((n for n in graph['nodes'] if n['id'] == e['to_id']), None)
+                                if dest_node and req_target_state.upper() not in [s.upper() for s in dest_node.get('states', [])]:
+                                    continue
                             match_count += 1
                             break
 
-                # Check fallback_relation if primary fails
+                # Check fallback_relation (support both array format and flat-field format)
                 if match_count < min_count:
                     fallback = cond.get('fallback_relation')
                     if fallback and isinstance(fallback, list) and len(fallback) == 3:
+                        # Legacy array format: ["HOLDS_LH", "character", "milk"]
                         fb_relation, fb_subject, fb_object = fallback
+                    elif cond.get('fallback_relation_subject'):
+                        # Flat-field format
+                        fb_subject = cond.get('fallback_relation_subject', '')
+                        fb_relation = cond.get('fallback_relation', '')
+                        fb_object = cond.get('fallback_relation_object', '')
+                    else:
+                        fb_subject = fb_relation = fb_object = None
+
+                    if fb_subject and fb_relation and fb_object:
                         fb_targets = [n for n in graph['nodes'] if n['class_name'].lower() == fb_subject.lower()]
                         if fb_subject.lower() == 'character':
                             fb_targets = [n for n in graph['nodes'] if n.get('id') == 1 or n['class_name'].lower() == 'character']
@@ -193,6 +210,7 @@ class VirtualHomeAgent:
                                     break
 
                 if match_count < min_count: return False
+
                 
             elif check_type == 'agent_action':
                 if not action_history: return False

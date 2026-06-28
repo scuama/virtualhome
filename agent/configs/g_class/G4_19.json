@@ -16,23 +16,15 @@
     ],
     "initial_states_override": [
         {
-            "target_classes": [
-                "tablelamp"
-            ],
-            "add_states": [
-                "ON"
-            ]
+            "target_classes": ["tablelamp"],
+            "add_states": ["ON"]
         }
     ],
-    "hidden_broken_classes": [
-        "table_lamp"
-    ],
+    "hidden_broken_classes": ["tablelamp"],
     "success_condition": {
         "check_type": "physical_state",
         "target_class": "tablelamp",
-        "require_states": [
-            "OFF"
-        ],
+        "require_states": ["OFF"],
         "quantifier": "all"
     }
 }

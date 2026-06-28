@@ -17,11 +17,9 @@
     "user_clarification_reply": "全部捡起来放在桌上。",
     "success_condition": {
         "check_type": "relation",
-        "require_relation": [
-            "ON",
-            "book",
-            "desk"
-        ],
+        "subject": "book",
+        "relation": "ON",
+        "object": "desk",
         "require_ask": true
     }
 }

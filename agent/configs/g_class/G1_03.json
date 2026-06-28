@@ -26,15 +26,11 @@
     ],
     "success_condition": {
         "check_type": "relation",
-        "require_relation": [
-            "HOLDS_RH",
-            "character",
-            "remote_control"
-        ],
-        "fallback_relation": [
-            "HOLDS_LH",
-            "character",
-            "remote_control"
-        ]
+        "subject": "character",
+        "relation": "HOLDS_RH",
+        "object": "remotecontrol",
+        "fallback_relation_subject": "character",
+        "fallback_relation": "HOLDS_LH",
+        "fallback_relation_object": "remotecontrol"
     }
 }

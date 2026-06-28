@@ -10,22 +10,14 @@
     ],
     "initial_states_override": [
         {
-            "target_classes": [
-                "tv"
-            ],
-            "add_states": [
-                "ON"
-            ]
+            "target_classes": ["tv"],
+            "add_states": ["ON"]
         }
     ],
-    "hidden_broken_classes": [
-        "remote_control"
-    ],
+    "hidden_broken_classes": ["remotecontrol"],
     "success_condition": {
         "check_type": "physical_state",
         "target_class": "tv",
-        "require_states": [
-            "OFF"
-        ]
+        "require_states": ["OFF"]
     }
 }

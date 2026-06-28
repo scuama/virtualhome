@@ -17,11 +17,9 @@
     "user_clarification_reply": "放到柜子里。",
     "success_condition": {
         "check_type": "relation",
-        "require_relation": [
-            "INSIDE",
-            "mug",
-            "cabinet"
-        ],
+        "subject": "mug",
+        "relation": "INSIDE",
+        "object": "cabinet",
         "require_ask": true
     }
 }

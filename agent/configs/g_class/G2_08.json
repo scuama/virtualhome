@@ -37,19 +37,11 @@
     "user_clarification_reply": "热的。",
     "success_condition": {
         "check_type": "relation",
-        "require_relation": [
-            "HOLDS_RH",
-            "character",
-            "milk"
-        ],
-        "fallback_relation": [
-            "HOLDS_LH",
-            "character",
-            "milk"
-        ],
-        "require_target_state": [
-            "HOT"
-        ],
+        "subject": "character",
+        "relation": "HOLDS_RH",
+        "object": "milk",
+        "subject_must_have_state": null,
+        "require_target_state": "HOT",
         "require_ask": true
     }
 }
