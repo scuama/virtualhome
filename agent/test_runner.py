@@ -72,9 +72,18 @@ def apply_overrides(env, config, debug=False):
                     execute(f"[putin] <{s_node['class_name']}> ({s_node['id']}) <{o_node['class_name']}> ({o_node['id']})")
 
     # 2. Apply initial_states_override
+    # States that can be set via physical actions:
+    ACTION_STATES = {'OPEN', 'CLOSED', 'ON', 'OFF'}
+    # States that CANNOT be set via physical actions → need expand_scene graph injection
+    GRAPH_STATES = {'DIRTY', 'CLEAN', 'HOT', 'COLD', 'WARM', 'FULL', 'EMPTY',
+                    'BROKEN', 'FILLED', 'PLUGGED_IN', 'PLUGGED_OUT', 'COOKED'}
+
+    # Collect all graph-level state changes first, apply in one expand_scene call
+    graph_state_changes = []  # list of (node_id, add_states, remove_states)
+
     for state_override in config.get('initial_states_override', []):
-        # Support both 'add_states' list and legacy 'state' string
         states_to_add = state_override.get('add_states', [])
+        states_to_remove = state_override.get('remove_states', [])
         if not states_to_add and state_override.get('state'):
             states_to_add = [state_override['state']]
 
@@ -84,7 +93,14 @@ def apply_overrides(env, config, debug=False):
                 if debug:
                     print(f"    [Setup] WARNING: Class '{cls}' not found in graph.")
                 continue
-            for state in states_to_add:
+
+            # Split into action-based vs graph-based
+            action_adds = [s for s in states_to_add if s.upper() in ACTION_STATES]
+            graph_adds  = [s for s in states_to_add if s.upper() in GRAPH_STATES]
+            graph_removes = [s for s in states_to_remove if s.upper() in GRAPH_STATES]
+
+            # Physical actions
+            for state in action_adds:
                 s = state.upper()
                 execute(f"[walk] <{node['class_name']}> ({node['id']})")
                 if s == 'OPEN':
@@ -95,7 +111,36 @@ def apply_overrides(env, config, debug=False):
                     execute(f"[switchon] <{node['class_name']}> ({node['id']})")
                 elif s == 'OFF':
                     execute(f"[switchoff] <{node['class_name']}> ({node['id']})")
+
+            # Collect graph-level changes
+            if graph_adds or graph_removes:
+                graph_state_changes.append((node['id'], graph_adds, graph_removes))
+
+    # Apply all graph-level state changes via expand_scene
+    if graph_state_changes:
+        current_graph = env.get_graph()
+        modified = False
+        for node_id, adds, removes in graph_state_changes:
+            for n in current_graph['nodes']:
+                if n['id'] == node_id:
+                    current_states = set(n.get('states', []))
+                    for r in removes:
+                        current_states.discard(r.upper())
+                    for a in adds:
+                        current_states.add(a.upper())
+                    n['states'] = list(current_states)
+                    if debug:
+                        print(f"    [Setup] Graph-inject states on {n['class_name']}({node_id}): +{adds} -{removes} → {n['states']}")
+                    modified = True
+                    break
+        if modified:
+            success, msg = env.comm.expand_scene(current_graph)
+            if not success:
+                print(f"    [Setup] WARNING: expand_scene failed: {msg}")
+            elif debug:
+                print(f"    [Setup] expand_scene: OK")
     return True
+
 
 
 def analyze_failure(scenario_id, config, reason, log_file_path, debug=False):
@@ -136,15 +181,21 @@ def analyze_failure(scenario_id, config, reason, log_file_path, debug=False):
 
     # Classify root cause
     if "'relation'" in reason or "KeyError" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: success_condition 使用了不兼容的 'require_relation' 数组格式,")
-        print(f"     _check_success 期望 'relation'/'subject'/'object' 字段格式.")
-    elif "physical_state" in str(sc.get('check_type', '')):
-        print(f"\n  ⚠️  ROOT CAUSE: check_type='physical_state' 未在 _check_success() 中实现.")
+        print(f"\n  ⚠️  ROOT CAUSE: success_condition 关系检查时发生 KeyError。")
+        print(f"     检查 subject/relation/object 字段是否正确填写。")
     elif "Max steps" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: Agent 在 {config.get('max_steps', 30)} 步内未完成目标.")
-    elif "help" in reason.lower():
-        print(f"\n  ⚠️  ROOT CAUSE: Agent 输出了 [ask] 请求帮助, 但 success_condition 未将 agent_action 纳入判断.")
+        print(f"\n  ⚠️  ROOT CAUSE: Agent 在 {config.get('max_steps', 15)} 步内未完成目标。")
+        print(f"     可能原因：目标物体超出感知范围 / 动作序列过长 / 物品未正确初始化。")
+    elif "help" in reason.lower() or "success condition was not met" in reason.lower():
+        print(f"\n  ⚠️  ROOT CAUSE: Agent 触发了 [ask]，但 success_condition 未通过。")
+        print(f"     检查：1) TV/condition object 的初始状态是否已正确设置")
+        print(f"           2) success_condition.check_type 是否匹配场景意图")
+    elif "Constraint" in reason or "Violation" in reason:
+        print(f"\n  ⚠️  ROOT CAUSE: Agent 触发了禁制条件 (failure_condition)。")
+    elif "Exception" in reason:
+        print(f"\n  ⚠️  ROOT CAUSE: 运行时异常。检查配置格式和环境物体是否存在。")
     print(f"{'='*60}\n")
+
 
 
 def main():
