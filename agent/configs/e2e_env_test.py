@@ -143,6 +143,12 @@ def validate_config_static(config, scenario_id):
             validate_state(state, f"{prefix}.add_states", errors, warnings)
         for state in ov.get('remove_states', []):
             validate_state(state, f"{prefix}.remove_states", errors, warnings)
+        # in_room: must be a valid room name if specified
+        if 'in_room' in ov:
+            valid_rooms = {'kitchen', 'bedroom', 'livingroom', 'bathroom'}
+            if ov['in_room'].lower() not in valid_rooms:
+                errors.append(f"[IN_ROOM] {prefix}.in_room='{ov['in_room']}' invalid. Valid: {valid_rooms}")
+
 
     # ── success_condition ──────────────────────────────────────
     sc = config.get('success_condition')

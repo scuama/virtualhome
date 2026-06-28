@@ -31,12 +31,26 @@ def apply_overrides(env, config, debug=False):
 
     nodes = raw_graph['nodes']
 
-    def find_node(cls_name):
+    # Build room membership lookup: node_id -> room_class_name
+    room_classes = {'kitchen', 'bedroom', 'livingroom', 'bathroom'}
+    node_room = {}
+    for e in raw_graph['edges']:
+        if e['relation_type'] == 'INSIDE':
+            dest = next((n for n in nodes if n['id'] == e['to_id']), None)
+            if dest and dest['class_name'].lower() in room_classes:
+                node_room[e['from_id']] = dest['class_name'].lower()
+
+    def find_node(cls_name, in_room=None):
+        """Find first node matching cls_name, optionally filtered by room."""
         cls_name = cls_name.lower()
-        for n in nodes:
-            if n['class_name'].lower() == cls_name:
-                return n
-        return None
+        candidates = [n for n in nodes if n['class_name'].lower() == cls_name]
+        if in_room:
+            in_room_l = in_room.lower()
+            room_candidates = [n for n in candidates if node_room.get(n['id']) == in_room_l]
+            if room_candidates:
+                return room_candidates[0]
+        return candidates[0] if candidates else None
+
 
     def execute(action_str):
         if debug:
@@ -88,10 +102,11 @@ def apply_overrides(env, config, debug=False):
             states_to_add = [state_override['state']]
 
         for cls in state_override.get('target_classes', []):
-            node = find_node(cls)
+            in_room = state_override.get('in_room', None)
+            node = find_node(cls, in_room=in_room)
             if not node:
                 if debug:
-                    print(f"    [Setup] WARNING: Class '{cls}' not found in graph.")
+                    print(f"    [Setup] WARNING: Class '{cls}' not found in graph{' (room: ' + in_room + ')' if in_room else ''}.")
                 continue
 
             # Split into action-based vs graph-based

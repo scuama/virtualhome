@@ -16,30 +16,23 @@
     ],
     "initial_states_override": [
         {
-            "target_classes": [
-                "apple"
-            ],
-            "remove_states": [
-                "CLEAN"
-            ],
-            "add_states": [
-                "DIRTY"
-            ]
+            "target_classes": ["apple"],
+            "remove_states": ["CLEAN"],
+            "add_states": ["DIRTY"]
         },
         {
-            "target_classes": [
-                "faucet"
-            ],
-            "add_states": [
-                "ON"
-            ]
+            "target_classes": ["faucet"],
+            "in_room": "kitchen",
+            "add_states": ["ON"]
         }
     ],
     "success_condition": {
-        "check_type": "physical_state",
-        "target_class": "apple",
-        "require_states": [
-            "CLEAN"
-        ]
+        "check_type": "relation",
+        "subject": "character",
+        "relation": "HOLDS_RH",
+        "object": "apple",
+        "fallback_relation_subject": "character",
+        "fallback_relation": "HOLDS_LH",
+        "fallback_relation_object": "apple"
     }
 }
