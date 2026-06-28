@@ -149,7 +149,15 @@ def apply_overrides(env, config, debug=False):
                     modified = True
                     break
         if modified:
-            success, msg = env.comm.expand_scene(current_graph)
+            # CRITICAL: expand_scene requires a graph WITHOUT characters.
+            # Passing character nodes causes Unity to hang indefinitely.
+            char_ids = {n['id'] for n in current_graph['nodes'] if n['class_name'].lower() == 'character'}
+            scene_graph = {
+                'nodes': [n for n in current_graph['nodes'] if n['id'] not in char_ids],
+                'edges': [e for e in current_graph['edges']
+                          if e['from_id'] not in char_ids and e['to_id'] not in char_ids]
+            }
+            success, msg = env.comm.expand_scene(scene_graph)
             if not success:
                 print(f"    [Setup] WARNING: expand_scene failed: {msg}")
             elif debug:
