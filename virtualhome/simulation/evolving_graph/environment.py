@@ -28,7 +28,6 @@ class State(Enum):
     DIRTY = 6
     CLEAN = 7
     LYING = 8
-    PLUGGED_IN = 9
     PLUGGED_OUT = 10
 
 

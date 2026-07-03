@@ -275,13 +275,39 @@ class VirtualHomeAgent:
         # 2. SDG Planner
         self.current_sdg = self.sdg_planner.generate_sdg(config['goal_instruction'])
             
+        # Initialize Spatial Memory with FULL graph (Mental Map)
+        full_graph_init = env.get_graph()
+        self.memory_nodes = {n['id']: n.copy() for n in full_graph_init.get('nodes', [])}
+        self.memory_edges = {}
+        for e in full_graph_init.get('edges', []):
+            self.memory_edges.setdefault(e['from_id'], []).append(e)
+
         # 3. Execution Loop
         steps = 0
         max_steps = config.get('max_steps', 15)
         
         while steps < max_steps:
             raw_obs = env.get_observations()
-            raw_graph = raw_obs[0]
+            partial_graph = raw_obs[0]
+            
+            # --- UPDATE SPATIAL MEMORY ---
+            visible_ids = set()
+            for n in partial_graph.get('nodes', []):
+                self.memory_nodes[n['id']] = n.copy()
+                visible_ids.add(n['id'])
+                # Clear old outward edges for this visible node
+                self.memory_edges[n['id']] = []
+                
+            for e in partial_graph.get('edges', []):
+                if e['from_id'] in visible_ids:
+                    self.memory_edges[e['from_id']].append(e)
+                    
+            # Reconstruct merged graph from memory
+            raw_graph = {
+                'nodes': list(self.memory_nodes.values()),
+                'edges': [e for edge_list in self.memory_edges.values() for e in edge_list]
+            }
+
             
             # 4. Perception Filter
             if self.current_sdg:
@@ -293,8 +319,9 @@ class VirtualHomeAgent:
             
             observed = self._get_observed_items(filtered_graph)
             
-            # Check success BEFORE action using raw_graph to avoid perception filter drops
-            if self._check_success(raw_graph, config.get('success_condition'), self.action_history):
+            # Check success BEFORE action using the true full graph to avoid partial/memory errors
+            true_full_graph = env.get_graph()
+            if self._check_success(true_full_graph, config.get('success_condition'), self.action_history):
                 self.logger.info("✅ SUCCESS! Goal condition met.")
                 self.logger.write_step(steps, "FINISH (Goal Reached)", self.current_sdg, observed)
                 return True, "Goal Reached"
@@ -365,13 +392,57 @@ class VirtualHomeAgent:
                         self.logger.error("❌ FAILED: Agent requested help, but success condition was not met.")
                         return False, "Agent requested help, but success condition was not met"
                 
-                obs, reward, done, info = env.step({0: next_action})
-                success = info.get('action_success', False)
-                msg = info.get('action_message', '')
-                history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
-                if not success and msg:
-                    history_entry["error"] = msg
-                self.action_history.append(history_entry)
+                # --- DYNAMIC EVENTS TRIGGER ---
+                dynamic_events = config.get('dynamic_events', [])
+                for ev in dynamic_events:
+                    trigger = ev['trigger']
+                    ev['times_triggered'] = ev.get('times_triggered', 0)
+                    if ev['times_triggered'] >= ev.get('max_triggers', 1):
+                        continue
+
+                    if f"[{trigger['action']}]" in next_action.lower() and f"<{trigger['target'].lower()}>" in next_action.lower():
+                        match = re.search(r'\(\s*(\d+)\s*\)', next_action)
+                        if match:
+                            t_id = int(match.group(1))
+                            req_state = trigger.get('target_state')
+                            node_ok = True
+                            if req_state:
+                                n_node = next((n for n in raw_graph['nodes'] if n['id'] == t_id), None)
+                                if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
+                                    node_ok = False
+                            
+                            if node_ok:
+                                effect = ev['effect']
+                                if effect['type'] == 'hide':
+                                    dur = effect['duration_steps']
+                                    if not hasattr(env, 'active_hidden_nodes'):
+                                        env.active_hidden_nodes = {}
+                                    if t_id not in env.active_hidden_nodes:
+                                        env.active_hidden_nodes[t_id] = dur
+                                        ev['times_triggered'] += 1
+                                        self.logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
+
+                # --- INTERCEPT HIDDEN OBJECTS ---
+                target_match = re.search(r'\(\s*(\d+)\s*\)', next_action)
+                intercepted = False
+                if target_match:
+                    target_id = int(target_match.group(1))
+                    hidden_nodes = getattr(env, 'active_hidden_nodes', {})
+                    if target_id in hidden_nodes:
+                        success = False
+                        msg = "有其他人正在用请稍等"
+                        history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning, "error": msg}
+                        self.action_history.append(history_entry)
+                        intercepted = True
+                        
+                if not intercepted:
+                    obs, reward, done, info = env.step({0: next_action})
+                    success = info.get('action_success', False)
+                    msg = info.get('action_message', '')
+                    history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
+                    if not success and msg:
+                        history_entry["error"] = msg
+                    self.action_history.append(history_entry)
             else:
                 next_action = "WAIT"
                 
@@ -379,6 +450,18 @@ class VirtualHomeAgent:
             self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
             
             steps += 1
+            
+            # --- DYNAMIC EVENTS TICK ---
+            if hasattr(env, 'active_hidden_nodes'):
+                expired = []
+                for k, v in env.active_hidden_nodes.items():
+                    if v != float('inf'):
+                        env.active_hidden_nodes[k] = v - 1
+                        if env.active_hidden_nodes[k] <= 0:
+                            expired.append(k)
+                for k in expired:
+                    del env.active_hidden_nodes[k]
+                    self.logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
             
         self.logger.error("❌ FAILED: Max steps reached.")
         return False, "Max steps reached"

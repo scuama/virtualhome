@@ -13,12 +13,6 @@
             "relation": "ON",
             "object": "tvstand",
             "count": 1
-        },
-        {
-            "subject": "sofa",
-            "relation": "INSIDE",
-            "object": "livingroom",
-            "count": 1
         }
     ],
     "dynamic_events": [

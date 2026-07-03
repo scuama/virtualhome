@@ -1,0 +1,98 @@
+{
+    "scenario_id": "M2_07",
+    "scenario_type": "M",
+    "goal_instruction": "如果冰箱门里有苹果，就把红苹果拿出来。",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "fridge"
+            ],
+            "add_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "red"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "green"
+            ],
+            "instance_filter": {
+                "index": 1
+            }
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "green"
+            ],
+            "instance_filter": {
+                "index": 2
+            }
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "green"
+            ],
+            "instance_filter": {
+                "index": 3
+            }
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "green"
+            ],
+            "instance_filter": {
+                "index": 4
+            }
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "add_properties": [
+                "green"
+            ],
+            "instance_filter": {
+                "index": 5
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "fridge"
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "apple",
+        "require_target_properties": [
+            "red"
+        ]
+    }
+}

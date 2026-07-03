@@ -1,0 +1,40 @@
+{
+    "scenario_id": "M1_03",
+    "scenario_type": "M",
+    "goal_instruction": "如果你看到了脏杯子，就及时把它们放到水槽里。",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "waterglass",
+                "target_state": "DIRTY"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "waterglass",
+                "duration_steps": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "waterglass",
+        "subject_must_have_state": "DIRTY",
+        "relation": "ON",
+        "destination_class": "sink"
+    }
+}

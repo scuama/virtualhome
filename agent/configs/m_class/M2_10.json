@@ -1,0 +1,68 @@
+{
+    "scenario_id": "M2_10",
+    "scenario_type": "M",
+    "goal_instruction": "如果沙发上有黄色的抱枕，就帮我拿一个过来。",
+    "environment_id": 3,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "pillow"
+            ],
+            "add_properties": [
+                "yellow"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "pillow"
+            ],
+            "add_properties": [
+                "orange"
+            ],
+            "instance_filter": {
+                "index": 1
+            }
+        },
+        {
+            "target_classes": [
+                "pillow"
+            ],
+            "add_properties": [
+                "orange"
+            ],
+            "instance_filter": {
+                "index": 2
+            }
+        },
+        {
+            "target_classes": [
+                "pillow"
+            ],
+            "add_properties": [
+                "orange"
+            ],
+            "instance_filter": {
+                "index": 3
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "pillow",
+            "relation": "ON",
+            "object": "sofa"
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "pillow",
+        "require_target_properties": [
+            "yellow"
+        ]
+    }
+}

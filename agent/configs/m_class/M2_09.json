@@ -1,0 +1,77 @@
+{
+    "scenario_id": "M2_09",
+    "scenario_type": "M",
+    "goal_instruction": "如果冰箱里有果汁，就倒一些在干净的杯子里。",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "CLEAN"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 1
+            }
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 2
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "juice",
+            "relation": "INSIDE",
+            "object": "fridge"
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge"
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "target_class": "character",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "destination_class": "waterglass",
+                "require_target_state": "CLEAN"
+            },
+            {
+                "check_type": "relation",
+                "target_class": "juice",
+                "relation": "INSIDE",
+                "destination_class": "waterglass",
+                "require_target_state": "CLEAN"
+            }
+        ]
+    }
+}

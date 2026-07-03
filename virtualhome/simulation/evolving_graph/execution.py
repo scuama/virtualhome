@@ -847,9 +847,14 @@ class PourExecutor(ActionExecutor):
         if src_node is None or dest_node is None:
             info.script_object_found_error(current_line.object() if src_node is None else current_line.subject())
         elif self._check_pourable(state, src_node, dest_node, info, char_index):
-            changes = [AddEdges(NodeInstance(src_node), Relation.INSIDE, NodeInstance(dest_node))]
-            if src_node.class_name == 'water':
-                changes += [DeleteEdges(CharacterNode(char_index), [Relation.HOLDS_LH, Relation.HOLDS_RH], NodeInstance(src_node))]
+            if src_node.class_name == 'coffeepot':
+                new_dest = dest_node.copy()
+                new_dest.states.add(State.FILLED_COFFEE)
+                changes = [ChangeNode(new_dest)]
+            else:
+                changes = [AddEdges(NodeInstance(src_node), Relation.INSIDE, NodeInstance(dest_node))]
+                if src_node.class_name == 'water':
+                    changes += [DeleteEdges(CharacterNode(char_index), [Relation.HOLDS_LH, Relation.HOLDS_RH], NodeInstance(src_node))]
             if modify:
                 yield state.change_state(changes, in_place=in_place)
             else:

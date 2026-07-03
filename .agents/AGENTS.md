@@ -9,7 +9,9 @@
 ## 2. 场景与物品初始化配置
 - **禁止直接放置于房间**：在编写测试用例配置（如 `G2_06.json` 的 `initial_relations_override`）时，**绝不允许**将物品直接设置为 `INSIDE <room_name>`（例如 `INSIDE livingroom`）。
 - **具体到支撑物**：必须将物品放置于房间内的具体支撑物或容器上/中（例如 `ON coffeetable` 或 `INSIDE kitchencabinet`）。
-- 📖 **相关文档索引**：[doc/scene_room_objects_catalog.md](file:///Users/rushy/program/virtualhome/doc/scene_room_objects_catalog.md) (查阅每个场景和房间中真实可用的物品)
+- 📖 **相关文档索引**：
+  - [doc/scene_room_objects_catalog.md](file:///Users/rushy/program/virtualhome/doc/scene_room_objects_catalog.md) (查阅每个场景和房间中真实可用的物品)
+  - [doc/config_generation_rules.md](file:///Users/rushy/program/virtualhome/doc/config_generation_rules.md) (从草案生成正式配置的全面规则与最佳实践)
 
 ## 3. 物理动作与宏约束
 - **严禁代码作弊 (No Magic Macros)**：不要试图在 Python 代码（如 `LLMExecutor`）中强行硬编码追加 `[walk]` 或 `[grab]` 等前置动作。

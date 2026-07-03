@@ -193,3 +193,6 @@ agent/results/*
 e2e_results.txt
 /environment_objects_catalog.md
 validate_configs.py
+
+
+.agents

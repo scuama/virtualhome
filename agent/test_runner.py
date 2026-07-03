@@ -32,6 +32,7 @@ def apply_overrides(env, config, debug=False):
             custom = getattr(env, 'custom_states', {}) or {}
             for ov in overrides:
                 rm, add = ov.get('remove_states', []), ov.get('add_states', [])
+                add_props = ov.get('add_properties', [])
                 i_filter = ov.get('instance_filter')
                 in_room  = ov.get('in_room')
                 for cls in ov.get('target_classes', []):
@@ -47,48 +48,41 @@ def apply_overrides(env, config, debug=False):
                     for node in candidates:
                         if node['id'] in custom: continue  # 真实动作优先
                         st = set(node.get('states', []))
-                        props = node.get('properties', [])
+                        props = set(node.get('properties', []))
                         for s in rm: st.discard(s)
                         for s in add:
                             if s == 'PLUGGED_OUT' and 'HAS_PLUG' not in props: continue
                             if s == 'OFF' and 'HAS_SWITCH' not in props: continue
                             st.add(s)
+                        for p in add_props:
+                            props.add(p)
                         node['states'] = list(st)
+                        node['properties'] = list(props)
                         if debug:
-                            print(f"    [Setup] Patched state on {node['class_name']}({node['id']}): {node['states']}")
+                            print(f"    [Setup] Patched state on {node['class_name']}({node['id']}): {node['states']} props: {node['properties']}")
             return graph
         env.get_graph = patched
         if debug:
             print("    [Setup] Installed get_graph monkey-patch for state overrides.")
 
-    from .graph_utils import find_node, find_all, clean_graph, move_item_in_graph, add_virtual_item
+    from agent.graph_utils import find_node, find_all
 
     def _hide_extra_nodes(env, nodes_to_hide):
         if not hasattr(env, 'active_hidden_nodes'):
             env.active_hidden_nodes = {}
         for n in nodes_to_hide:
-            env.active_hidden_nodes[n['id']] = 999999
+            env.active_hidden_nodes[n['id']] = float('inf')
 
-    def _get_scene_without_chars(env):
-        _, raw = env.comm.environment_graph()
-        char_ids = {n['id'] for n in raw['nodes'] if n['class_name'].lower() == 'character'}
-        return {
-            'nodes': [n for n in raw['nodes'] if n['id'] not in char_ids],
-            'edges': [e for e in raw['edges'] if e['from_id'] not in char_ids and e['to_id'] not in char_ids]
-        }
-
-    def _readd_characters(env):
-        for i in range(env.num_agents):
-            if hasattr(env, 'agent_info') and i in env.agent_info:
-                env.comm.add_character(env.agent_info[i])
-            else:
-                env.comm.add_character()
-        env.changed_graph = True
+    def _already_has_relation(graph, s_node, rel, obj_node):
+        return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
 
     def execute(action_str):
         print(f"    [Setup] {action_str}")
         obs, reward, done, info = env.step({0: action_str})
-        return info.get('action_success', False)
+        success = info.get('action_success', False)
+        if not success:
+            print(f"      -> FAILED: {info.get('action_message', '')}")
+        return success
 
     # 1. 状态覆盖
     state_overrides = config.get('initial_states_override', [])
@@ -97,9 +91,6 @@ def apply_overrides(env, config, debug=False):
 
     # 2. 关系覆盖 (位置)
     graph = env.get_graph()
-    needs_expand = False
-    scene_graph = None
-
     for ro in config.get('initial_relations_override', []):
         subj   = ro['subject'].lower()
         rel    = ro.get('relation', 'ON').upper()
@@ -124,38 +115,23 @@ def apply_overrides(env, config, debug=False):
             _hide_extra_nodes(env, subj_nodes[count:])
             subj_nodes = subj_nodes[:count]
 
-        # Use Graph API for placement
-        if not scene_graph:
-            scene_graph = clean_graph(_get_scene_without_chars(env))
-            
-        obj_node_scene = next((n for n in scene_graph['nodes'] if n['id'] == obj_node['id']), None)
-        if not obj_node_scene: continue
-
-        # Move existing items
-        for s_node in subj_nodes:
-            move_item_in_graph(scene_graph, s_node['id'], rel, obj_node['id'])
-            needs_expand = True
-
-        # Create missing items
+        # 验证必需物品是否充足 (不再调用会死锁的 expand_scene)
         if len(subj_nodes) < count:
-            missing = count - len(subj_nodes)
-            for i in range(missing):
-                add_virtual_item(scene_graph, subj, rel, obj_node['id'])
-            needs_expand = True
-            
-    if needs_expand:
-        env.comm.expand_scene(scene_graph)
-        _readd_characters(env)
-        
-        # Self-Verification: Check if created nodes were silently dropped
-        new_graph = env.get_graph()
-        for ro in config.get('initial_relations_override', []):
-            subj   = ro['subject'].lower()
-            if subj == 'character': continue
-            count  = ro.get('count', 1)
-            actual_count = len([n for n in new_graph['nodes'] if n['class_name'].lower() == subj])
-            if actual_count < count:
-                raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {actual_count} were spawned. The prefab '{subj}' is likely missing from Unity resources. Please test this scenario in a different room/scene!")
+            raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {len(subj_nodes)} exist in the scene. Please change to a different room/scene that contains enough '{subj}'.")
+
+        # 依靠物理动作将物品就位
+        for s_node in subj_nodes[:count]:
+            if _already_has_relation(graph, s_node, rel, obj_node): continue
+            execute(f'[walk] <{subj}> ({s_node["id"]})')
+            execute(f'[grab] <{subj}> ({s_node["id"]})')
+            execute(f'[walk] <{obj}> ({obj_node["id"]})')
+            if rel == 'INSIDE':
+                execute(f'[open] <{obj}> ({obj_node["id"]})')
+                execute(f'[putin] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
+                execute(f'[close] <{obj}> ({obj_node["id"]})')
+            else:
+                execute(f'[putback] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
+        graph = env.get_graph()
 
     return True
 

@@ -1,0 +1,45 @@
+{
+    "scenario_id": "M1_05",
+    "scenario_type": "M",
+    "goal_instruction": "如果牛奶是凉的，就把它放进微波炉加热。",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "add_states": [
+                "COLD"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "milk"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "milk",
+                "duration_steps": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "milk",
+        "require_state": "HOT"
+    }
+}

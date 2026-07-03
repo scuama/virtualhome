@@ -1,0 +1,42 @@
+{
+    "scenario_id": "M1_01",
+    "scenario_type": "M",
+    "goal_instruction": "如果电视开着，就把遥控器拿过来。",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "remotecontrol",
+            "relation": "ON",
+            "object": "coffeetable"
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "remotecontrol"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "remotecontrol",
+                "duration_steps": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "remotecontrol"
+    }
+}
