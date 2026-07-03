@@ -1,74 +1,52 @@
 {
     "scenario_id": "M2_08",
     "scenario_type": "M",
-    "goal_instruction": "如果桌子上有苹果，拿一个熟了的过来。",
+    "goal_instruction": "\u5982\u679c\u684c\u5b50\u4e0a\u6709\u82f9\u679c\uff0c\u62ff\u4e00\u4e2a\u719f\u4e86\u7684\u8fc7\u6765\u3002",
     "environment_id": 1,
     "initial_states_override": [
         {
             "target_classes": [
                 "apple"
             ],
-            "add_properties": [
-                "red"
-            ],
             "instance_filter": {
                 "index": 0
-            }
+            },
+            "add_states": [
+                "RED"
+            ]
         },
         {
             "target_classes": [
                 "apple"
-            ],
-            "add_properties": [
-                "green"
             ],
             "instance_filter": {
                 "index": 1
-            }
+            },
+            "add_states": [
+                "GREEN"
+            ]
         },
         {
             "target_classes": [
                 "apple"
-            ],
-            "add_properties": [
-                "green"
             ],
             "instance_filter": {
                 "index": 2
-            }
+            },
+            "add_states": [
+                "GREEN"
+            ]
         },
         {
             "target_classes": [
                 "apple"
-            ],
-            "add_properties": [
-                "green"
             ],
             "instance_filter": {
                 "index": 3
-            }
-        },
-        {
-            "target_classes": [
-                "apple"
-            ],
-            "add_properties": [
-                "green"
-            ],
-            "instance_filter": {
-                "index": 4
-            }
-        },
-        {
-            "target_classes": [
-                "apple"
-            ],
-            "add_properties": [
-                "green"
-            ],
-            "instance_filter": {
-                "index": 5
-            }
+            },
+            "add_states": [
+                "GREEN"
+            ]
         }
     ],
     "initial_relations_override": [
@@ -80,7 +58,8 @@
         {
             "subject": "apple",
             "relation": "ON",
-            "object": "kitchentable"
+            "object": "kitchentable",
+            "count": 4
         }
     ],
     "success_condition": {
@@ -88,8 +67,6 @@
         "target_class": "character",
         "relation": "HOLDS_RH|HOLDS_LH",
         "destination_class": "apple",
-        "require_target_properties": [
-            "red"
-        ]
+        "require_target_state": "RED"
     }
 }

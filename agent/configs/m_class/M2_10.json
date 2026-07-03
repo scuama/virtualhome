@@ -1,52 +1,52 @@
 {
     "scenario_id": "M2_10",
     "scenario_type": "M",
-    "goal_instruction": "如果沙发上有黄色的抱枕，就帮我拿一个过来。",
+    "goal_instruction": "\u5982\u679c\u6c99\u53d1\u4e0a\u6709\u9ec4\u8272\u7684\u62b1\u6795\uff0c\u5c31\u5e2e\u6211\u62ff\u4e00\u4e2a\u8fc7\u6765\u3002",
     "environment_id": 3,
     "initial_states_override": [
         {
             "target_classes": [
                 "pillow"
             ],
-            "add_properties": [
-                "yellow"
-            ],
             "instance_filter": {
                 "index": 0
-            }
+            },
+            "add_states": [
+                "YELLOW"
+            ]
         },
         {
             "target_classes": [
                 "pillow"
-            ],
-            "add_properties": [
-                "orange"
             ],
             "instance_filter": {
                 "index": 1
-            }
+            },
+            "add_states": [
+                "ORANGE"
+            ]
         },
         {
             "target_classes": [
                 "pillow"
-            ],
-            "add_properties": [
-                "orange"
             ],
             "instance_filter": {
                 "index": 2
-            }
+            },
+            "add_states": [
+                "ORANGE"
+            ]
         },
         {
             "target_classes": [
                 "pillow"
             ],
-            "add_properties": [
-                "orange"
-            ],
             "instance_filter": {
                 "index": 3
-            }
+            },
+            "add_states": [
+                "ORANGE"
+            ]
         }
     ],
     "initial_relations_override": [
@@ -58,7 +58,8 @@
         {
             "subject": "pillow",
             "relation": "ON",
-            "object": "sofa"
+            "object": "sofa",
+            "count": 4
         }
     ],
     "success_condition": {
@@ -66,8 +67,6 @@
         "target_class": "character",
         "relation": "HOLDS_RH|HOLDS_LH",
         "destination_class": "pillow",
-        "require_target_properties": [
-            "yellow"
-        ]
+        "require_target_state": "YELLOW"
     }
 }

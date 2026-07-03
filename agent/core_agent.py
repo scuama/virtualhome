@@ -10,9 +10,12 @@ from .llm_executor import LLMExecutor
 class AgentLogger:
     def __init__(self, log_mode="text", scenario_id=""):
         self.log_mode = log_mode
-        os.makedirs("agent/logs", exist_ok=True)
+        import os
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        logs_dir = os.path.join(base_dir, "logs")
+        os.makedirs(logs_dir, exist_ok=True)
         prefix = f"run_{scenario_id}" if scenario_id else "run_log"
-        self.log_file = f"agent/logs/{prefix}.md"
+        self.log_file = os.path.join(logs_dir, f"{prefix}.md")
         
         # Initialize markdown file
         with open(self.log_file, "w", encoding="utf-8") as f:

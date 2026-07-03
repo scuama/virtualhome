@@ -27,26 +27,40 @@ def apply_overrides(env, config, debug=False):
     """
     def _install_state_patch(env, overrides, debug):
         original = env.get_graph
+        # Map to store which IDs get which overrides so they don't shift
+        # Key: override index, Value: list of node IDs assigned to this override
+        locked_assignments = {}
+        
         def patched(*args, **kwargs):
             graph = original(*args, **kwargs)
             custom = getattr(env, 'custom_states', {}) or {}
-            for ov in overrides:
+            
+            for ov_idx, ov in enumerate(overrides):
                 rm, add = ov.get('remove_states', []), ov.get('add_states', [])
                 add_props = ov.get('add_properties', [])
                 i_filter = ov.get('instance_filter')
                 in_room  = ov.get('in_room')
-                for cls in ov.get('target_classes', []):
-                    candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
-                    if in_room:
-                        room_ids  = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
-                        inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
-                        candidates = [n for n in candidates if n['id'] in inside_ids]
-                    if i_filter and 'index' in i_filter:
-                        idx = i_filter['index']
-                        candidates = [candidates[idx]] if idx < len(candidates) else []
-                    
-                    for node in candidates:
-                        if node['id'] in custom: continue  # 真实动作优先
+                
+                # If we haven't locked IDs for this override yet, do it now
+                if ov_idx not in locked_assignments:
+                    assigned_ids = []
+                    for cls in ov.get('target_classes', []):
+                        candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
+                        if in_room:
+                            room_ids  = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
+                            inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
+                            candidates = [n for n in candidates if n['id'] in inside_ids]
+                        if i_filter and 'index' in i_filter:
+                            idx = i_filter['index']
+                            candidates = [candidates[idx]] if idx < len(candidates) else []
+                        assigned_ids.extend([n['id'] for n in candidates])
+                    locked_assignments[ov_idx] = assigned_ids
+                
+                # Apply patches to the locked IDs
+                target_ids = locked_assignments[ov_idx]
+                for node in graph['nodes']:
+                    if node['id'] in target_ids:
+                        # Do not skip if in custom, we want to MERGE our colors with physics states like COLD!
                         st = set(node.get('states', []))
                         props = set(node.get('properties', []))
                         for s in rm: st.discard(s)
@@ -60,7 +74,9 @@ def apply_overrides(env, config, debug=False):
                         node['properties'] = list(props)
                         if debug:
                             print(f"    [Setup] Patched state on {node['class_name']}({node['id']}): {node['states']} props: {node['properties']}")
+                        
             return graph
+            
         env.get_graph = patched
         if debug:
             print("    [Setup] Installed get_graph monkey-patch for state overrides.")

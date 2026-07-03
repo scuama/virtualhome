@@ -25,7 +25,8 @@
         {
             "subject": "waterglass",
             "relation": "ON",
-            "object": "kitchentable"
+            "object": "kitchentable",
+            "count": 4
         }
     ],
     "success_condition": {
