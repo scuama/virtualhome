@@ -34,5 +34,3 @@ class GoalReasoner:
             
         return self.global_intent
 
-    def get_global_intent(self):
-        return self.global_intent

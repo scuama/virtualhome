@@ -1,6 +1,4 @@
 import json
-import networkx as nx
-import matplotlib.pyplot as plt
 import os
 from .llm_client import LLMClient
 
@@ -66,27 +64,4 @@ class SDGPlanner:
                 self.logger.log_error(f"SDG JSON 解析失败: {e}\nRaw Response:\n{response}")
             return None
 
-    def generate_mermaid_graph(self) -> str:
-        if not self.current_sdg:
-            return "No SDG generated yet."
 
-        lines = ["graph TD"]
-        nodes = self.current_sdg.get("nodes", [])
-        edges = self.current_sdg.get("edges", [])
-
-        for node in nodes:
-            nid = node["id"]
-            if node["type"] == "State":
-                label = f"{node['object']}\\n({node['value']})"
-            elif node["type"] == "Relation":
-                label = f"{node['object']}\\n{node['relation']}\\n{node.get('target', '')}"
-            else:
-                label = f"{node['object']}"
-            lines.append(f'    {nid}["{label}"]')
-
-        for edge in edges:
-            reason = edge.get('reason', '')
-            # from -> to means prerequisite -> goal
-            lines.append(f'    {edge["from"]} -->|"{reason}"| {edge["to"]}')
-
-        return "\n".join(lines)

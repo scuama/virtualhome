@@ -55,6 +55,3 @@ def add_virtual_item(graph, class_name, relation, target_id):
     move_item_in_graph(graph, new_id, relation, target_id)
     return new_id
 
-def delete_item_in_graph(graph, node_id):
-    graph['nodes'] = [n for n in graph['nodes'] if n['id'] != node_id]
-    graph['edges'] = [e for e in graph['edges'] if e['from_id'] != node_id and e['to_id'] != node_id]
