@@ -61,17 +61,8 @@ def apply_overrides(env, config, debug=False):
         if debug:
             print("    [Setup] Installed get_graph monkey-patch for state overrides.")
 
-    def _find_node(graph, cls, in_room=None):
-        candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
-        if in_room:
-            room_ids = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
-            inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
-            candidates = [n for n in candidates if n['id'] in inside_ids]
-        return candidates[0] if candidates else None
+    from .graph_utils import find_node, find_all, clean_graph, move_item_in_graph, add_virtual_item
 
-    def _find_all(graph, cls):
-        return [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
-        
     def _hide_extra_nodes(env, nodes_to_hide):
         if not hasattr(env, 'active_hidden_nodes'):
             env.active_hidden_nodes = {}
@@ -86,13 +77,6 @@ def apply_overrides(env, config, debug=False):
             'edges': [e for e in raw['edges'] if e['from_id'] not in char_ids and e['to_id'] not in char_ids]
         }
 
-    def _add_virtual_nodes(scene_graph, subj_class, obj_id, count):
-        max_id = max(n['id'] for n in scene_graph['nodes']) if scene_graph['nodes'] else 0
-        for i in range(count):
-            new_id = max_id + 1 + i
-            scene_graph['nodes'].append({'id': new_id, 'class_name': subj_class, 'category': 'Decor', 'states': []})
-            scene_graph['edges'].append({'from_id': new_id, 'relation_type': 'ON', 'to_id': obj_id})
-
     def _readd_characters(env):
         for i in range(env.num_agents):
             if hasattr(env, 'agent_info') and i in env.agent_info:
@@ -101,16 +85,10 @@ def apply_overrides(env, config, debug=False):
                 env.comm.add_character()
         env.changed_graph = True
 
-    def _already_has_relation(graph, s_node, rel, obj_node):
-        return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
-
     def execute(action_str):
         print(f"    [Setup] {action_str}")
         obs, reward, done, info = env.step({0: action_str})
-        success = info.get('action_success', False)
-        if not success:
-            print(f"      -> FAILED: {info.get('action_message', '')}")
-        return success
+        return info.get('action_success', False)
 
     # 1. 状态覆盖
     state_overrides = config.get('initial_states_override', [])
@@ -119,6 +97,9 @@ def apply_overrides(env, config, debug=False):
 
     # 2. 关系覆盖 (位置)
     graph = env.get_graph()
+    needs_expand = False
+    scene_graph = None
+
     for ro in config.get('initial_relations_override', []):
         subj   = ro['subject'].lower()
         rel    = ro.get('relation', 'ON').upper()
@@ -128,14 +109,14 @@ def apply_overrides(env, config, debug=False):
 
         # 角色初始位置特殊处理
         if subj == 'character':
-            obj_node = _find_node(graph, obj)
+            obj_node = find_node(graph, obj)
             if obj_node:
                 execute(f'[walk] <{obj}> ({obj_node["id"]})')
             graph = env.get_graph()
             continue
 
-        subj_nodes = _find_all(graph, subj)
-        obj_node   = _find_node(graph, obj, in_room)
+        subj_nodes = find_all(graph, subj)
+        obj_node   = find_node(graph, obj, in_room)
         if not obj_node: continue
 
         # 隐藏多余的对象实例
@@ -143,30 +124,39 @@ def apply_overrides(env, config, debug=False):
             _hide_extra_nodes(env, subj_nodes[count:])
             subj_nodes = subj_nodes[:count]
 
-        # 若对象不足，用 expand_scene 补充
+        # Use Graph API for placement
+        if not scene_graph:
+            scene_graph = clean_graph(_get_scene_without_chars(env))
+            
+        obj_node_scene = next((n for n in scene_graph['nodes'] if n['id'] == obj_node['id']), None)
+        if not obj_node_scene: continue
+
+        # Move existing items
+        for s_node in subj_nodes:
+            move_item_in_graph(scene_graph, s_node['id'], rel, obj_node['id'])
+            needs_expand = True
+
+        # Create missing items
         if len(subj_nodes) < count:
             missing = count - len(subj_nodes)
-            scene_graph = _get_scene_without_chars(env)
-            _add_virtual_nodes(scene_graph, subj, obj_node['id'], missing)
-            env.comm.expand_scene(scene_graph)
-            _readd_characters(env)          
-            graph = env.get_graph()
-            subj_nodes = _find_all(graph, subj)
-
-        # 依靠物理动作将物品就位
-        for s_node in subj_nodes[:count]:
-            if _already_has_relation(graph, s_node, rel, obj_node): continue
-            execute(f'[walk] <{subj}> ({s_node["id"]})')
-            execute(f'[grab] <{subj}> ({s_node["id"]})')
-            execute(f'[walk] <{obj}> ({obj_node["id"]})')
-            if rel == 'INSIDE':
-                execute(f'[open] <{obj}> ({obj_node["id"]})')
-                execute(f'[putin] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
-                execute(f'[close] <{obj}> ({obj_node["id"]})')
-            else:
-                execute(f'[putback] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
-        graph = env.get_graph()
+            for i in range(missing):
+                add_virtual_item(scene_graph, subj, rel, obj_node['id'])
+            needs_expand = True
+            
+    if needs_expand:
+        env.comm.expand_scene(scene_graph)
+        _readd_characters(env)
         
+        # Self-Verification: Check if created nodes were silently dropped
+        new_graph = env.get_graph()
+        for ro in config.get('initial_relations_override', []):
+            subj   = ro['subject'].lower()
+            if subj == 'character': continue
+            count  = ro.get('count', 1)
+            actual_count = len([n for n in new_graph['nodes'] if n['class_name'].lower() == subj])
+            if actual_count < count:
+                raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {actual_count} were spawned. The prefab '{subj}' is likely missing from Unity resources. Please test this scenario in a different room/scene!")
+
     return True
 
 
