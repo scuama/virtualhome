@@ -46,6 +46,19 @@ class PerceptionFilter:
             selected_ids = []
             reasoning = "Fallback due to error."
             
+        # Force include objects that are explicitly named in SDG or intent
+        sdg_str_lower = sdg_str.lower()
+        intent_str_lower = intent_str.lower()
+        for node in raw_graph.get('nodes', []):
+            cname = node['class_name'].lower()
+            if cname in ['character']:
+                if node['id'] not in selected_ids: selected_ids.append(node['id'])
+                continue
+            if cname in sdg_str_lower or cname in intent_str_lower:
+                if node['id'] not in selected_ids:
+                    selected_ids.append(node['id'])
+            
+
         self.logger.log_module_output("PerceptionFilter", 0, {
             "reasoning": reasoning,
             "selected_ids": selected_ids,

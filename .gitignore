@@ -187,8 +187,8 @@ agent/test_npc_images/
 agent/Player_*.log
 agent/configs/port_*.txt
 agent/configs/Player_*.log
-agent/results/
-
+agent/results/*
+!agent/results/success/
 # Root-level temp output files
 e2e_results.txt
 /environment_objects_catalog.md

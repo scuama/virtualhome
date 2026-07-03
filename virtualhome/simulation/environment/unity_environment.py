@@ -257,7 +257,8 @@ class UnityEnvironment(BaseEnvironment):
                             message = "Failed: Must hold source object and be close to target."
                         elif dest_node['class_name'] == 'sink':
                             if src_id not in self.custom_states: self.custom_states[src_id] = set()
-                            filled_states = [s for s in self.custom_states[src_id] if s.startswith('FILLED_')]
+                            src_states = set(src_node.get('states', []))
+                            filled_states = [s for s in src_states if s.startswith('FILLED_')]
                             if filled_states:
                                 for s in filled_states:
                                     self.custom_states[src_id].discard(s)
@@ -633,9 +634,10 @@ class UnityEnvironment(BaseEnvironment):
 
     def get_observation(self, agent_id, obs_type, info={}):
         if obs_type == 'partial':
-            # agent 0 has id (0 + 1)
             curr_graph = self.get_graph()
-            return utils.get_visible_nodes(curr_graph, agent_id=(agent_id+1))
+            chars = [n for n in curr_graph['nodes'] if n['class_name'].lower() == 'character']
+            actual_agent_id = chars[agent_id]['id'] if len(chars) > agent_id else (agent_id+1)
+            return utils.get_visible_nodes(curr_graph, agent_id=actual_agent_id)
 
         elif obs_type == 'full':
             return self.get_graph()

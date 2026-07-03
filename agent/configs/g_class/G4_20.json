@@ -1,23 +1,22 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "如果桌子上有水壶，就给我倒杯水过来。",
+    "environment_id": 2,
+    "max_steps": 25,
+    "goal_instruction": "如果桌上有果汁，给我倒一杯过来",
     "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        },
-        {
-            "subject": "dishbowl",
-            "relation": "ON",
-            "object": "kitchentable",
-            "count": 1
-        }
+        { "subject": "character", "relation": "ON", "object": "kitchentable", "in_room": "kitchen" },
+        { "subject": "juice", "relation": "ON", "object": "kitchentable", "count": 1 },
+        { "subject": "mug", "count": 0, "object": "kitchentable" },
+        { "subject": "glass", "count": 0, "object": "kitchentable" },
+        { "subject": "drinking_glass", "count": 0, "object": "kitchentable" },
+        { "subject": "cup", "count": 0, "object": "kitchentable" },
+        { "subject": "coffee_cup", "count": 0, "object": "kitchentable" }
     ],
-    "hidden_broken_classes": ["mug"],
     "success_condition": {
-        "check_type": "physical_state",
-        "target_class": "dishbowl",
-        "require_states": ["FULL"]
+        "check_type": "relation",
+        "subject": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "",
+        "require_target_properties": ["POURABLE"],
+        "require_target_state": "FILLED_JUICE"
     }
 }

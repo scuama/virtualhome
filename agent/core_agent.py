@@ -157,8 +157,8 @@ class VirtualHomeAgent:
                 min_count = cond.get('min_count', 1)
                 req_state = cond.get('subject_must_have_state', None)
 
-                target_nodes = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
-                dest_nodes = [n['id'] for n in graph['nodes'] if n['class_name'].lower() == dest_class.lower()]
+                target_nodes = [n for n in graph['nodes'] if target_class.lower() in n['class_name'].lower()]
+                dest_nodes = [n['id'] for n in graph['nodes'] if dest_class.lower() in n['class_name'].lower()]
 
                 # Also handle special 'character' target using id=1
                 if target_class.lower() == 'character':
@@ -171,14 +171,23 @@ class VirtualHomeAgent:
 
                 # Filter by require_target_state (the dest object must have this state)
                 req_target_state = cond.get('require_target_state')
+                req_target_props = cond.get('require_target_properties')
 
                 match_count = 0
                 for t_id in target_ids:
                     for e in graph['edges']:
-                        if e['from_id'] == t_id and e['relation_type'] == relation and e['to_id'] in dest_nodes:
+                        if e['from_id'] == t_id and e['relation_type'] in relation.split('|') and e['to_id'] in dest_nodes:
+                            dest_node = next((n for n in graph['nodes'] if n['id'] == e['to_id']), None)
                             if req_target_state:
-                                dest_node = next((n for n in graph['nodes'] if n['id'] == e['to_id']), None)
                                 if dest_node and req_target_state.upper() not in [s.upper() for s in dest_node.get('states', [])]:
+                                    continue
+                            if req_target_props:
+                                props_matched = True
+                                for prop in req_target_props:
+                                    if dest_node and prop.upper() not in [p.upper() for p in dest_node.get('properties', [])]:
+                                        props_matched = False
+                                        break
+                                if not props_matched:
                                     continue
                             match_count += 1
                             break

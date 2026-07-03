@@ -31,14 +31,24 @@
                 "mug"
             ],
             "add_states": [
-                "FULL"
+                "FILLED_WATER"
             ]
         }
     ],
     "success_condition": {
-        "check_type": "relation",
-        "subject": "mug",
-        "relation": "INSIDE",
-        "object": "cabinet"
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "subject": "mug",
+                "relation": "INSIDE",
+                "object": "cabinet"
+            },
+            {
+                "check_type": "state",
+                "target_class": "mug",
+                "require_state": "EMPTY"
+            }
+        ]
     }
 }

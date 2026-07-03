@@ -55,163 +55,6 @@ Instruction: "{instruction}"
 Analyze the intent and return the structured JSON.
 """
 
-STATE_MACHINE_GENERATOR_SYSTEM_PROMPT = """
-You are a State Machine Builder for an embodied AI robot.
-Your task is to analyze the user's intent and target object, and determine if the object must undergo any state transformations (e.g. from DIRTY to CLEAN, or WHOLE to SLICED) before it can satisfy the intent.
-For example, if the intent is to "eat" an "apple", a typical physical constraint is that the apple MUST be CLEAN. If it is DIRTY, it must be washed.
-VirtualHome supports states like: CLEAN, DIRTY, OPEN, CLOSED, ON, OFF.
-
-You must output ONLY a JSON object representing the state machine, with multiple paths if necessary.
-Format:
-{
-  "state_machine": {
-    "target_object": "<target_object>",
-    "required_final_states": ["CLEAN"],
-    "forbidden_final_states": ["DIRTY"],
-    "transitions": [
-      {
-        "from_state": "DIRTY",
-        "to_state": "CLEAN",
-        "action": "wash",
-        "rationale": "Food must be clean before eating."
-      }
-    ]
-  }
-}
-"""
-
-STATE_MACHINE_GENERATOR_USER_PROMPT = """
-Instruction: "{instruction}"
-Target Object: "{target_object}"
-Deep Intent: "{deep_intent}"
-
-Please output the state machine JSON.
-"""
-
-SOLUTION_SPACE_SYSTEM_PROMPT = """
-You are a perception analyzer for an embodied AI robot. 
-You will receive an image (first-person view) and optionally some observation text from the environment.
-Your task is to carefully examine the image and list all distinct, interactable objects you can clearly see.
-
-CRITICAL INSTRUCTION:
-1. The image provided is ONLY the First-Person View (from the robot's head camera).
-2. You will be provided a `Legal Objects List`. These are the ONLY objects the robot can physically interact with in this environment.
-3. If you see something in the image that matches an object in this list, you MUST use the EXACT NAME from the list.
-4. If an object is slightly blurry or partially occluded, but highly resembles an item in the `Legal Objects List`, you MUST output it. It is CRITICAL that you try your best to map visual objects to the provided list rather than predicting nothing. Do not hallucinate completely absent objects, but be highly encouraged to match seen items to the list.
-
-You must output ONLY a JSON object with the key:
-- "visible_objects": (list of strings) Exact names of objects currently visible.
-"""
-
-SOLUTION_SPACE_USER_PROMPT = """
-Observation Text (if any): "{observation_text}"
-Legal Objects List: {legal_objects}
-
-Please extract the visible objects from the provided image, strictly matching names from the Legal Objects List where applicable.
-"""
-
-SOLUTION_SPACE_FILTER_SYSTEM_PROMPT = """
-You are a relevance filter for an embodied AI robot.
-Your task is to review the currently visible objects, memory objects, and all available locations, and filter them based on the Global Intent.
-
-CRITICAL RULES:
-1. STRICT OBJECT FILTERING: Remove any objects that are clearly irrelevant to the 'target_object', 'deep_intent', or acceptable_alternatives_properties. For example, if looking for a beverage, discard toys, tools, blocks, lids, etc. CRITICAL: You MUST retain ANY objects that could serve as functional tools or physical backups (e.g., if the intent involves heating, retain ALL heating appliances like stove and microwave; if it involves holding liquid, retain ALL valid containers like cup, mug, dishbowl, pot). Do not filter out backups just because they aren't the primary target.
-2. When in doubt about borderline items, omit them rather than including obvious toys/tools. An empty `relevant_objects` list is acceptable if no candidate plausibly satisfies the intent yet—exploration should continue.
-3. LOCATION RETENTION (CRITICAL): You MUST retain all locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent (e.g. if the intent says 'put remote on sofa', you MUST keep the sofa!). Do NOT filter out locations just because they don't currently contain the target object. Keep all logical receptacles that could serve as destinations.
-4. HELD OBJECT (CRITICAL): Check the `Currently Held Object`. If the agent is holding something, you MUST include its exact name in `relevant_objects` IF AND ONLY IF it is a valid target or acceptable alternative. Do not forget to output it!
-
-You must output ONLY a JSON object with:
-- "relevant_objects": (list of strings) The filtered list of relevant objects.
-- "relevant_locations": (list of strings) The filtered list of relevant locations.
-"""
-
-SOLUTION_SPACE_FILTER_USER_PROMPT = """
-Global Intent:
-{global_intent}
-
-Currently Visible Objects:
-{visible_objects}
-
-Memory Objects:
-{memory_objects}
-
-All Available Locations:
-{all_locations}
-
-Currently Held Object:
-{held_object}
-
-Output the filtered relevant objects and locations in JSON format.
-"""
-
-SOLUTION_RANKING_SYSTEM_PROMPT = """
-You are a Multi-dimensional Solution Ranker for an Embodied AI Agent.
-You will be given the Global Intent, a list of Legal Combinations (valid action + item combinations), the Current Location, Visited Locations, Unvisited Locations, and a Budget (Remaining Steps).
-Your task is to generate several plausible, short action sequences (plans) that make progress towards the Global Intent.
-Then, you must evaluate and rank these plans based on:
-1. Success Probability (Does it rely on common sense? Is the target known/visible?)
-2. Step Overhead (How many steps to complete? Fewer is better).
-
-CRITICAL RULES:
-1. Every plan must start with an action from the `Legal Combinations` list.
-2. NO HALLUCINATION (CRITICAL): ONLY consider an object to be "in Memory" or "Visible" if its name EXACTLY exists in the Memory dictionary or Visible Objects.
-3. LOCATION HINT DISTRUST: Do NOT blindly trust the user's `location_hint`. If you have explored the `location_hint` and the target is not there, trust your memory over the hint.
-4. EXPLORATION MODE: If the `target_object` is UNKNOWN (not visible, not in memory), you must explore unvisited locations.
-5. NEVER choose a 'navigate' action to go to your `Current Location`. NEVER go to a location in `Visited Locations` UNLESS returning to a previously seen alternative object.
-6. VISIBLE RELEVANT PICK: If an object appears in BOTH `Relevant Objects` and the current view, a pick plan may be auto-injected for scoring. Rank it highly when the target is not yet secured—do not navigate away while a good alternative is in front of you.
-7. If an alternative is needed and available, rank the plan to use the alternative higher if the budget is running low.
-8. If a plan requires more steps than the Budget (Remaining Steps), rank it lowest or mark it invalid.
-9. The `first_action_id` of your top-ranked plan MUST be the exact integer key from the provided `Legal Combinations` mapping. CRITICAL: Do NOT confuse the integer key with object node IDs in the description! If you hallucinate an ID, your plan will be rejected.
-10. DYNAMIC EXPLORATION PRIORITY: While `Unvisited Locations` remain and the target is not found, rank exploration (navigate/open) plans highest. Do NOT pick up objects outside `Relevant Objects` just to talk to the user.
-11. CONTAINER OPEN PRIORITY (CRITICAL): Read `Exploration Context`. If `pending_open_location` is set, you are already at a container that can be opened but has NOT been opened yet. You MUST rank `open` for that location highest (rank_score >= 95). Do NOT navigate away until it is opened and inspected. Opening completes exploration of the current site; leaving without opening wastes a trip.
-12. PROACTIVE COMMUNICATION (VIRTUAL ACTION 9999): Action 9999 appears when you hold an object listed in `Relevant Objects` or when exploration is completely exhausted. **CRITICAL: IF YOU ARE HOLDING A RELEVANT OBJECT (i.e., `Currently Held Object` is in `Relevant Objects`), YOU MUST ABSOLUTELY RANK ACTION 9999 AS THE TOP CHOICE (score 100) TO IMMEDIATELY COMMUNICATE THIS TO THE USER!** Do NOT continue exploring or navigating if you have already secured a relevant alternative or target.
-13. STATE MACHINE COMPLIANCE: If a `State Machine Rules` section is provided in the input, you MUST obey its constraints. For example, if the required state is CLEAN and the object is DIRTY, you CANNOT communicate success (Action 9999). Instead, you MUST generate a plan to transition the state (e.g. navigate to sink and wash the object) to satisfy the state machine before returning.
-
-You must output ONLY a JSON object with the following structure:
-{
-  "plans": [
-    {
-      "plan_description": "Navigate to the table, then look for the apple.",
-      "first_action_id": 12,
-      "success_probability": "High",
-      "step_overhead_estimate": 3,
-      "budget_check": "Pass",
-      "rank_score": 90
-    }
-  ],
-  "reasoning": "Plan A is ranked highest because...",
-  "selected_action_id": 12,
-  "communication_to_user": null
-}
-"""
-
-SOLUTION_RANKING_USER_PROMPT = """
-Global Intent:
-{global_intent}
-
-Global Rules / Physical Constraints:
-{global_rules}
-
-Current Location: {current_location}
-Held Object: {held_object}
-Relevant Objects (LLM-filtered): {relevant_objects}
-Visited Locations: {visited_locations}
-Unvisited Locations: {unvisited_locations}
-Memory (Object -> State): {memory_objects}
-Budget (Remaining Steps): {remaining_steps}
-
-Exploration Context:
-{exploration_context}
-
-State Machine Rules:
-{state_machine_rules}
-
-Legal Combinations (Action ID -> Description):
-{legal_combinations}
-
-Generate plans, rank them, and output the selected action ID (and communication if all logical locations are exhausted).
-"""
-
 PERCEPTION_SYSTEM_PROMPT = """You are the Visual Attention Cortex of an embodied AI robot.
 Your task is to filter a large list of observed objects in the environment down to ONLY the items that are strictly necessary for the current goal.
 
@@ -252,7 +95,7 @@ AVAILABLE ACTIONS:
 - [wipe] <object_class> (<object_id>) : Manually wipe an object to clean it without water or sink. (Must be near it)
 - [wash] <object_class> (<object_id>) : Wash a dirty object. (Must be holding the object AND near a sink/dishwasher)
 - [cut] <object_class> (<object_id>) : Cut or slice an object. (Must be holding a knife AND near the target object)
-- [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target)
+- [pour] <source_class> (<source_id>) <target_class> (<target_id>) : Pour liquid. Target can be another POURABLE container (e.g. cup/mug) or a sink. (Must hold the source AND be near the target. You MUST explicitly [walk] to the target FIRST if you aren't already there.)
 - [ask] <message> : Ask the human for clarification or report physical impossibility.
 - [wait] : Do nothing for 1 step. Use ONLY when waiting for a dynamic event, temporary ban, or moving object.
 
@@ -272,13 +115,15 @@ CRITICAL RULES:
 8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
    You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
    - SITUATION 1 (Ambiguity): If the instruction contains vague, subjective, or ambiguous words (e.g., "suitable", "safe", "proper place") that make it impossible to determine the exact target state or object among multiple candidates, you MUST NOT guess. You MUST use `[ask] <question>` to request clarification from the user before taking physical actions.
-   - SITUATION 2 (Inherently False Preconditions): If the instruction's fundamental premise or condition is permanently impossible (e.g., "If the TV is on" but the TV is clearly marked as 'BROKEN' in your initial observation), the condition is eternally unsatisfied. In this exact case, use `[ask] <reason>` to report that the task is impossible.
+   - SITUATION 2 (Inherently False Preconditions): If the instruction's fundamental premise or condition is permanently impossible (e.g., "If the TV is on" but the TV is clearly marked as 'BROKEN' in your initial observation), the condition is eternally unsatisfied. In this exact case, use `[ask] <reason>` to report that the task is impossible. NOTE: Missing tools or containers for an actionable task (like missing a kettle for pouring water) are OBSTACLES, not false preconditions. You must substitute them instead of asking!
    - PLUGGING EXCEPTION: Some appliances (like `stove` or `sink`) are hardwired and lack the `HAS_PLUG` property. If the SDG requires power, but the object lacks `HAS_PLUG`, do NOT try to `[plugin]`. Consider it powered and skip to `[switchon]`.
    
    For ALL OTHER FAILURES during execution (e.g., you try to operate a tool and suddenly receive an unexpected 'BROKEN' error feedback from the environment):
    You MUST autonomously handle the situation by finding an alternative route or object to achieve the goal. DO NOT OUTPUT `[ask]` FOR THESE.
 9. HANDS & PARALLEL OPTIMIZATION (P2): You have two hands (HOLDS_RH, HOLDS_LH). If you need to transport or process multiple items and both hands are empty, you should `[grab]` the first item, then `[grab]` the second item, and THEN `[walk]` to the destination. Do not waste steps by transporting them one by one.
-10. DISAPPEARING OBJECTS STRATEGY & SUBSTITUTION (M1): SUBSTITUTION FORBIDDEN: You must strictly interact with the exact object class requested by the user or the SDG (e.g., if asked for 'remotecontrol', do NOT use 'cellphone'). If an object you need to interact with suddenly disappears from the graph when you approach it, it means ANOTHER PERSON in the house is temporarily using it! Do NOT abort the task and do NOT substitute it. Instead, output the `[wait]` action to stay in place, and it will be returned shortly.
+10. DISAPPEARING OBJECTS STRATEGY & SUBSTITUTION (M1): AUTONOMOUS SUBSTITUTION REQUIRED: There are two distinct situations when an object is missing: 
+    A) If an object you need to interact with SUDDENLY disappears from the graph WHEN YOU APPROACH IT, it means ANOTHER PERSON in the house is temporarily using it! Do NOT abort the task and do NOT substitute it. Instead, output the `[wait]` action to stay in place, and it will be returned shortly.
+    B) If an object requested by the user is permanently missing from the environment (you have NEVER seen it at all), you MUST autonomously find an alternative substitute that fulfills the SAME PHYSICAL PROPERTIES (e.g. if the action requires `POURABLE`, the substitute MUST have `POURABLE`). DO NOT use `[ask]`. Do not use incompatible objects like a `dishbowl` for pouring.
 11. DYNAMIC GLOBAL RULES (M3): You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route.
 12. INSTANCE DISAMBIGUATION (M2): When there are multiple instances of the same object class (e.g. two cups), carefully check their `states` and `properties`. NEVER blindly grab the first one you see. You MUST pick the exact instance that matches the SDG requirements.
 
