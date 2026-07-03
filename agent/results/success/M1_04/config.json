@@ -5,11 +5,6 @@
     "environment_id": 1,
     "initial_relations_override": [
         {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "livingroom"
-        },
-        {
             "subject": "pillow",
             "relation": "ON",
             "object": "sofa"

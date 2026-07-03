@@ -73,6 +73,11 @@
     ],
     "initial_relations_override": [
         {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
             "subject": "apple",
             "relation": "ON",
             "object": "kitchentable"

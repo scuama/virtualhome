@@ -196,6 +196,8 @@ def main():
     parser = argparse.ArgumentParser(description='VirtualHome E2E Test Runner')
     parser.add_argument('--debug', action='store_true',
                         help='Debug mode: stop and analyze on each failure')
+    parser.add_argument('--force', action='store_true',
+                        help='Force re-run of already successful scenarios')
     parser.add_argument('--scenario', type=str, default=None,
                         help='Run a single scenario by ID (e.g. G1_01)')
     parser.add_argument('--category', type=str, default=None,
@@ -240,7 +242,7 @@ def main():
 
     for scenario_id, config_path in all_configs:
         # Skip already-succeeded
-        if os.path.exists(os.path.join(success_dir, scenario_id)):
+        if not args.force and os.path.exists(os.path.join(success_dir, scenario_id)):
             print(f"[SKIP] {scenario_id} — already succeeded.")
             summary["skipped"] += 1
             continue

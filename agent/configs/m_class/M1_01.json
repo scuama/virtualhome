@@ -15,6 +15,11 @@
     ],
     "initial_relations_override": [
         {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
             "subject": "remotecontrol",
             "relation": "ON",
             "object": "coffeetable"

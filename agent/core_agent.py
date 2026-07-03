@@ -308,6 +308,12 @@ class VirtualHomeAgent:
                 'edges': [e for edge_list in self.memory_edges.values() for e in edge_list]
             }
 
+            # --- GRAPH PRUNING FOR HIDDEN NODES ---
+            hidden_nodes = getattr(env, 'active_hidden_nodes', {})
+            if hidden_nodes:
+                raw_graph['nodes'] = [n for n in raw_graph['nodes'] if n['id'] not in hidden_nodes]
+                raw_graph['edges'] = [e for e in raw_graph['edges'] if e['from_id'] not in hidden_nodes and e['to_id'] not in hidden_nodes]
+
             
             # 4. Perception Filter
             if self.current_sdg:
@@ -430,12 +436,13 @@ class VirtualHomeAgent:
                     hidden_nodes = getattr(env, 'active_hidden_nodes', {})
                     if target_id in hidden_nodes:
                         success = False
-                        msg = "有其他人正在用请稍等"
+                        msg = "动作失败：目标物品突然消失了，请等待或重新规划。"
                         history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning, "error": msg}
                         self.action_history.append(history_entry)
                         intercepted = True
                         
                 if not intercepted:
+                    self.logger.info(f"Executing action: {next_action}")
                     obs, reward, done, info = env.step({0: next_action})
                     success = info.get('action_success', False)
                     msg = info.get('action_message', '')
