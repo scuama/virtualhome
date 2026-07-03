@@ -1,0 +1,39 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果电视机开着，就把遥控器拿过来。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF",
+                "BROKEN"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "agent_action",
+        "require_action": "[ask]",
+        "require_message_contains": [
+            "impossible",
+            "broken",
+            "not exist",
+            "cannot",
+            "fail",
+            "坏",
+            "不可能",
+            "没有"
+        ]
+    }
+}

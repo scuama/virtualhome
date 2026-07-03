@@ -1,0 +1,35 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果冰箱里有牛奶，就帮我用微波炉热一杯。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "fridge"
+            ],
+            "add_states": [
+                "BROKEN"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "agent_action",
+        "require_action": "[ask]",
+        "require_message_contains": [
+            "impossible",
+            "broken",
+            "not exist",
+            "cannot",
+            "fail",
+            "坏",
+            "不可能",
+            "没有"
+        ]
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果厨房里没有人，确保厨房是安全的。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "stove"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "user_clarification_reply": "把炉子关掉。",
+    "success_condition": {
+        "check_type": "physical_state",
+        "target_class": "stove",
+        "require_states": [
+            "OFF"
+        ],
+        "require_ask": true
+    }
+}

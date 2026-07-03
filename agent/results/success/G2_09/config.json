@@ -1,0 +1,26 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果书掉到地上了，帮我收拾整齐。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "floor",
+            "in_room": "livingroom",
+            "count": 3
+        }
+    ],
+    "user_clarification_reply": "全部捡起来放在书桌上。",
+    "success_condition": {
+        "check_type": "relation",
+        "subject": "book",
+        "relation": "ON",
+        "object": "desk",
+        "require_ask": true
+    }
+}

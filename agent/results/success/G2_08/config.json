@@ -1,0 +1,47 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "如果看到牛奶，拿一杯温度合适的过来。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 0,
+            "add_states": [
+                "COLD"
+            ]
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 1,
+            "add_states": [
+                "HOT"
+            ]
+        }
+    ],
+    "user_clarification_reply": "热的。",
+    "success_condition": {
+        "check_type": "relation",
+        "subject": "character",
+        "relation": "HOLDS_RH",
+        "object": "milk",
+        "subject_must_have_state": null,
+        "require_target_state": "HOT",
+        "require_ask": true
+    }
+}

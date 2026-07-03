@@ -1,0 +1,38 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果桌上有苹果，帮我洗干净拿过来。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": ["apple"],
+            "remove_states": ["CLEAN"],
+            "add_states": ["DIRTY"]
+        },
+        {
+            "target_classes": ["faucet"],
+            "in_room": "kitchen",
+            "add_states": ["ON"]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "subject": "character",
+        "relation": "HOLDS_RH",
+        "object": "apple",
+        "fallback_relation_subject": "character",
+        "fallback_relation": "HOLDS_LH",
+        "fallback_relation_object": "apple"
+    }
+}

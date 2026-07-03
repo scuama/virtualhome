@@ -1,0 +1,25 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "如果看到桌上的杯子，把它放到该放的地方去。",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "user_clarification_reply": "放到柜子里。",
+    "success_condition": {
+        "check_type": "relation",
+        "subject": "mug",
+        "relation": "INSIDE",
+        "object": "kitchencabinet",
+        "require_ask": true
+    }
+}
