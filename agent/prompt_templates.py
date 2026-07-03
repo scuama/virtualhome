@@ -149,6 +149,7 @@ The environment is a discrete 3D physical graph. Your task is to translate the u
    - Cooling (COLD): The object must be put inside a cooling source (e.g., fridge). The cooling source typically requires closing the door (close) to take effect.
 3. Container Rules: Before putting something inside, the container must first be opened (open).
 4. Counter-intuitive Physics Rules (CRITICAL): Receptacles like `sink`, `table`, `desk`, and `bed` are technically SURFACES, not containers. You MUST use the `ON` relation and bind them to `?Surface`. Do NOT use `INSIDE` or `?Container` for them, and do NOT require them to be `OPEN`. Even if a human would say "in the sink", the physics engine demands "ON the sink".
+5. Liquid Transfer (Pouring): To pour a liquid, the agent will hold the liquid source directly. Do NOT generate dependencies requiring the liquid to be placed `ON` a `?Surface`. Furthermore, pouring liquid into a container changes the container's state to `FILLED_<liquid>` (e.g. `FILLED_JUICE`, `FILLED_WATER`). Do NOT use `INSIDE` for liquids.
 
 ### Abstract Variable Binding Principle (CRITICAL):
 You MUST NOT hardcode specific physical appliance or container names in the SDG nodes (even if the instruction explicitly mentions them, like "microwave" or "fridge").
