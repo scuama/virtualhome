@@ -1,0 +1,28 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Put the waterglass in the fridge and ensure the fridge is turned on to cool it.",
+    "initial_relations_override": [
+        {
+            "subject": "waterglass",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "fridge",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "waterglass",
+        "require_target_state": [
+            "COLD"
+        ]
+    },
+    "max_steps": 20
+}

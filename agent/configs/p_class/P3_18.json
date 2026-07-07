@@ -1,0 +1,34 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Wash the clothespile in the washingmachine and then take it out.",
+    "initial_relations_override": [
+        {
+            "subject": "clothespile",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "clothespile",
+            "states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "subject": "washingmachine",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "clothespile",
+        "require_target_state": [
+            "CLEAN"
+        ]
+    },
+    "max_steps": 25
+}

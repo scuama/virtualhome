@@ -1,0 +1,42 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the milk is cold, boil it in the cookingpot on the stove.",
+    "initial_relations_override": [
+        {
+            "subject": "milk",
+            "count": 1
+        },
+        {
+            "subject": "cookingpot",
+            "count": 1
+        },
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "cookingpot",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "milk",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "stove",
+            "states": [
+                "OFF"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "milk",
+        "require_target_state": [
+            "HOT"
+        ]
+    },
+    "max_steps": 25
+}

@@ -1,0 +1,34 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the salmon is cold, roast it in the oven.",
+    "initial_relations_override": [
+        {
+            "subject": "salmon",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "salmon",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "oven",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "salmon",
+        "require_target_state": [
+            "HOT"
+        ]
+    },
+    "max_steps": 20
+}

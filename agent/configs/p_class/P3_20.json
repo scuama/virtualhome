@@ -1,0 +1,45 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Pour water into the coffeemaker, turn it on to brew coffee, and serve a cup of coffee on the table.",
+    "initial_relations_override": [
+        {
+            "subject": "waterglass",
+            "count": 1
+        },
+        {
+            "subject": "coffeemaker",
+            "count": 1
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "waterglass",
+            "states": [
+                "FILLED_WATER"
+            ]
+        },
+        {
+            "subject": "coffeemaker",
+            "states": [
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "coffee",
+        "relation": "INSIDE",
+        "destination_class": "mug",
+        "require_target_state": [
+            "HOT"
+        ]
+    },
+    "max_steps": 25
+}

@@ -1,0 +1,34 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the waterglass is dirty, wash it in the sink and then put it on the kitchentable.",
+    "initial_relations_override": [
+        {
+            "subject": "waterglass",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "waterglass",
+            "states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "subject": "faucet",
+            "states": [
+                "OFF"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "waterglass",
+        "relation": "ON",
+        "destination_class": "kitchentable",
+        "require_target_state": [
+            "CLEAN"
+        ]
+    },
+    "max_steps": 20
+}

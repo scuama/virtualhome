@@ -1,0 +1,38 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Slice the apple with a clean knife and put the sliced apple on the plate. Ensure the knife is clean before using it.",
+    "initial_relations_override": [
+        {
+            "subject": "cutleryknife",
+            "count": 1
+        },
+        {
+            "subject": "apple",
+            "count": 1
+        },
+        {
+            "subject": "plate",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "cutleryknife",
+            "states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "apple",
+        "relation": "ON",
+        "destination_class": "plate",
+        "require_target_state": [
+            "SLICED"
+        ]
+    },
+    "max_steps": 25
+}

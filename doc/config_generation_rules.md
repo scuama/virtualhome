@@ -1,6 +1,8 @@
 # VirtualHome 场景配置生成与最佳实践规范
 
 本文档旨在为 AI Agent（或开发者）基于初步设想（如 `doc/config.md`）生成完整的 `.json` 配置文件提供核心规则和最佳实践。请在编写配置时**严格遵守**以下约束，以确保配置能成功被 Unity 引擎加载并执行。
+## 0. 语言与指令 (Language & Instructions)
+- **强制英文**：配置中的 `goal_instruction` 必须全部使用英文（例如：`If there is an apple in the fridge, take two and put them on the table.`），因为大模型对于英文指令的语义理解和指代消解更加精准。
 
 ## 1. 场景与物品一致性 (Scene & Objects Consistency)
 - **环境优先**：每个配置必须首先选定 `environment_id` (0-6) 以及具体房间。

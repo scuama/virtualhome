@@ -234,6 +234,13 @@ class VirtualHomeAgent:
                 if req_action and req_action.lower() not in last_action:
                     return False
                     
+                act = cond.get('action')
+                tgt = cond.get('target_class')
+                if act and tgt:
+                    import re
+                    if not (re.search(act.lower(), last_action) and tgt.lower() in last_action):
+                        return False
+                        
                 req_msgs = cond.get('require_message_contains', [])
                 if req_msgs:
                     matched = False

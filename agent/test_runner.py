@@ -109,9 +109,25 @@ def apply_overrides(env, config, debug=False):
     graph = env.get_graph()
     for ro in config.get('initial_relations_override', []):
         subj   = ro['subject'].lower()
+        count  = ro.get('count', 1)
+        
+        subj_nodes = find_all(graph, subj)
+
+        # 隐藏多余的对象实例
+        if len(subj_nodes) > count:
+            _hide_extra_nodes(env, subj_nodes[count:])
+            subj_nodes = subj_nodes[:count]
+
+        # 验证必需物品是否充足
+        if len(subj_nodes) < count:
+            raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {len(subj_nodes)} exist in the scene. Please change to a different room/scene that contains enough '{subj}'.")
+
+        # 如果没有指定 object，只调整数量不移动位置
+        if 'object' not in ro:
+            continue
+            
         rel    = ro.get('relation', 'ON').upper()
         obj    = ro['object'].lower()
-        count  = ro.get('count', 1)
         in_room = ro.get('in_room')
 
         # 角色初始位置特殊处理
@@ -122,18 +138,8 @@ def apply_overrides(env, config, debug=False):
             graph = env.get_graph()
             continue
 
-        subj_nodes = find_all(graph, subj)
         obj_node   = find_node(graph, obj, in_room)
         if not obj_node: continue
-
-        # 隐藏多余的对象实例
-        if len(subj_nodes) > count:
-            _hide_extra_nodes(env, subj_nodes[count:])
-            subj_nodes = subj_nodes[:count]
-
-        # 验证必需物品是否充足 (不再调用会死锁的 expand_scene)
-        if len(subj_nodes) < count:
-            raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {len(subj_nodes)} exist in the scene. Please change to a different room/scene that contains enough '{subj}'.")
 
         # 依靠物理动作将物品就位
         for s_node in subj_nodes[:count]:
@@ -292,6 +298,9 @@ def main():
         def timeout_handler(signum, frame):
             raise TimeoutException("Episode timed out after 5 minutes")
 
+        import time
+        start_time = time.time()
+
         try:
             signal.signal(signal.SIGALRM, timeout_handler)
             signal.alarm(300) # 5 minutes
@@ -308,13 +317,20 @@ def main():
             if args.debug:
                 traceback.print_exc()
 
+        execution_time = time.time() - start_time
+
         print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
+        print(f"  Time: {execution_time:.2f} seconds")
 
         # Archive
         dest_parent = success_dir if success else fail_dir
         dest_folder = os.path.join(dest_parent, scenario_id)
         os.makedirs(dest_folder, exist_ok=True)
-        shutil.copy(config_path, os.path.join(dest_folder, 'config.json'))
+        
+        config['execution_time_seconds'] = round(execution_time, 2)
+        with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
+            json.dump(config, cf, indent=4, ensure_ascii=False)
+            
         log_file = os.path.join(logs_dir, f"run_{scenario_id}.md")
         if os.path.exists(log_file):
             shutil.copy(log_file, os.path.join(dest_folder, f"run_{scenario_id}.md"))

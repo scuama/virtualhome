@@ -1,0 +1,44 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Warm up the pancake in the microwave using a clean plate.",
+    "initial_relations_override": [
+        {
+            "subject": "pancake",
+            "count": 1
+        },
+        {
+            "subject": "plate",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "pancake",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "plate",
+            "states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "subject": "microwave",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "pancake",
+        "require_target_state": [
+            "HOT"
+        ]
+    },
+    "max_steps": 25
+}
