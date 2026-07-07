@@ -29,6 +29,5 @@
         "require_states": [
             "HOT"
         ]
-    },
-    "max_steps": 20
+    }
 }

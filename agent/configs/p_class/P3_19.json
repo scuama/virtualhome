@@ -37,6 +37,5 @@
         "relation": "ON",
         "destination_class": "breadslice",
         "subject_must_have_state": "HOT"
-    },
-    "max_steps": 25
+    }
 }

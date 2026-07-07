@@ -71,6 +71,7 @@ CRITICAL RULES:
 5. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their classes if multiple options exist.
 6. DO NOT include background objects, decorations, or irrelevant furniture that are NOT related to the task.
 7. IMPLICIT TOOL RETENTION (CRITICAL): If the SDG or Goal implies an action that requires a tool (e.g., SLICED requires a knife, WASHED requires a sink/sponge), you MUST select the required tools even if they are not explicitly named in the goal.
+8. EXACT MATCH RETENTION (CRITICAL): You MUST include the EXACT class names that are explicitly mentioned in the Goal or SDG. If the goal says "closet", you MUST include "closet", do NOT just include "closetdrawer" and drop "closet"! If it says "plate", include "plate". Do not drop explicitly mentioned objects!
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -85,8 +86,8 @@ Your task is to choose the SINGLE NEXT atomic action to execute, based on the Go
 AVAILABLE ACTIONS:
 - [walk] <object_class> (<object_id>) : Move to an object.
 - [grab] <object_class> (<object_id>) : Pick up an object. (You must be near it)
-- [putin] <object_class> (<object_id>) <container_class> (<container_id>) : Put object inside a container. (Container must be OPEN. You MUST explicitly [walk] to the container FIRST if you aren't already there.)
-- [putback] <object_class> (<object_id>) <surface_class> (<surface_id>) : Place object on a surface. (You MUST explicitly [walk] to the surface FIRST if you aren't already there.)
+- [putin] <object_class> (<object_id>) <container_class> (<container_id>) : Put object inside ANY container (including movable receptacles like plate, bowl, cookingpot). (Container must be OPEN if it has a lid. You MUST explicitly [walk] to the container FIRST.)
+- [putback] <object_class> (<object_id>) <surface_class> (<surface_id>) : Place object on a FLAT SURFACE ONLY (e.g. table, counter, bed, sink). DO NOT use [putback] for containers like plate or bowl, use [putin] instead! (You MUST explicitly [walk] to the surface FIRST.)
 - [open] <object_class> (<object_id>) : Open a container/door.
 - [close] <object_class> (<object_id>) : Close a container/door.
 - [switchon] <object_class> (<object_id>) : Turn on an appliance. (Must be PLUGGED_IN if it has a plug)
@@ -100,21 +101,21 @@ AVAILABLE ACTIONS:
 - [ask] <message> : Ask the human for clarification or report physical impossibility.
 - [wait] : Do nothing for 1 step. Use ONLY when waiting for a dynamic event, temporary ban, or moving object.
 
-HANDS FULL RULE: The robot only has TWO hands. If you are already holding 2 objects and need to grab a 3rd, you MUST first `[putback]` or `[putin]` one of the currently held objects!
+HANDS FULL RULE: The robot only has TWO hands. If you are already holding 2 objects and need to grab a 3rd, you MUST first `[putback]` or `[putin]` one of the currently held objects! WARNING: If you use a tool (like a knife for `[cut]`), it occupies your hand! You MUST `[putback]` the tool on a table before attempting to `[grab]` or `[putin]` another object, or you will run out of hands!
 
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
-2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, `[plugin]` an object, OR if you want to `[putback]`, `[putin]`, or `[pour]` INTO a destination receptacle, you MUST FIRST output a `[walk] <target_or_destination_class> (<id>)` action in the previous steps to get near it! DO NOT EVER ASSUME you are already close to the destination! ALWAYS output a `[walk]` action before `[putback]`, `[putin]`, or `[pour]`! NO EXCEPTIONS!
+2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, `[plugin]` an object, OR if you want to `[putback]`, `[putin]`, or `[pour]` INTO a destination receptacle, you MUST FIRST output a `[walk] <target_or_destination_class> (<id>)` action in the previous steps to get near it! DO NOT EVER ASSUME you are already close to the destination! ALWAYS output a `[walk]` action to the destination receptacle BEFORE you output `[putback]`, `[putin]`, or `[pour]`! NO EXCEPTIONS!
 3. CONTAINER RULE (CRITICAL): Even if you just opened a container (like a fridge, cabinet, or microwave), you are NOT automatically near the objects inside it. You MUST explicitly `[walk]` to the specific object INSIDE the container before you can `[grab]` it!
 4. NO MAGIC MACROS (CRITICAL): You cannot perform actions on objects you do not hold. To `[putin]`, `[putback]`, or `[pour]` an object, you MUST already be holding it (i.e. your state must show `HOLDS_RH` or `HOLDS_LH` for that object). If you are not holding it, you must output `[walk]` and then `[grab]` in previous steps. DO NOT output `[putin]` directly assuming the system will auto-grab it for you.
-5. CONTAINER RULE: To PUTIN, if the container has the 'CLOSED' state, you must `[open]` it first. However, many receptacles like `cookingpot`, `fryingpan`, `plate`, `sink`, or `table` DO NOT have lids (no `CAN_OPEN` property). For these, NEVER try to `[open]` them! You can directly `[putin]` (if it is a hollow container like cookingpot) or `[putback]` (if it is a flat surface like a sink/table).
+5. CONTAINER RULE: To PUTIN, if the container has the 'CLOSED' state, you must `[open]` it first. However, many receptacles like `cookingpot`, `fryingpan`, `plate`, `sink`, or `table` DO NOT have lids (no `CAN_OPEN` property). For these, NEVER try to `[open]` them! NEVER TRY TO OPEN A COOKINGPOT! You can directly `[putin]` (if it is a hollow container like cookingpot) or `[putback]` (if it is a flat surface like a sink/table).
 6. COUNTER-INTUITIVE PHYSICS (CRITICAL): The `sink` is NOT a container in this physical engine, it is a flat surface! You absolutely CANNOT `[open]` a sink and you CANNOT `[putin]` to a sink. If you need to place something in the sink, you MUST output exactly `[putback] <object> <sink>`, otherwise the physics engine will reject your action.
 7. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`. CRITICAL: You MUST wrap every class name in angle brackets `< >`. Outputting `[walk] plate (11)` without brackets is a fatal syntax error!
 8. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
 9. FAILURE & LOOPS: If an execution step returns an error, OR if you find yourself repeating the same cycle of actions (e.g. repeatedly switching something on and off, or walking to the same object) without progress toward the SDG, you MUST output the action `[ask]` and explain what is failing in the `reasoning` field.
     - To [wash], you MUST first [grab] the object, then [walk] to a sink, then [wash].
     - To [cut], you MUST first [grab] a knife, then [walk] to the food, then [cut].
-    - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
+    - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the source container DIRTY! You must immediately [wash] the source container afterwards if you want to keep it clean.
     - To [putback] or [putin] an object A into/onto B, you MUST first [grab] A, then [walk] to B. You CANNOT put something down if you are not holding it, and you CANNOT do it from across the room!
 10. HYGIENE RULE (CRITICAL): Before you `[cut]` food with a tool, you MUST ensure both the food and the tool are NOT `DIRTY`. If they are `DIRTY`, you must `[wash]` them first! Before you `[pour]` or `[putin]` food into a receptacle, you MUST ensure the receptacle is NOT `DIRTY`. If it is `DIRTY`, you must `[wash]` it first!
 11. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
@@ -159,7 +160,7 @@ The environment is a discrete 3D physical graph. Your task is to translate the u
 ### Abstract Variable Binding Principle (CRITICAL):
 You MUST NOT hardcode specific physical appliance or container names in the SDG nodes (even if the instruction explicitly mentions them, like "microwave" or "fridge").
 You MUST use generic variables prefixed with a question mark to refer to them, for example: `?Heater` (an object capable of heating), `?Cooler` (an object capable of cooling), `?Container` (a receptacle), `?Surface` (a flat support).
-EXCEPTION (CRITICAL): If the instruction EXPLICITLY asks to place Object A onto/into a SPECIFIC target Object B (e.g., 'put the pie on the plate', 'put the apple in the box'), you MUST NOT use `?Surface` or `?Container` for B. You MUST use the exact explicit class name for B (e.g., `A ON plate`, `A INSIDE box`) to preserve the specific nested relationship! Use abstract variables ONLY for functional appliances where ANY matching appliance would do.
+EXCEPTION (CRITICAL): If the instruction EXPLICITLY asks to place Object A onto/into a SPECIFIC target Object B (e.g., 'put the pie on the plate', 'put the apple in the box'), you MUST NOT use `?Surface` or `?Container` for B. You MUST use the exact explicit class name for B (e.g., `A ON plate`, `A INSIDE box`) to preserve the specific nested relationship! DO NOT split this into two independent nodes like 'A ON ?Surface' and 'B ON ?Surface'! That is a FATAL ERROR. Use abstract variables ONLY for functional appliances where ANY matching appliance would do.
 The actual object binding will be handled by the downstream executor during runtime based on the physical environment's `properties`!
 
 ### Output Format (Strict JSON):

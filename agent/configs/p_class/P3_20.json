@@ -1,14 +1,11 @@
 {
     "environment_id": 3,
-    "goal_instruction": "Pour water into the coffeemaker, turn it on to brew coffee, and serve a cup of coffee on the table.",
+    "goal_instruction": "If the mug contains something, empty it and wash it.",
     "initial_relations_override": [
         {
-            "subject": "waterglass",
-            "count": 1
-        },
-        {
-            "subject": "coffeemaker",
-            "count": 1
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
         },
         {
             "subject": "mug",
@@ -19,25 +16,17 @@
     ],
     "initial_states_override": [
         {
-            "subject": "waterglass",
+            "subject": "mug",
             "states": [
-                "FILLED_WATER"
-            ]
-        },
-        {
-            "subject": "coffeemaker",
-            "states": [
-                "OFF",
-                "PLUGGED_OUT"
+                "FILLED_MILK"
             ]
         }
     ],
     "success_condition": {
-        "check_type": "relation",
-        "target_class": "coffee",
-        "relation": "INSIDE",
-        "destination_class": "mug",
-        "subject_must_have_state": "HOT"
-    },
-    "max_steps": 25
+        "check_type": "state",
+        "target_class": "mug",
+        "require_states": [
+            "CLEAN"
+        ]
+    }
 }

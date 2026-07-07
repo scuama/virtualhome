@@ -1,13 +1,11 @@
 {
     "environment_id": 0,
-    "goal_instruction": "Slice the pie and put the sliced pie on the plate.",
+    "goal_instruction": "If the pie is uncut, slice it with the cutleryknife and then put it inside the plate.",
     "initial_relations_override": [
         {
-            "subject": "cutleryknife",
-            "count": 1
-        },
-        {
             "subject": "pie",
+            "relation": "ON",
+            "object": "kitchencounter",
             "count": 1
         },
         {
@@ -15,34 +13,31 @@
             "relation": "ON",
             "object": "kitchentable",
             "count": 1
-        }
-    ],
-    "initial_states_override": [
+        },
         {
             "subject": "cutleryknife",
-            "states": [
-                "DIRTY"
-            ]
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
         }
     ],
+    "initial_states_override": [],
     "success_condition": {
         "mode": "AND",
         "conditions": [
             {
-                "check_type": "relation",
+                "check_type": "state",
                 "target_class": "pie",
-                "relation": "ON",
-                "destination_class": "plate",
-                "subject_must_have_state": "SLICED"
+                "require_states": [
+                    "SLICED"
+                ]
             },
             {
-                "check_type": "state",
-                "target_class": "cutleryknife",
-                "require_states": [
-                    "CLEAN"
-                ]
+                "check_type": "relation",
+                "target_class": "pie",
+                "relation": "INSIDE",
+                "destination_class": "plate"
             }
         ]
-    },
-    "max_steps": 25
+    }
 }

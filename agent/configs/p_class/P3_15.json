@@ -23,6 +23,5 @@
         "require_states": [
             "COLD"
         ]
-    },
-    "max_steps": 20
+    }
 }

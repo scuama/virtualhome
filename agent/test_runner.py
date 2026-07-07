@@ -9,16 +9,22 @@ import sys
 import signal
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+class Logger:
+    def __init__(self, filename):
+        self.terminal = sys.stdout
+        self.log = open(filename, "w", encoding="utf-8")
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+        self.log.flush()
+
+    def flush(self):
+        self.terminal.flush()
+        self.log.flush()
+
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 from agent.core_agent import VirtualHomeAgent
-
-
-def get_raw_graph(env):
-    """get_observations() returns dict keyed by agent_id (int). Agent 0's graph is the scene graph.
-    NOTE: this is a PARTIAL (vision-limited) graph. Only use for perception simulation.
-    For scene setup, always use env.get_graph() which returns the FULL scene graph."""
-    obs_dict = env.get_observations()
-    return obs_dict.get(0)
 
 
 def apply_overrides(env, config, debug=False):
@@ -33,7 +39,6 @@ def apply_overrides(env, config, debug=False):
         
         def patched(*args, **kwargs):
             graph = original(*args, **kwargs)
-            custom = getattr(env, 'custom_states', {}) or {}
             
             for ov_idx, ov in enumerate(overrides):
                 rm, add = ov.get('remove_states', []), ov.get('add_states', [])
@@ -72,14 +77,10 @@ def apply_overrides(env, config, debug=False):
                             props.add(p)
                         node['states'] = list(st)
                         node['properties'] = list(props)
-                        if debug:
-                            print(f"    [Setup] Patched state on {node['class_name']}({node['id']}): {node['states']} props: {node['properties']}")
                         
             return graph
             
         env.get_graph = patched
-        if debug:
-            print("    [Setup] Installed get_graph monkey-patch for state overrides.")
 
     from agent.graph_utils import find_node, find_all
 
@@ -93,11 +94,8 @@ def apply_overrides(env, config, debug=False):
         return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
 
     def execute(action_str):
-        print(f"    [Setup] {action_str}")
         obs, reward, done, info = env.step({0: action_str})
         success = info.get('action_success', False)
-        if not success:
-            print(f"      -> FAILED: {info.get('action_message', '')}")
         return success
 
     # 1. 状态覆盖
@@ -158,85 +156,40 @@ def apply_overrides(env, config, debug=False):
     return True
 
 
-
-def analyze_failure(scenario_id, config, reason, log_file_path, debug=False):
-    """Print a structured debug analysis of a failed scenario."""
-    print(f"\n{'='*60}")
-    print(f"  🔍 DEBUG ANALYSIS: {scenario_id}")
-    print(f"{'='*60}")
-    print(f"  Goal: {config.get('goal_instruction', 'N/A')}")
-    print(f"  Environment ID: {config.get('environment_id', 'N/A')}")
-    print(f"  Failure Reason: {reason}")
-
-    sc = config.get('success_condition', {})
-    print(f"\n  Success Condition:")
-    print(f"    check_type: {sc.get('check_type', 'N/A')}")
-    for k, v in sc.items():
-        if k != 'check_type':
-            print(f"    {k}: {v}")
-
-    if config.get('initial_relations_override'):
-        print(f"\n  Initial Relations Override:")
-        for r in config['initial_relations_override']:
-            print(f"    {r}")
-
-    if config.get('initial_states_override'):
-        print(f"\n  Initial States Override:")
-        for s in config['initial_states_override']:
-            print(f"    {s}")
-
-    if log_file_path and os.path.exists(log_file_path):
-        print(f"\n  Run Log: {log_file_path}")
-        with open(log_file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-        # Show last 20 lines of log
-        lines = content.strip().split('\n')
-        print(f"  --- Last {min(20, len(lines))} lines of run log ---")
-        for line in lines[-20:]:
-            print(f"  | {line}")
-
-    # Classify root cause
-    if "'relation'" in reason or "KeyError" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: success_condition 关系检查时发生 KeyError。")
-        print(f"     检查 subject/relation/object 字段是否正确填写。")
-    elif "Max steps" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: Agent 在 {config.get('max_steps', 15)} 步内未完成目标。")
-        print(f"     可能原因：目标物体超出感知范围 / 动作序列过长 / 物品未正确初始化。")
-    elif "help" in reason.lower() or "success condition was not met" in reason.lower():
-        print(f"\n  ⚠️  ROOT CAUSE: Agent 触发了 [ask]，但 success_condition 未通过。")
-        print(f"     检查：1) TV/condition object 的初始状态是否已正确设置")
-        print(f"           2) success_condition.check_type 是否匹配场景意图")
-    elif "Constraint" in reason or "Violation" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: Agent 触发了禁制条件 (failure_condition)。")
-    elif "Exception" in reason:
-        print(f"\n  ⚠️  ROOT CAUSE: 运行时异常。检查配置格式和环境物体是否存在。")
-    print(f"{'='*60}\n")
-
-
-
 def main():
     parser = argparse.ArgumentParser(description='VirtualHome E2E Test Runner')
-    parser.add_argument('--debug', action='store_true',
-                        help='Debug mode: stop and analyze on each failure')
-    parser.add_argument('--force', action='store_true',
-                        help='Force re-run of already successful scenarios')
-    parser.add_argument('--scenario', type=str, default=None,
-                        help='Run a single scenario by ID (e.g. G1_01)')
-    parser.add_argument('--category', type=str, default=None,
-                        help='Run a specific category of scenarios (e.g. G2)')
+    parser.add_argument('target', type=str, nargs='?', default='',
+                        help='Target scenario ID or prefix (e.g. P3 or P3_12). Leave empty for all.')
+    parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     base_dir = os.path.dirname(__file__)
+    logs_dir = os.path.join(base_dir, 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    log_path = os.path.join(logs_dir, "test_runner.log")
+
+    if not args.daemon:
+        import subprocess
+        cmd = [sys.executable, __file__]
+        if args.target:
+            cmd.append(args.target)
+        cmd.append("--daemon")
+        
+        subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        print(f"[INFO] Task started in background.")
+        print(f"[INFO] Monitor logs via: tail -f {log_path}")
+        sys.exit(0)
+
+    sys.stdout = Logger(log_path)
+    sys.stderr = sys.stdout
+
     configs_dir = os.path.join(base_dir, 'configs')
     results_dir = os.path.join(base_dir, 'results')
     success_dir = os.path.join(results_dir, 'success')
     fail_dir = os.path.join(results_dir, 'fail')
-    logs_dir = os.path.join(base_dir, 'logs')
-
     os.makedirs(success_dir, exist_ok=True)
     os.makedirs(fail_dir, exist_ok=True)
-    os.makedirs(logs_dir, exist_ok=True)
-
+    
     # Gather configs
     all_configs = []
     for cls_dir in ['g_class', 'm_class', 'p_class']:
@@ -244,16 +197,12 @@ def main():
         if os.path.exists(target_dir):
             for path in glob.glob(os.path.join(target_dir, '*.json')):
                 scenario_id = os.path.splitext(os.path.basename(path))[0]
-                if args.scenario and scenario_id != args.scenario:
-                    continue
-                if args.category and not scenario_id.startswith(args.category):
+                if args.target and not scenario_id.startswith(args.target):
                     continue
                 all_configs.append((scenario_id, path))
     all_configs = sorted(all_configs)
 
     # Init engine
-    exec_path = os.path.abspath(os.path.join(
-        base_dir, '../virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app'))
     env = UnityEnvironment(
         num_agents=1,
         observation_types=['partial'],
@@ -263,10 +212,12 @@ def main():
     summary = {"total": len(all_configs), "skipped": 0, "success": 0, "fail": 0, "failures": []}
 
     for scenario_id, config_path in all_configs:
-        # Skip already-succeeded
-        if not args.force and os.path.exists(os.path.join(success_dir, scenario_id)):
+        if os.path.exists(os.path.join(success_dir, scenario_id)):
             print(f"[SKIP] {scenario_id} — already succeeded.")
             summary["skipped"] += 1
+            fail_path = os.path.join(fail_dir, scenario_id)
+            if os.path.exists(fail_path):
+                shutil.rmtree(fail_path, ignore_errors=True)
             continue
 
         print(f"\n==========================================")
@@ -276,28 +227,30 @@ def main():
             config = json.load(f)
 
         env_id = config.get('environment_id', 0)
+        
+        old_stdout = sys.stdout
+        # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
+            
         try:
             env.reset(environment_id=env_id)
         except Exception as e:
+            # sys.stdout.close()
+            sys.stdout = old_stdout
             reason = f"Engine Reset Failed: {e}"
             print(f"  {reason}")
             summary["fail"] += 1
             summary["failures"].append({"scenario": scenario_id, "reason": reason})
-            if args.debug:
-                analyze_failure(scenario_id, config, reason, None, debug=True)
-                input("  [DEBUG] Press Enter to continue to next scenario...")
             continue
 
         try:
-            apply_overrides(env, config, debug=args.debug)
+            apply_overrides(env, config, debug=False)
         except Exception as e:
+            # sys.stdout.close()
+            sys.stdout = old_stdout
             reason = f"Initialization Failed: {e}"
             print(f"  {reason}")
             summary["fail"] += 1
             summary["failures"].append({"scenario": scenario_id, "reason": reason})
-            if args.debug:
-                analyze_failure(scenario_id, config, reason, None, debug=True)
-                input("  [DEBUG] Press Enter to continue to next scenario...")
             continue
 
         agent = VirtualHomeAgent(model_name="gpt-5.4-mini", scenario_id=scenario_id)
@@ -319,20 +272,19 @@ def main():
         except TimeoutException as e:
             success = False
             reason = str(e)
-            print(f"  [TIMEOUT] Scenario {scenario_id} exceeded 5 minutes.")
         except Exception as e:
             signal.alarm(0)
             success = False
             reason = f"Exception: {e}"
-            if args.debug:
-                traceback.print_exc()
+        finally:
+            # sys.stdout.close()
+            sys.stdout = old_stdout
 
         execution_time = time.time() - start_time
 
         print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
         print(f"  Time: {execution_time:.2f} seconds")
 
-        # Archive
         dest_parent = success_dir if success else fail_dir
         dest_folder = os.path.join(dest_parent, scenario_id)
         os.makedirs(dest_folder, exist_ok=True)
@@ -347,37 +299,16 @@ def main():
 
         if success:
             summary["success"] += 1
+            fail_path = os.path.join(fail_dir, scenario_id)
+            if os.path.exists(fail_path):
+                shutil.rmtree(fail_path, ignore_errors=True)
         else:
             summary["fail"] += 1
             summary["failures"].append({"scenario": scenario_id, "reason": reason})
-            if args.debug:
-                analyze_failure(scenario_id, config, reason, log_file, debug=True)
-                try:
-                    input("  [DEBUG] Press Enter to continue to next scenario, or Ctrl+C to abort...")
-                except KeyboardInterrupt:
-                    print("\n  [DEBUG] Aborted by user.")
-                    break
 
-    # Final report
     print(f"\n\n==========================================")
     print(f"Testing Complete!")
     print(f"Total: {summary['total']} | Skipped: {summary['skipped']} | ✅ Success: {summary['success']} | ❌ Fail: {summary['fail']}")
-
-    report_path = os.path.join(results_dir, "test_summary_report.md")
-    with open(report_path, "w", encoding="utf-8") as f:
-        f.write("# VirtualHome E2E Test Summary\n\n")
-        f.write(f"- **Total Scenarios**: {summary['total']}\n")
-        f.write(f"- **Skipped (Already Success)**: {summary['skipped']}\n")
-        f.write(f"- **Newly Succeeded**: {summary['success']}\n")
-        f.write(f"- **Failed**: {summary['fail']}\n\n")
-        if summary["failures"]:
-            f.write("## Failure Details\n\n")
-            f.write("| Scenario | Reason |\n|---|---|\n")
-            for fail in summary["failures"]:
-                f.write(f"| **{fail['scenario']}** | {fail['reason']} |\n")
-
-    print(f"Summary report: {report_path}")
-
 
 if __name__ == '__main__':
     main()
