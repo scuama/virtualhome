@@ -1,0 +1,35 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the milk is cold, heat it up in the microwave.",
+    "initial_relations_override": [
+        {
+            "subject": "milk",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "milk",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "microwave",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "state",
+        "target_class": "milk",
+        "require_states": [
+            "HOT"
+        ]
+    },
+    "max_steps": 20,
+    "execution_time_seconds": 53.65
+}

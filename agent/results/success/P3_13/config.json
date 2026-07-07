@@ -29,5 +29,5 @@
         "subject_must_have_state": "CLEAN"
     },
     "max_steps": 20,
-    "execution_time_seconds": 31.41
+    "execution_time_seconds": 27.43
 }
