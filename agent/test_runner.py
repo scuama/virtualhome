@@ -288,7 +288,17 @@ def main():
                 input("  [DEBUG] Press Enter to continue to next scenario...")
             continue
 
-        apply_overrides(env, config, debug=args.debug)
+        try:
+            apply_overrides(env, config, debug=args.debug)
+        except Exception as e:
+            reason = f"Initialization Failed: {e}"
+            print(f"  {reason}")
+            summary["fail"] += 1
+            summary["failures"].append({"scenario": scenario_id, "reason": reason})
+            if args.debug:
+                analyze_failure(scenario_id, config, reason, None, debug=True)
+                input("  [DEBUG] Press Enter to continue to next scenario...")
+            continue
 
         agent = VirtualHomeAgent(model_name="gpt-5.4-mini", scenario_id=scenario_id)
 

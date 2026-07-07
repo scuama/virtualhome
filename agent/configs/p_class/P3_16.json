@@ -1,6 +1,6 @@
 {
     "environment_id": 2,
-    "goal_instruction": "If the salmon is cold, roast it in the oven.",
+    "goal_instruction": "If the salmon is cold, roast it on the stove.",
     "initial_relations_override": [
         {
             "subject": "salmon",
@@ -15,18 +15,16 @@
             ]
         },
         {
-            "subject": "oven",
+            "subject": "stove",
             "states": [
-                "CLOSED",
-                "OFF",
-                "PLUGGED_OUT"
+                "OFF"
             ]
         }
     ],
     "success_condition": {
         "check_type": "state",
         "target_class": "salmon",
-        "require_target_state": [
+        "require_states": [
             "HOT"
         ]
     },

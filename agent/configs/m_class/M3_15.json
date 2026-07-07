@@ -35,7 +35,9 @@
             {
                 "check_type": "state",
                 "target_class": "milk",
-                "state": "HOT"
+                "require_states": [
+                    "HOT"
+                ]
             },
             {
                 "check_type": "agent_action",
@@ -47,6 +49,8 @@
     "success_condition": {
         "check_type": "state",
         "target_class": "milk",
-        "state": "HOT"
+        "require_states": [
+            "HOT"
+        ]
     }
 }

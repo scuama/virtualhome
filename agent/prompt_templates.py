@@ -70,6 +70,7 @@ CRITICAL RULES:
 4. LOCATION RETENTION (CRITICAL): You MUST include ALL locations, furniture, and receptacles explicitly mentioned or implied by the Global Intent.
 5. If the SDG contains abstract variables like `?Washer` or `?Cooler`, you must look for physical appliances in the list that match these capabilities (e.g., sink, dishwasher, fridge). You MUST include ALL of their classes if multiple options exist.
 6. DO NOT include background objects, decorations, or irrelevant furniture that are NOT related to the task.
+7. IMPLICIT TOOL RETENTION (CRITICAL): If the SDG or Goal implies an action that requires a tool (e.g., SLICED requires a knife, WASHED requires a sink/sponge), you MUST select the required tools even if they are not explicitly named in the goal.
 
 You must output ONLY a JSON object with the following structure:
 {
@@ -103,7 +104,7 @@ HANDS FULL RULE: The robot only has TWO hands. If you are already holding 2 obje
 
 CRITICAL RULES:
 1. VARIABLE BINDING: The SDG uses abstract variables like `?Washer`, `?Cooler`, or `?Container`. You must look at the Filtered Graph and choose the best physical object to bind to these variables (e.g., `sink(10)` for `?Washer`).
-2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, or `[plugin]` an object, you MUST FIRST output a `[walk] <object_class> (<id>)` action in the previous steps to get near it!
+2. PROXIMITY RULE (CRITICAL): You CANNOT interact with an object from across the room. If you want to `[grab]`, `[open]`, `[close]`, `[switchon]`, `[switchoff]`, `[plugin]` an object, OR if you want to `[putback]`, `[putin]`, or `[pour]` INTO a destination receptacle, you MUST FIRST output a `[walk] <target_or_destination_class> (<id>)` action in the previous steps to get near it! DO NOT EVER ASSUME you are already close to the destination! ALWAYS output a `[walk]` action before `[putback]`, `[putin]`, or `[pour]`! NO EXCEPTIONS!
 3. CONTAINER RULE (CRITICAL): Even if you just opened a container (like a fridge, cabinet, or microwave), you are NOT automatically near the objects inside it. You MUST explicitly `[walk]` to the specific object INSIDE the container before you can `[grab]` it!
 4. NO MAGIC MACROS (CRITICAL): You cannot perform actions on objects you do not hold. To `[putin]`, `[putback]`, or `[pour]` an object, you MUST already be holding it (i.e. your state must show `HOLDS_RH` or `HOLDS_LH` for that object). If you are not holding it, you must output `[walk]` and then `[grab]` in previous steps. DO NOT output `[putin]` directly assuming the system will auto-grab it for you.
 4. CONTAINER RULE: To PUTIN, the container must have the 'OPEN' state. If it is 'CLOSED', you must `[open]` it first (after walking to it). If a target receptacle (e.g., `sink`, `table`) does NOT have the `CAN_OPEN` property, you CANNOT use `[open]` or `[putin]`. You MUST use `[putback]` to place the object in/on it.
@@ -111,9 +112,11 @@ CRITICAL RULES:
 5. ACTION FORMAT: The action MUST exactly match the format: `[action_name] <class_name> (<id>)`. For example: `[walk] <sink> (10)`. For two-argument actions: `[putin] <apple> (22) <sink> (10)`.
 6. PROGRESSION: The goal is to progress towards the SDG's root node state (e.g. `CLEAN`). Evaluate what states are missing and choose the SINGLE NEXT atomic action that bridges the gap.
 7. FAILURE & LOOPS: If an execution step returns an error, OR if you find yourself repeating the same cycle of actions (e.g. repeatedly switching something on and off, or walking to the same object) without progress toward the SDG, you MUST output the action `[ask]` and explain what is failing in the `reasoning` field.
-   - To [wash], you MUST first [grab] the object, then [walk] to a sink, then [wash].
-   - To [cut], you MUST first [grab] a knife, then [walk] to the food, then [cut].
-   - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
+    - To [wash], you MUST first [grab] the object, then [walk] to a sink, then [wash].
+    - To [cut], you MUST first [grab] a knife, then [walk] to the food, then [cut].
+    - To [pour] liquid from A to B, you MUST [grab] A, [walk] to B, then [pour] A into B. Note: pouring non-water into a sink makes the container DIRTY!
+    - To [putback] or [putin] an object A into/onto B, you MUST first [grab] A, then [walk] to B. You CANNOT put something down if you are not holding it, and you CANNOT do it from across the room!
+8. HYGIENE RULE (CRITICAL): Before you `[cut]` food with a tool, you MUST ensure both the food and the tool are NOT `DIRTY`. If they are `DIRTY`, you must `[wash]` them first! Before you `[pour]` or `[putin]` food into a receptacle, you MUST ensure the receptacle is NOT `DIRTY`. If it is `DIRTY`, you must `[wash]` it first!
 8. EXCLUSIVE USE OF `[ask]` AND FAILURE HANDLING (CRITICAL):
    You must demonstrate strong autonomy. You are ONLY allowed to output the `[ask]` action in the following TWO specific situations. For any other failures, you must NOT ask for help.
    - SITUATION 1 (Ambiguity): If the instruction contains vague, subjective, or ambiguous words (e.g., "suitable", "safe", "proper place") that make it impossible to determine the exact target state or object among multiple candidates, you MUST NOT guess. You MUST use `[ask] <question>` to request clarification from the user before taking physical actions.
@@ -128,6 +131,7 @@ CRITICAL RULES:
     B) If an object requested by the user is permanently missing from the environment (you have NEVER seen it at all), you MUST autonomously find an alternative substitute that fulfills the SAME PHYSICAL PROPERTIES (e.g. if the action requires `POURABLE`, the substitute MUST have `POURABLE`). DO NOT use `[ask]`. Do not use incompatible objects like a `dishbowl` for pouring.
 11. DYNAMIC GLOBAL RULES: You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route. IMPORTANT: If a previously active rule disappears from the 'Active Global Rules' list, it means the ban has been completely LIFTED. You must immediately stop `[wait]`ing and resume your planned actions.
 12. INSTANCE DISAMBIGUATION: When there are multiple instances of the same object class (e.g. two cups), carefully check their `states` and `properties`. NEVER blindly grab the first one you see. You MUST pick the exact instance that matches the SDG requirements.
+13. CLEANLINESS COMMON SENSE: Before using any tool (like a knife for cutting) or container (like a pot, plate, or cup for holding food/drinks), you MUST check if it has the `DIRTY` state in the graph. If it is `DIRTY`, you MUST explicitly `[wash]` it first before using it for your task! (To wash, you must grab it and go to a sink).
 
 OUTPUT FORMAT (Strict JSON):
 {

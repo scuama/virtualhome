@@ -231,7 +231,8 @@ class UnityEnvironment(BaseEnvironment):
                     if target_node:
                         props = target_node.get('properties', [])
                         if 'CUTTABLE' in props:
-                            holding_knife = any(e['from_id'] == char_id and e['relation_type'].startswith('HOLDS') and next((n for n in current_graph['nodes'] if n['id'] == e['to_id']), {}).get('class_name') == 'knife' for e in current_graph['edges'])
+                            holding_knife = any(e['from_id'] == char_id and e['relation_type'].startswith('HOLDS') and 'knife' in next((n for n in current_graph['nodes'] if n['id'] == e['to_id']), {}).get('class_name', '') for e in current_graph['edges'])
+
                             close_to_target = any(e['from_id'] == char_id and (e['relation_type'] == 'CLOSE' or e['relation_type'].startswith('HOLDS')) and e['to_id'] == obj_id for e in current_graph['edges'])
                             if holding_knife and close_to_target:
                                 success = True

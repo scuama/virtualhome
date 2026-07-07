@@ -9,12 +9,6 @@
         {
             "subject": "cookingpot",
             "count": 1
-        },
-        {
-            "subject": "apple",
-            "relation": "INSIDE",
-            "object": "cookingpot",
-            "count": 1
         }
     ],
     "initial_states_override": [
@@ -34,7 +28,7 @@
     "success_condition": {
         "check_type": "state",
         "target_class": "milk",
-        "require_target_state": [
+        "require_states": [
             "HOT"
         ]
     },

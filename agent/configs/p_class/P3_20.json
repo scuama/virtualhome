@@ -1,5 +1,5 @@
 {
-    "environment_id": 2,
+    "environment_id": 3,
     "goal_instruction": "Pour water into the coffeemaker, turn it on to brew coffee, and serve a cup of coffee on the table.",
     "initial_relations_override": [
         {
@@ -37,9 +37,7 @@
         "target_class": "coffee",
         "relation": "INSIDE",
         "destination_class": "mug",
-        "require_target_state": [
-            "HOT"
-        ]
+        "subject_must_have_state": "HOT"
     },
     "max_steps": 25
 }

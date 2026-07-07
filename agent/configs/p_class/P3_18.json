@@ -1,5 +1,5 @@
 {
-    "environment_id": 2,
+    "environment_id": 3,
     "goal_instruction": "Wash the clothespile in the washingmachine and then take it out.",
     "initial_relations_override": [
         {
@@ -26,7 +26,7 @@
     "success_condition": {
         "check_type": "state",
         "target_class": "clothespile",
-        "require_target_state": [
+        "require_states": [
             "CLEAN"
         ]
     },

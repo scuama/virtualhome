@@ -1,5 +1,5 @@
 {
-    "environment_id": 2,
+    "environment_id": 3,
     "goal_instruction": "Warm up the pancake in the microwave using a clean plate.",
     "initial_relations_override": [
         {
@@ -36,7 +36,7 @@
     "success_condition": {
         "check_type": "state",
         "target_class": "pancake",
-        "require_target_state": [
+        "require_states": [
             "HOT"
         ]
     },

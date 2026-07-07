@@ -28,5 +28,6 @@
         "destination_class": "kitchentable",
         "subject_must_have_state": "CLEAN"
     },
-    "max_steps": 20
+    "max_steps": 20,
+    "execution_time_seconds": 31.41
 }

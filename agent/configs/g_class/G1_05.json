@@ -47,7 +47,9 @@
             {
                 "check_type": "state",
                 "target_class": "mug",
-                "require_state": "EMPTY"
+                "require_states": [
+                    "EMPTY"
+                ]
             }
         ]
     }

@@ -20,13 +20,17 @@
             {
                 "check_type": "state",
                 "target_class": "tv",
-                "state": "ON"
+                "require_states": [
+                    "ON"
+                ]
             }
         ]
     },
     "success_condition": {
         "check_type": "state",
         "target_class": "tv",
-        "state": "ON"
+        "require_states": [
+            "ON"
+        ]
     }
 }

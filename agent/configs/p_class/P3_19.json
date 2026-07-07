@@ -36,9 +36,7 @@
         "target_class": "cutlets",
         "relation": "ON",
         "destination_class": "breadslice",
-        "require_target_state": [
-            "HOT"
-        ]
+        "subject_must_have_state": "HOT"
     },
     "max_steps": 25
 }

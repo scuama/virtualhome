@@ -147,7 +147,7 @@ write_config("G2_08.json", {
         "check_type": "relation",
         "require_relation": ["HOLDS_RH", "character", "milk"], 
         "fallback_relation": ["HOLDS_LH", "character", "milk"],
-        "require_target_state": ["HOT"],
+        "require_states": ["HOT"],
         "require_ask": True
     }
 })

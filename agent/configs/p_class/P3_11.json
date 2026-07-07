@@ -26,7 +26,7 @@
     "success_condition": {
         "check_type": "state",
         "target_class": "milk",
-        "require_target_state": [
+        "require_states": [
             "HOT"
         ]
     },
