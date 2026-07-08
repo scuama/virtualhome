@@ -1,0 +1,78 @@
+{
+    "scenario_id": "M4_18",
+    "scenario_type": "M",
+    "goal_instruction": "Put the plate we just used on the kitchentable.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_properties": [
+                "COLOR_RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_properties": [
+                "COLOR_GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "plate",
+            "count": 2,
+            "relation": "INSIDE",
+            "object": "kitchencabinet"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <plate> (15) <sink> (99)",
+            "success": true,
+            "reasoning": "I washed the plate with the COLOR_RED property."
+        },
+        {
+            "step": 0,
+            "action": "[walk] <kitchentable> (131)",
+            "success": true,
+            "reasoning": "The SDG requires the plate to be ON a kitchentable. The washed plate is currently near the character, but not on a table yet. Since putting an object onto a surface requires being explicitly walked to that destination first, and no table is currently selected as the target, the next step is to move next to the kitchen table. I will bind ?Container/?Surface to kitchentable(131), which is a valid flat surface for placing the plate."
+        },
+        {
+            "step": 1,
+            "action": "[grab] <plate> (67)",
+            "success": true,
+            "reasoning": "The SDG requires a plate to be ON the kitchen table. We are already CLOSE to kitchentable(131) from the previous walk action, and the washed target plate is plate(67), which is also CLOSE to the character. Since putting onto a surface requires the object to be held first, the next atomic step should be to grab the correct plate before placing it on the table."
+        },
+        {
+            "step": 2,
+            "action": "[putback] <plate> (67) <kitchentable> (131)",
+            "success": true,
+            "reasoning": "The target plate is already held in the right hand (HOLDS_RH plate(67)), so the remaining gap is to place it on the kitchen table to satisfy N1. The current graph shows two kitchen tables, and the last successful walk was to kitchentable(131), so the next required atomic action is to put the held plate onto that flat surface. No additional walk is needed because the instruction says not to repeat a walk action if I just did it."
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "properties": [
+            "COLOR_RED"
+        ],
+        "relation": "ON",
+        "destination_class": "kitchentable"
+    },
+    "execution_time_seconds": 13.89
+}

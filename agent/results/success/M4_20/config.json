@@ -1,0 +1,140 @@
+{
+    "scenario_id": "M4_20",
+    "scenario_type": "M",
+    "goal_instruction": "If there are apples on the table, put the washed red one in the fridge.",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLEAN",
+                "RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "DIRTY",
+                "RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "CLEAN",
+                "GREEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 3
+            },
+            "add_states": [
+                "DIRTY",
+                "GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "count": 4,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <apple> (33)",
+            "success": true,
+            "reasoning": "I washed the red apple. It is CLEAN and RED."
+        },
+        {
+            "step": 0,
+            "action": "[walk] <fridge> (225)",
+            "success": true,
+            "reasoning": "The washed red apple exists as apple(113) and is already on the kitchen table, which satisfies the prerequisite for storing it in the fridge. The fridge(225) is the correct cooler and is currently CLOSED, matching the required end state. I need to move toward the fridge before I can open or place anything into it, and I have not just walked to it yet."
+        },
+        {
+            "step": 1,
+            "action": "[open] <fridge> (225)",
+            "success": true,
+            "reasoning": "The washed red apple is already clean, and the fridge is the correct cooler. The fridge is currently CLOSED, which matches the required end state, but to place the apple inside it I must first be near the fridge and then open it before putting the apple in. Since I just walked to the fridge, the next atomic action should be to open it."
+        },
+        {
+            "step": 2,
+            "action": "[putin] <apple> (113) <fridge> (225)",
+            "success": false,
+            "reasoning": "The washed red apple is already satisfied as apple(113) with states RED and CLEAN. The fridge(225) is the correct cooler and is currently OPEN, so the remaining gap for N1 is to place the apple inside it and then later close it. Since I am adjacent to the fridge from the previous walk/open sequence and the apple is the intended item, the next atomic action should be to put the held apple into the open fridge. This will progress directly toward N1 while preserving the required cooled storage setup.",
+            "error": {
+                "0": {
+                    "message": "ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n"
+                }
+            }
+        },
+        {
+            "step": 3,
+            "action": "[close] <fridge> (225)",
+            "success": true,
+            "reasoning": "The last attempt to put the apple into the fridge failed while the fridge is still OPEN. The SDG requires the washed red apple to be INSIDE the cooler and the cooler to be CLOSED, so the immediate next atomic action is to close the fridge. The washed red apple is currently apple(113) and the fridge is fridge(225)."
+        },
+        {
+            "step": 4,
+            "action": "[walk] <apple> (113)",
+            "success": true,
+            "reasoning": "The goal gap is that the washed red apple must be INSIDE the fridge, and the fridge must end CLOSED. The fridge is already closed now after the last successful close action, but the apple is still on the kitchen table and not inside the fridge. Since the prior putin failed, the most plausible issue is that the apple was not actually held at that moment; however, the current graph does not show any held object, so the next required step is to return to the apple and re-grab it before attempting to store it. I will bind the cooler to fridge(225), and the target washed apple to apple(113)."
+        },
+        {
+            "step": 5,
+            "action": "[grab] <apple> (113)",
+            "success": true,
+            "reasoning": "The washed red apple needed for N1 is apple(113), and the current graph shows it is CLOSE to the character, so I am already near it. The fridge is already CLOSED, satisfying N2. Since the previous putin failed, the next logical atomic step is to grab the washed red apple before trying to store it again."
+        },
+        {
+            "step": 6,
+            "action": "[walk] <fridge> (225)",
+            "success": true,
+            "reasoning": "The washed red apple required by N1 is currently already held in the right hand as apple(113), so the remaining gap is to place it inside the correct cooler, fridge(225), which is already CLOSED and therefore satisfies N2. Because putin requires being near the destination, and the previous action was not a walk to the fridge, the next atomic action should be to walk to the fridge before any further placement attempt."
+        },
+        {
+            "step": 7,
+            "action": "[putin] <apple> (113) <fridge> (225)",
+            "success": true,
+            "reasoning": "The washed red apple is currently held in the right hand (apple(113)), and the fridge(225) is already nearby and CLOSED, which satisfies the cooler-state requirement. The previous putin attempt failed, but the graph now confirms I am still holding the correct apple and am close to the fridge. Since the next gap toward N1 is to place the held washed apple inside the closed fridge, the next atomic action should be the placement action. However, the instruction requires walking to the destination before putin; I already did that in the previous step and should not repeat walk now."
+        }
+    ],
+    "success_condition": {
+        "target_class": "apple",
+        "states": [
+            "CLEAN",
+            "RED"
+        ],
+        "relation": "INSIDE",
+        "destination_class": "fridge"
+    },
+    "execution_time_seconds": 35.6
+}

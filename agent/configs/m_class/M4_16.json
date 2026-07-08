@@ -1,0 +1,50 @@
+{
+    "scenario_id": "M4_16",
+    "scenario_type": "M",
+    "goal_instruction": "Put the waterglass we just used into the dishwasher.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": ["waterglass"],
+            "instance_filter": {"index": 0},
+            "add_states": ["DIRTY", "EMPTY"]
+        },
+        {
+            "target_classes": ["waterglass"],
+            "instance_filter": {"index": 1},
+            "add_states": ["CLEAN", "EMPTY"]
+        },
+        {
+            "target_classes": ["waterglass"],
+            "instance_filter": {"index": 2},
+            "add_states": ["DIRTY", "FILLED_MILK"]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "waterglass",
+            "count": 3,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[pour] <waterglass> (15) <sink> (99)",
+            "success": true,
+            "reasoning": "I poured the milk into the sink. The waterglass is EMPTY and DIRTY."
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": ["DIRTY", "EMPTY"],
+        "relation": "INSIDE",
+        "destination_class": "dishwasher"
+    }
+}

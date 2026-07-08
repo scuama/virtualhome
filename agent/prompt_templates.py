@@ -137,6 +137,13 @@ CRITICAL RULES:
     - 绝对禁止隔空抓取：在执行 `[grab] <物体>` 之前，必须确认当前角色与该物体处于同一位置。如果目标物体不在身边，第一步永远是 `[walk] <物体>`，其次才是 `[grab] <物体>`。
     - 状态校验防幻觉：执行 `[grab]` 后，必须检查下一轮返回的 Filtered Graph 中，该物体是否带有了 `HELD` 或 `IN_HAND` 状态。严禁在推理中自行假设“我已经拿起了 XX”。如果抓取失败，不要重复执行 `[putin]` 或 `[putback]`，应立即执行 `[walk] <物体>` 重新靠近，然后再次尝试 `[grab]`。
     - 搬运类任务黄金顺序：`[walk] <目标物体>` -> `[grab] <目标物体>` -> `[walk] <目标容器>` -> `[putin]`/`[putback]`。绝对禁止 `[walk] <容器>` -> `[grab] <远处的物体>` 这样的路径。
+18. MEMORY ALIGNMENT & OBJECT TRACKING (CRITICAL): 
+    If your previous actions or prior memory indicate you interacted with a specific object (e.g., a cup that became DIRTY), but you can no longer find that exact object (by ID) in your current location or if its ID has changed:
+    - DO NOT abort the task.
+    - You MUST autonomously search the environment for objects of the same class.
+    - You MUST perform "Memory Alignment": compare the `states` and `properties` of the newly observed objects against your memory of the lost object's final state (e.g., look for a DIRTY cup nearby).
+    - Even if the ID is completely different, if the physical states perfectly match the logical outcome of your past actions, treat it as the SAME object and continue your task with this new ID.
+    - WARNING: The prior memory is a NON-CONTINUOUS slice of the past! You are currently NOT holding the target object unless explicitly shown as HELD in your current observation. If you need to manipulate the remembered object, you MUST first locate it, `[walk]` to it, and `[grab]` it before any other interactions.
 
 
 OUTPUT FORMAT (Strict JSON):

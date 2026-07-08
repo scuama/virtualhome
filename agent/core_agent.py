@@ -224,6 +224,9 @@ class VirtualHomeAgent:
         for e in full_graph_init.get('edges', []):
             self.memory_edges.setdefault(e['from_id'], []).append(e)
 
+        # --- PRIOR MEMORY INJECTION ---
+        self.action_history = config.get('prior_action_history', [])
+
         # 3. Execution Loop
         steps = 0
         max_steps = config.get('max_steps', 15)

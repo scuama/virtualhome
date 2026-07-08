@@ -1,0 +1,103 @@
+{
+    "scenario_id": "M4_17",
+    "scenario_type": "M",
+    "goal_instruction": "If the kitchencabinet is open, put the waterglass you just washed inside.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "kitchencabinet"
+            ],
+            "add_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLEAN",
+                "EMPTY"
+            ],
+            "remove_states": [
+                "DIRTY",
+                "FILLED_MILK",
+                "FILLED_WATER"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "waterglass",
+            "count": 3,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <waterglass> (15)",
+            "success": true,
+            "reasoning": "I washed the waterglass. It is CLEAN and EMPTY."
+        },
+        {
+            "step": 0,
+            "action": "[grab] <waterglass> (64)",
+            "success": true,
+            "reasoning": "The target is a clean waterglass to be stored inside a kitchen cabinet. The graph shows waterglass(64) is CLEAN and EMPTY, and kitchencabinet(138) is OPEN. Since the cabinet is already open and the glass is close to the character, the next required step toward satisfying N1 is to grab the correct waterglass before placing it into the cabinet."
+        },
+        {
+            "step": 1,
+            "action": "[walk] <kitchencabinet> (138)",
+            "success": true,
+            "reasoning": "The target waterglass is already in hand (HOLDS_RH waterglass(64)), and the required destination cabinet is kitchencabinet(138). The SDG still requires the cabinet to be open before placing the glass inside, and although the graph lists both OPEN and CLOSED states for the cabinet, the satisfied prerequisite is that it is open enough to use. Since putin would require being near the cabinet first, the next atomic step is to walk to the cabinet."
+        },
+        {
+            "step": 2,
+            "action": "[putin] <waterglass> (64) <kitchencabinet> (138)",
+            "success": true,
+            "reasoning": "The goal is to place the held clean waterglass(64) inside an open kitchencabinet. The cabinet node N2 is already satisfied because kitchencabinet(138) is OPEN. The remaining gap is N1: the waterglass is not yet inside the cabinet. I am already close to kitchencabinet(138) from the prior walk, and I am holding the correct waterglass in my right hand, so the next atomic step is to put it into the cabinet."
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": [
+            "CLEAN"
+        ],
+        "relation": "INSIDE",
+        "destination_class": "kitchencabinet"
+    },
+    "execution_time_seconds": 13.95
+}
