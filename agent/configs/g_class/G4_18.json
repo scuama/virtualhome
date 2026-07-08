@@ -13,6 +13,9 @@
             "target_classes": [
                 "tv"
             ],
+            "remove_states": [
+                "OFF"
+            ],
             "add_states": [
                 "ON"
             ]

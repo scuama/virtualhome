@@ -40,6 +40,9 @@
         "target_class": "character",
         "destination_class": "apple",
         "relation": "HOLDS_RH",
-        "min_count": 1
+        "min_count": 1,
+        "destination_states": [
+            "CLEAN"
+        ]
     }
 }

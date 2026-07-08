@@ -1,6 +1,6 @@
 {
     "environment_id": 2,
-    "goal_instruction": "If you see milk, bring over a cup at the right temperature.",
+    "goal_instruction": "If you see milk, bring over a cup of it at the right temperature.",
     "initial_relations_override": [
         {
             "subject": "character",
