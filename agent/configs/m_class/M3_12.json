@@ -3,7 +3,13 @@
     "scenario_type": "M",
     "goal_instruction": "If the TV is off, turn it on.",
     "environment_id": 1,
-    "initial_states_override": [],
+    "initial_states_override": [
+        {
+            "target_classes": ["tv"],
+            "remove_states": ["ON"],
+            "add_states": ["OFF"]
+        }
+    ],
     "initial_relations_override": [],
     "scheduled_rules": [
         {
@@ -15,16 +21,8 @@
     "failure_condition": {
         "start_step": 0,
         "end_step": 5,
-        "mode": "AND",
-        "conditions": [
-            {
-                "check_type": "state",
-                "target_class": "tv",
-                "require_states": [
-                    "ON"
-                ]
-            }
-        ]
+        "target_class": "tv",
+        "states": ["ON"]
     },
     "success_condition": {
         "target_class": "tv",

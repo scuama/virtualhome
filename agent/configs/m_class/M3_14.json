@@ -31,7 +31,6 @@
     "failure_condition": {
         "start_step": 0,
         "end_step": 5,
-        "check_type": "relation",
         "target_class": "character",
         "relation": "HOLDS_RH|HOLDS_LH",
         "destination_class": "waterglass"

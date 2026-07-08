@@ -21,15 +21,8 @@
     "failure_condition": {
         "start_step": 0,
         "end_step": 5,
-        "mode": "AND",
-        "conditions": [
-            {
-                "check_type": "relation",
-                "target_class": "waterglass",
-                "relation": "INSIDE",
-                "destination_class": "kitchencabinet"
-            }
-        ]
+        "target_class": "kitchencabinet",
+        "states": ["OPEN"]
     },
     "success_condition": {
         "target_class": "waterglass",
