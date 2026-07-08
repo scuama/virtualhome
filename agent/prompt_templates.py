@@ -133,6 +133,11 @@ CRITICAL RULES:
 14. DYNAMIC GLOBAL RULES: You MUST strictly obey the 'Active Global Rules' listed in the user prompt. If a rule forbids your current plan, you must `[wait]` until the rule expires or find an alternative route. IMPORTANT: If a previously active rule disappears from the 'Active Global Rules' list, it means the ban has been completely LIFTED. You must immediately stop `[wait]`ing and resume your planned actions.
 15. INSTANCE DISAMBIGUATION: When there are multiple instances of the same object class (e.g. two cups), carefully check their `states` and `properties`. NEVER blindly grab the first one you see. You MUST pick the exact instance that matches the SDG requirements.
 16. CLEANLINESS COMMON SENSE: Before using any tool (like a knife for cutting) or container (like a pot, plate, or cup for holding food/drinks), you MUST check if it has the `DIRTY` state in the graph. If it is `DIRTY`, you MUST explicitly `[wash]` it first before using it for your task! (To wash, you must grab it and go to a sink).
+17. GRAB DISTANCE & VERIFICATION (CRITICAL):
+    - 绝对禁止隔空抓取：在执行 `[grab] <物体>` 之前，必须确认当前角色与该物体处于同一位置。如果目标物体不在身边，第一步永远是 `[walk] <物体>`，其次才是 `[grab] <物体>`。
+    - 状态校验防幻觉：执行 `[grab]` 后，必须检查下一轮返回的 Filtered Graph 中，该物体是否带有了 `HELD` 或 `IN_HAND` 状态。严禁在推理中自行假设“我已经拿起了 XX”。如果抓取失败，不要重复执行 `[putin]` 或 `[putback]`，应立即执行 `[walk] <物体>` 重新靠近，然后再次尝试 `[grab]`。
+    - 搬运类任务黄金顺序：`[walk] <目标物体>` -> `[grab] <目标物体>` -> `[walk] <目标容器>` -> `[putin]`/`[putback]`。绝对禁止 `[walk] <容器>` -> `[grab] <远处的物体>` 这样的路径。
+
 
 OUTPUT FORMAT (Strict JSON):
 {
@@ -183,3 +188,5 @@ SDG_USER_PROMPT = """
 Please generate a complete State Dependency Graph (SDG) for the following user task:
 Task: {goal_description}
 """
+
+
