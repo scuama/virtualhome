@@ -18,12 +18,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "waterglass",
-        "require_states": [
+        "states": [
             "COLD"
-        ]
-    },
-    "max_steps": 20,
-    "execution_time_seconds": 57.31
+        ],
+        "min_count": 1
+    }
 }

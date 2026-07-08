@@ -1,7 +1,7 @@
 {
     "scenario_id": "M1_02",
     "scenario_type": "M",
-    "goal_instruction": "如果桌子上有果汁，就给我倒杯果汁过来。",
+    "goal_instruction": "If there is juice on the table, pour me a glass of juice.",
     "environment_id": 2,
     "initial_relations_override": [
         {
@@ -35,10 +35,15 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "character",
         "relation": "HOLDS_RH|HOLDS_LH",
-        "destination_class": "",
-        "require_target_state": "FILLED_JUICE"
+        "min_count": 1,
+        "destination_class": "ANY",
+        "destination_properties": [
+            "POURABLE"
+        ],
+        "destination_states": [
+            "FILLED_JUICE"
+        ]
     }
 }

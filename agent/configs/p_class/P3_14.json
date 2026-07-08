@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "If the pie is uncut, slice it with the cutleryknife and then put it inside the plate.",
+    "goal_instruction": "If the pie is uncut, slice it with the cutleryknife and then put it inside the fridge.",
     "initial_relations_override": [
         {
             "subject": "pie",
@@ -9,7 +9,7 @@
             "count": 1
         },
         {
-            "subject": "plate",
+            "subject": "fridge",
             "relation": "ON",
             "object": "kitchentable",
             "count": 1
@@ -26,17 +26,17 @@
         "mode": "AND",
         "conditions": [
             {
-                "check_type": "state",
                 "target_class": "pie",
-                "require_states": [
+                "states": [
                     "SLICED"
-                ]
+                ],
+                "min_count": 1
             },
             {
-                "check_type": "relation",
                 "target_class": "pie",
+                "destination_class": "fridge",
                 "relation": "INSIDE",
-                "destination_class": "plate"
+                "min_count": 1
             }
         ]
     }

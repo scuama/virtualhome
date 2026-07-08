@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果炉子开着，就帮我热一杯牛奶和一杯咖啡拿到桌上。",
+    "goal_instruction": "If the stove is on, please heat a glass of milk and a cup of coffee and bring them to the table.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -22,18 +22,5 @@
             ]
         }
     ],
-    "success_condition": {
-        "check_type": "agent_action",
-        "require_action": "[ask]",
-        "require_message_contains": [
-            "impossible",
-            "broken",
-            "not exist",
-            "cannot",
-            "fail",
-            "坏",
-            "不可能",
-            "没有"
-        ]
-    }
+    "on_ask_policy": "SUCCESS"
 }

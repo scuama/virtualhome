@@ -22,12 +22,12 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "waterglass",
-        "relation": "ON",
         "destination_class": "kitchentable",
-        "subject_must_have_state": "CLEAN"
-    },
-    "max_steps": 20,
-    "execution_time_seconds": 27.43
+        "relation": "ON",
+        "min_count": 1,
+        "states": [
+            "CLEAN"
+        ]
+    }
 }

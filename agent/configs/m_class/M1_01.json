@@ -1,7 +1,7 @@
 {
     "scenario_id": "M1_01",
     "scenario_type": "M",
-    "goal_instruction": "如果电视开着，就把遥控器拿过来。",
+    "goal_instruction": "If the TV is on, bring me the remote control.",
     "environment_id": 1,
     "initial_states_override": [
         {
@@ -39,9 +39,9 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "character",
+        "destination_class": "remotecontrol",
         "relation": "HOLDS_RH|HOLDS_LH",
-        "destination_class": "remotecontrol"
+        "min_count": 1
     }
 }

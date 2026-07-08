@@ -24,10 +24,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "milk",
-        "require_states": [
+        "states": [
             "HOT"
-        ]
+        ],
+        "min_count": 1
     }
 }

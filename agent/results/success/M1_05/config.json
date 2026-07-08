@@ -1,7 +1,7 @@
 {
     "scenario_id": "M1_05",
     "scenario_type": "M",
-    "goal_instruction": "如果牛奶是凉的，就把它放进微波炉加热。",
+    "goal_instruction": "If the milk is cold, put it in the microwave to heat it up.",
     "environment_id": 2,
     "initial_states_override": [
         {
@@ -43,8 +43,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "milk",
-        "require_state": "HOT"
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1
     }
 }

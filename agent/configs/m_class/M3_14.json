@@ -37,10 +37,9 @@
         "destination_class": "waterglass"
     },
     "success_condition": {
-        "check_type": "relation",
         "target_class": "waterglass",
-        "relation": "ON|INSIDE",
         "destination_class": "sink",
+        "relation": "ON|INSIDE",
         "min_count": 1
     }
 }

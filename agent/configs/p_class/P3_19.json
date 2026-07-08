@@ -32,10 +32,12 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "cutlets",
-        "relation": "ON",
         "destination_class": "breadslice",
-        "subject_must_have_state": "HOT"
+        "relation": "ON",
+        "min_count": 1,
+        "states": [
+            "HOT"
+        ]
     }
 }

@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果电视机开着，就把遥控器拿过来。",
+    "goal_instruction": "If the TV is on, bring the remote control here.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -25,12 +25,9 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
-        "subject": "character",
+        "target_class": "character",
+        "destination_class": "remotecontrol",
         "relation": "HOLDS_RH",
-        "object": "remotecontrol",
-        "fallback_relation_subject": "character",
-        "fallback_relation": "HOLDS_LH",
-        "fallback_relation_object": "remotecontrol"
+        "min_count": 1
     }
 }

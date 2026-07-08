@@ -1,7 +1,7 @@
 {
     "scenario_id": "M2_06",
     "scenario_type": "M",
-    "goal_instruction": "如果桌上有水杯(waterglass)，就把脏水杯放到水槽里。",
+    "goal_instruction": "If there is a water glass on the table, put the dirty water glass into the sink.",
     "environment_id": 2,
     "initial_states_override": [
         {
@@ -30,10 +30,12 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "waterglass",
-        "subject_must_have_state": "DIRTY",
+        "destination_class": "sink",
         "relation": "ON",
-        "destination_class": "sink"
+        "min_count": 1,
+        "states": [
+            "DIRTY"
+        ]
     }
 }

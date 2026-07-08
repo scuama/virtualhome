@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果台灯亮着，就关了。",
+    "goal_instruction": "If the desk lamp is on, turn it off.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -16,15 +16,22 @@
     ],
     "initial_states_override": [
         {
-            "target_classes": ["tablelamp"],
-            "add_states": ["ON"]
+            "target_classes": [
+                "tablelamp"
+            ],
+            "add_states": [
+                "ON"
+            ]
         }
     ],
-    "hidden_broken_classes": ["tablelamp"],
+    "hidden_broken_classes": [
+        "tablelamp"
+    ],
     "success_condition": {
-        "check_type": "physical_state",
         "target_class": "tablelamp",
-        "require_states": ["OFF"],
-        "quantifier": "all"
+        "states": [
+            "OFF"
+        ],
+        "min_count": 1
     }
 }

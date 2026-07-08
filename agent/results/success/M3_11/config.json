@@ -33,10 +33,9 @@
         ]
     },
     "success_condition": {
-        "check_type": "relation",
         "target_class": "apple",
-        "relation": "ON",
         "destination_class": "kitchentable",
+        "relation": "ON",
         "min_count": 2
     }
 }

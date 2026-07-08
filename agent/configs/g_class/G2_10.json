@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果厨房里没有人，确保厨房是安全的。",
+    "goal_instruction": "If there is no one in the kitchen, make sure the kitchen is safe.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -18,13 +18,13 @@
             ]
         }
     ],
-    "user_clarification_reply": "把炉子关掉。",
+    "user_clarification_reply": "Turn off the stove.",
     "success_condition": {
-        "check_type": "physical_state",
         "target_class": "stove",
-        "require_states": [
+        "states": [
             "OFF"
         ],
-        "require_ask": true
-    }
+        "min_count": 1
+    },
+    "require_ask_to_pass": true
 }

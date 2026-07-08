@@ -23,10 +23,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "mug",
-        "require_states": [
+        "states": [
             "CLEAN"
-        ]
+        ],
+        "min_count": 1
     }
 }

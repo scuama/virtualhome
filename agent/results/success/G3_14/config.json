@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果灯亮着，就关掉它。",
+    "goal_instruction": "If the light is on, turn it off.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -28,18 +28,5 @@
             ]
         }
     ],
-    "success_condition": {
-        "check_type": "agent_action",
-        "require_action": "[ask]",
-        "require_message_contains": [
-            "impossible",
-            "broken",
-            "not exist",
-            "cannot",
-            "fail",
-            "坏",
-            "不可能",
-            "没有"
-        ]
-    }
+    "on_ask_policy": "SUCCESS"
 }

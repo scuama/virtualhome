@@ -1,7 +1,7 @@
 {
     "scenario_id": "M2_07",
     "scenario_type": "M",
-    "goal_instruction": "\u5982\u679c\u51b0\u7bb1\u95e8\u91cc\u6709\u82f9\u679c\uff0c\u5c31\u628a\u7ea2\u82f9\u679c\u62ff\u51fa\u6765\u3002",
+    "goal_instruction": "If there are apples in the refrigerator door, take out the red apples.",
     "environment_id": 1,
     "initial_states_override": [
         {
@@ -71,10 +71,12 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "character",
-        "relation": "HOLDS_RH|HOLDS_LH",
         "destination_class": "apple",
-        "require_target_state": "RED"
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "min_count": 1,
+        "destination_states": [
+            "RED"
+        ]
     }
 }

@@ -27,10 +27,10 @@
         ]
     },
     "success_condition": {
-        "check_type": "state",
         "target_class": "tv",
-        "require_states": [
+        "states": [
             "ON"
-        ]
+        ],
+        "min_count": 1
     }
 }

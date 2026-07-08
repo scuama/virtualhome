@@ -1,6 +1,6 @@
 {
     "environment_id": 2,
-    "goal_instruction": "如果冰箱里有牛奶，就帮我用微波炉热一杯。",
+    "goal_instruction": "If there is milk in the fridge, heat up a cup of it in the microwave.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -18,10 +18,10 @@
         "microwave"
     ],
     "success_condition": {
-        "check_type": "physical_state",
         "target_class": "milk",
-        "require_states": [
+        "states": [
             "HOT"
-        ]
+        ],
+        "min_count": 1
     }
 }

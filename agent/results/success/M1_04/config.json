@@ -1,9 +1,14 @@
 {
     "scenario_id": "M1_04",
     "scenario_type": "M",
-    "goal_instruction": "如果沙发上有抱枕，就帮我拿一个过来。",
+    "goal_instruction": "If there is a pillow on the sofa, please bring me one.",
     "environment_id": 1,
     "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
         {
             "subject": "pillow",
             "relation": "ON",
@@ -24,9 +29,9 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "character",
+        "destination_class": "pillow",
         "relation": "HOLDS_RH|HOLDS_LH",
-        "destination_class": "pillow"
+        "min_count": 1
     }
 }

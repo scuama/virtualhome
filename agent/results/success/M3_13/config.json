@@ -32,9 +32,9 @@
         ]
     },
     "success_condition": {
-        "check_type": "relation",
         "target_class": "waterglass",
+        "destination_class": "kitchencabinet",
         "relation": "INSIDE",
-        "destination_class": "kitchencabinet"
+        "min_count": 1
     }
 }

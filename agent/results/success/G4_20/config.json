@@ -1,22 +1,56 @@
 {
     "environment_id": 2,
     "max_steps": 25,
-    "goal_instruction": "如果桌上有果汁，给我倒一杯过来",
+    "goal_instruction": "If there is juice on the table, pour me a glass.",
     "initial_relations_override": [
-        { "subject": "character", "relation": "ON", "object": "kitchentable", "in_room": "kitchen" },
-        { "subject": "juice", "relation": "ON", "object": "kitchentable", "count": 1 },
-        { "subject": "mug", "count": 0, "object": "kitchentable" },
-        { "subject": "glass", "count": 0, "object": "kitchentable" },
-        { "subject": "drinking_glass", "count": 0, "object": "kitchentable" },
-        { "subject": "cup", "count": 0, "object": "kitchentable" },
-        { "subject": "coffee_cup", "count": 0, "object": "kitchentable" }
+        {
+            "subject": "character",
+            "relation": "ON",
+            "object": "kitchentable",
+            "in_room": "kitchen"
+        },
+        {
+            "subject": "juice",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        },
+        {
+            "subject": "mug",
+            "count": 0,
+            "object": "kitchentable"
+        },
+        {
+            "subject": "glass",
+            "count": 0,
+            "object": "kitchentable"
+        },
+        {
+            "subject": "drinking_glass",
+            "count": 0,
+            "object": "kitchentable"
+        },
+        {
+            "subject": "cup",
+            "count": 0,
+            "object": "kitchentable"
+        },
+        {
+            "subject": "coffee_cup",
+            "count": 0,
+            "object": "kitchentable"
+        }
     ],
     "success_condition": {
-        "check_type": "relation",
-        "subject": "character",
+        "target_class": "character",
         "relation": "HOLDS_RH|HOLDS_LH",
-        "destination_class": "",
-        "require_target_properties": ["POURABLE"],
-        "require_target_state": "FILLED_JUICE"
+        "min_count": 1,
+        "destination_class": "ANY",
+        "destination_properties": [
+            "POURABLE"
+        ],
+        "destination_states": [
+            "FILLED_JUICE"
+        ]
     }
 }

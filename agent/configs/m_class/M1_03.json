@@ -1,7 +1,7 @@
 {
     "scenario_id": "M1_03",
     "scenario_type": "M",
-    "goal_instruction": "如果你看到了脏水杯，就及时把它们放到水槽里。",
+    "goal_instruction": "If you see dirty cups, put them in the sink right away.",
     "environment_id": 2,
     "initial_states_override": [
         {
@@ -49,10 +49,12 @@
         }
     ],
     "success_condition": {
-        "check_type": "relation",
         "target_class": "waterglass",
-        "subject_must_have_state": "DIRTY",
+        "destination_class": "sink",
         "relation": "ON",
-        "destination_class": "sink"
+        "min_count": 1,
+        "states": [
+            "DIRTY"
+        ]
     }
 }

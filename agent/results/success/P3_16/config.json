@@ -22,12 +22,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "salmon",
-        "require_states": [
+        "states": [
             "HOT"
-        ]
-    },
-    "max_steps": 20,
-    "execution_time_seconds": 33.39
+        ],
+        "min_count": 1
+    }
 }

@@ -13,10 +13,30 @@
 - **禁止直接放入房间**：在编写 `initial_relations_override` 时，**严禁**将物品直接设置为属于某个房间（例如 `{"subject": "apple", "relation": "INSIDE", "object": "livingroom"}` 是非法的，会导致引擎死锁崩溃）。
 - **依托具体支撑物**：物品必须被精确地放置在房间内的具体家具表面或容器内部。例如：放置于 `ON tvstand` 或 `INSIDE kitchencabinet`。
 
-## 3. 成功与失败条件 (Conditions Setup)
-- **规范字段**：在配置 `success_condition` 时，目前主要支持的 `check_type` 为 `"relation"` 或 `"agent_action"`。
-- **关系校验**：对于 `"relation"`，通常必须明确提供 `target_class`（或 `subject`）、`relation`（如 `ON` / `INSIDE`）以及 `destination_class`（或 `object`）。
-- **状态要求**：可以通过 `require_target_state` 要求目标物体的特定状态（如电视必须处于 `ON` 状态）。
+## 3. 成功条件配置 (Success Conditions)
+- **极简画像漏斗模式 (Unified Funnel Schema)**：在配置 `success_condition` 时，引擎完全基于“节点特征与关联边”进行全盘扫描。
+- **支持的约束维度**：
+  - `target_class` / `destination_class`: 可以指定具体物品名称，或使用 `"ANY"` 代表匹配任何物品（泛型匹配）。
+  - `states` / `destination_states`: 用于约束主语/宾语的动态状态（如 `["HOT"]`, `["DIRTY"]`, `["FILLED_JUICE"]`）。
+  - `properties` / `destination_properties`: 用于约束主语/宾语的静态固有属性（如 `["POURABLE"]`）。
+  - `relation`: 约束主语到宾语的有向动作边（支持正则 `|`，例如 `"HOLDS_RH|HOLDS_LH"` 代表左手或右手均可）。
+  - `require_ask_to_pass`: (布尔值) 如果任务规定必须先通过 `[ask]` 澄清需求才能成功，需要设置为 `true`。
+
+## 3.5 最佳实践范例 (Best Practice Example)
+为了展示泛化匹配能力，假设我们需要配置一个任务：“给用户倒一杯装满果汁的饮料（且不在乎是用什么容器装的）”。
+最优的配置写法如下：
+
+```json
+    "success_condition": {
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "ANY",
+        "destination_properties": ["POURABLE"],
+        "destination_states": ["FILLED_JUICE"],
+        "min_count": 1
+    }
+```
+**解析**：引擎会首先找出名为 `character` 的主体，查验它是否有伸向其它物体的 `HOLDS_RH` 或 `HOLDS_LH` 的边。接着顺着这条边去检查那个被拿在手里的物体（`ANY` 代表忽略其具体的 class 名字），只要该物体具备 `POURABLE` 属性（证明它是个容器）且其内部状态为 `FILLED_JUICE`，即刻判定任务成功。
 
 ## 4. 动态事件的高级使用 (Dynamic Events)
 - 当需要测试大模型的感知和适应能力时，可以合理使用 `dynamic_events`。

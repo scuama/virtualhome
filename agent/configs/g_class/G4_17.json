@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果桌上有苹果，帮我开水龙头冲一冲，洗一个拿过来。",
+    "goal_instruction": "If there are apples on the table, rinse them under the tap and bring me one.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -31,10 +31,10 @@
         "faucet"
     ],
     "success_condition": {
-        "check_type": "physical_state",
         "target_class": "apple",
-        "require_states": [
+        "states": [
             "CLEAN"
-        ]
+        ],
+        "min_count": 1
     }
 }

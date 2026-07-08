@@ -26,17 +26,17 @@
         "mode": "AND",
         "conditions": [
             {
-                "check_type": "state",
                 "target_class": "clothespile",
-                "require_states": [
+                "states": [
                     "CLEAN"
-                ]
+                ],
+                "min_count": 1
             },
             {
-                "check_type": "relation",
                 "target_class": "clothespile",
+                "destination_class": "closet",
                 "relation": "INSIDE",
-                "destination_class": "closet"
+                "min_count": 1
             }
         ]
     }

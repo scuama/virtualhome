@@ -1,7 +1,7 @@
 {
     "scenario_id": "M2_09",
     "scenario_type": "M",
-    "goal_instruction": "如果冰箱里有果汁，就倒一些在干净的水杯(waterglass)里。",
+    "goal_instruction": "If there is juice in the fridge, pour some into a clean water glass.",
     "environment_id": 2,
     "initial_states_override": [
         {
@@ -64,8 +64,11 @@
         }
     ],
     "success_condition": {
-        "check_type": "state",
         "target_class": "waterglass",
-        "require_states": ["FILLED_JUICE", "CLEAN"]
+        "states": [
+            "FILLED_JUICE",
+            "CLEAN"
+        ],
+        "min_count": 1
     }
 }

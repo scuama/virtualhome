@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果看到桌上的杯子，把它放到该放的地方去。",
+    "goal_instruction": "If you see the cup on the table, put it where it belongs.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -14,12 +14,12 @@
             "count": 1
         }
     ],
-    "user_clarification_reply": "放到柜子里。",
+    "user_clarification_reply": "Put it in the cabinet.",
     "success_condition": {
-        "check_type": "relation",
-        "subject": "mug",
+        "target_class": "mug",
+        "destination_class": "kitchencabinet",
         "relation": "INSIDE",
-        "object": "kitchencabinet",
-        "require_ask": true
-    }
+        "min_count": 1
+    },
+    "require_ask_to_pass": true
 }

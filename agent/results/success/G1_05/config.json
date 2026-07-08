@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果杯子里有水，就倒掉放进柜子里。",
+    "goal_instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -39,15 +39,17 @@
         "mode": "AND",
         "conditions": [
             {
-                "check_type": "relation",
-                "subject": "mug",
+                "target_class": "mug",
+                "destination_class": "cabinet",
                 "relation": "INSIDE",
-                "object": "cabinet"
+                "min_count": 1
             },
             {
-                "check_type": "state",
                 "target_class": "mug",
-                "require_state": "EMPTY"
+                "states": [
+                    "EMPTY"
+                ],
+                "min_count": 1
             }
         ]
     }

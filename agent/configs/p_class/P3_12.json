@@ -1,9 +1,9 @@
 {
     "environment_id": 2,
-    "goal_instruction": "If the salmon is cold, heat it up in the cookingpot on the stove.",
+    "goal_instruction": "If the milk is cold, heat it up in the cookingpot on the stove.",
     "initial_relations_override": [
         {
-            "subject": "salmon",
+            "subject": "milk",
             "relation": "ON",
             "object": "kitchencounter",
             "count": 1
@@ -11,22 +11,28 @@
         {
             "subject": "cookingpot",
             "relation": "ON",
-            "object": "kitchencounter",
+            "object": "stove",
             "count": 1
         }
     ],
     "initial_states_override": [
         {
-            "subject": "salmon",
+            "subject": "milk",
             "states": [
                 "COLD"
+            ]
+        },
+        {
+            "subject": "cookingpot",
+            "states": [
+                "OPEN"
             ]
         },
         {
             "subject": "stove",
             "states": [
                 "OFF",
-                "PLUGGED_OUT"
+                "PLUGGED_IN"
             ]
         }
     ],
@@ -34,18 +40,25 @@
         "mode": "AND",
         "conditions": [
             {
-                "check_type": "state",
-                "target_class": "salmon",
-                "require_states": [
+                "target_class": "milk",
+                "states": [
                     "HOT"
-                ]
+                ],
+                "min_count": 1
             },
             {
-                "check_type": "relation",
-                "target_class": "salmon",
+                "target_class": "milk",
+                "destination_class": "cookingpot",
                 "relation": "INSIDE",
-                "destination_class": "cookingpot"
+                "min_count": 1
+            },
+            {
+                "target_class": "cookingpot",
+                "destination_class": "stove",
+                "relation": "ON",
+                "min_count": 1
             }
         ]
-    }
+    },
+    "execution_time_seconds": 60.0
 }

@@ -1,6 +1,6 @@
 {
     "environment_id": 2,
-    "goal_instruction": "如果看到牛奶，拿一杯温度合适的过来。",
+    "goal_instruction": "If you see milk, bring over a cup at the right temperature.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -34,14 +34,15 @@
             ]
         }
     ],
-    "user_clarification_reply": "热的。",
+    "user_clarification_reply": "Hot.",
     "success_condition": {
-        "check_type": "relation",
-        "subject": "character",
+        "target_class": "character",
+        "destination_class": "milk",
         "relation": "HOLDS_RH",
-        "object": "milk",
-        "subject_must_have_state": null,
-        "require_target_state": "HOT",
-        "require_ask": true
-    }
+        "min_count": 1,
+        "destination_states": [
+            "HOT"
+        ]
+    },
+    "require_ask_to_pass": true
 }

@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "如果灯亮着，就关掉它。",
+    "goal_instruction": "If the light is on, turn it off.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -25,11 +25,10 @@
         }
     ],
     "success_condition": {
-        "check_type": "physical_state",
         "target_class": "tablelamp",
-        "require_states": [
+        "states": [
             "OFF"
         ],
-        "quantifier": "all"
+        "min_count": 1
     }
 }
