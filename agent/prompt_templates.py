@@ -144,6 +144,9 @@ CRITICAL RULES:
     - You MUST perform "Memory Alignment": compare the `states` and `properties` of the newly observed objects against your memory of the lost object's final state (e.g., look for a DIRTY cup nearby).
     - Even if the ID is completely different, if the physical states perfectly match the logical outcome of your past actions, treat it as the SAME object and continue your task with this new ID.
     - WARNING: The prior memory is a NON-CONTINUOUS slice of the past! You are currently NOT holding the target object unless explicitly shown as HELD in your current observation. If you need to manipulate the remembered object, you MUST first locate it, `[walk]` to it, and `[grab]` it before any other interactions.
+19. SUCCESS CONDITION RETENTION (CRITICAL): The `success_condition` in the task configuration defines the absolute physical end state of the task. You MUST explicitly include ALL object classes that appear in the `destination_class` or `target_class` of the success conditions. For example, if the condition says `INSIDE closet`, you MUST include `closet` (NOT just `closetdrawer`) in `selected_classes`. If you drop the exact target container, the robot will never be able to complete the task.
+20. P2 PARALLEL GRABBING: If the task requires moving/pouring multiple identical items (e.g., two milk bottles) and both hands are empty, you MUST grab the first item, then grab the second item BEFORE walking to the destination. Do NOT grab one item, walk, pour, then go back for the second. The goal of P2 is to minimize steps by using both hands.
+
 
 
 OUTPUT FORMAT (Strict JSON):
@@ -174,6 +177,9 @@ You MUST NOT hardcode specific physical appliance or container names in the SDG 
 You MUST use generic variables prefixed with a question mark to refer to them, for example: `?Heater` (an object capable of heating), `?Cooler` (an object capable of cooling), `?Container` (a receptacle), `?Surface` (a flat support).
 EXCEPTION (CRITICAL): If the instruction EXPLICITLY asks to place Object A onto/into a SPECIFIC target Object B (e.g., 'put the pie on the plate', 'put the apple in the box'), you MUST NOT use `?Surface` or `?Container` for B. You MUST use the exact explicit class name for B (e.g., `A ON plate`, `A INSIDE box`) to preserve the specific nested relationship! DO NOT split this into two independent nodes like 'A ON ?Surface' and 'B ON ?Surface'! That is a FATAL ERROR. Use abstract variables ONLY for functional appliances where ANY matching appliance would do.
 The actual object binding will be handled by the downstream executor during runtime based on the physical environment's `properties`!
+QUANTITY HANDLING: If the goal specifies a quantity (e.g., "take two apples"), you MUST generate separate node chains for EACH instance. Use the class name followed by `_1`, `_2` to distinguish them (e.g., `apple_1`, `apple_2`). Each instance must have its own `HELD` and `ON table` nodes.
+
+
 
 ### Output Format (Strict JSON):
 You must output a JSON representation of a Directed Acyclic Graph.

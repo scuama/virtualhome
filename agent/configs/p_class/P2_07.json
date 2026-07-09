@@ -1,0 +1,41 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there are apples in the fridge, take two out and put them on the kitchentable.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 2
+        },
+        {
+            "subject": "fridge",
+            "relation": "ON",
+            "object": "kitchencounter"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "fridge",
+            "states": ["CLOSED"]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "kitchentable",
+                "min_count": 2
+            }
+        ]
+    },
+    "execution_time_seconds": 60
+}

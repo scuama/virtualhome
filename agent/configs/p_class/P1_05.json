@@ -1,17 +1,18 @@
 {
     "environment_id": 0,
-    "goal_instruction": "If the clothespile is dirty, wash it in the sink and then put it inside the closet in the bedroom.",
+    "goal_instruction": "If the washing machine is not working, turn it on and wash the two piles of dirty clothes on the floor.",
     "initial_relations_override": [
         {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "bedroom"
+            "subject": "washingmachine",
+            "relation": "ON",
+            "object": "floor",
+            "count": 1
         },
         {
             "subject": "clothespile",
             "relation": "ON",
-            "object": "chair",
-            "count": 1
+            "object": "floor",
+            "count": 2
         }
     ],
     "initial_states_override": [
@@ -20,8 +21,8 @@
             "states": ["DIRTY"]
         },
         {
-            "subject": "closet",
-            "states": ["OPEN"]
+            "subject": "washingmachine",
+            "states": ["OFF", "PLUGGED_IN"]
         }
     ],
     "success_condition": {
@@ -31,14 +32,7 @@
                 "check_type": "state",
                 "target_class": "clothespile",
                 "require_states": ["CLEAN"],
-                "min_count": 1
-            },
-            {
-                "check_type": "relation",
-                "target_class": "clothespile",
-                "relation": "INSIDE",
-                "destination_class": "closet",
-                "min_count": 1
+                "min_count": 2
             }
         ]
     },

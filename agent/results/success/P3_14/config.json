@@ -11,7 +11,7 @@
         {
             "subject": "fridge",
             "relation": "ON",
-            "object": "kitchencounter",   
+            "object": "kitchencounter",
             "count": 1
         },
         {
@@ -24,7 +24,9 @@
     "initial_states_override": [
         {
             "subject": "fridge",
-            "states": ["OPEN"]   
+            "states": [
+                "OPEN"
+            ]
         }
     ],
     "success_condition": {
@@ -33,7 +35,9 @@
             {
                 "check_type": "state",
                 "target_class": "pie",
-                "require_states": ["SLICED"]
+                "require_states": [
+                    "SLICED"
+                ]
             },
             {
                 "check_type": "relation",
@@ -43,5 +47,5 @@
             }
         ]
     },
-    "execution_time_seconds": 60.0  
+    "execution_time_seconds": 40.07
 }
