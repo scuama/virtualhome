@@ -158,15 +158,15 @@ def apply_overrides(env, config, debug=False):
 
 def main():
     parser = argparse.ArgumentParser(description='VirtualHome E2E Test Runner')
-    parser.add_argument('target', type=str, nargs='?', default='',
-                        help='Target scenario ID or prefix (e.g. P3 or P3_12). Leave empty for all.')
+    parser.add_argument('target', type=str, nargs='*', default=[],
+                        help='Target scenario IDs or prefixes (e.g. P3 P3_12). Leave empty for all.')
     # ===================== 新增 --method 参数 =====================
     parser.add_argument(
         '--method',
-        type=str,
-        default='robostate',
+        nargs='+',
+        default=['robostate'],
         choices=list(AGENT_REGISTRY.keys()),
-        help='Method to evaluate: ' + ', '.join(AGENT_REGISTRY.keys())
+        help='Methods to evaluate: ' + ', '.join(AGENT_REGISTRY.keys())
     )
     parser.add_argument(
         '--model',
@@ -186,41 +186,23 @@ def main():
 
     base_dir = os.path.dirname(__file__)
     configs_dir = os.path.join(base_dir, 'configs')
-    results_dir = os.path.join(
-        base_dir,
-        'results',
-        args.method
-    )
-    success_dir = os.path.join(results_dir, 'success')
-    fail_dir = os.path.join(results_dir, 'fail')
-    raw_logs_dir = os.path.join(results_dir, 'raw')
-    
-    os.makedirs(success_dir, exist_ok=True)
-    os.makedirs(fail_dir, exist_ok=True)
-    os.makedirs(raw_logs_dir, exist_ok=True)
-    
-    log_path = os.path.join(
-        raw_logs_dir,
-        f"test_runner_{args.method}.log"
-    )
 
+    log_path = os.path.join(base_dir, 'test_runner.log')
     if not args.daemon:
         import subprocess
         cmd = [sys.executable, __file__]
         if args.target:
-            cmd.append(args.target)
+            cmd.extend(args.target)
         cmd.append("--daemon")
         # 传递 method 参数到子进程
         cmd.append("--method")
-        cmd.append(args.method)
+        cmd.extend(args.method)
         
         subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
         print(f"[INFO] Task started in background.")
+        print(f"[INFO] Evaluating methods: {', '.join(args.method)}")
         print(f"[INFO] Monitor logs via: tail -f {log_path}")
         sys.exit(0)
-
-    sys.stdout = Logger(log_path)
-    sys.stderr = sys.stdout
     
     # Gather configs
     all_configs = []
@@ -229,7 +211,7 @@ def main():
         if os.path.exists(target_dir):
             for path in glob.glob(os.path.join(target_dir, '*.json')):
                 scenario_id = os.path.splitext(os.path.basename(path))[0]
-                if args.target and not scenario_id.startswith(args.target):
+                if args.target and not scenario_id.startswith(tuple(args.target)):
                     continue
                 all_configs.append((scenario_id, path))
     all_configs = sorted(all_configs)
@@ -241,255 +223,279 @@ def main():
         executable_args={'file_name': None}
     )
 
-    summary = {
-        "method": args.method,
-        "model": args.model,
-        "total": len(all_configs),
-        "skipped": 0,
-        "success": 0,
-        "fail": 0,
-        "failures": []
-    }
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
 
-    print(
-        f"[INFO] Method={args.method} | "
-        f"Model={args.model} | "
-        f"Timeout={args.timeout}s"
-    )
+    sys.stdout = Logger(log_path)
+    sys.stderr = sys.stdout
 
-    for scenario_id, config_path in all_configs:
-        if os.path.exists(os.path.join(success_dir, scenario_id)):
-            print(f"[SKIP] {scenario_id} — already succeeded.")
-            summary["skipped"] += 1
-            fail_path = os.path.join(fail_dir, scenario_id)
-            if os.path.exists(fail_path):
-                shutil.rmtree(fail_path, ignore_errors=True)
-            continue
+    for method_name in args.method:
 
-        print(f"\n==========================================")
-        print(f"[RUN] {scenario_id}")
-
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-
-        env_id = config.get('environment_id', 0)
+        results_dir = os.path.join(base_dir, 'results', method_name)
+        success_dir = os.path.join(results_dir, 'success')
+        fail_dir = os.path.join(results_dir, 'fail')
+        raw_logs_dir = os.path.join(results_dir, 'raw')
         
-        old_stdout = sys.stdout
-        # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
-            
-        try:
-            env.reset(environment_id=env_id)
-        except Exception as e:
-            # sys.stdout.close()
-            sys.stdout = old_stdout
-            reason = f"Engine Reset Failed: {e}"
-            print(f"  {reason}")
-            summary["fail"] += 1
-            summary["failures"].append({"scenario": scenario_id, "reason": reason})
-            continue
+        os.makedirs(success_dir, exist_ok=True)
+        os.makedirs(fail_dir, exist_ok=True)
+        os.makedirs(raw_logs_dir, exist_ok=True)
+        
+        
 
-        try:
-            apply_overrides(env, config, debug=False)
-        except Exception as e:
-            # sys.stdout.close()
-            sys.stdout = old_stdout
-            reason = f"Initialization Failed: {e}"
-            print(f"  {reason}")
-            summary["fail"] += 1
-            summary["failures"].append({"scenario": scenario_id, "reason": reason})
-            continue
+        summary = {
+            "method": method_name,
+            "model": args.model,
+            "total": len(all_configs),
+            "skipped": 0,
+            "success": 0,
+            "fail": 0,
+            "failures": []
+        }
 
-        # ===================== 根据 method 选择 Agent =====================
-        agent_cls = AGENT_REGISTRY[args.method]
-        agent = agent_cls(
-            model_name=args.model,
-            scenario_id=scenario_id
+        print(
+            f"[INFO] Method={method_name} | "
+            f"Model={args.model} | "
+            f"Timeout={args.timeout}s"
         )
-        # ================================================================
 
-        # Prevent a failed run from copying a stale log produced by
-        # another method or an earlier execution of the same scenario.
-        scenario_log_file = os.path.join(
-            logs_dir,
-            f"run_{scenario_id}.md"
-        )
-        if os.path.exists(scenario_log_file):
-            os.remove(scenario_log_file)
+        for scenario_id, config_path in all_configs:
+            if os.path.exists(os.path.join(success_dir, scenario_id)):
+                print(f"[SKIP] {scenario_id} — already succeeded.")
+                summary["skipped"] += 1
+                fail_path = os.path.join(fail_dir, scenario_id)
+                if os.path.exists(fail_path):
+                    shutil.rmtree(fail_path, ignore_errors=True)
+                continue
 
-        class TimeoutException(Exception):
-            pass
+            print(f"\n==========================================")
+            print(f"[RUN] {scenario_id}")
 
-        def timeout_handler(signum, frame):
-            raise TimeoutException(
-                f"Episode timed out after {args.timeout} seconds"
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+
+            env_id = config.get('environment_id', 0)
+
+            old_stdout = sys.stdout
+            # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
+
+            try:
+                env.reset(environment_id=env_id)
+            except Exception as e:
+                # sys.stdout.close()
+                sys.stdout = old_stdout
+                reason = f"Engine Reset Failed: {e}"
+                print(f"  {reason}")
+                summary["fail"] += 1
+                summary["failures"].append({"scenario": scenario_id, "reason": reason})
+                continue
+
+            try:
+                apply_overrides(env, config, debug=False)
+            except Exception as e:
+                # sys.stdout.close()
+                sys.stdout = old_stdout
+                reason = f"Initialization Failed: {e}"
+                print(f"  {reason}")
+                summary["fail"] += 1
+                summary["failures"].append({"scenario": scenario_id, "reason": reason})
+                continue
+
+            # ===================== 根据 method 选择 Agent =====================
+            agent_cls = AGENT_REGISTRY[method_name]
+            agent = agent_cls(
+                model_name=args.model,
+                scenario_id=scenario_id
             )
+            # ================================================================
 
-        import time
-        start_time = time.time()
-
-        try:
-            signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(args.timeout)
-            
-            from evaluation.condition_checker import check_success
-            from agent.utils.logger import AgentLogger
-            
-            logger = AgentLogger(
-                log_mode=config.get("log_mode", "markdown"),
-                scenario_id=scenario_id,
-                log_dir=raw_logs_dir
+            # Prevent a failed run from copying a stale log produced by
+            # another method or an earlier execution of the same scenario.
+            scenario_log_file = os.path.join(
+                raw_logs_dir,
+                f"run_{scenario_id}.md"
             )
-            
-            max_steps = int(config.get("max_steps", 15))
-            success_condition = config.get("success_condition", {})
-            failure_condition = config.get("failure_condition")
-            
-            # Adapt the observation types for the unity environment
-            env.observation_types = getattr(agent, "REQUIRED_OBSERVATION", ["partial"])
-            
-            step_count = 0
-            success = False
-            reason = "Max steps reached"
-            
-            # Initial observation
-            obs = env.get_observation()
-            if isinstance(obs, list) and len(obs) == 1:
-                obs = obs[0]
-                
-            action_history = list(config.get("prior_action_history", []))
-            
-            while step_count < max_steps:
-                graph = env.get_graph()
-                
-                if check_success(graph, success_condition):
-                    success = True
-                    reason = "Goal Reached"
-                    break
-                    
-                if failure_condition:
-                    start_step = int(failure_condition.get("start_step", 0))
-                    end_step = int(failure_condition.get("end_step", 999999))
-                    if start_step <= step_count <= end_step and check_success(graph, failure_condition):
-                        success = False
-                        reason = "Failure condition met (Constraint Violated)"
-                        break
-                        
-                env_info = {
-                    "step": step_count,
-                    "logger": logger,
-                    "action_history": action_history
-                }
-                
-                try:
-                    action_str = agent.get_action(obs, config, env_info)
-                except Exception as e:
-                    success = False
-                    reason = f"Agent generation crashed: {e}"
-                    break
-                    
-                if action_str == "done()":
-                    success = False
-                    reason = "Agent terminated early without reaching goal"
-                    break
-                    
-                # Execute action
-                _, _, env_done, info = env.step({0: action_str})
-                action_success = info.get("action_success", False) if info else False
-                
-                history_entry = {
-                    "step": step_count,
-                    "action": action_str,
-                    "success": action_success,
-                }
-                if info and info.get("action_message"):
-                    history_entry["message" if action_success else "error"] = info["action_message"]
-                action_history.append(history_entry)
-                
-                try:
-                    # Write markdown step
-                    logger.write_step(step_count, action_str, None, [])
-                except Exception:
-                    pass
-                
-                if env_done:
-                    success = False
-                    reason = "Environment terminated unexpectedly"
-                    break
-                    
-                # Next observation
-                obs = env.get_observation()
+            if os.path.exists(scenario_log_file):
+                os.remove(scenario_log_file)
+
+            class TimeoutException(Exception):
+                pass
+
+            def timeout_handler(signum, frame):
+                raise TimeoutException(
+                    f"Episode timed out after {args.timeout} seconds"
+                )
+
+            import time
+            start_time = time.time()
+
+            try:
+                signal.signal(signal.SIGALRM, timeout_handler)
+                signal.alarm(args.timeout)
+
+                from evaluation.condition_checker import check_success
+                from agent.utils.logger import AgentLogger
+
+                logger = AgentLogger(
+                    log_mode=config.get("log_mode", "markdown"),
+                    scenario_id=scenario_id,
+                    log_dir=raw_logs_dir
+                )
+
+                max_steps = int(config.get("max_steps", 15))
+                success_condition = config.get("success_condition", {})
+                failure_condition = config.get("failure_condition")
+
+                # Adapt the observation types for the unity environment
+                env.observation_types = getattr(agent, "REQUIRED_OBSERVATION", ["partial"])
+
+                step_count = 0
+                success = False
+                reason = "Max steps reached"
+
+                # Initial observation
+                obs = env.get_observations()[0]
                 if isinstance(obs, list) and len(obs) == 1:
                     obs = obs[0]
-                    
-                step_count += 1
-                
-            # Final verification if loop finished
-            if not success and step_count == max_steps:
-                graph = env.get_graph()
-                if check_success(graph, success_condition):
-                    success = True
-                    reason = "Goal Reached at last step"
 
-            signal.alarm(0)
-        except TimeoutException as e:
-            success = False
-            reason = str(e)
-        except Exception as e:
-            signal.alarm(0)
-            success = False
-            reason = f"Exception: {e}"
-        finally:
-            # sys.stdout.close()
-            sys.stdout = old_stdout
+                action_history = list(config.get("prior_action_history", []))
 
-        execution_time = time.time() - start_time
+                while step_count < max_steps:
+                    graph = env.get_graph()
 
-        print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
-        print(f"  Time: {execution_time:.2f} seconds")
+                    if check_success(graph, success_condition):
+                        success = True
+                        reason = "Goal Reached"
+                        break
 
-        dest_parent = success_dir if success else fail_dir
-        dest_folder = os.path.join(dest_parent, scenario_id)
-        os.makedirs(dest_folder, exist_ok=True)
-        
-        config['evaluation_method'] = args.method
-        config['evaluation_model'] = args.model
-        config['execution_time_seconds'] = round(
-            execution_time,
-            2
-        )
-        with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
-            json.dump(config, cf, indent=4, ensure_ascii=False)
-            
-        if os.path.exists(scenario_log_file):
-            shutil.copy(
-                scenario_log_file,
-                os.path.join(
-                    dest_folder,
-                    f"run_{scenario_id}.md"
-                )
+                    if failure_condition:
+                        start_step = int(failure_condition.get("start_step", 0))
+                        end_step = int(failure_condition.get("end_step", 999999))
+                        if start_step <= step_count <= end_step and check_success(graph, failure_condition):
+                            success = False
+                            reason = "Failure condition met (Constraint Violated)"
+                            break
+
+                    env_info = {
+                        "step": step_count,
+                        "logger": logger,
+                        "action_history": action_history
+                    }
+
+                    try:
+                        action_str = agent.get_action(obs, config, env_info)
+                    except Exception as e:
+                        success = False
+                        reason = f"Agent generation crashed: {e}"
+                        break
+
+                    if action_str == "done()":
+                        success = False
+                        reason = "Agent terminated early without reaching goal"
+                        break
+
+                    # Execute action
+                    _, _, env_done, info = env.step({0: action_str})
+                    action_success = info.get("action_success", False) if info else False
+
+                    history_entry = {
+                        "step": step_count,
+                        "action": action_str,
+                        "success": action_success,
+                    }
+                    if info and info.get("action_message"):
+                        history_entry["message" if action_success else "error"] = info["action_message"]
+                    action_history.append(history_entry)
+
+                    try:
+                        # Write markdown step
+                        logger.write_step(step_count, action_str, None, [])
+                    except Exception:
+                        pass
+
+                    if env_done:
+                        success = False
+                        reason = "Environment terminated unexpectedly"
+                        break
+
+                    # Next observation
+                    obs = env.get_observations()[0]
+                    if isinstance(obs, list) and len(obs) == 1:
+                        obs = obs[0]
+
+                    step_count += 1
+
+                # Final verification if loop finished
+                if not success and step_count == max_steps:
+                    graph = env.get_graph()
+                    if check_success(graph, success_condition):
+                        success = True
+                        reason = "Goal Reached at last step"
+
+                signal.alarm(0)
+            except TimeoutException as e:
+                success = False
+                reason = str(e)
+            except Exception as e:
+                signal.alarm(0)
+                success = False
+                reason = f"Exception: {e}"
+            finally:
+                # sys.stdout.close()
+                sys.stdout = old_stdout
+
+            execution_time = time.time() - start_time
+
+            print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
+            print(f"  Time: {execution_time:.2f} seconds")
+
+            dest_parent = success_dir if success else fail_dir
+            dest_folder = os.path.join(dest_parent, scenario_id)
+            os.makedirs(dest_folder, exist_ok=True)
+
+            config['evaluation_method'] = method_name
+            config['evaluation_model'] = args.model
+            config['execution_time_seconds'] = round(
+                execution_time,
+                2
             )
+            with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
+                json.dump(config, cf, indent=4, ensure_ascii=False)
 
-        if success:
-            summary["success"] += 1
-            fail_path = os.path.join(fail_dir, scenario_id)
-            if os.path.exists(fail_path):
-                shutil.rmtree(fail_path, ignore_errors=True)
-        else:
-            summary["fail"] += 1
-            summary["failures"].append({"scenario": scenario_id, "reason": reason})
+            if os.path.exists(scenario_log_file):
+                shutil.copy(
+                    scenario_log_file,
+                    os.path.join(
+                        dest_folder,
+                        f"run_{scenario_id}.md"
+                    )
+                )
 
-    print(f"\n\n==========================================")
-    print(
-        f"Testing Complete! "
-        f"Method={summary['method']} | "
-        f"Model={summary['model']}"
-    )
-    print(
-        f"Total: {summary['total']} | "
-        f"Skipped: {summary['skipped']} | "
-        f"✅ Success: {summary['success']} | "
-        f"❌ Fail: {summary['fail']}"
-    )
+            if success:
+                summary["success"] += 1
+                fail_path = os.path.join(fail_dir, scenario_id)
+                if os.path.exists(fail_path):
+                    shutil.rmtree(fail_path, ignore_errors=True)
+            else:
+                summary["fail"] += 1
+                summary["failures"].append({"scenario": scenario_id, "reason": reason})
+
+        print(f"\n\n==========================================")
+        print(
+            f"Testing Complete! "
+            f"Method={summary['method']} | "
+            f"Model={summary['model']}"
+        )
+        print(
+            f"Total: {summary['total']} | "
+            f"Skipped: {summary['skipped']} | "
+            f"✅ Success: {summary['success']} | "
+            f"❌ Fail: {summary['fail']}"
+        )
+
+    if hasattr(sys.stdout, 'log') and not sys.stdout.log.closed:
+        sys.stdout.log.close()
+    sys.stdout = original_stdout
+    sys.stderr = original_stderr
 
 if __name__ == '__main__':
     main()

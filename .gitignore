@@ -196,3 +196,8 @@ validate_configs.py
 
 
 .agents
+# Evaluation results
+evaluation/results/*
+!evaluation/results/*/
+evaluation/results/*/*
+!evaluation/results/*/success/

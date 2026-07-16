@@ -20,7 +20,7 @@ class RoboStateAgent(BaseAgent):
         self.perception_filter = None
         self.llm_executor = None
         self.scenario_id = scenario_id
-        self.logger = AgentLogger(log_mode="markdown", scenario_id=scenario_id)
+        self.logger = None
 
     def _get_observed_items(self, graph, current_step=0):
         active_rules = []

@@ -64,7 +64,7 @@ class SayCanAgent(BaseAgent):
     def __init__(self, model_name: str = "gpt-5.4-mini", scenario_id: str = ""):
         self.llm = LLMClient(model_name=model_name)
         self.scenario_id = scenario_id
-        self.logger = AgentLogger(log_mode="markdown", scenario_id=scenario_id)
+        self.logger = None
         self.action_history: List[dict] = []
         self.goal = ""
         self.version = self.VERSION

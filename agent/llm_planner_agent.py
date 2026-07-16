@@ -424,10 +424,7 @@ class LLMPlannerAgent(BaseAgent):
     ):
         self.llm = LLMClient(model_name=model_name)
         self.scenario_id = scenario_id
-        self.logger = AgentLogger(
-            log_mode="markdown",
-            scenario_id=scenario_id,
-        )
+        self.logger = None
 
         # agent/llm_planner_agent.py -> project root
         self.project_root = Path(__file__).resolve().parents[1]
