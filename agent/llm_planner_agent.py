@@ -8,9 +8,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from ..utils.logger import AgentLogger
-from ..utils.llm_client import LLMClient
-from ..base_agent import BaseAgent
+from .utils.logger import AgentLogger
+from .utils.llm_client import LLMClient
+from .base_agent import BaseAgent
 
 
 LLM_PLANNER_VERSION = "LLM-PLANNER-VH-OFFICIAL-HLP-v1.0-2026-07-16"

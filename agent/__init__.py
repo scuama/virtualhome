@@ -1,7 +1,7 @@
 # Agent Package Initialization
-from .robostate.robostate_agent import RoboStateAgent
-from .baselines.saycan_agent import SayCanAgent
-from .baselines.llm_planner_agent import LLMPlannerAgent
+from .robostate_agent import RoboStateAgent
+from .saycan_agent import SayCanAgent
+from .llm_planner_agent import LLMPlannerAgent
 from .base_agent import BaseAgent
 
 AGENT_REGISTRY = {

@@ -2,9 +2,9 @@ import json
 import re
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from ..utils.logger import AgentLogger
-from ..utils.llm_client import LLMClient
-from ..base_agent import BaseAgent
+from .utils.logger import AgentLogger
+from .utils.llm_client import LLMClient
+from .base_agent import BaseAgent
 
 
 SAYCAN_AGENT_VERSION = "SAYCAN-VH-v3.0-2026-07-16"
