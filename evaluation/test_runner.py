@@ -323,12 +323,15 @@ def main():
             if os.path.exists(scenario_log_file):
                 os.remove(scenario_log_file)
 
+            max_steps = int(config.get("max_steps", 15))
+            timeout_seconds = max_steps * 5
+
             class TimeoutException(Exception):
                 pass
 
             def timeout_handler(signum, frame):
                 raise TimeoutException(
-                    f"Episode timed out after {args.timeout} seconds"
+                    f"Episode timed out after {timeout_seconds} seconds"
                 )
 
             import time
@@ -336,7 +339,7 @@ def main():
 
             try:
                 signal.signal(signal.SIGALRM, timeout_handler)
-                signal.alarm(args.timeout)
+                signal.alarm(timeout_seconds)
 
                 from evaluation.condition_checker import check_success
                 from agent.utils.logger import AgentLogger
@@ -347,7 +350,6 @@ def main():
                     log_dir=raw_logs_dir
                 )
 
-                max_steps = int(config.get("max_steps", 15))
                 success_condition = config.get("success_condition", {})
                 failure_condition = config.get("failure_condition")
 
