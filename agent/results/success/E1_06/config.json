@@ -1,0 +1,24 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Always leave the stove open.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "stove",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "stove",
+        "states": [
+            "OPEN"
+        ],
+        "min_count": 1
+    },
+    "execution_time_seconds": 13.52
+}

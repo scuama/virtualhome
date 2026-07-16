@@ -1,0 +1,24 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "The dishwasher must always be open to dry the dishwasher.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "dishwasher",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "dishwasher",
+        "states": [
+            "OPEN"
+        ],
+        "min_count": 1
+    },
+    "execution_time_seconds": 13.06
+}

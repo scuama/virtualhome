@@ -1,0 +1,42 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Put the plate from the kitchen counter into the dishwasher.",
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "dishwasher"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "plate",
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
+        },
+        {
+            "subject": "dishwasher",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "relation": "INSIDE",
+        "destination_class": "dishwasher",
+        "min_count": 1
+    },
+    "execution_time_seconds": 23.21
+}

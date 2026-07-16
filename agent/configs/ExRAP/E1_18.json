@@ -1,0 +1,23 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If someone uses a plate for washing dishes and leaves it somewhere, put it in the dishwasher.",
+    "initial_states_override": [
+        {
+            "target_classes": ["dishwasher"],
+            "add_states": ["OPEN"],
+            "remove_states": ["CLOSED"]
+        }
+    ],
+    "initial_relations_override": [
+        { "subject": "character", "relation": "INSIDE", "object": "kitchen" },
+        { "subject": "plate", "relation": "ON", "object": "kitchencounter", "count": 1 },
+        { "subject": "dishwasher", "relation": "INSIDE", "object": "kitchen" }
+    ],
+    "user_clarification_reply": "Put the plate from the kitchen counter into the dishwasher.",
+    "success_condition": {
+        "target_class": "plate",
+        "relation": "INSIDE",
+        "destination_class": "dishwasher",
+        "min_count": 1
+    }
+}

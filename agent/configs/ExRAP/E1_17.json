@@ -1,0 +1,13 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the radio is off, turn it on",
+    "initial_relations_override": [
+        { "subject": "character", "relation": "INSIDE", "object": "bedroom" },
+        { "subject": "radio", "relation": "ON", "object": "bookshelf" }
+    ],
+    "success_condition": {
+        "target_class": "radio",
+        "states": ["ON"],
+        "min_count": 1
+    }
+}

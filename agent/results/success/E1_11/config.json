@@ -1,0 +1,24 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If your computer stays off, turn it on.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "computer",
+            "relation": "ON",
+            "object": "desk"
+        }
+    ],
+    "success_condition": {
+        "target_class": "computer",
+        "states": [
+            "ON"
+        ],
+        "min_count": 1
+    },
+    "execution_time_seconds": 13.04
+}

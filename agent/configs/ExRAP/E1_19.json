@@ -1,0 +1,13 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If your microwave is off, turn it on.",
+    "initial_relations_override": [
+        { "subject": "character", "relation": "INSIDE", "object": "kitchen" },
+        { "subject": "microwave", "relation": "INSIDE", "object": "kitchen" }
+    ],
+    "success_condition": {
+        "target_class": "microwave",
+        "states": ["ON"],
+        "min_count": 1
+    }
+}

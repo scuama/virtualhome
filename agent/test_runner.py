@@ -160,13 +160,37 @@ def main():
     parser = argparse.ArgumentParser(description='VirtualHome E2E Test Runner')
     parser.add_argument('target', type=str, nargs='?', default='',
                         help='Target scenario ID or prefix (e.g. P3 or P3_12). Leave empty for all.')
+    # ===================== 新增 --method 参数 =====================
+    parser.add_argument(
+        '--method',
+        type=str,
+        default='exrap',
+        choices=['exrap', 'saycan', 'llm_planner'],
+        help='Method to evaluate: exrap, saycan, or llm_planner'
+    )
+    parser.add_argument(
+        '--model',
+        type=str,
+        default='gpt-5.4-mini',
+        help='Shared LLM backbone used by all methods'
+    )
+    parser.add_argument(
+        '--timeout',
+        type=int,
+        default=600,
+        help='Per-episode timeout in seconds (default: 600)'
+    )
+    # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     base_dir = os.path.dirname(__file__)
     logs_dir = os.path.join(base_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
-    log_path = os.path.join(logs_dir, "test_runner.log")
+    log_path = os.path.join(
+        logs_dir,
+        f"test_runner_{args.method}.log"
+    )
 
     if not args.daemon:
         import subprocess
@@ -174,6 +198,9 @@ def main():
         if args.target:
             cmd.append(args.target)
         cmd.append("--daemon")
+        # 传递 method 参数到子进程
+        cmd.append("--method")
+        cmd.append(args.method)
         
         subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
         print(f"[INFO] Task started in background.")
@@ -184,7 +211,11 @@ def main():
     sys.stderr = sys.stdout
 
     configs_dir = os.path.join(base_dir, 'configs')
-    results_dir = os.path.join(base_dir, 'results')
+    results_dir = os.path.join(
+        base_dir,
+        'results',
+        args.method
+    )
     success_dir = os.path.join(results_dir, 'success')
     fail_dir = os.path.join(results_dir, 'fail')
     os.makedirs(success_dir, exist_ok=True)
@@ -192,7 +223,7 @@ def main():
     
     # Gather configs
     all_configs = []
-    for cls_dir in ['g_class', 'm_class', 'p_class']:
+    for cls_dir in ['g_class', 'm_class', 'p_class','ExRAP']:
         target_dir = os.path.join(configs_dir, cls_dir)
         if os.path.exists(target_dir):
             for path in glob.glob(os.path.join(target_dir, '*.json')):
@@ -209,7 +240,21 @@ def main():
         executable_args={'file_name': None}
     )
 
-    summary = {"total": len(all_configs), "skipped": 0, "success": 0, "fail": 0, "failures": []}
+    summary = {
+        "method": args.method,
+        "model": args.model,
+        "total": len(all_configs),
+        "skipped": 0,
+        "success": 0,
+        "fail": 0,
+        "failures": []
+    }
+
+    print(
+        f"[INFO] Method={args.method} | "
+        f"Model={args.model} | "
+        f"Timeout={args.timeout}s"
+    )
 
     for scenario_id, config_path in all_configs:
         if os.path.exists(os.path.join(success_dir, scenario_id)):
@@ -253,20 +298,49 @@ def main():
             summary["failures"].append({"scenario": scenario_id, "reason": reason})
             continue
 
-        agent = VirtualHomeAgent(model_name="gpt-5.4-mini", scenario_id=scenario_id)
+        # ===================== 根据 method 选择 Agent =====================
+        if args.method == 'saycan':
+            from agent.saycan_agent import SayCanAgent
+            agent = SayCanAgent(
+                model_name=args.model,
+                scenario_id=scenario_id
+            )
+        elif args.method == 'llm_planner':
+            from agent.llm_planner_agent import LLMPlannerAgent
+            agent = LLMPlannerAgent(
+                model_name=args.model,
+                scenario_id=scenario_id
+            )
+        else:  # exrap
+            agent = VirtualHomeAgent(
+                model_name=args.model,
+                scenario_id=scenario_id
+            )
+        # ================================================================
+
+        # Prevent a failed run from copying a stale log produced by
+        # another method or an earlier execution of the same scenario.
+        scenario_log_file = os.path.join(
+            logs_dir,
+            f"run_{scenario_id}.md"
+        )
+        if os.path.exists(scenario_log_file):
+            os.remove(scenario_log_file)
 
         class TimeoutException(Exception):
             pass
 
         def timeout_handler(signum, frame):
-            raise TimeoutException("Episode timed out after 5 minutes")
+            raise TimeoutException(
+                f"Episode timed out after {args.timeout} seconds"
+            )
 
         import time
         start_time = time.time()
 
         try:
             signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(300) # 5 minutes
+            signal.alarm(args.timeout)
             success, reason = agent.run_episode(env, config)
             signal.alarm(0)
         except TimeoutException as e:
@@ -289,13 +363,23 @@ def main():
         dest_folder = os.path.join(dest_parent, scenario_id)
         os.makedirs(dest_folder, exist_ok=True)
         
-        config['execution_time_seconds'] = round(execution_time, 2)
+        config['evaluation_method'] = args.method
+        config['evaluation_model'] = args.model
+        config['execution_time_seconds'] = round(
+            execution_time,
+            2
+        )
         with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
             json.dump(config, cf, indent=4, ensure_ascii=False)
             
-        log_file = os.path.join(logs_dir, f"run_{scenario_id}.md")
-        if os.path.exists(log_file):
-            shutil.copy(log_file, os.path.join(dest_folder, f"run_{scenario_id}.md"))
+        if os.path.exists(scenario_log_file):
+            shutil.copy(
+                scenario_log_file,
+                os.path.join(
+                    dest_folder,
+                    f"run_{scenario_id}.md"
+                )
+            )
 
         if success:
             summary["success"] += 1
@@ -307,8 +391,17 @@ def main():
             summary["failures"].append({"scenario": scenario_id, "reason": reason})
 
     print(f"\n\n==========================================")
-    print(f"Testing Complete!")
-    print(f"Total: {summary['total']} | Skipped: {summary['skipped']} | ✅ Success: {summary['success']} | ❌ Fail: {summary['fail']}")
+    print(
+        f"Testing Complete! "
+        f"Method={summary['method']} | "
+        f"Model={summary['model']}"
+    )
+    print(
+        f"Total: {summary['total']} | "
+        f"Skipped: {summary['skipped']} | "
+        f"✅ Success: {summary['success']} | "
+        f"❌ Fail: {summary['fail']}"
+    )
 
 if __name__ == '__main__':
     main()

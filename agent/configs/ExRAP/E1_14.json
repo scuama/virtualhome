@@ -1,0 +1,13 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the stove is off, go and turn it on for preheat.",
+    "initial_relations_override": [
+        { "subject": "character", "relation": "INSIDE", "object": "kitchen" },
+        { "subject": "stove", "relation": "INSIDE", "object": "kitchen" }
+    ],
+    "success_condition": {
+        "target_class": "stove",
+        "states": ["ON"],
+        "min_count": 1
+    }
+}
