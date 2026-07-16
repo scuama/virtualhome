@@ -70,194 +70,93 @@ class SayCanAgent(BaseAgent):
         self.version = self.VERSION
 
     # ------------------------------------------------------------------
-    # Episode loop
+    # Agent Action Selection
     # ------------------------------------------------------------------
-    def run_episode(self, env, config: dict) -> Tuple[bool, str]:
+    def get_action(self, obs: dict, config: dict, env_info: dict = None) -> str:
         self.goal = str(config.get("goal_instruction", "")).strip()
         if not self.goal:
-            return False, "No goal instruction provided"
+            return "done()"
 
-        self.logger = AgentLogger(
-            log_mode=config.get("log_mode", "markdown"),
-            scenario_id=self.scenario_id,
+        env_info = env_info or {}
+        step = env_info.get("step", 0)
+        self.logger = env_info.get("logger") or self.logger
+        self.action_history = env_info.get("action_history", [])
+
+        if step == 0:
+            self.logger.info(f"[{self.VERSION}] Starting SayCan-VH episode for goal: {self.goal}")
+            self._log_module_output(
+                "SayCanVersion",
+                0,
+                {
+                    "version": self.VERSION,
+                    "implementation": "SayCan (VirtualHome adaptation)",
+                    "say_score_mode": self.SAY_SCORE_MODE,
+                    "can_score_mode": self.CAN_SCORE_MODE,
+                    "say_context_mode": config.get("saycan_say_context_mode", "state_summary"),
+                    "task_semantics_in_can": False,
+                },
+            )
+
+        graph = self._deduplicate_graph(obs)
+
+        candidate_actions = self._generate_candidate_actions(
+            graph=graph,
+            goal=self.goal,
+            config=config,
         )
-        self.action_history = list(config.get("prior_action_history", []))
-        max_steps = int(config.get("max_steps", 15))
-        success_condition = config.get("success_condition", {})
-        failure_condition = config.get("failure_condition")
+        if not candidate_actions:
+            self.logger.error("No candidate skills could be generated.")
+            return "done()"
+
+        say_scores = self._score_with_llm(
+            graph=graph,
+            candidate_actions=candidate_actions,
+            config=config,
+        )
+        can_scores = self._score_affordance(
+            graph=graph,
+            candidate_actions=candidate_actions,
+            config=config,
+        )
+
+        combined_scores: Dict[str, float] = {}
+        for action in candidate_actions:
+            combined_scores[action] = (
+                say_scores.get(action, 0.0)
+                * can_scores.get(action, 0.0)
+                * self._repetition_penalty(action)
+            )
+
+        best_action = self._select_action(
+            candidate_actions=candidate_actions,
+            say_scores=say_scores,
+            can_scores=can_scores,
+            combined_scores=combined_scores,
+        )
+
+        self._log_scoring(
+            step=step,
+            candidate_actions=candidate_actions,
+            say_scores=say_scores,
+            can_scores=can_scores,
+            combined_scores=combined_scores,
+            best_action=best_action,
+        )
 
         self.logger.info(
-            f"[{self.VERSION}] Starting SayCan-VH episode for goal: {self.goal}"
-        )
-        self._log_module_output(
-            "SayCanVersion",
-            0,
-            {
-                "version": self.VERSION,
-                "implementation": "SayCan (VirtualHome adaptation)",
-                "say_score_mode": self.SAY_SCORE_MODE,
-                "can_score_mode": self.CAN_SCORE_MODE,
-                "say_context_mode": config.get(
-                    "saycan_say_context_mode", "state_summary"
-                ),
-                "task_semantics_in_can": False,
-                "source_file": __file__,
-            },
+            f"[{self.VERSION}] Step {step}: selected '{best_action}' "
+            f"(Say={say_scores.get(best_action, 0.0):.3f}, "
+            f"Can={can_scores.get(best_action, 0.0):.3f}, "
+            f"Combined={combined_scores.get(best_action, 0.0):.3f})"
         )
 
-        for step in range(max_steps):
-            graph = self._deduplicate_graph(env.get_graph())
+        if best_action.lower().startswith("[ask]"):
+            if "user_clarification_reply" in config:
+                clarification = str(config.pop("user_clarification_reply")).strip()
+                if clarification:
+                    config["goal_instruction"] = f"{config.get('goal_instruction', '')} User clarification: {clarification}"
 
-            if self._check_success(graph, success_condition):
-                if not self._ask_requirement_met(config):
-                    self.logger.error(
-                        "Goal reached, but clarification was required."
-                    )
-                    return False, "Failed: Did not ask for clarification"
-                self.logger.info("✅ SUCCESS! Goal condition met.")
-                self._write_step_log(
-                    step,
-                    "FINISH (Goal Reached)",
-                    self._observed_items(graph),
-                )
-                return True, "Goal Reached"
-
-            if (
-                failure_condition
-                and self._condition_is_active(failure_condition, step)
-                and self._check_success(graph, failure_condition)
-            ):
-                self.logger.error("❌ FAILED: Failure condition met.")
-                return False, "Failure condition met (Constraint Violated)"
-
-            candidate_actions = self._generate_candidate_actions(
-                graph=graph,
-                goal=self.goal,
-                config=config,
-            )
-            if not candidate_actions:
-                self.logger.error("No candidate skills could be generated.")
-                return False, "No candidate actions"
-
-            say_scores = self._score_with_llm(
-                graph=graph,
-                candidate_actions=candidate_actions,
-                config=config,
-            )
-            can_scores = self._score_affordance(
-                graph=graph,
-                candidate_actions=candidate_actions,
-                config=config,
-            )
-
-            combined_scores: Dict[str, float] = {}
-            for action in candidate_actions:
-                combined_scores[action] = (
-                    say_scores.get(action, 0.0)
-                    * can_scores.get(action, 0.0)
-                    * self._repetition_penalty(action)
-                )
-
-            best_action = self._select_action(
-                candidate_actions=candidate_actions,
-                say_scores=say_scores,
-                can_scores=can_scores,
-                combined_scores=combined_scores,
-            )
-
-            self._log_scoring(
-                step=step,
-                candidate_actions=candidate_actions,
-                say_scores=say_scores,
-                can_scores=can_scores,
-                combined_scores=combined_scores,
-                best_action=best_action,
-            )
-
-            if best_action == "done()":
-                self.logger.error(
-                    "Agent selected done(), but the goal is not satisfied."
-                )
-                self._write_step_log(
-                    step, "done()", self._observed_items(graph)
-                )
-                return False, "Terminated before goal"
-
-            self.logger.info(
-                f"[{self.VERSION}] Step {step}: selected '{best_action}' "
-                f"(Say={say_scores.get(best_action, 0.0):.3f}, "
-                f"Can={can_scores.get(best_action, 0.0):.3f}, "
-                f"Combined={combined_scores.get(best_action, 0.0):.3f})"
-            )
-
-            if best_action.lower().startswith("[ask]"):
-                ask_result = self._handle_ask(
-                    best_action, step, graph, config
-                )
-                if ask_result is not None:
-                    return ask_result
-                continue
-
-            try:
-                _, _, done, info = env.step({0: best_action})
-                info = info or {}
-                success = self._coerce_action_success(
-                    info.get("action_success", False)
-                )
-                message = str(info.get("action_message", ""))
-            except Exception as exc:
-                done = False
-                success = False
-                message = f"Environment exception: {exc}"
-                self.logger.error(message)
-
-            history_entry = {
-                "step": step,
-                "action": best_action,
-                "success": success,
-                "reasoning": (
-                    f"Say={say_scores.get(best_action, 0.0):.3f}; "
-                    f"Can={can_scores.get(best_action, 0.0):.3f}; "
-                    f"Combined={combined_scores.get(best_action, 0.0):.3f}"
-                ),
-            }
-            if message:
-                history_entry["message" if success else "error"] = message
-            self.action_history.append(history_entry)
-
-            if not success:
-                self.logger.info(f"Action failed: {best_action}. {message}")
-
-            post_graph = self._deduplicate_graph(env.get_graph())
-            self._write_step_log(
-                step, best_action, self._observed_items(post_graph)
-            )
-
-            if (
-                failure_condition
-                and self._condition_is_active(failure_condition, step)
-                and self._check_success(post_graph, failure_condition)
-            ):
-                self.logger.error("❌ FAILED: Failure condition met.")
-                return False, "Failure condition met (Constraint Violated)"
-
-            if self._check_success(post_graph, success_condition):
-                if not self._ask_requirement_met(config):
-                    self.logger.error(
-                        "Goal reached, but clarification was required."
-                    )
-                    return False, "Failed: Did not ask for clarification"
-                self.logger.info("✅ SUCCESS! Goal condition met.")
-                return True, "Goal Reached"
-
-            if done:
-                self.logger.error(
-                    "Environment terminated before the goal was reached."
-                )
-                return False, "Environment terminated"
-
-        self.logger.error("❌ FAILED: Max steps reached.")
-        return False, "Max steps reached"
+        return best_action
 
     def _generate_candidate_actions(
         self,

@@ -118,227 +118,147 @@ class RoboStateAgent(BaseAgent):
 
         return True
 
-    def run_episode(self, env, config):
-        log_mode = config.get("log_mode", "text")
-        self.logger = AgentLogger(log_mode=log_mode, scenario_id=self.scenario_id)
-        
-        # Instantiate sub-modules with the logger
-        self.goal_reasoner = GoalReasoner(self.llm, self.logger)
-        self.sdg_planner = SDGPlanner(self.llm, self.logger)
-        self.perception_filter = PerceptionFilter(self.llm, self.logger)
-        self.llm_executor = LLMExecutor(self.llm, self.logger)
-        
-        self.logger.info(f"Starting Episode: {config['goal_instruction']}")
-        
-        # 1. Goal Reasoner
-        goal_intent = self.goal_reasoner.extract_intent(config['goal_instruction'])
-        
-        # 2. SDG Planner
-        self.current_sdg = self.sdg_planner.generate_sdg(config['goal_instruction'])
-            
-        # Initialize Spatial Memory with FULL graph (Mental Map)
-        full_graph_init = env.get_graph()
-        self.memory_nodes = {n['id']: n.copy() for n in full_graph_init.get('nodes', [])}
-        self.memory_edges = {}
-        for e in full_graph_init.get('edges', []):
-            self.memory_edges.setdefault(e['from_id'], []).append(e)
+    REQUIRED_OBSERVATION = ["partial"]
 
-        # --- PRIOR MEMORY INJECTION ---
-        self.action_history = config.get('prior_action_history', [])
-
-        # 3. Execution Loop
-        steps = 0
-        max_steps = config.get('max_steps', 15)
-        
-        while steps < max_steps:
-            raw_obs = env.get_observations()
-            partial_graph = raw_obs[0]
+    def get_action(self, obs: dict, config: dict, env_info: dict = None) -> str:
+        goal_instruction = config.get("goal_instruction", "")
+        if not goal_instruction:
+            return "done()"
             
-            # --- UPDATE SPATIAL MEMORY ---
-            visible_ids = set()
-            for n in partial_graph.get('nodes', []):
-                self.memory_nodes[n['id']] = n.copy()
-                visible_ids.add(n['id'])
-                # Clear old outward edges for this visible node
-                self.memory_edges[n['id']] = []
+        env_info = env_info or {}
+        step = env_info.get("step", 0)
+        self.logger = env_info.get("logger") or getattr(self, "logger", None)
+        if not self.logger:
+            self.logger = AgentLogger(log_mode=config.get("log_mode", "markdown"), scenario_id=self.scenario_id)
+            
+        self.action_history = env_info.get("action_history", [])
+
+        if step == 0:
+            self.goal_reasoner = GoalReasoner(self.llm, self.logger)
+            self.sdg_planner = SDGPlanner(self.llm, self.logger)
+            self.perception_filter = PerceptionFilter(self.llm, self.logger)
+            self.llm_executor = LLMExecutor(self.llm, self.logger)
+            
+            self.logger.info(f"Starting Episode: {goal_instruction}")
+            self.goal_intent = self.goal_reasoner.extract_intent(goal_instruction)
+            self.current_sdg = self.sdg_planner.generate_sdg(goal_instruction)
+            
+            self.memory_nodes = {}
+            self.memory_edges = {}
+            self.active_hidden_nodes = {}
+            self.dynamic_events = config.get("dynamic_events", [])
+            for ev in self.dynamic_events:
+                ev["times_triggered"] = 0
+
+        # --- UPDATE SPATIAL MEMORY ---
+        visible_ids = set()
+        for n in obs.get('nodes', []):
+            self.memory_nodes[n['id']] = n.copy()
+            visible_ids.add(n['id'])
+            self.memory_edges[n['id']] = []
+            
+        for e in obs.get('edges', []):
+            if e['from_id'] in visible_ids:
+                self.memory_edges[e['from_id']].append(e)
                 
-            for e in partial_graph.get('edges', []):
-                if e['from_id'] in visible_ids:
-                    self.memory_edges[e['from_id']].append(e)
-                    
-            # Reconstruct merged graph from memory
-            raw_graph = {
-                'nodes': list(self.memory_nodes.values()),
-                'edges': [e for edge_list in self.memory_edges.values() for e in edge_list]
-            }
+        # Reconstruct merged graph from memory
+        raw_graph = {
+            'nodes': list(self.memory_nodes.values()),
+            'edges': [e for edge_list in self.memory_edges.values() for e in edge_list]
+        }
 
-            # --- GRAPH PRUNING FOR HIDDEN NODES ---
-            hidden_nodes = getattr(env, 'active_hidden_nodes', {})
-            if hidden_nodes:
-                raw_graph['nodes'] = [n for n in raw_graph['nodes'] if n['id'] not in hidden_nodes]
-                raw_graph['edges'] = [e for e in raw_graph['edges'] if e['from_id'] not in hidden_nodes and e['to_id'] not in hidden_nodes]
+        # --- GRAPH PRUNING FOR HIDDEN NODES ---
+        if self.active_hidden_nodes:
+            raw_graph['nodes'] = [n for n in raw_graph['nodes'] if n['id'] not in self.active_hidden_nodes]
+            raw_graph['edges'] = [e for e in raw_graph['edges'] if e['from_id'] not in self.active_hidden_nodes and e['to_id'] not in self.active_hidden_nodes]
 
-            
-            # 4. Perception Filter
-            if self.current_sdg:
-                filtered_graph = self.perception_filter.filter_observations(
-                    raw_graph, goal_intent, self.current_sdg
-                )
-            else:
-                filtered_graph = raw_graph
-            
-            observed = self._get_observed_items(filtered_graph)
-            
-            # Check success BEFORE action using the true full graph to avoid partial/memory errors
-            true_full_graph = env.get_graph()
-            if self._check_success(true_full_graph, config.get('success_condition'), self.action_history):
-                if config.get("require_ask_to_pass", False):
-                    has_asked = any(entry.get('action', '').lower().startswith('[ask]') for entry in self.action_history)
-                    if not has_asked:
-                        self.logger.error("❌ FAILED: Goal physically reached, but agent failed to ask as required.")
-                        return False, "Failed: Did not ask for clarification"
-                self.logger.info("✅ SUCCESS! Goal condition met.")
-                self.logger.write_step(steps, "FINISH (Goal Reached)", self.current_sdg, observed)
-                return True, "Goal Reached"
-                
-            if config.get('failure_condition'):
-                fail_cond = config.get('failure_condition')
-                if fail_cond.get('start_step', 0) <= steps <= fail_cond.get('end_step', 9999):
-                    if self._check_success(raw_graph, fail_cond, self.action_history):
-                        self.logger.error("❌ FAILED: Failure condition met (e.g. violated rule).")
-                        return False, "Failure condition met (Constraint Violated)"
-            # Execute logic using the filtered graph
-            next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
-                filtered_graph, goal_intent, self.current_sdg, self.action_history, config.get('scheduled_rules')
+        # 4. Perception Filter
+        if self.current_sdg:
+            filtered_graph = self.perception_filter.filter_observations(
+                raw_graph, self.goal_intent, self.current_sdg
             )
-            
-            import re
-            if next_action and next_action != "WAIT":
-                # Ensure class names have < > around them.
-                # Format is [action] class_name (id) or [action] <class_name> (id)
-                # We want to replace " class_name (" with " <class_name> ("
-                # But handle two arguments as well: [putin] apple (1) fridge (2)
-                def add_brackets(match):
-                    cls_name = match.group(1).strip()
-                    if not cls_name.startswith('<'):
-                        cls_name = f"<{cls_name}>"
-                    return f" {cls_name} ({match.group(2)})"
-                
-                next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
-                
-                if next_action.lower().startswith("[ask]"):
-                    success = True
-                    msg = "Agent asked for help."
-                    history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
-                    self.action_history.append(history_entry)
-                    self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
-                    
-                    if "user_clarification_reply" in config:
-                        clarification = config.pop("user_clarification_reply")
-                        
-                        rewrite_sys = "You are a helpful assistant rewriting instructions."
-                        rewrite_user = f"Original instruction: '{config['goal_instruction']}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
-                        try:
-                            new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
-                        except Exception:
-                            new_goal_instruction = config['goal_instruction'] + " " + clarification
-                            
-                        self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
-                        
-                        # Update config and regenerate intent and SDG based on the clarified instruction
-                        config['goal_instruction'] = new_goal_instruction
-                        goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
-                        self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
-                        
-                        # Add a fake action to history to let LLM Executor know we got a reply
-                        self.action_history.append({
-                            "step": steps + 0.5, 
-                            "action": f"[USER_REPLY] {clarification}",
-                            "success": True, 
-                            "reasoning": "User clarified the ambiguity."
-                        })
-                        steps += 1
-                        continue
+        else:
+            filtered_graph = raw_graph
+        
+        observed = self._get_observed_items(filtered_graph)
 
-                    policy = config.get("on_ask_policy", "FAIL")
-                    if policy == "SUCCESS":
-                        self.logger.info("✅ SUCCESS: Agent requested help, fulfilling the on_ask_policy SUCCESS condition.")
-                        return True, "Goal Reached (Help Asked)"
-                    else:
-                        self.logger.error("❌ FAILED: Agent requested help, which triggers immediate failure under current policy.")
-                        return False, "Agent requested help, which is not permitted"
-                
-                # --- DYNAMIC EVENTS TRIGGER ---
-                dynamic_events = config.get('dynamic_events', [])
-                for ev in dynamic_events:
-                    trigger = ev['trigger']
-                    ev['times_triggered'] = ev.get('times_triggered', 0)
-                    if ev['times_triggered'] >= ev.get('max_triggers', 1):
-                        continue
-
-                    if f"[{trigger['action']}]" in next_action.lower() and f"<{trigger['target'].lower()}>" in next_action.lower():
-                        match = re.search(r'\(\s*(\d+)\s*\)', next_action)
-                        if match:
-                            t_id = int(match.group(1))
-                            req_state = trigger.get('target_state')
-                            node_ok = True
-                            if req_state:
-                                n_node = next((n for n in raw_graph['nodes'] if n['id'] == t_id), None)
-                                if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
-                                    node_ok = False
-                            
-                            if node_ok:
-                                effect = ev['effect']
-                                if effect['type'] == 'hide':
-                                    dur = effect['duration_steps']
-                                    if not hasattr(env, 'active_hidden_nodes'):
-                                        env.active_hidden_nodes = {}
-                                    if t_id not in env.active_hidden_nodes:
-                                        env.active_hidden_nodes[t_id] = dur
-                                        ev['times_triggered'] += 1
-                                        self.logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
-
-                # --- INTERCEPT HIDDEN OBJECTS ---
-                target_match = re.search(r'\(\s*(\d+)\s*\)', next_action)
-                intercepted = False
-                if target_match:
-                    target_id = int(target_match.group(1))
-                    hidden_nodes = getattr(env, 'active_hidden_nodes', {})
-                    if target_id in hidden_nodes:
-                        success = False
-                        msg = "动作失败：目标物品突然消失了，请等待或重新规划。"
-                        history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning, "error": msg}
-                        self.action_history.append(history_entry)
-                        intercepted = True
+        # Decide next action
+        next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
+            filtered_graph, self.goal_intent, self.current_sdg, self.action_history, config.get('scheduled_rules')
+        )
+        
+        import re
+        if next_action and next_action != "WAIT":
+            def add_brackets(match):
+                cls_name = match.group(1).strip()
+                if not cls_name.startswith('<'):
+                    cls_name = f"<{cls_name}>"
+                return f" {cls_name} ({match.group(2)})"
+            
+            next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
+            
+            if next_action.lower().startswith("[ask]"):
+                if "user_clarification_reply" in config:
+                    clarification = config.pop("user_clarification_reply")
+                    rewrite_sys = "You are a helpful assistant rewriting instructions."
+                    rewrite_user = f"Original instruction: '{config.get('goal_instruction')}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
+                    try:
+                        new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
+                    except Exception:
+                        new_goal_instruction = config.get('goal_instruction') + " " + clarification
                         
-                if not intercepted:
-                    self.logger.info(f"Executing action: {next_action}")
-                    obs, reward, done, info = env.step({0: next_action})
-                    success = info.get('action_success', False)
-                    msg = info.get('action_message', '')
-                    history_entry = {"step": steps, "action": next_action, "success": success, "reasoning": reasoning}
-                    if not success and msg:
-                        history_entry["error"] = msg
-                    self.action_history.append(history_entry)
-            else:
-                next_action = "WAIT"
-                
-            # Log current step
-            self.logger.write_step(steps, next_action, self.current_sdg, observed, current_node_focus, satisfied_nodes)
+                    self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
+                    config['goal_instruction'] = new_goal_instruction
+                    self.goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
+                    self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
+                    return "wait()" # Let step fail/retry with new plan
             
-            steps += 1
+            # --- DYNAMIC EVENTS TRIGGER ---
+            for ev in self.dynamic_events:
+                trigger = ev['trigger']
+                if ev['times_triggered'] >= ev.get('max_triggers', 1):
+                    continue
+
+                if f"[{trigger['action']}]" in next_action.lower() and f"<{trigger['target'].lower()}>" in next_action.lower():
+                    match = re.search(r'\(\s*(\d+)\s*\)', next_action)
+                    if match:
+                        t_id = int(match.group(1))
+                        req_state = trigger.get('target_state')
+                        node_ok = True
+                        if req_state:
+                            n_node = next((n for n in raw_graph['nodes'] if n['id'] == t_id), None)
+                            if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
+                                node_ok = False
+                        
+                        if node_ok:
+                            effect = ev['effect']
+                            if effect['type'] == 'hide':
+                                dur = effect['duration_steps']
+                                if t_id not in self.active_hidden_nodes:
+                                    self.active_hidden_nodes[t_id] = dur
+                                    ev['times_triggered'] += 1
+                                    self.logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
+
+            # --- INTERCEPT HIDDEN OBJECTS ---
+            target_match = re.search(r'\(\s*(\d+)\s*\)', next_action)
+            if target_match:
+                target_id = int(target_match.group(1))
+                if target_id in self.active_hidden_nodes:
+                    # Actually we want test_runner to try and fail, but to mimic exact behavior, 
+                    # we can change the action to a WAIT or let it fail naturally.
+                    pass
+        else:
+            next_action = "WAIT"
             
-            # --- DYNAMIC EVENTS TICK ---
-            if hasattr(env, 'active_hidden_nodes'):
-                expired = []
-                for k, v in env.active_hidden_nodes.items():
-                    if v != float('inf'):
-                        env.active_hidden_nodes[k] = v - 1
-                        if env.active_hidden_nodes[k] <= 0:
-                            expired.append(k)
-                for k in expired:
-                    del env.active_hidden_nodes[k]
-                    self.logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
+        # --- DYNAMIC EVENTS TICK ---
+        expired = []
+        for k, v in self.active_hidden_nodes.items():
+            if v != float('inf'):
+                self.active_hidden_nodes[k] = v - 1
+                if self.active_hidden_nodes[k] <= 0:
+                    expired.append(k)
+        for k in expired:
+            del self.active_hidden_nodes[k]
+            self.logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
             
-        self.logger.error("❌ FAILED: Max steps reached.")
-        return False, "Max steps reached"
+        return next_action

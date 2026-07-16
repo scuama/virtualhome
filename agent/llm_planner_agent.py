@@ -205,11 +205,9 @@ class VirtualHomeHLPExecutor:
 
     def execute(
         self,
-        env,
+        graph: dict,
         skill: HighLevelSkill,
-        remaining_budget: int,
     ) -> SkillExecutionResult:
-        graph = deduplicate_graph(env.get_graph())
         action = skill.action
 
         if action == "Navigation":
@@ -233,9 +231,7 @@ class VirtualHomeHLPExecutor:
                     message="Target is already close.",
                 )
             return self._run_primitives(
-                env,
                 [format_unary("walk", node)],
-                remaining_budget,
             )
 
         unary_mapping = {
@@ -264,9 +260,7 @@ class VirtualHomeHLPExecutor:
             primitives.append(format_unary(unary_mapping[action], node))
 
             return self._run_primitives(
-                env,
                 primitives,
-                remaining_budget,
             )
 
         if action == "PutObject":
@@ -329,9 +323,7 @@ class VirtualHomeHLPExecutor:
                 )
 
             return self._run_primitives(
-                env,
                 primitives,
-                remaining_budget,
             )
 
         return self._failure(
@@ -395,50 +387,20 @@ class VirtualHomeHLPExecutor:
 
     def _run_primitives(
         self,
-        env,
         primitives: Sequence[str],
-        remaining_budget: int,
     ) -> SkillExecutionResult:
-        if remaining_budget <= 0:
-            return self._failure(
-                "No remaining primitive-step budget."
+        if not primitives:
+            return SkillExecutionResult(
+                success=True,
+                primitive_actions=[],
+                consumed_steps=0,
+                message="No primitives to execute.",
             )
-
-        if len(primitives) > remaining_budget:
-            return self._failure(
-                "High-level skill exceeds remaining primitive-step budget."
-            )
-
-        executed: List[str] = []
-
-        for primitive in primitives:
-            try:
-                _, _, _, info = env.step({0: primitive})
-                info = info or {}
-                success = coerce_bool(
-                    info.get("action_success", False)
-                )
-                message = str(
-                    info.get("action_message", "")
-                )
-            except Exception as exc:
-                success = False
-                message = f"Environment exception: {exc}"
-
-            executed.append(primitive)
-
-            if not success:
-                return SkillExecutionResult(
-                    success=False,
-                    primitive_actions=executed,
-                    consumed_steps=len(executed),
-                    message=message or "Primitive action failed.",
-                )
 
         return SkillExecutionResult(
             success=True,
-            primitive_actions=executed,
-            consumed_steps=len(executed),
+            primitive_actions=list(primitives),
+            consumed_steps=len(primitives),
             message="",
         )
 
@@ -450,10 +412,10 @@ class VirtualHomeHLPExecutor:
             consumed_steps=0,
             message=message,
         )
-
-
 class LLMPlannerAgent(BaseAgent):
     VERSION = LLM_PLANNER_VERSION
+
+    REQUIRED_OBSERVATION = ["partial"]
 
     def __init__(
         self,
@@ -474,324 +436,142 @@ class LLMPlannerAgent(BaseAgent):
         self.completed_plans: List[Tuple[str, ...]] = []
         self.visible_objects: Set[str] = set()
         self.current_plan: List[HighLevelSkill] = []
+        self.primitive_queue: List[str] = []
+        
+        self.hlp = None
+        self.executor = None
+        self.replan_count = 0
+        self.replan_reason = "initial planning"
 
-    def run_episode(
-        self,
-        env,
-        config: dict,
-    ) -> Tuple[bool, str]:
-        goal = str(
-            config.get("goal_instruction", "")
-        ).strip()
-
+    def get_action(self, obs: dict, config: dict, env_info: dict = None) -> str:
+        goal = str(config.get("goal_instruction", "")).strip()
         if not goal:
-            return False, "No goal instruction provided"
+            return "done()"
 
-        self.logger = AgentLogger(
-            log_mode=config.get("log_mode", "markdown"),
-            scenario_id=self.scenario_id,
-        )
-        self.action_history = list(
-            config.get("prior_action_history", [])
-        )
-        self.completed_plans = []
-        self.visible_objects = set()
-        self.current_plan = []
+        env_info = env_info or {}
+        step = env_info.get("step", 0)
+        self.logger = env_info.get("logger") or self.logger
+        self.action_history = env_info.get("action_history", [])
 
-        max_steps = int(config.get("max_steps", 15))
-        max_replans = int(
-            config.get(
-                "llm_planner_max_replans",
-                max(3, max_steps),
+        if step == 0:
+            self.logger.info(f"[{self.VERSION}] Starting LLM-Planner-VH episode for goal: {goal}")
+            self.completed_plans = []
+            self.visible_objects = set()
+            self.current_plan = []
+            self.primitive_queue = []
+            self.replan_count = 0
+            self.replan_reason = "initial planning"
+            
+            knn_k = int(config.get("llm_planner_knn_k", 9))
+            embedding_model = str(config.get("llm_planner_embedding_model", "paraphrase-MiniLM-L6-v2"))
+            
+            self.hlp = OfficialHLPAdapter(
+                llm_client=self.llm,
+                project_root=self.project_root,
+                logger=self.logger,
+                knn_k=knn_k,
+                embedding_model=embedding_model,
+                debug=bool(config.get("llm_planner_debug_prompt", False)),
             )
-        )
-        knn_k = int(
-            config.get("llm_planner_knn_k", 9)
-        )
-        embedding_model = str(
-            config.get(
-                "llm_planner_embedding_model",
-                "paraphrase-MiniLM-L6-v2",
+            self.executor = VirtualHomeHLPExecutor(self.logger)
+            
+            self._log_module(
+                "LLMPlannerVersion",
+                {
+                    "version": self.VERSION,
+                    "planner_core": "official OSU HLP prompt generator and kNN",
+                    "controller": "VirtualHome grounding and primitive executor",
+                    "knn_k": knn_k,
+                    "embedding_model": embedding_model,
+                },
             )
-        )
-        prompt_seed = int(
-            config.get("llm_planner_prompt_seed", 0)
-        )
+            try:
+                self.hlp.validate_setup()
+            except Exception as exc:
+                self.logger.error(str(exc))
+                return "done()"
 
-        hlp = OfficialHLPAdapter(
-            llm_client=self.llm,
-            project_root=self.project_root,
-            logger=self.logger,
-            knn_k=knn_k,
-            embedding_model=embedding_model,
-            debug=bool(
-                config.get(
-                    "llm_planner_debug_prompt",
-                    False,
+        self._update_visible_objects(obs)
+        full_graph = deduplicate_graph(obs)
+
+        # If previous action failed, clear primitive queue and current plan
+        if step > 0 and self.action_history and not self.action_history[-1].get("success", True):
+            self.primitive_queue = []
+            self.current_plan = []
+            self.replan_reason = f"previous action failed: {self.action_history[-1].get('action', '')}"
+
+        if self.primitive_queue:
+            return self.primitive_queue.pop(0)
+
+        max_replans = int(config.get("llm_planner_max_replans", 15))
+        prompt_seed = int(config.get("llm_planner_prompt_seed", 0))
+
+        while not self.current_plan:
+            if self.replan_count >= max_replans:
+                self.logger.error("❌ FAILED: maximum replanning attempts reached.")
+                return "done()"
+
+            try:
+                plan, metadata = self.hlp.generate(
+                    instruction=goal,
+                    visible_objects=sorted(self.visible_objects),
+                    completed_plans=self.completed_plans,
+                    prompt_seed=(prompt_seed + self.replan_count),
                 )
-            ),
-        )
-        executor = VirtualHomeHLPExecutor(self.logger)
+            except Exception as exc:
+                self.logger.error(f"Official HLP generation failed: {exc}")
+                return "done()"
 
-        self.logger.info(
-            f"[{self.VERSION}] Starting LLM-Planner-VH "
-            f"episode for goal: {goal}"
-        )
-        self._log_module(
-            "LLMPlannerVersion",
-            {
-                "version": self.VERSION,
-                "planner_core": (
-                    "official OSU HLP prompt generator and kNN"
-                ),
-                "controller": (
-                    "VirtualHome grounding and primitive executor"
-                ),
-                "knn_k": knn_k,
-                "embedding_model": embedding_model,
-                "source_file": __file__,
-            },
-        )
+            self.replan_count += 1
+            metadata["replan_count"] = self.replan_count
+            metadata["reason"] = self.replan_reason
+            self._log_module("LLMPlannerHLP", metadata)
 
-        try:
-            hlp.validate_setup()
-        except Exception as exc:
-            self.logger.error(str(exc))
-            return False, f"LLM-Planner setup error: {exc}"
+            if not plan:
+                self.logger.error("LLM returned no parseable high-level plan.")
+                return "done()"
 
-        primitive_step = 0
-        replan_count = 0
-        replan_reason = "initial planning"
-
-        while primitive_step < max_steps:
-            full_graph = deduplicate_graph(env.get_graph())
-            self._update_visible_objects(env)
-
-            if check_success(
-                full_graph,
-                config.get("success_condition", {}),
-            ):
-                self.logger.info(
-                    "✅ SUCCESS! Goal condition met."
-                )
-                self._write_step(
-                    primitive_step,
-                    "FINISH (Goal Reached)",
-                    full_graph,
-                )
-                return True, "Goal Reached"
-
-            if self._failure_condition_met(
-                full_graph,
-                config,
-                primitive_step,
-            ):
-                self.logger.error(
-                    "❌ FAILED: Failure condition met."
-                )
-                return (
-                    False,
-                    "Failure condition met (Constraint Violated)",
-                )
-
-            if not self.current_plan:
-                if replan_count >= max_replans:
-                    self.logger.error(
-                        "❌ FAILED: maximum replanning attempts reached."
-                    )
-                    return False, "Max replans reached"
-
-                try:
-                    plan, metadata = hlp.generate(
-                        instruction=goal,
-                        visible_objects=sorted(
-                            self.visible_objects
-                        ),
-                        completed_plans=self.completed_plans,
-                        prompt_seed=(
-                            prompt_seed + replan_count
-                        ),
-                    )
-                except Exception as exc:
-                    self.logger.error(
-                        f"Official HLP generation failed: {exc}"
-                    )
-                    return (
-                        False,
-                        f"HLP generation failed: {exc}",
-                    )
-
-                replan_count += 1
-                metadata["replan_count"] = replan_count
-                metadata["reason"] = replan_reason
-                self._log_module(
-                    "LLMPlannerHLP",
-                    metadata,
-                )
-
-                if not plan:
-                    self.logger.error(
-                        "LLM returned no parseable high-level plan."
-                    )
-                    return (
-                        False,
-                        "No parseable high-level plan",
-                    )
-
-                self.current_plan = list(plan)
-
-                self.logger.info(
-                    f"[{self.VERSION}] Generated HLP "
-                    f"#{replan_count}: "
-                    f"{[str(skill) for skill in self.current_plan]}"
-                )
-
-            skill = self.current_plan.pop(0)
-
+            self.current_plan = list(plan)
             self.logger.info(
-                f"[{self.VERSION}] Executing HLP: {skill}"
+                f"[{self.VERSION}] Generated HLP #{self.replan_count}: {[str(skill) for skill in self.current_plan]}"
             )
 
-            result = executor.execute(
-                env=env,
-                skill=skill,
-                remaining_budget=(
-                    max_steps - primitive_step
-                ),
-            )
+        skill = self.current_plan.pop(0)
+        self.logger.info(f"[{self.VERSION}] Executing HLP: {skill}")
 
-            if result.consumed_steps == 0:
-                if result.success:
-                    self.completed_plans.append(
-                        skill.as_tuple()
-                    )
-                    self.logger.info(
-                        f"HLP already satisfied: {skill}"
-                    )
-                    continue
-
-                self.action_history.append(
-                    {
-                        "step": primitive_step,
-                        "high_level_skill": list(
-                            skill.as_tuple()
-                        ),
-                        "action": "",
-                        "success": False,
-                        "error": result.message,
-                    }
-                )
-
-                self.logger.info(
-                    f"HLP failed before execution: {skill}. "
-                    f"{result.message}. Replanning."
-                )
-
-                self.current_plan = []
-                replan_reason = (
-                    f"high-level skill failed: {skill}; "
-                    f"reason: {result.message}"
-                )
-                continue
-
-            # Each high-level skill may emit one or two primitive actions.
-            for primitive_index, primitive in enumerate(
-                result.primitive_actions
-            ):
-                primitive_success = (
-                    result.success
-                    or primitive_index
-                    < len(result.primitive_actions) - 1
-                )
-
-                self.action_history.append(
-                    {
-                        "step": primitive_step,
-                        "high_level_skill": list(
-                            skill.as_tuple()
-                        ),
-                        "action": primitive,
-                        "success": primitive_success,
-                        "error": (
-                            ""
-                            if primitive_success
-                            else result.message
-                        ),
-                    }
-                )
-
-                post_graph = deduplicate_graph(
-                    env.get_graph()
-                )
-
-                self._write_step(
-                    primitive_step,
-                    f"{primitive} | HLP={skill}",
-                    post_graph,
-                )
-
-                primitive_step += 1
-
-            if result.success:
-                self.completed_plans.append(
-                    skill.as_tuple()
-                )
-                replan_reason = (
-                    "continue after completed high-level skills"
-                )
-            else:
-                self.logger.info(
-                    f"HLP execution failed: {skill}. "
-                    f"{result.message}. Replanning."
-                )
-                self.current_plan = []
-                replan_reason = (
-                    f"high-level skill failed: {skill}; "
-                    f"environment feedback: {result.message}"
-                )
-
-            post_graph = deduplicate_graph(
-                env.get_graph()
-            )
-
-            if check_success(
-                post_graph,
-                config.get("success_condition", {}),
-            ):
-                self.logger.info(
-                    "✅ SUCCESS! Goal condition met."
-                )
-                return True, "Goal Reached"
-
-            if self._failure_condition_met(
-                post_graph,
-                config,
-                primitive_step,
-            ):
-                self.logger.error(
-                    "❌ FAILED: Failure condition met."
-                )
-                return (
-                    False,
-                    "Failure condition met (Constraint Violated)",
-                )
-
-        self.logger.error(
-            "❌ FAILED: Max steps reached."
+        result = self.executor.execute(
+            graph=full_graph,
+            skill=skill,
         )
-        return False, "Max steps reached"
 
-    def _update_visible_objects(self, env) -> None:
-        try:
-            observations = env.get_observations()
-            if isinstance(observations, dict):
-                partial_graph = observations.get(0, {})
-            else:
-                partial_graph = {}
-        except Exception:
-            partial_graph = {}
+        if result.consumed_steps == 0:
+            if result.success:
+                self.completed_plans.append(skill.as_tuple())
+                self.logger.info(f"HLP already satisfied: {skill}")
+                return "wait()"
+            
+            self.logger.info(f"HLP failed before execution: {skill}. {result.message}. Replanning.")
+            self.current_plan = []
+            self.replan_reason = f"high-level skill failed: {skill}; reason: {result.message}"
+            return "wait()"
 
-        for node in partial_graph.get("nodes", []):
+        if result.success:
+            self.completed_plans.append(skill.as_tuple())
+            self.replan_reason = "continue after completed high-level skills"
+        else:
+            self.logger.info(f"HLP execution failed: {skill}. {result.message}. Replanning.")
+            self.current_plan = []
+            self.replan_reason = f"high-level skill failed: {skill}; environment feedback: {result.message}"
+
+        self.primitive_queue = result.primitive_actions
+        
+        if self.primitive_queue:
+            return self.primitive_queue.pop(0)
+            
+        return "wait()"
+
+    def _update_visible_objects(self, obs: dict) -> None:
+        for node in obs.get("nodes", []):
             if str(node.get("category", "")) == "Rooms":
                 continue
 

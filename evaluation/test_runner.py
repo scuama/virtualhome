@@ -185,10 +185,22 @@ def main():
     args = parser.parse_args()
 
     base_dir = os.path.dirname(__file__)
-    logs_dir = os.path.join(base_dir, 'logs')
-    os.makedirs(logs_dir, exist_ok=True)
+    configs_dir = os.path.join(base_dir, 'configs')
+    results_dir = os.path.join(
+        base_dir,
+        'results',
+        args.method
+    )
+    success_dir = os.path.join(results_dir, 'success')
+    fail_dir = os.path.join(results_dir, 'fail')
+    raw_logs_dir = os.path.join(results_dir, 'raw')
+    
+    os.makedirs(success_dir, exist_ok=True)
+    os.makedirs(fail_dir, exist_ok=True)
+    os.makedirs(raw_logs_dir, exist_ok=True)
+    
     log_path = os.path.join(
-        logs_dir,
+        raw_logs_dir,
         f"test_runner_{args.method}.log"
     )
 
@@ -209,17 +221,6 @@ def main():
 
     sys.stdout = Logger(log_path)
     sys.stderr = sys.stdout
-
-    configs_dir = os.path.join(base_dir, 'configs')
-    results_dir = os.path.join(
-        base_dir,
-        'results',
-        args.method
-    )
-    success_dir = os.path.join(results_dir, 'success')
-    fail_dir = os.path.join(results_dir, 'fail')
-    os.makedirs(success_dir, exist_ok=True)
-    os.makedirs(fail_dir, exist_ok=True)
     
     # Gather configs
     all_configs = []
@@ -329,7 +330,106 @@ def main():
         try:
             signal.signal(signal.SIGALRM, timeout_handler)
             signal.alarm(args.timeout)
-            success, reason = agent.run_episode(env, config)
+            
+            from evaluation.condition_checker import check_success
+            from agent.utils.logger import AgentLogger
+            
+            logger = AgentLogger(
+                log_mode=config.get("log_mode", "markdown"),
+                scenario_id=scenario_id,
+                log_dir=raw_logs_dir
+            )
+            
+            max_steps = int(config.get("max_steps", 15))
+            success_condition = config.get("success_condition", {})
+            failure_condition = config.get("failure_condition")
+            
+            # Adapt the observation types for the unity environment
+            env.observation_types = getattr(agent, "REQUIRED_OBSERVATION", ["partial"])
+            
+            step_count = 0
+            success = False
+            reason = "Max steps reached"
+            
+            # Initial observation
+            obs = env.get_observation()
+            if isinstance(obs, list) and len(obs) == 1:
+                obs = obs[0]
+                
+            action_history = list(config.get("prior_action_history", []))
+            
+            while step_count < max_steps:
+                graph = env.get_graph()
+                
+                if check_success(graph, success_condition):
+                    success = True
+                    reason = "Goal Reached"
+                    break
+                    
+                if failure_condition:
+                    start_step = int(failure_condition.get("start_step", 0))
+                    end_step = int(failure_condition.get("end_step", 999999))
+                    if start_step <= step_count <= end_step and check_success(graph, failure_condition):
+                        success = False
+                        reason = "Failure condition met (Constraint Violated)"
+                        break
+                        
+                env_info = {
+                    "step": step_count,
+                    "logger": logger,
+                    "action_history": action_history
+                }
+                
+                try:
+                    action_str = agent.get_action(obs, config, env_info)
+                except Exception as e:
+                    success = False
+                    reason = f"Agent generation crashed: {e}"
+                    break
+                    
+                if action_str == "done()":
+                    success = False
+                    reason = "Agent terminated early without reaching goal"
+                    break
+                    
+                # Execute action
+                _, _, env_done, info = env.step({0: action_str})
+                action_success = info.get("action_success", False) if info else False
+                
+                history_entry = {
+                    "step": step_count,
+                    "action": action_str,
+                    "success": action_success,
+                }
+                if info and info.get("action_message"):
+                    history_entry["message" if action_success else "error"] = info["action_message"]
+                action_history.append(history_entry)
+                
+                try:
+                    # Write markdown step
+                    logger.write_step(step_count, action_str, None, [])
+                except Exception:
+                    pass
+                
+                if env_done:
+                    success = False
+                    reason = "Environment terminated unexpectedly"
+                    break
+                    
+                # Next observation
+                obs = env.get_observation()
+                if isinstance(obs, list) and len(obs) == 1:
+                    obs = obs[0]
+                    
+                step_count += 1
+                
+            # Final verification if loop finished
+            if not success and step_count == max_steps:
+                graph = env.get_graph()
+                if check_success(graph, success_condition):
+                    success = True
+                    reason = "Goal Reached at last step"
+
             signal.alarm(0)
         except TimeoutException as e:
             success = False

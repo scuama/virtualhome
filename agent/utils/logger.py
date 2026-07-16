@@ -2,13 +2,15 @@ import json
 import os
 
 class AgentLogger:
-    def __init__(self, log_mode="text", scenario_id=""):
+    def __init__(self, log_mode="text", scenario_id="", log_dir=None):
         self.log_mode = log_mode
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        logs_dir = os.path.join(base_dir, "..", "..", "evaluation", "logs")
-        os.makedirs(logs_dir, exist_ok=True)
+        if not log_dir:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            log_dir = os.path.join(base_dir, "..", "..", "evaluation", "logs")
+        
+        os.makedirs(log_dir, exist_ok=True)
         prefix = f"run_{scenario_id}" if scenario_id else "run_log"
-        self.log_file = os.path.join(logs_dir, f"{prefix}.md")
+        self.log_file = os.path.join(log_dir, f"{prefix}.md")
         
         # Initialize markdown file
         with open(self.log_file, "w", encoding="utf-8") as f:
