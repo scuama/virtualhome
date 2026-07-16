@@ -119,7 +119,7 @@ def apply_overrides(env, config, debug=False):
         # 验证必需物品是否充足
         if len(subj_nodes) < count:
             raise RuntimeError(f"Scene initialization failed: Requested {count} '{subj}', but only {len(subj_nodes)} exist in the scene. Please change to a different room/scene that contains enough '{subj}'.")
-
+        
         # 如果没有指定 object，只调整数量不移动位置
         if 'object' not in ro:
             continue
@@ -180,6 +180,11 @@ def main():
         default=600,
         help='Per-episode timeout in seconds (default: 600)'
     )
+    parser.add_argument(
+        '--force',
+        action='store_true',
+        help='Force re-run even if scenario already succeeded'
+    )
     # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -197,13 +202,20 @@ def main():
         # 传递 method 参数到子进程
         cmd.append("--method")
         cmd.extend(args.method)
+        if args.force:
+            cmd.append("--force")
         
         subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
         print(f"[INFO] Task started in background.")
         print(f"[INFO] Evaluating methods: {', '.join(args.method)}")
         print(f"[INFO] Monitor logs via: tail -f {log_path}")
         sys.exit(0)
-    
+
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
+    sys.stdout = Logger(log_path)
+    sys.stderr = sys.stdout
+
     # Gather configs
     all_configs = []
     for cls_dir in ['g_class', 'm_class', 'p_class','ExRAP']:
@@ -222,12 +234,6 @@ def main():
         observation_types=['partial'],
         executable_args={'file_name': None}
     )
-
-    original_stdout = sys.stdout
-    original_stderr = sys.stderr
-
-    sys.stdout = Logger(log_path)
-    sys.stderr = sys.stdout
 
     for method_name in args.method:
 
@@ -259,7 +265,7 @@ def main():
         )
 
         for scenario_id, config_path in all_configs:
-            if os.path.exists(os.path.join(success_dir, scenario_id)):
+            if not args.force and os.path.exists(os.path.join(success_dir, scenario_id)):
                 print(f"[SKIP] {scenario_id} — already succeeded.")
                 summary["skipped"] += 1
                 fail_path = os.path.join(fail_dir, scenario_id)
@@ -351,6 +357,12 @@ def main():
                 step_count = 0
                 success = False
                 reason = "Max steps reached"
+                
+                if not hasattr(env, 'active_hidden_nodes'):
+                    env.active_hidden_nodes = {}
+                env.dynamic_events = config.get("dynamic_events", [])
+                for ev in env.dynamic_events:
+                    ev["times_triggered"] = 0
 
                 # Initial observation
                 obs = env.get_observations()[0]
@@ -363,6 +375,13 @@ def main():
                     graph = env.get_graph()
 
                     if check_success(graph, success_condition):
+                        if config.get("require_ask_to_pass", False):
+                            has_asked = any(entry.get('action', '').lower().startswith('[ask]') for entry in action_history)
+                            if not has_asked:
+                                success = False
+                                reason = "Failed: Did not ask for clarification"
+                                break
+                                
                         success = True
                         reason = "Goal Reached"
                         break
@@ -378,7 +397,8 @@ def main():
                     env_info = {
                         "step": step_count,
                         "logger": logger,
-                        "action_history": action_history
+                        "action_history": action_history,
+                        "hidden_nodes": env.active_hidden_nodes
                     }
 
                     try:
@@ -392,9 +412,67 @@ def main():
                         success = False
                         reason = "Agent terminated early without reaching goal"
                         break
+                        
+                    intercepted = False
+                    action_success = False
+                    env_done = False
+                    info = {}
+                    
+                    if action_str.lower().startswith("[ask]"):
+                        if "user_clarification_reply" in config:
+                            intercepted = True
+                            info = {
+                                "action_success": True,
+                                "action_message": config["user_clarification_reply"]
+                            }
+                        else:
+                            policy = config.get("on_ask_policy", "FAIL")
+                            if policy == "SUCCESS":
+                                success = True
+                                reason = "Goal Reached (Help Asked)"
+                                break
+                            else:
+                                success = False
+                                reason = "Agent requested help, which is not permitted"
+                                break
 
-                    # Execute action
-                    _, _, env_done, info = env.step({0: action_str})
+                    import re
+                    
+                    for ev in env.dynamic_events:
+                        trigger = ev['trigger']
+                        if ev['times_triggered'] >= ev.get('max_triggers', 1):
+                            continue
+
+                        if f"[{trigger['action']}]" in action_str.lower() and f"<{trigger['target'].lower()}>" in action_str.lower():
+                            ev_match = re.search(r'\(\s*(\d+)\s*\)', action_str)
+                            if ev_match:
+                                t_id = int(ev_match.group(1))
+                                req_state = trigger.get('target_state')
+                                node_ok = True
+                                if req_state:
+                                    n_node = next((n for n in graph['nodes'] if n['id'] == t_id), None)
+                                    if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
+                                        node_ok = False
+                                
+                                if node_ok:
+                                    effect = ev['effect']
+                                    if effect['type'] == 'hide':
+                                        dur = effect['duration_steps']
+                                        if t_id not in env.active_hidden_nodes:
+                                            env.active_hidden_nodes[t_id] = dur
+                                            ev['times_triggered'] += 1
+                                            logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
+
+                    target_match = re.search(r'\(\s*(\d+)\s*\)', action_str)
+                    if target_match:
+                        target_id = int(target_match.group(1))
+                        if target_id in env.active_hidden_nodes:
+                            intercepted = True
+                            info = {"action_message": "动作失败：目标物品突然消失了，请等待或重新规划。"}
+
+                    if not intercepted:
+                        _, _, env_done, info = env.step({0: action_str})
+                    
                     action_success = info.get("action_success", False) if info else False
 
                     history_entry = {
@@ -421,6 +499,16 @@ def main():
                     obs = env.get_observations()[0]
                     if isinstance(obs, list) and len(obs) == 1:
                         obs = obs[0]
+                        
+                    expired = []
+                    for k, v in env.active_hidden_nodes.items():
+                        if v != float('inf'):
+                            env.active_hidden_nodes[k] = v - 1
+                            if env.active_hidden_nodes[k] <= 0:
+                                expired.append(k)
+                    for k in expired:
+                        del env.active_hidden_nodes[k]
+                        logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
 
                     step_count += 1
 
@@ -428,8 +516,17 @@ def main():
                 if not success and step_count == max_steps:
                     graph = env.get_graph()
                     if check_success(graph, success_condition):
-                        success = True
-                        reason = "Goal Reached at last step"
+                        if config.get("require_ask_to_pass", False):
+                            has_asked = any(entry.get('action', '').lower().startswith('[ask]') for entry in action_history)
+                            if not has_asked:
+                                success = False
+                                reason = "Failed: Did not ask for clarification"
+                            else:
+                                success = True
+                                reason = "Goal Reached at last step"
+                        else:
+                            success = True
+                            reason = "Goal Reached at last step"
 
                 signal.alarm(0)
             except TimeoutException as e:

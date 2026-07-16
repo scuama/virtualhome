@@ -201,3 +201,6 @@ evaluation/results/*
 !evaluation/results/*/
 evaluation/results/*/*
 !evaluation/results/*/success/
+
+# Old framework archive
+archive/

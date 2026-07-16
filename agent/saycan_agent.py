@@ -150,12 +150,6 @@ class SayCanAgent(BaseAgent):
             f"Combined={combined_scores.get(best_action, 0.0):.3f})"
         )
 
-        if best_action.lower().startswith("[ask]"):
-            if "user_clarification_reply" in config:
-                clarification = str(config.pop("user_clarification_reply")).strip()
-                if clarification:
-                    config["goal_instruction"] = f"{config.get('goal_instruction', '')} User clarification: {clarification}"
-
         return best_action
 
     def _generate_candidate_actions(
@@ -944,7 +938,7 @@ order. Every score must be between 0 and 100.
 
         if "user_clarification_reply" in config:
             clarification = str(
-                config.pop("user_clarification_reply")
+                config.get("user_clarification_reply")
             ).strip()
             if clarification:
                 self.goal = (

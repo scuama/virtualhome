@@ -145,10 +145,26 @@ class RoboStateAgent(BaseAgent):
             
             self.memory_nodes = {}
             self.memory_edges = {}
-            self.active_hidden_nodes = {}
-            self.dynamic_events = config.get("dynamic_events", [])
-            for ev in self.dynamic_events:
-                ev["times_triggered"] = 0
+
+        # --- Check if previous step was an [ask] with a user reply ---
+        if step > 0 and self.action_history:
+            last_entry = self.action_history[-1]
+            if last_entry.get("action", "").lower().startswith("[ask]") and last_entry.get("success"):
+                clarification = last_entry.get("message")
+                if clarification:
+                    rewrite_sys = "You are a helpful assistant rewriting instructions."
+                    rewrite_user = f"Original instruction: '{goal_instruction}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
+                    try:
+                        new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
+                    except Exception:
+                        new_goal_instruction = goal_instruction + " " + clarification
+                        
+                    self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
+                    config['goal_instruction'] = new_goal_instruction
+                    self.goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
+                    self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
+
+        self.active_hidden_nodes = env_info.get("hidden_nodes", {})
 
         # --- UPDATE SPATIAL MEMORY ---
         visible_ids = set()
@@ -197,68 +213,7 @@ class RoboStateAgent(BaseAgent):
             
             next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
             
-            if next_action.lower().startswith("[ask]"):
-                if "user_clarification_reply" in config:
-                    clarification = config.pop("user_clarification_reply")
-                    rewrite_sys = "You are a helpful assistant rewriting instructions."
-                    rewrite_user = f"Original instruction: '{config.get('goal_instruction')}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
-                    try:
-                        new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
-                    except Exception:
-                        new_goal_instruction = config.get('goal_instruction') + " " + clarification
-                        
-                    self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
-                    config['goal_instruction'] = new_goal_instruction
-                    self.goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
-                    self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
-                    return "wait()" # Let step fail/retry with new plan
-            
-            # --- DYNAMIC EVENTS TRIGGER ---
-            for ev in self.dynamic_events:
-                trigger = ev['trigger']
-                if ev['times_triggered'] >= ev.get('max_triggers', 1):
-                    continue
-
-                if f"[{trigger['action']}]" in next_action.lower() and f"<{trigger['target'].lower()}>" in next_action.lower():
-                    match = re.search(r'\(\s*(\d+)\s*\)', next_action)
-                    if match:
-                        t_id = int(match.group(1))
-                        req_state = trigger.get('target_state')
-                        node_ok = True
-                        if req_state:
-                            n_node = next((n for n in raw_graph['nodes'] if n['id'] == t_id), None)
-                            if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
-                                node_ok = False
-                        
-                        if node_ok:
-                            effect = ev['effect']
-                            if effect['type'] == 'hide':
-                                dur = effect['duration_steps']
-                                if t_id not in self.active_hidden_nodes:
-                                    self.active_hidden_nodes[t_id] = dur
-                                    ev['times_triggered'] += 1
-                                    self.logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
-
-            # --- INTERCEPT HIDDEN OBJECTS ---
-            target_match = re.search(r'\(\s*(\d+)\s*\)', next_action)
-            if target_match:
-                target_id = int(target_match.group(1))
-                if target_id in self.active_hidden_nodes:
-                    # Actually we want test_runner to try and fail, but to mimic exact behavior, 
-                    # we can change the action to a WAIT or let it fail naturally.
-                    pass
         else:
             next_action = "WAIT"
-            
-        # --- DYNAMIC EVENTS TICK ---
-        expired = []
-        for k, v in self.active_hidden_nodes.items():
-            if v != float('inf'):
-                self.active_hidden_nodes[k] = v - 1
-                if self.active_hidden_nodes[k] <= 0:
-                    expired.append(k)
-        for k in expired:
-            del self.active_hidden_nodes[k]
-            self.logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
             
         return next_action
