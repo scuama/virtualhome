@@ -1,0 +1,42 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Put the cutlets in the fryingpan, cook them on the stove, and then place them on the breadslice.",
+    "initial_relations_override": [
+        {
+            "subject": "cutlets",
+            "count": 1
+        },
+        {
+            "subject": "breadslice",
+            "count": 1
+        },
+        {
+            "subject": "fryingpan",
+            "relation": "ON",
+            "object": "stove",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "cutlets",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "stove",
+            "states": [
+                "OFF"
+            ]
+        }
+    ],
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "cutlets",
+        "relation": "ON",
+        "destination_class": "breadslice",
+        "subject_must_have_state": "HOT"
+    },
+    "execution_time_seconds": 31.6
+}

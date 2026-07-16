@@ -1,0 +1,46 @@
+{
+    "scenario_id": "M3_14",
+    "scenario_type": "M",
+    "goal_instruction": "If there is a dirty waterglass on the table, put it in the sink.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "scheduled_rules": [
+        {
+            "start_step": 0,
+            "end_step": 5,
+            "rule_text": "Kitchen cleaning in progress. Do not touch or move any utensils."
+        }
+    ],
+    "failure_condition": {
+        "start_step": 0,
+        "end_step": 5,
+        "check_type": "relation",
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_class": "waterglass"
+    },
+    "success_condition": {
+        "check_type": "relation",
+        "target_class": "waterglass",
+        "relation": "INSIDE",
+        "destination_class": "sink",
+        "min_count": 1
+    }
+}

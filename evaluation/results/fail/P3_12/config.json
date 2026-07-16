@@ -1,0 +1,52 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the salmon is cold, heat it up in the cookingpot on the stove.",
+    "initial_relations_override": [
+        {
+            "subject": "salmon",
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
+        },
+        {
+            "subject": "cookingpot",
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "salmon",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "stove",
+            "states": [
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "state",
+                "target_class": "salmon",
+                "require_states": [
+                    "HOT"
+                ]
+            },
+            {
+                "check_type": "relation",
+                "target_class": "salmon",
+                "relation": "INSIDE",
+                "destination_class": "cookingpot"
+            }
+        ]
+    },
+    "execution_time_seconds": 99.13
+}
