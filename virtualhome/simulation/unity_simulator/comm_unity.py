@@ -34,7 +34,7 @@ class UnityCommunication(object):
     """
 
     def __init__(self, url='127.0.0.1', port='8080', file_name=None, x_display=None, no_graphics=False, logging=True,
-                 timeout_wait=300, docker_enabled=False):
+                 timeout_wait=5, docker_enabled=False):
         self._address = 'http://' + url + ':' + port
         self.port = port
         self.graphics = no_graphics
@@ -92,7 +92,7 @@ class UnityCommunication(object):
     def post_command(self, request_dict, repeat=False):
         try:
             if repeat:
-                resp = self.requests_retry_session().post(self._address, json=request_dict) 
+                resp = self.requests_retry_session().post(self._address, json=request_dict, timeout=self.timeout_wait) 
             else:
                 resp = requests.post(self._address, json=request_dict, timeout=self.timeout_wait)
             if resp.status_code != requests.codes.ok:
