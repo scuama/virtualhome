@@ -81,4 +81,4 @@ python evaluation/test_runner.py E1_01 --method my_custom --force
 
 ## 6. 调试建议
 
-- 确保运行测试前 Unity 后台进程（8080 端口）已启动，`test_runner.py` 会通过 `file_name=None` 自动连接至该进程。
+- 测试框架 `test_runner.py` 会自动检测并管理 Unity 后台进程。如果未启动或在运行中发生崩溃，框架会自动通过 `--unity-path` 参数（或默认路径）重新拉起 8080 端口服务端，无需手动干预。

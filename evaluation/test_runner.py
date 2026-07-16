@@ -154,6 +154,38 @@ def apply_overrides(env, config, debug=False):
         graph = env.get_graph()
 
     return True
+def ensure_unity_running(unity_path, force_restart=False):
+    import socket
+    import time
+    import subprocess
+    
+    def is_port_open(port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(1)
+            try:
+                s.connect(('127.0.0.1', port))
+                return True
+            except:
+                return False
+
+    if not force_restart and is_port_open(8080):
+        return
+
+    print("[INFO] Starting/Restarting Unity Simulator...")
+    subprocess.run(["pkill", "-9", "-f", "VirtualHome"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(1)
+    
+    cmd = [unity_path, "-batchmode", "-http-port=8080"]
+    subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
+    for _ in range(30):
+        if is_port_open(8080):
+            time.sleep(2)  # Give Unity extra time to fully init its HTTP server
+            print("[INFO] Unity Simulator started successfully.")
+            return
+        time.sleep(1)
+    
+    raise RuntimeError("Failed to start Unity simulator on port 8080 after 30 seconds.")
 
 
 def main():
@@ -174,16 +206,17 @@ def main():
         default='gpt-5.4-mini',
         help='Shared LLM backbone used by all methods'
     )
-    parser.add_argument(
-        '--timeout',
-        type=int,
-        default=600,
-        help='Per-episode timeout in seconds (default: 600)'
-    )
+    # (Timeout is dynamically calculated as max_steps * 5, --timeout argument removed)
     parser.add_argument(
         '--force',
         action='store_true',
         help='Force re-run even if scenario already succeeded'
+    )
+    parser.add_argument(
+        '--unity-path',
+        type=str,
+        default='/Users/rushy/program/virtualhome/virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app/Contents/MacOS/VirtualHome',
+        help='Path to Unity executable'
     )
     # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
@@ -229,6 +262,7 @@ def main():
     all_configs = sorted(all_configs)
 
     # Init engine
+    ensure_unity_running(args.unity_path)
     env = UnityEnvironment(
         num_agents=1,
         observation_types=['partial'],
@@ -261,7 +295,7 @@ def main():
         print(
             f"[INFO] Method={method_name} | "
             f"Model={args.model} | "
-            f"Timeout={args.timeout}s"
+            f"Timeout=Dynamic (max_steps * 5)s"
         )
 
         for scenario_id, config_path in all_configs:
@@ -287,13 +321,22 @@ def main():
             try:
                 env.reset(environment_id=env_id)
             except Exception as e:
-                # sys.stdout.close()
-                sys.stdout = old_stdout
-                reason = f"Engine Reset Failed: {e}"
-                print(f"  {reason}")
-                summary["fail"] += 1
-                summary["failures"].append({"scenario": scenario_id, "reason": reason})
-                continue
+                print(f"[WARN] Engine Reset Failed: {e}. Attempting to restart Unity engine...")
+                try:
+                    ensure_unity_running(args.unity_path, force_restart=True)
+                    env = UnityEnvironment(
+                        num_agents=1,
+                        observation_types=['partial'],
+                        executable_args={'file_name': None}
+                    )
+                    env.reset(environment_id=env_id)
+                except Exception as e2:
+                    sys.stdout = old_stdout
+                    reason = f"Engine Reset Failed twice: {e2}"
+                    print(f"  {reason}")
+                    summary["fail"] += 1
+                    summary["failures"].append({"scenario": scenario_id, "reason": reason})
+                    continue
 
             try:
                 apply_overrides(env, config, debug=False)

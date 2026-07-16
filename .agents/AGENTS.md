@@ -3,7 +3,7 @@
 在处理此 VirtualHome 具身智能项目时，请严格遵守以下规则和约束：
 
 ## 1. 核心架构与引擎连接
-- **Client-Server 分离**：**严禁**在 Python 脚本的 `UnityEnvironment` 中传入引擎的物理执行路径（`exec_path`）。必须始终使用 `executable_args={'file_name': None}` 来连接早已在后台启动的 8080 端口服务端，否则会导致严重的端口占用和引擎死锁。
+- **Client-Server 分离**：**严禁**在 Python 脚本的 `UnityEnvironment` 中传入引擎的物理执行路径（`exec_path`）。必须始终使用 `executable_args={'file_name': None}` 来连接 8080 端口服务端，否则会导致引擎内部自带线程管理引发的严重端口占用和死锁。但**允许**测试框架 (`test_runner.py`) 在外部通过干净的 `subprocess` 主动管理（启动/杀死）Unity 独立进程，以保证测试的自动恢复能力。
 - 📖 **相关文档索引**：[doc/unity_connection_guide.md](file:///Users/rushy/program/virtualhome/doc/unity_connection_guide.md)
 
 ## 2. 场景与物品初始化配置
