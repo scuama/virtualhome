@@ -6,7 +6,7 @@ from .utils.llm_client import LLMClient
 from .base_agent import BaseAgent
 
 
-SAYCAN_AGENT_VERSION = "SAYCAN-VH-v3.1-STEPWISE-2026-07-17"
+SAYCAN_AGENT_VERSION = "SAYCAN-VH-v3.3-EXPLORATION-2026-07-17"
 __version__ = SAYCAN_AGENT_VERSION
 
 
@@ -59,6 +59,24 @@ class SayCanAgent(BaseAgent):
     CONTAINER_PROPERTIES = {"CONTAINER", "CONTAINERS"}
     SURFACE_PROPERTIES = {"SURFACE"}
     OPENABLE_PROPERTIES = {"OPENABLE", "CAN_OPEN"}
+
+    # Unity exposes a few graph properties more broadly than the executable
+    # action set. These filters keep candidate generation aligned with the
+    # actual simulator without encoding task-instance solutions.
+    NON_OPENABLE_CATEGORIES = {"FOOD", "DRINKS", "CLOTHES", "DECOR"}
+    OPENABLE_CLASS_HINTS = {
+        "cabinet", "cupboard", "drawer", "fridge", "refrigerator",
+        "microwave", "microwaveoven", "oven", "dishwasher",
+        "washingmachine", "dryer", "closet", "door", "box",
+        "trashcan", "garbagecan", "coffeemaker",
+    }
+    ACTIVATION_TASK_TERMS = {
+        "heat", "hot", "warm", "cook", "boil", "toast", "bake",
+    }
+    ROOM_CATEGORIES = {"ROOM", "ROOMS"}
+    NAVIGATION_CLASS_HINTS = {
+        "door", "doorjamb", "doorframe", "entrance", "hallway",
+    }
 
     def __init__(
         self,
@@ -119,19 +137,42 @@ class SayCanAgent(BaseAgent):
             self._extract_graph(obs)
         )
 
-        candidate_actions = self._generate_candidate_actions(
+        generated_actions = self._generate_candidate_actions(
             graph=graph,
             goal=goal,
             config=config,
             action_history=action_history,
         )
-        if not candidate_actions:
+        if not generated_actions:
             self._safe_error(
                 logger,
                 "No candidate skills could be generated; returning [wait].",
             )
             return "[wait]"
 
+        # Score physical executability first. Sending only currently executable
+        # candidates to the language model prevents an invalid action from
+        # receiving a high Say score and also reduces prompt size.
+        generated_can_scores = self._score_affordance(
+            graph=graph,
+            candidate_actions=generated_actions,
+            config=config,
+        )
+        candidate_actions = [
+            action for action in generated_actions
+            if generated_can_scores.get(action, 0.0) > 0.0
+        ]
+        if not candidate_actions:
+            self._safe_error(
+                logger,
+                "No executable SayCan candidates remain; returning [wait].",
+            )
+            return "[wait]"
+
+        can_scores = {
+            action: generated_can_scores[action]
+            for action in candidate_actions
+        }
         say_scores = self._score_with_llm(
             graph=graph,
             candidate_actions=candidate_actions,
@@ -139,11 +180,6 @@ class SayCanAgent(BaseAgent):
             goal=goal,
             action_history=action_history,
             logger=logger,
-        )
-        can_scores = self._score_affordance(
-            graph=graph,
-            candidate_actions=candidate_actions,
-            config=config,
         )
 
         combined_scores: Dict[str, float] = {}
@@ -218,6 +254,11 @@ class SayCanAgent(BaseAgent):
         character_id = int(character["id"]) if character else 1
 
         goal_terms = self._extract_goal_terms(goal)
+        compact_goal = self._compact(goal)
+        support_classes: Set[str] = set()
+        for term in goal_terms:
+            support_classes.update(self.SKILL_SUPPORT_CLASSES.get(term, set()))
+
         selected_ids = self._select_relevant_node_ids(
             graph,
             goal_terms,
@@ -249,33 +290,73 @@ class SayCanAgent(BaseAgent):
             properties = self._upper_set(node.get("properties", []))
             states = self._effective_states(node)
 
+            # When the explicit target is not visible under partial
+            # observation, candidate selection falls back to rooms and
+            # navigation landmarks. Walking to them is exploration, not an
+            # interaction with an unrelated visible device.
+            if self._is_navigation_target(node):
+                if (
+                    node_id not in held_ids
+                    and not self._is_current_room(
+                        node_id=node_id,
+                        graph=graph,
+                        character_id=character_id,
+                    )
+                ):
+                    actions.append(
+                        self._format_unary("walk", class_name, node_id)
+                    )
+                continue
+
             # Walking is the universal enabling action for object interactions.
             # Do not generate walk-to-self actions for objects already in hand.
-            if category != "Rooms" and node_id not in held_ids:
+            if node_id not in held_ids:
                 actions.append(self._format_unary("walk", class_name, node_id))
 
             if "GRABBABLE" in properties and node_id not in held_ids:
                 actions.append(self._format_unary("grab", class_name, node_id))
 
-            if properties & self.OPENABLE_PROPERTIES:
+            if self._is_openable_target(node):
                 if "OPEN" not in states:
                     actions.append(self._format_unary("open", class_name, node_id))
                 if "CLOSED" not in states:
                     actions.append(self._format_unary("close", class_name, node_id))
 
+            is_goal_target = self._node_matches_terms(node, goal_terms)
+            is_support_device = self._compact(class_name) in {
+                self._compact(item) for item in support_classes
+            }
+
             if "HAS_SWITCH" in properties:
-                if "ON" not in states:
+                if (
+                    "ON" not in states
+                    and self._should_offer_switch_on(
+                        compact_goal=compact_goal,
+                        is_goal_target=is_goal_target,
+                        is_support_device=is_support_device,
+                    )
+                ):
                     actions.append(self._format_unary("switchon", class_name, node_id))
-                if "OFF" not in states:
+                if (
+                    "OFF" not in states
+                    and self._goal_requests_switch_off(compact_goal)
+                    and is_goal_target
+                ):
                     actions.append(self._format_unary("switchoff", class_name, node_id))
 
             if "HAS_PLUG" in properties:
-                if "PLUGGED_IN" not in states:
+                if (
+                    "PLUGGED_IN" not in states
+                    and (is_support_device or self._goal_requests_plug_in(compact_goal))
+                ):
                     actions.append(self._format_unary("plugin", class_name, node_id))
-                if "PLUGGED_OUT" not in states:
+                if (
+                    "PLUGGED_OUT" not in states
+                    and self._goal_requests_plug_out(compact_goal)
+                    and is_goal_target
+                ):
                     actions.append(self._format_unary("plugout", class_name, node_id))
 
-            compact_goal = self._compact(goal)
             if ("wash" in compact_goal or "clean" in compact_goal) and "GRABBABLE" in properties:
                 actions.append(self._format_unary("wash", class_name, node_id))
             if ("cut" in compact_goal or "slice" in compact_goal) and "CUTTABLE" in properties:
@@ -284,8 +365,7 @@ class SayCanAgent(BaseAgent):
         held_nodes = [id_to_node[node_id] for node_id in held_ids if node_id in id_to_node]
         containers = [
             node for node in selected_nodes
-            if self._upper_set(node.get("properties", []))
-            & (self.CONTAINER_PROPERTIES | self.OPENABLE_PROPERTIES)
+            if self._is_container_target(node)
         ]
         surfaces = [
             node for node in selected_nodes
@@ -363,7 +443,7 @@ class SayCanAgent(BaseAgent):
         actions = list(dict.fromkeys(actions))
         actions.sort(key=lambda action: self._candidate_priority(action, goal, graph), reverse=True)
 
-        max_candidates = max(5, int(config.get("saycan_max_candidates", 40)))
+        max_candidates = max(5, int(config.get("saycan_max_candidates", 28)))
         if len(actions) > max_candidates:
             # Preserve wait and ask actions when truncating.
             special = [
@@ -390,6 +470,7 @@ class SayCanAgent(BaseAgent):
         id_to_node = {int(node["id"]): node for node in nodes if "id" in node}
 
         selected_ids: Set[int] = set()
+        directly_relevant_ids: Set[int] = set()
         support_classes: Set[str] = set()
         for term in goal_terms:
             support_classes.update(self.SKILL_SUPPORT_CLASSES.get(term, set()))
@@ -420,14 +501,16 @@ class SayCanAgent(BaseAgent):
 
             if direct_match or support_match:
                 selected_ids.add(node_id)
+                directly_relevant_ids.add(node_id)
             elif useful_fixture and class_name in support_classes:
                 selected_ids.add(node_id)
-
-            if class_name == "character":
-                selected_ids.add(node_id)
+                directly_relevant_ids.add(node_id)
 
         # Keep one-hop spatial parents and children of directly relevant objects.
-        frontier = set(selected_ids)
+        # Do not expand from the character node: doing so would pull every CLOSE
+        # object in the room into the candidate set (e.g. wall phones and light
+        # switches for a television task).
+        frontier = set(directly_relevant_ids)
         for edge in edges:
             relation = str(edge.get("relation_type", edge.get("relation", ""))).upper()
             from_id = int(edge.get("from_id", -1))
@@ -447,15 +530,29 @@ class SayCanAgent(BaseAgent):
                 if int(object_id) in id_to_node:
                     selected_ids.add(int(object_id))
 
-        # Safe fallback: retain interactive nodes rather than the entire scene clutter.
-        if len(selected_ids) <= 1:
+        character = self._get_character(nodes)
+        if character is not None:
+            selected_ids.add(int(character["id"]))
+
+        # Under partial observation, absence of the explicit goal target must
+        # trigger exploration rather than manipulation of arbitrary visible
+        # devices. For example, when a TV is not visible, a wall phone or a
+        # light switch must not become a substitute target merely because it is
+        # switchable. Rooms and navigation landmarks are generic search skills.
+        if not directly_relevant_ids:
+            character = self._get_character(nodes)
+            character_id = int(character["id"]) if character else 1
             for node in nodes:
-                properties = self._upper_set(node.get("properties", []))
-                if properties & {
-                    "GRABBABLE", "HAS_SWITCH", "HAS_PLUG", "OPENABLE", "CAN_OPEN",
-                    "CONTAINER", "CONTAINERS", "SURFACE",
-                }:
-                    selected_ids.add(int(node["id"]))
+                node_id = int(node["id"])
+                if not self._is_navigation_target(node):
+                    continue
+                if self._is_current_room(
+                    node_id=node_id,
+                    graph=graph,
+                    character_id=character_id,
+                ):
+                    continue
+                selected_ids.add(node_id)
 
         return selected_ids
 
@@ -495,9 +592,13 @@ class SayCanAgent(BaseAgent):
             "You are the Say component of a SayCan planner. Score how useful "
             "each candidate skill is as the immediate next step for completing "
             "the instruction. A separate Can component evaluates physical "
-            "executability. Prefer coherent progress, respect conditional "
-            "instructions and active rules, and avoid repeating failed skills. "
-            "Return valid JSON only."
+            "executability. Treat an if/when clause as a condition to check, "
+            "not as a state that should be restored. Focus on the requested "
+            "effect in the main clause, preserve progress already made, and "
+            "avoid irrelevant device controls or action cycles. If the named "
+            "target is not visible and the candidates are navigation actions, "
+            "prefer the location most likely to reveal the target rather than "
+            "acting on an unrelated object. Return valid JSON only."
         )
         user_prompt = f"""
 Instruction:
@@ -690,9 +791,7 @@ order. Every score must be between 0 and 100.
 
             if action_name in {"open", "close"}:
                 if (
-                    not primary_properties.intersection(
-                        self.OPENABLE_PROPERTIES
-                    )
+                    not self._is_openable_target(primary_node)
                     or primary_id not in close_ids
                 ):
                     scores[action] = 0.0
@@ -754,12 +853,7 @@ order. Every score must be between 0 and 100.
                 ):
                     scores[action] = 0.0
                 elif action_name == "putin":
-                    is_container = bool(
-                        destination_properties.intersection(
-                            self.CONTAINER_PROPERTIES
-                            | self.OPENABLE_PROPERTIES
-                        )
-                    )
+                    is_container = self._is_container_target(destination)
                     if not is_container:
                         scores[action] = 0.0
                     elif (
@@ -907,7 +1001,13 @@ order. Every score must be between 0 and 100.
 
         lines = []
         for entry in action_history[-limit:]:
-            status = "success" if entry.get("success") else "failed"
+            success = entry.get("success", entry.get("action_success"))
+            if success is True:
+                status = "success"
+            elif success is False:
+                status = "failed"
+            else:
+                status = "unknown"
             detail = entry.get("error") or entry.get("message") or ""
             line = f"- {entry.get('action', '')}: {status}"
             if detail:
@@ -1000,6 +1100,111 @@ order. Every score must be between 0 and 100.
                 json.dumps(payload, ensure_ascii=False),
             )
 
+    def _node_matches_terms(self, node: dict, goal_terms: Set[str]) -> bool:
+        compact_name = self._compact(node.get("class_name", ""))
+        return any(
+            len(term) >= 2
+            and (term in compact_name or compact_name in term)
+            for term in goal_terms
+        )
+
+    def _is_navigation_target(self, node: dict) -> bool:
+        category = str(node.get("category", "")).upper()
+        compact_name = self._compact(node.get("class_name", ""))
+        if category in self.ROOM_CATEGORIES:
+            return True
+        return any(
+            hint in compact_name
+            for hint in self.NAVIGATION_CLASS_HINTS
+        )
+
+    @staticmethod
+    def _is_current_room(
+        node_id: int,
+        graph: dict,
+        character_id: int,
+    ) -> bool:
+        return any(
+            int(edge.get("from_id", -1)) == character_id
+            and int(edge.get("to_id", -1)) == node_id
+            and str(
+                edge.get("relation_type", edge.get("relation", ""))
+            ).upper() == "INSIDE"
+            for edge in graph.get("edges", [])
+        )
+
+    def _is_openable_target(self, node: dict) -> bool:
+        properties = self._upper_set(node.get("properties", []))
+        if not properties.intersection(self.OPENABLE_PROPERTIES):
+            return False
+
+        category = str(node.get("category", "")).upper()
+        if category in self.NON_OPENABLE_CATEGORIES:
+            return False
+
+        compact_name = self._compact(node.get("class_name", ""))
+        has_class_hint = any(
+            self._compact(hint) in compact_name
+            or compact_name in self._compact(hint)
+            for hint in self.OPENABLE_CLASS_HINTS
+        )
+        return bool(
+            properties.intersection(self.CONTAINER_PROPERTIES)
+            or has_class_hint
+        )
+
+    def _is_container_target(self, node: dict) -> bool:
+        properties = self._upper_set(node.get("properties", []))
+        return bool(
+            properties.intersection(self.CONTAINER_PROPERTIES)
+            or self._is_openable_target(node)
+        )
+
+    def _should_offer_switch_on(
+        self,
+        compact_goal: str,
+        is_goal_target: bool,
+        is_support_device: bool,
+    ) -> bool:
+        explicit_on = any(
+            phrase in compact_goal
+            for phrase in (
+                "turnon", "turniton", "switchon", "switchiton",
+                "poweron", "poweriton", "activate", "start",
+            )
+        )
+        task_needs_activation = any(
+            term in compact_goal for term in self.ACTIVATION_TASK_TERMS
+        )
+        explicit_on = explicit_on or compact_goal.endswith("on")
+        return (explicit_on and is_goal_target) or (
+            task_needs_activation and is_support_device
+        )
+
+    @staticmethod
+    def _goal_requests_switch_off(compact_goal: str) -> bool:
+        return any(
+            phrase in compact_goal
+            for phrase in (
+                "turnoff", "turnitoff", "switchoff", "switchitoff",
+                "poweroff", "poweritoff", "deactivate", "stop",
+            )
+        )
+
+    @staticmethod
+    def _goal_requests_plug_in(compact_goal: str) -> bool:
+        return any(
+            phrase in compact_goal
+            for phrase in ("plugin", "pluggedin", "connectpower")
+        )
+
+    @staticmethod
+    def _goal_requests_plug_out(compact_goal: str) -> bool:
+        return any(
+            phrase in compact_goal
+            for phrase in ("plugout", "unplug", "disconnectpower")
+        )
+
     def _inside_closed_container(
         self,
         object_id: int,
@@ -1037,12 +1242,34 @@ order. Every score must be between 0 and 100.
             consecutive_matches += 1
             penalty *= 0.1 if not entry.get("success", False) else 0.35
 
+        recent_actions = [
+            str(entry.get("action", ""))
+            for entry in action_history[-6:]
+        ]
+
         if consecutive_matches == 0:
             # Penalize a recently failed action even if another action occurred after it.
             for entry in action_history[-3:]:
-                if entry.get("action") == action and not entry.get("success", False):
-                    penalty *= 0.25
+                success = entry.get("success", entry.get("action_success"))
+                if entry.get("action") == action and success is False:
+                    penalty *= 0.15
                     break
+
+        # Detect an emerging A-B-A loop. This is task independent and only uses
+        # the runner-provided action history.
+        if len(recent_actions) >= 2 and action == recent_actions[-2]:
+            penalty *= 0.08
+
+        # Detect a sustained A-B-A-B loop and almost completely suppress either
+        # member until another skill is attempted.
+        if (
+            len(recent_actions) >= 4
+            and recent_actions[-4] == recent_actions[-2]
+            and recent_actions[-3] == recent_actions[-1]
+            and action in {recent_actions[-1], recent_actions[-2]}
+        ):
+            penalty *= 0.02
+
         return penalty
 
     @staticmethod
