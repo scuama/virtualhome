@@ -205,7 +205,17 @@ def main():
         if args.force:
             cmd.append("--force")
         
-        subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        env = os.environ.copy()
+        project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+        subprocess.Popen(
+            cmd,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+            env=env,
+            cwd=project_root,
+        )
         print(f"[INFO] Task started in background.")
         print(f"[INFO] Evaluating methods: {', '.join(args.method)}")
         print(f"[INFO] Monitor logs via: tail -f {log_path}")
