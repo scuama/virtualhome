@@ -39,6 +39,7 @@ class LLMExecutor:
         action_history,
         scheduled_rules=None,
         allow_ask=True,
+        task_context=None,
     ):
         self.logger.info("LLMExecutor: Analyzing filtered graph to decide next action...")
         
@@ -69,7 +70,10 @@ class LLMExecutor:
                 "[wait]."
             )
         )
-        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nClarification Rule:\n{clarification_rule}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+        task_context_str = json.dumps(
+            task_context or {}, ensure_ascii=False
+        )
+        user_prompt = f"Task Scheduling Context:\n{task_context_str}\n\nGoal Intent FOR THE ACTIVE TASK ONLY:\n{intent_str}\n\nRequired SDG FOR THE ACTIVE TASK ONLY:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nClarification Rule:\n{clarification_rule}\n\nWork only on active_task_id. Never manipulate objects belonging to satisfied_task_ids. What is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
 
         system_prompt = EXECUTOR_SYSTEM_PROMPT
         if not allow_ask:

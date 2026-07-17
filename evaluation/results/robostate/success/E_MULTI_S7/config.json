@@ -1,0 +1,233 @@
+{
+    "scenario_id": "E_MULTI_S7",
+    "extension_type": "multi",
+    "source_scenarios": [
+        "E1_03",
+        "E1_07",
+        "E1_15",
+        "E1_11",
+        "E1_18",
+        "E1_14",
+        "E1_17"
+    ],
+    "instruction_scale": 7,
+    "environment_id": 2,
+    "goal_instruction": "1. If you see a book somewhere unorganized, bring it to the sofa.\n2. The mug should always be on the coffeetable.\n3. Put the folder in the closet.\n4. If your computer stays off, turn it on.\n5. If someone uses a plate for washing dishes and leaves it somewhere, put it in the dishwasher.\n6. If the stove is off, go and turn it on for preheat.\n7. If the radio is off, turn it on.",
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_15",
+            "instruction": "Put the folder in the closet.",
+            "success_condition": {
+                "target_class": "folder",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_18",
+            "instruction": "If someone uses a plate for washing dishes and leaves it somewhere, put it in the dishwasher.",
+            "success_condition": {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "dishwasher",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_14",
+            "instruction": "If the stove is off, go and turn it on for preheat.",
+            "success_condition": {
+                "target_class": "stove",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on.",
+            "success_condition": {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "closet"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ]
+        },
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "dishwasher"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ]
+        },
+        {
+            "target_classes": [
+                "stove"
+            ],
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "radio"
+            ],
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        },
+        {
+            "subject": "folder",
+            "relation": "ON",
+            "object": "desk",
+            "count": 1
+        },
+        {
+            "subject": "plate",
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            {
+                "target_class": "folder",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1
+            },
+            {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "dishwasher",
+                "min_count": 1
+            },
+            {
+                "target_class": "stove",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        ]
+    },
+    "max_steps": 105,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 76.0
+}

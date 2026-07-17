@@ -6,6 +6,7 @@ class PerceptionFilter:
     def __init__(self, llm_client: LLMClient, logger):
         self.llm = llm_client
         self.logger = logger
+        self._selection_cache = {}
         
     def filter_observations(self, raw_graph, intent_dict, current_sdg, max_ids=15):
         """
@@ -28,23 +29,34 @@ class PerceptionFilter:
         
         user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nObserved Object Classes:\n{compressed_scene}"
         
-        # 2. Call Attention LLM
-        self.logger.info("PerceptionFilter: Asking Attention LLM to pick relevant classes...")
-        
-        try:
-            result_str = self.llm.generate_response(
-                system_prompt=PERCEPTION_SYSTEM_PROMPT,
-                user_prompt=user_prompt,
-                response_format="json_object",
-                model_override="gpt-5.4-mini" # Use a fast/cheap model for attention
-            )
-            result_dict = json.loads(result_str)
-            selected_classes = [c.lower() for c in result_dict.get("selected_classes", [])]
-            reasoning = result_dict.get("reasoning", "")
-        except Exception as e:
-            self.logger.error(f"PerceptionFilter failed: {e}")
-            selected_classes = []
-            reasoning = "Fallback due to error."
+        # 2. Call Attention LLM only when either the task or observed class set
+        # changes. State/edge changes do not invalidate a class selection.
+        cache_key = (
+            json.dumps(intent_dict, ensure_ascii=False, sort_keys=True),
+            json.dumps(current_sdg, ensure_ascii=False, sort_keys=True),
+            tuple(sorted(unique_classes)),
+        )
+        cached = self._selection_cache.get(cache_key)
+        if cached is not None:
+            selected_classes = list(cached)
+            reasoning = "Reused cached class selection."
+        else:
+            self.logger.info("PerceptionFilter: Asking Attention LLM to pick relevant classes...")
+            try:
+                result_str = self.llm.generate_response(
+                    system_prompt=PERCEPTION_SYSTEM_PROMPT,
+                    user_prompt=user_prompt,
+                    response_format="json_object",
+                    model_override="gpt-5.4-mini" # Use a fast/cheap model for attention
+                )
+                result_dict = json.loads(result_str)
+                selected_classes = [c.lower() for c in result_dict.get("selected_classes", [])]
+                reasoning = result_dict.get("reasoning", "")
+                self._selection_cache[cache_key] = tuple(selected_classes)
+            except Exception as e:
+                self.logger.error(f"PerceptionFilter failed: {e}")
+                selected_classes = []
+                reasoning = "Fallback due to error."
             
         # Force include objects that are explicitly named in SDG or intent
         sdg_str_lower = sdg_str.lower()
@@ -100,4 +112,3 @@ class PerceptionFilter:
         
         self.logger.info(f"PerceptionFilter: Graph reduced from {len(raw_graph.get('nodes', []))} to {len(filtered_nodes)} nodes.")
         return filtered_graph
-

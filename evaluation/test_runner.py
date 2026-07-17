@@ -11,6 +11,8 @@ import sys
 import signal
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from evaluation.task_progress import TaskProgressTracker
+
 class Logger:
     def __init__(self, filename):
         self.terminal = sys.stdout
@@ -29,69 +31,6 @@ from virtualhome.simulation.environment.unity_environment import UnityEnvironmen
 from agent import AGENT_REGISTRY
 
 DEFAULT_CLARIFICATION_REPLY = "nothing to claim"
-
-
-class TaskProgressTracker:
-    """Tracks per-instruction completion without changing success semantics."""
-
-    def __init__(self, config):
-        configured_tasks = config.get("tasks") or []
-        if configured_tasks:
-            tasks = configured_tasks
-        else:
-            tasks = [
-                {
-                    "task_id": config.get("scenario_id", "task_1"),
-                    "instruction": config.get("goal_instruction", ""),
-                    "success_condition": config.get("success_condition", {}),
-                }
-            ]
-
-        self.tasks = [
-            {
-                "task_id": task.get("task_id", f"task_{index + 1}"),
-                "instruction": task.get("instruction", ""),
-                "success_condition": copy.deepcopy(task.get("success_condition", {})),
-                "completed": False,
-                "completion_step": None,
-            }
-            for index, task in enumerate(tasks)
-        ]
-
-    def update(self, graph, step, check_success, logger=None):
-        for task in self.tasks:
-            if task["completed"]:
-                continue
-            if check_success(graph, task["success_condition"]):
-                task["completed"] = True
-                task["completion_step"] = int(step)
-                if logger:
-                    logger.info(
-                        f"✅ TASK COMPLETED: {task['task_id']} at step {step}."
-                    )
-
-    def as_metrics(self):
-        total = len(self.tasks)
-        completed = sum(1 for task in self.tasks if task["completed"])
-        completion_steps = [
-            task["completion_step"]
-            for task in self.tasks
-            if task["completion_step"] is not None
-        ]
-        mean_completion_step = (
-            round(sum(completion_steps) / len(completion_steps), 4)
-            if completion_steps
-            else None
-        )
-        return {
-            "task_total": total,
-            "task_completed": completed,
-            # SR is strict episode success; PS exposes partial task progress.
-            "sr": 1.0 if total and completed == total else 0.0,
-            "ps": round(completed / total, 4) if total else 0.0,
-            "mean_completion_step": mean_completion_step,
-            "tasks": copy.deepcopy(self.tasks),
-        }
 
 
 class DynamicEventRuntime:
@@ -370,7 +309,17 @@ def apply_overrides(env, config, debug=False):
 
     # 2. 关系覆盖 (位置)
     graph = env.get_graph()
-    for ro in config.get('initial_relations_override', []):
+    relation_overrides = config.get('initial_relations_override', [])
+    # Initialization actions move the real character. Always restore the
+    # configured character spawn after all object placements are complete.
+    ordered_relations = [
+        ro for ro in relation_overrides
+        if str(ro.get('subject', '')).lower() != 'character'
+    ] + [
+        ro for ro in relation_overrides
+        if str(ro.get('subject', '')).lower() == 'character'
+    ]
+    for ro in ordered_relations:
         subj   = ro['subject'].lower()
         count  = ro.get('count', 1)
         
@@ -857,7 +806,8 @@ def main():
                         "step": step_count,
                         "logger": logger,
                         "action_history": action_history,
-                        "hidden_nodes": env.active_hidden_nodes
+                        "hidden_nodes": env.active_hidden_nodes,
+                        "task_progress": task_tracker.as_env_info(),
                     }
 
                     try:
@@ -918,9 +868,38 @@ def main():
                         history_entry["message" if action_success else "error"] = info["action_message"]
                     action_history.append(history_entry)
 
+                    # Refresh evaluator truth immediately so the step log and
+                    # the next agent call see the action's resulting state.
+                    try:
+                        task_tracker.update(
+                            env.get_graph(),
+                            step_count + 1,
+                            check_success,
+                            logger,
+                        )
+                    except Exception as progress_error:
+                        logger.error(
+                            f"Task progress refresh failed: {progress_error}"
+                        )
+
                     try:
                         # Write markdown step
-                        logger.write_step(step_count, action_str, None, [])
+                        decision = getattr(agent, "last_decision", {}) or {}
+                        logger.write_step(
+                            step_count,
+                            action_str,
+                            decision.get("sdg"),
+                            decision.get("observed_items", []),
+                            decision.get("current_node_focus"),
+                            decision.get("satisfied_nodes"),
+                            action_success=action_success,
+                            action_message=(
+                                info.get("action_message") if info else None
+                            ),
+                            task_progress=task_tracker.as_env_info(),
+                            active_task_id=decision.get("active_task_id"),
+                            decision_source=decision.get("source"),
+                        )
                     except Exception:
                         pass
 

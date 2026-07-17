@@ -1,226 +1,453 @@
-import json
-import os
-import datetime
+"""RoboState agent with evaluator-driven multi-task control."""
+
+import re
+from typing import Optional, Set
+
+from .base_agent import BaseAgent
+from .robostate.action_validator import ActionValidator
+from .robostate.exploration import RoomFrontierExplorer
+from .robostate.goal_reasoner import GoalReasoner
+from .robostate.llm_executor import LLMExecutor
+from .robostate.loop_detector import LoopDetector
+from .robostate.perception_filter import PerceptionFilter
+from .robostate.sdg_planner import SDGPlanner
+from .robostate.task_manager import MultiTaskManager, TaskState
 from .utils.llm_client import LLMClient
 from .utils.logger import AgentLogger
-from .robostate.goal_reasoner import GoalReasoner
-from .robostate.sdg_planner import SDGPlanner
-from .robostate.perception_filter import PerceptionFilter
-from .robostate.llm_executor import LLMExecutor
-from .base_agent import BaseAgent
+
 
 class RoboStateAgent(BaseAgent):
+    REQUIRED_OBSERVATION = ["partial"]
+
     def __init__(self, model_name="gpt-4o-mini", scenario_id=""):
         super().__init__(model_name, scenario_id)
         self.llm = LLMClient(model_name=model_name)
-        self.action_history = []
-        self.current_sdg = None
-        self.goal_reasoner = None
-        self.sdg_planner = None
-        self.perception_filter = None
-        self.llm_executor = None
         self.scenario_id = scenario_id
         self.logger = None
-
-    def _get_observed_items(self, graph, current_step=0):
-        active_rules = []
-        for r in getattr(self, 'env_rules', []):
-            if r['start_step'] <= current_step <= r['end_step']:
-                rule_text = r['rule_text']
-                if r['end_step'] < 999:
-                    rule_text += f" (Note: This rule is temporary and will expire at step {r['end_step']+1}. If this rule blocks your required preconditions, you MUST output [wait] until it expires instead of giving up.)"
-                active_rules.append(rule_text)
-        items = []
-        for n in graph.get('nodes', []):
-            states = n.get('states', [])
-            state_str = f" [{','.join(states)}]" if states else ""
-            items.append(f"{n['class_name']}({n['id']}){state_str}")
-        return items
-
-    def _check_success(self, graph, condition, action_history=None):
-        if not condition: return False
-        
-        mode = condition.get('mode', 'SINGLE')
-        conditions = condition.get('conditions', [condition]) if mode == 'AND' else [condition]
-        
-        for cond in conditions:
-            target_class = cond.get('target_class', 'ANY')
-            min_count = cond.get('min_count', 1)
-            req_states = cond.get('states', [])
-            req_props = cond.get('properties', [])
-            relation = cond.get('relation')
-            dest_class = cond.get('destination_class')
-            dest_states = cond.get('destination_states', [])
-            dest_props = cond.get('destination_properties', [])
-            
-            if target_class.upper() == 'ANY':
-                candidates = graph['nodes']
-            elif target_class.lower() == 'character':
-                candidates = [n for n in graph['nodes'] if n.get('id') == 1 or n['class_name'].lower() == 'character']
-            else:
-                candidates = [n for n in graph['nodes'] if n['class_name'].lower() == target_class.lower()]
-
-            if not candidates:
-                return False
-                
-            if req_states:
-                valid_candidates = []
-                for n in candidates:
-                    node_states = [s.upper() for s in n.get('states', [])]
-                    if all(req.upper() in node_states for req in req_states):
-                        valid_candidates.append(n)
-                candidates = valid_candidates
-                
-            if req_props:
-                valid_candidates = []
-                for n in candidates:
-                    node_props = [p.upper() for p in n.get('properties', [])]
-                    if all(req.upper() in node_props for req in req_props):
-                        valid_candidates.append(n)
-                candidates = valid_candidates
-                
-            if relation:
-                valid_candidates = []
-                for n in candidates:
-                    rel_matched = False
-                    for e in graph['edges']:
-                        e_rel = e.get('relation_type', e.get('relation', '')).upper()
-                        target_rels = [r.strip() for r in relation.upper().split('|')]
-                        if e['from_id'] == n['id'] and e_rel in target_rels:
-                            target_node = next((tn for tn in graph['nodes'] if tn['id'] == e['to_id']), None)
-                            if not target_node: continue
-                            
-                            # Check destination class
-                            if dest_class and dest_class.upper() != 'ANY':
-                                if target_node['class_name'].lower() != dest_class.lower():
-                                    continue
-                            
-                            # Check destination states
-                            if dest_states:
-                                tn_states = [s.upper() for s in target_node.get('states', [])]
-                                if not all(req.upper() in tn_states for req in dest_states):
-                                    continue
-                                    
-                            # Check destination properties
-                            if dest_props:
-                                tn_props = [p.upper() for p in target_node.get('properties', [])]
-                                if not all(req.upper() in tn_props for req in dest_props):
-                                    continue
-                            
-                            rel_matched = True
-                            break
-                    if rel_matched:
-                        valid_candidates.append(n)
-                candidates = valid_candidates
-                
-            if len(candidates) < min_count:
-                return False
-
-        return True
-
-    REQUIRED_OBSERVATION = ["partial"]
+        self.action_history = []
+        self.last_decision = {}
+        self._initialized = False
 
     def get_action(self, obs: dict, config: dict, env_info: dict = None) -> str:
-        goal_instruction = config.get("goal_instruction", "")
-        if not goal_instruction:
-            return "done()"
-            
         env_info = env_info or {}
-        step = env_info.get("step", 0)
-        self.logger = env_info.get("logger") or getattr(self, "logger", None)
+        step = int(env_info.get("step", 0))
+        goal = str(config.get("goal_instruction", "")).strip()
+        if not goal and not config.get("tasks"):
+            return "done()"
+
+        self.logger = env_info.get("logger") or self.logger
         if not self.logger:
-            self.logger = AgentLogger(log_mode=config.get("log_mode", "markdown"), scenario_id=self.scenario_id)
-            
+            self.logger = AgentLogger(
+                log_mode=config.get("log_mode", "markdown"),
+                scenario_id=self.scenario_id,
+            )
         self.action_history = env_info.get("action_history", [])
 
-        if step == 0:
-            self.goal_reasoner = GoalReasoner(self.llm, self.logger)
-            self.sdg_planner = SDGPlanner(self.llm, self.logger)
-            self.perception_filter = PerceptionFilter(self.llm, self.logger)
-            self.llm_executor = LLMExecutor(self.llm, self.logger)
-            
-            self.logger.info(f"Starting Episode: {goal_instruction}")
-            self.goal_intent = self.goal_reasoner.extract_intent(goal_instruction)
-            self.current_sdg = self.sdg_planner.generate_sdg(goal_instruction)
-            
-            self.memory_nodes = {}
-            self.memory_edges = {}
-            self.clarification_received = False
+        if step == 0 or not self._initialized:
+            self._initialize_episode(config, goal)
 
-        # --- Check if previous step was an [ask] with a user reply ---
-        if step > 0 and self.action_history:
-            last_entry = self.action_history[-1]
-            if last_entry.get("action", "").lower().startswith("[ask]") and last_entry.get("success"):
-                clarification = last_entry.get("message")
-                if clarification:
-                    self.clarification_received = True
-                    rewrite_sys = "You are a helpful assistant rewriting instructions."
-                    rewrite_user = f"Original instruction: '{goal_instruction}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
-                    try:
-                        new_goal_instruction = self.llm.generate_response(rewrite_sys, rewrite_user).strip()
-                    except Exception:
-                        new_goal_instruction = goal_instruction + " " + clarification
-                        
-                    self.logger.info(f"User provided clarification: {clarification}. Rewritten instruction: {new_goal_instruction}")
-                    config['goal_instruction'] = new_goal_instruction
-                    self.goal_intent = self.goal_reasoner.extract_intent(new_goal_instruction)
-                    self.current_sdg = self.sdg_planner.generate_sdg(new_goal_instruction)
+        self._consume_previous_result(step)
+        self._handle_clarification()
+        memory_graph, effective_graph = self._update_memory(
+            obs, step, env_info.get("hidden_nodes", {})
+        )
 
-        self.active_hidden_nodes = env_info.get("hidden_nodes", {})
+        self.task_manager.update_progress(
+            env_info.get("task_progress"), step
+        )
+        self.task_manager.refresh_graph_classes(memory_graph)
+        self.explorer.update(obs, step)
 
-        # --- UPDATE SPATIAL MEMORY ---
+        if self.task_manager.all_satisfied():
+            return self._return_action(
+                step, "done()", None, effective_graph, source="all_tasks_satisfied"
+            )
+
+        hidden_nodes = env_info.get("hidden_nodes", {})
+        attempted_tasks: Set[str] = set()
+        hidden_task_ids: Set[str] = set()
+
+        for _ in range(max(1, len(self.task_manager.tasks))):
+            task = self.task_manager.select_task(
+                memory_graph, step, exclude=attempted_tasks
+            )
+            if task is None:
+                break
+            attempted_tasks.add(task.task_id)
+
+            try:
+                self.task_manager.ensure_plan(
+                    task, self.goal_reasoner, self.sdg_planner
+                )
+            except Exception as exc:
+                self.logger.error(
+                    f"Planning failed for task {task.task_id}: {exc}"
+                )
+                self.task_manager.defer(
+                    task.task_id, step, "intent or SDG generation failed"
+                )
+                continue
+
+            hidden_ids = self.explorer.relevant_hidden_ids(
+                task.required_classes,
+                hidden_nodes,
+                memory_graph,
+            )
+            if hidden_ids:
+                hidden_task_ids.add(task.task_id)
+                unfinished_count = sum(
+                    1
+                    for item in self.task_manager.tasks
+                    if not item.currently_satisfied
+                    and item.task_id not in attempted_tasks
+                )
+                if unfinished_count:
+                    self.task_manager.defer(
+                        task.task_id,
+                        step,
+                        f"dynamic object(s) hidden: {sorted(hidden_ids)}",
+                    )
+                    continue
+                return self._return_action(
+                    step,
+                    "[wait]",
+                    task,
+                    effective_graph,
+                    source="relevant_dynamic_object_hidden",
+                )
+
+            missing_classes = self.explorer.missing_classes(
+                task.required_classes, memory_graph
+            )
+            if missing_classes:
+                explore_action = self.explorer.next_action(step)
+                if explore_action:
+                    self.logger.info(
+                        f"Task {task.task_id} is missing {sorted(missing_classes)}; "
+                        "exploring another room."
+                    )
+                    return self._return_action(
+                        step,
+                        explore_action,
+                        task,
+                        effective_graph,
+                        source="room_frontier",
+                    )
+                self.task_manager.defer(
+                    task.task_id,
+                    step,
+                    f"required classes not found: {sorted(missing_classes)}",
+                )
+                continue
+
+            filtered_graph = (
+                self.perception_filter.filter_observations(
+                    effective_graph, task.intent or {}, task.sdg
+                )
+                if task.sdg
+                else effective_graph
+            )
+            candidate, reasoning, focus, satisfied_nodes = (
+                self.llm_executor.decide_next_action(
+                    filtered_graph,
+                    task.intent or {},
+                    task.sdg,
+                    self.action_history,
+                    config.get("scheduled_rules"),
+                    allow_ask=not self.clarification_received,
+                    task_context=self.task_manager.task_context(),
+                )
+            )
+            candidate = self._normalize_action(candidate)
+            allow_wait = self._temporary_rule_active(config, step)
+
+            loop = self.loop_detector.check(candidate, self.action_history)
+            if loop.detected:
+                self.logger.info(
+                    f"LoopDetector rejected {candidate!r}: {loop.reason}."
+                )
+                self.task_manager.defer(task.task_id, step, loop.reason or "loop")
+                continue
+
+            validation = self.action_validator.validate(
+                candidate,
+                effective_graph,
+                protected_classes=(
+                    self.task_manager.protected_classes()
+                ),
+                allow_wait=allow_wait,
+            )
+            if not validation.valid or not validation.action:
+                self.logger.info(
+                    f"ActionValidator rejected {candidate!r} for task "
+                    f"{task.task_id}: {validation.reason}."
+                )
+                self.task_manager.defer(
+                    task.task_id, step, validation.reason or "invalid action"
+                )
+                continue
+
+            if validation.repaired:
+                self.logger.info(
+                    f"ActionValidator replaced {candidate!r} with "
+                    f"{validation.action!r}: {validation.reason}."
+                )
+            return self._return_action(
+                step,
+                validation.action,
+                task,
+                filtered_graph,
+                focus=focus,
+                satisfied_nodes=satisfied_nodes,
+                source="llm_executor_repaired" if validation.repaired else "llm_executor",
+                reasoning=reasoning,
+            )
+
+        # Every runnable task requested an unsafe action or lacked a grounded
+        # object. Keep making spatial progress instead of entering a wait loop.
+        recovery_action = self.explorer.next_action(step, revisit=True)
+        recovery_task = self.task_manager.active_task
+        if recovery_action:
+            return self._return_action(
+                step,
+                recovery_action,
+                recovery_task,
+                effective_graph,
+                source="loop_recovery_room_revisit",
+            )
+        if hidden_task_ids or self._temporary_rule_active(config, step):
+            return self._return_action(
+                step,
+                "[wait]",
+                recovery_task,
+                effective_graph,
+                source="allowed_wait_recovery",
+            )
+
+        self.logger.error(
+            "RoboState exhausted task switching and room exploration; no safe "
+            "grounded action is available."
+        )
+        return self._return_action(
+            step,
+            "[wait]",
+            recovery_task,
+            effective_graph,
+            source="no_safe_action",
+        )
+
+    def _initialize_episode(self, config: dict, goal: str) -> None:
+        self.goal_reasoner = GoalReasoner(self.llm, self.logger)
+        self.sdg_planner = SDGPlanner(self.llm, self.logger)
+        self.perception_filter = PerceptionFilter(self.llm, self.logger)
+        self.llm_executor = LLMExecutor(self.llm, self.logger)
+        self.task_manager = MultiTaskManager(
+            config,
+            logger=self.logger,
+            failure_limit=int(config.get("robostate_task_failure_limit", 2)),
+        )
+        self.explorer = RoomFrontierExplorer(self.logger)
+        self.action_validator = ActionValidator()
+        self.loop_detector = LoopDetector()
+        self.memory_nodes = {}
+        self.memory_edges = {}
+        self.memory_last_seen = {}
+        self.clarification_received = False
+        self._processed_history_steps = set()
+        self._processed_clarification_steps = set()
+        self._issued_task_by_step = {}
+        self.last_decision = {}
+        self._initialized = True
+        label = goal or " | ".join(
+            task.instruction for task in self.task_manager.tasks
+        )
+        self.logger.info(
+            f"Starting RoboState episode with {len(self.task_manager.tasks)} "
+            f"task(s): {label}"
+        )
+
+    def _consume_previous_result(self, step: int) -> None:
+        if not self.action_history:
+            return
+        entry = self.action_history[-1]
+        history_step = int(entry.get("step", len(self.action_history) - 1))
+        if history_step in self._processed_history_steps:
+            return
+        self._processed_history_steps.add(history_step)
+        task_id = self._issued_task_by_step.get(history_step)
+        success = self._coerce_success(entry.get("success", False))
+        self.task_manager.record_result(task_id, success, step)
+        self.explorer.record_action(
+            entry.get("action", ""), success, history_step
+        )
+
+    def _handle_clarification(self) -> None:
+        if not self.action_history:
+            return
+        entry = self.action_history[-1]
+        history_step = int(entry.get("step", len(self.action_history) - 1))
+        if history_step in self._processed_clarification_steps:
+            return
+        if not str(entry.get("action", "")).lower().startswith("[ask]"):
+            return
+        if not self._coerce_success(entry.get("success", False)):
+            return
+
+        self._processed_clarification_steps.add(history_step)
+        self.clarification_received = True
+        clarification = str(entry.get("message", "")).strip()
+        task_id = self._issued_task_by_step.get(history_step)
+        task = self.task_manager.get(task_id) or self.task_manager.active_task
+        if not task or not self._meaningful_clarification(clarification):
+            self.logger.info(
+                "Clarification contained no new task information; continuing "
+                "autonomous search."
+            )
+            return
+
+        rewrite_system = "You rewrite embodied task instructions precisely."
+        rewrite_user = (
+            f"Original instruction: {task.instruction!r}\n"
+            f"User clarification: {clarification!r}\n"
+            "Combine them into one complete English instruction. Output only "
+            "the instruction."
+        )
+        rewritten = self.llm.generate_response(
+            rewrite_system, rewrite_user
+        ).strip()
+        if not rewritten:
+            rewritten = f"{task.instruction} {clarification}".strip()
+        self.task_manager.revise_task(task.task_id, rewritten)
+
+    def _update_memory(self, obs: dict, step: int, hidden_nodes) -> tuple:
         visible_ids = set()
-        for n in obs.get('nodes', []):
-            self.memory_nodes[n['id']] = n.copy()
-            visible_ids.add(n['id'])
-            self.memory_edges[n['id']] = []
-            
-        for e in obs.get('edges', []):
-            if e['from_id'] in visible_ids:
-                self.memory_edges[e['from_id']].append(e)
-                
-        # Reconstruct merged graph from memory
-        raw_graph = {
-            'nodes': list(self.memory_nodes.values()),
-            'edges': [e for edge_list in self.memory_edges.values() for e in edge_list]
+        for node in obs.get("nodes", []):
+            node_id = int(node["id"])
+            self.memory_nodes[node_id] = dict(node)
+            self.memory_last_seen[node_id] = int(step)
+            self.memory_edges[node_id] = []
+            visible_ids.add(node_id)
+
+        for edge in obs.get("edges", []):
+            from_id = int(edge.get("from_id", -1))
+            if from_id in visible_ids:
+                self.memory_edges[from_id].append(dict(edge))
+
+        memory_graph = {
+            "nodes": list(self.memory_nodes.values()),
+            "edges": [
+                edge
+                for edges in self.memory_edges.values()
+                for edge in edges
+            ],
+        }
+        hidden_ids = {int(node_id) for node_id in (hidden_nodes or {})}
+        effective_graph = {
+            "nodes": [
+                node
+                for node in memory_graph["nodes"]
+                if int(node.get("id", -1)) not in hidden_ids
+            ],
+            "edges": [
+                edge
+                for edge in memory_graph["edges"]
+                if int(edge.get("from_id", -1)) not in hidden_ids
+                and int(edge.get("to_id", -1)) not in hidden_ids
+            ],
+        }
+        return memory_graph, effective_graph
+
+    def _return_action(
+        self,
+        step: int,
+        action: str,
+        task: Optional[TaskState],
+        graph: dict,
+        focus: str = "",
+        satisfied_nodes=None,
+        source: str = "controller",
+        reasoning: str = "",
+    ) -> str:
+        task_id = task.task_id if task else None
+        self._issued_task_by_step[int(step)] = task_id
+        observed_items = self._get_observed_items(graph)
+        self.last_decision = {
+            "active_task_id": task_id,
+            "task_progress": self.task_manager.task_context(),
+            "sdg": task.sdg if task else None,
+            "observed_items": observed_items,
+            "current_node_focus": focus,
+            "satisfied_nodes": list(satisfied_nodes or []),
+            "source": source,
+            "reasoning": reasoning,
+        }
+        try:
+            self.logger.log_module_output(
+                "RoboStateMultiTaskController",
+                step,
+                {
+                    "action": action,
+                    "active_task_id": task_id,
+                    "task_context": self.task_manager.task_context(),
+                    "source": source,
+                },
+            )
+        except Exception:
+            pass
+        return action
+
+    @staticmethod
+    def _normalize_action(action: str) -> str:
+        value = str(action or "").strip()
+        if value.upper() == "WAIT" or value.lower() == "wait()":
+            return "[wait]"
+
+        def add_brackets(match):
+            class_name = match.group(1).strip()
+            return f" <{class_name}> ({match.group(2)})"
+
+        return re.sub(
+            r"\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)",
+            add_brackets,
+            value,
+        )
+
+    @staticmethod
+    def _get_observed_items(graph: dict):
+        items = []
+        for node in graph.get("nodes", []):
+            states = node.get("states", [])
+            suffix = f" [{','.join(states)}]" if states else ""
+            items.append(
+                f"{node.get('class_name', 'object')}({node.get('id')}){suffix}"
+            )
+        return items
+
+    @staticmethod
+    def _temporary_rule_active(config: dict, step: int) -> bool:
+        return any(
+            int(rule.get("start_step", 0))
+            <= step
+            <= int(rule.get("end_step", 9999))
+            for rule in config.get("scheduled_rules", []) or []
+        )
+
+    @staticmethod
+    def _meaningful_clarification(message: str) -> bool:
+        normalized = " ".join(str(message).strip().lower().split())
+        return normalized not in {
+            "",
+            "none",
+            "n/a",
+            "no clarification",
+            "nothing to claim",
+            "nothing to clarify",
         }
 
-        # --- GRAPH PRUNING FOR HIDDEN NODES ---
-        if self.active_hidden_nodes:
-            raw_graph['nodes'] = [n for n in raw_graph['nodes'] if n['id'] not in self.active_hidden_nodes]
-            raw_graph['edges'] = [e for e in raw_graph['edges'] if e['from_id'] not in self.active_hidden_nodes and e['to_id'] not in self.active_hidden_nodes]
-
-        # 4. Perception Filter
-        if self.current_sdg:
-            filtered_graph = self.perception_filter.filter_observations(
-                raw_graph, self.goal_intent, self.current_sdg
-            )
-        else:
-            filtered_graph = raw_graph
-        
-        observed = self._get_observed_items(filtered_graph)
-
-        # Decide next action
-        next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
-            filtered_graph,
-            self.goal_intent,
-            self.current_sdg,
-            self.action_history,
-            config.get('scheduled_rules'),
-            allow_ask=not getattr(self, 'clarification_received', False),
-        )
-        
-        import re
-        if next_action and next_action != "WAIT":
-            def add_brackets(match):
-                cls_name = match.group(1).strip()
-                if not cls_name.startswith('<'):
-                    cls_name = f"<{cls_name}>"
-                return f" {cls_name} ({match.group(2)})"
-            
-            next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
-            
-        else:
-            next_action = "[wait]"
-            
-        return next_action
+    @staticmethod
+    def _coerce_success(value) -> bool:
+        if isinstance(value, dict):
+            return all(bool(item) for item in value.values()) if value else False
+        if isinstance(value, (list, tuple)):
+            return all(bool(item) for item in value) if value else False
+        return bool(value)

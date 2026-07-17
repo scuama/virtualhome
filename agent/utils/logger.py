@@ -36,10 +36,37 @@ class AgentLogger:
                 formatted_data = json.dumps(output_data, ensure_ascii=False, indent=2)
             f.write(f"\n### [{module_name}] Output\n```json\n{formatted_data}\n```\n")
         
-    def write_step(self, step, action, sdg, observed_items, current_node_focus=None, satisfied_nodes=None):
+    def write_step(
+        self,
+        step,
+        action,
+        sdg,
+        observed_items,
+        current_node_focus=None,
+        satisfied_nodes=None,
+        action_success=None,
+        action_message=None,
+        task_progress=None,
+        active_task_id=None,
+        decision_source=None,
+    ):
         with open(self.log_file, "a", encoding="utf-8") as f:
             f.write(f"## Step {step}\n")
             f.write(f"- **Action**: `{action}`\n")
+            if action_success is not None:
+                f.write(f"- **Action Success**: `{bool(action_success)}`\n")
+            if action_message:
+                f.write(f"- **Action Message**: {action_message}\n")
+            if active_task_id:
+                f.write(f"- **Active Task**: `{active_task_id}`\n")
+            if decision_source:
+                f.write(f"- **Decision Source**: `{decision_source}`\n")
+            if task_progress:
+                progress_text = ", ".join(
+                    f"{item.get('task_id')}={'done' if item.get('currently_satisfied') else 'pending'}"
+                    for item in task_progress
+                )
+                f.write(f"- **Task Progress**: {progress_text}\n")
             
             # Always output the Mermaid graph for SDG
             f.write(f"- **SDG Status**:\n")

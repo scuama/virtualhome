@@ -168,6 +168,8 @@ fabric.properties
 # Project-specific stuff
 /test*/
 /test*.py
+!/tests/
+!/tests/test_robostate_multitask.py
 data/*
 .vscode/
 
