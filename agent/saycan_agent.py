@@ -2,12 +2,11 @@ import json
 import re
 from typing import Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
-from .utils.logger import AgentLogger
 from .utils.llm_client import LLMClient
 from .base_agent import BaseAgent
 
 
-SAYCAN_AGENT_VERSION = "SAYCAN-VH-v3.0-2026-07-16"
+SAYCAN_AGENT_VERSION = "SAYCAN-VH-v3.1-STEPWISE-2026-07-17"
 __version__ = SAYCAN_AGENT_VERSION
 
 
@@ -61,57 +60,85 @@ class SayCanAgent(BaseAgent):
     SURFACE_PROPERTIES = {"SURFACE"}
     OPENABLE_PROPERTIES = {"OPENABLE", "CAN_OPEN"}
 
-    def __init__(self, model_name: str = "gpt-5.4-mini", scenario_id: str = ""):
+    def __init__(
+        self,
+        model_name: str = "gpt-5.4-mini",
+        scenario_id: str = "",
+    ):
+        super().__init__(model_name=model_name, scenario_id=scenario_id)
         self.llm = LLMClient(model_name=model_name)
-        self.scenario_id = scenario_id
-        self.logger = None
-        self.action_history: List[dict] = []
-        self.goal = ""
         self.version = self.VERSION
 
     # ------------------------------------------------------------------
-    # Agent Action Selection
+    # Stepwise Agent Action Selection
     # ------------------------------------------------------------------
-    def get_action(self, obs: dict, config: dict, env_info: dict = None) -> str:
-        self.goal = str(config.get("goal_instruction", "")).strip()
-        if not self.goal:
-            return "done()"
-
+    def get_action(
+        self,
+        obs: dict,
+        config: dict,
+        env_info: dict = None,
+    ) -> str:
+        """Select exactly one action without modifying the environment."""
         env_info = env_info or {}
-        step = env_info.get("step", 0)
-        self.logger = env_info.get("logger") or self.logger
-        self.action_history = env_info.get("action_history", [])
+
+        goal = str(config.get("goal_instruction", "")).strip()
+        if not goal:
+            raise ValueError(
+                "SayCanAgent requires config['goal_instruction']."
+            )
+
+        step = int(env_info.get("step", 0))
+        action_history = list(env_info.get("action_history", []) or [])
+        logger = env_info.get("logger")
 
         if step == 0:
-            self.logger.info(f"[{self.VERSION}] Starting SayCan-VH episode for goal: {self.goal}")
+            self._safe_info(
+                logger,
+                f"[{self.VERSION}] Starting SayCan-VH episode "
+                f"for goal: {goal}",
+            )
             self._log_module_output(
-                "SayCanVersion",
-                0,
-                {
+                logger=logger,
+                module_name="SayCanVersion",
+                step=0,
+                payload={
                     "version": self.VERSION,
                     "implementation": "SayCan (VirtualHome adaptation)",
+                    "interface": "BaseAgent.get_action",
                     "say_score_mode": self.SAY_SCORE_MODE,
                     "can_score_mode": self.CAN_SCORE_MODE,
-                    "say_context_mode": config.get("saycan_say_context_mode", "state_summary"),
+                    "say_context_mode": config.get(
+                        "saycan_say_context_mode",
+                        "state_summary",
+                    ),
                     "task_semantics_in_can": False,
                 },
             )
 
-        graph = self._deduplicate_graph(obs)
+        graph = self._deduplicate_graph(
+            self._extract_graph(obs)
+        )
 
         candidate_actions = self._generate_candidate_actions(
             graph=graph,
-            goal=self.goal,
+            goal=goal,
             config=config,
+            action_history=action_history,
         )
         if not candidate_actions:
-            self.logger.error("No candidate skills could be generated.")
-            return "done()"
+            self._safe_error(
+                logger,
+                "No candidate skills could be generated; returning [wait].",
+            )
+            return "[wait]"
 
         say_scores = self._score_with_llm(
             graph=graph,
             candidate_actions=candidate_actions,
             config=config,
+            goal=goal,
+            action_history=action_history,
+            logger=logger,
         )
         can_scores = self._score_affordance(
             graph=graph,
@@ -124,7 +151,10 @@ class SayCanAgent(BaseAgent):
             combined_scores[action] = (
                 say_scores.get(action, 0.0)
                 * can_scores.get(action, 0.0)
-                * self._repetition_penalty(action)
+                * self._repetition_penalty(
+                    action,
+                    action_history,
+                )
             )
 
         best_action = self._select_action(
@@ -135,6 +165,7 @@ class SayCanAgent(BaseAgent):
         )
 
         self._log_scoring(
+            logger=logger,
             step=step,
             candidate_actions=candidate_actions,
             say_scores=say_scores,
@@ -143,20 +174,42 @@ class SayCanAgent(BaseAgent):
             best_action=best_action,
         )
 
-        self.logger.info(
+        self._safe_info(
+            logger,
             f"[{self.VERSION}] Step {step}: selected '{best_action}' "
             f"(Say={say_scores.get(best_action, 0.0):.3f}, "
             f"Can={can_scores.get(best_action, 0.0):.3f}, "
-            f"Combined={combined_scores.get(best_action, 0.0):.3f})"
+            f"Combined={combined_scores.get(best_action, 0.0):.3f})",
         )
-
         return best_action
+
+    @staticmethod
+    def _extract_graph(obs: dict) -> dict:
+        if not isinstance(obs, dict):
+            return {"nodes": [], "edges": []}
+        if "nodes" in obs and "edges" in obs:
+            return obs
+        graph = obs.get("graph")
+        if isinstance(graph, dict):
+            return graph
+        return {"nodes": [], "edges": []}
+
+    @staticmethod
+    def _safe_info(logger, message: str) -> None:
+        if logger is not None and hasattr(logger, "info"):
+            logger.info(message)
+
+    @staticmethod
+    def _safe_error(logger, message: str) -> None:
+        if logger is not None and hasattr(logger, "error"):
+            logger.error(message)
 
     def _generate_candidate_actions(
         self,
         graph: dict,
         goal: str,
         config: dict,
+        action_history: Sequence[dict],
     ) -> List[str]:
         nodes = graph.get("nodes", [])
         edges = graph.get("edges", [])
@@ -165,7 +218,11 @@ class SayCanAgent(BaseAgent):
         character_id = int(character["id"]) if character else 1
 
         goal_terms = self._extract_goal_terms(goal)
-        selected_ids = self._select_relevant_node_ids(graph, goal_terms)
+        selected_ids = self._select_relevant_node_ids(
+            graph,
+            goal_terms,
+            action_history,
+        )
 
         selected_nodes = [
             id_to_node[node_id]
@@ -288,7 +345,7 @@ class SayCanAgent(BaseAgent):
         if (
             config.get("dynamic_events")
             or config.get("scheduled_rules")
-            or self._last_action_failed()
+            or self._last_action_failed(action_history)
         ):
             actions.append("[wait]")
 
@@ -303,20 +360,15 @@ class SayCanAgent(BaseAgent):
                 "[ask] Could you clarify the target object or location?"
             )
 
-        # done() allows the language model to express intentional termination,
-        # but run_episode only accepts it when success has already been verified.
-        actions.append("done()")
-
         actions = list(dict.fromkeys(actions))
         actions.sort(key=lambda action: self._candidate_priority(action, goal, graph), reverse=True)
 
         max_candidates = max(5, int(config.get("saycan_max_candidates", 40)))
         if len(actions) > max_candidates:
-            # Preserve done() and wait when truncating.
+            # Preserve wait and ask actions when truncating.
             special = [
                 action for action in actions
-                if action == "done()"
-                or action == "[wait]"
+                if action == "[wait]"
                 or action.lower().startswith("[ask]")
             ]
             regular = [
@@ -327,7 +379,12 @@ class SayCanAgent(BaseAgent):
 
         return actions
 
-    def _select_relevant_node_ids(self, graph: dict, goal_terms: Set[str]) -> Set[int]:
+    def _select_relevant_node_ids(
+        self,
+        graph: dict,
+        goal_terms: Set[str],
+        action_history: Sequence[dict],
+    ) -> Set[int]:
         nodes = graph.get("nodes", [])
         edges = graph.get("edges", [])
         id_to_node = {int(node["id"]): node for node in nodes if "id" in node}
@@ -383,8 +440,10 @@ class SayCanAgent(BaseAgent):
                 selected_ids.add(from_id)
 
         # A failed target must remain available even if it is not explicit in the goal.
-        if self.action_history:
-            for object_id in self.ID_PATTERN.findall(self.action_history[-1].get("action", "")):
+        if action_history:
+            for object_id in self.ID_PATTERN.findall(
+                str(action_history[-1].get("action", ""))
+            ):
                 if int(object_id) in id_to_node:
                     selected_ids.add(int(object_id))
 
@@ -408,11 +467,14 @@ class SayCanAgent(BaseAgent):
         graph: dict,
         candidate_actions: Sequence[str],
         config: dict,
+        goal: str,
+        action_history: Sequence[dict],
+        logger=None,
     ) -> Dict[str, float]:
         context_mode = str(
             config.get("saycan_say_context_mode", "state_summary")
         ).lower()
-        history_summary = self._build_history_summary()
+        history_summary = self._build_history_summary(action_history)
         active_rules = self._active_rules(config)
 
         if context_mode == "instruction_only":
@@ -439,7 +501,7 @@ class SayCanAgent(BaseAgent):
         )
         user_prompt = f"""
 Instruction:
-{self.goal}
+{goal}
 
 Candidate-local environment context:
 {scene_section}
@@ -469,15 +531,19 @@ order. Every score must be between 0 and 100.
                 response, len(candidate_actions)
             )
         except Exception as exc:
-            self.logger.error(f"LLM scoring failed: {exc}")
+            self._safe_error(logger, f"LLM scoring failed: {exc}")
             scores = None
 
         if scores is None:
-            self.logger.error(
-                "Invalid Say response; using generic lexical fallback."
+            self._safe_error(
+                logger,
+                "Invalid Say response; using generic lexical fallback.",
             )
             return self._heuristic_say_scores(
-                candidate_actions, config
+                candidate_actions=candidate_actions,
+                config=config,
+                goal=goal,
+                action_history=action_history,
             )
 
         return {
@@ -507,20 +573,19 @@ order. Every score must be between 0 and 100.
         self,
         candidate_actions: Sequence[str],
         config: dict,
+        goal: str,
+        action_history: Sequence[dict],
     ) -> Dict[str, float]:
         """Generic emergency fallback without task-specific action sequences."""
-        goal_terms = self._extract_goal_terms(self.goal)
+        goal_terms = self._extract_goal_terms(goal)
         scores: Dict[str, float] = {}
 
         for action in candidate_actions:
-            if action == "done()":
-                scores[action] = 0.0
-                continue
             if action == "[wait]":
                 scores[action] = 0.25 if (
                     config.get("dynamic_events")
                     or config.get("scheduled_rules")
-                    or self._last_action_failed()
+                    or self._last_action_failed(action_history)
                 ) else 0.02
                 continue
             if action.lower().startswith("[ask]"):
@@ -536,9 +601,9 @@ order. Every score must be between 0 and 100.
             )
             score = 0.12 + min(0.66, 0.22 * overlap)
 
-            if self.action_history:
+            if action_history:
                 last_action = str(
-                    self.action_history[-1].get("action", "")
+                    action_history[-1].get("action", "")
                 )
                 if action == last_action:
                     score *= 0.35
@@ -585,9 +650,6 @@ order. Every score must be between 0 and 100.
                 for value in self.ID_PATTERN.findall(action)
             ]
 
-            if action == "done()":
-                scores[action] = 0.0
-                continue
             if action == "[wait]" or action.lower().startswith("[ask]"):
                 scores[action] = 1.0
                 continue
@@ -769,7 +831,7 @@ order. Every score must be between 0 and 100.
         combined_scores: Dict[str, float],
     ) -> str:
         if not candidate_actions:
-            return "done()"
+            return "[wait]"
 
         max_combined = max(combined_scores.values(), default=0.0)
         if max_combined > 0:
@@ -785,11 +847,11 @@ order. Every score must be between 0 and 100.
 
         executable = [
             action for action in candidate_actions
-            if can_scores.get(action, 0.0) > 0 and action != "done()"
+            if can_scores.get(action, 0.0) > 0
         ]
         if executable:
             return max(executable, key=lambda action: say_scores.get(action, 0.0))
-        return "done()"
+        return "[wait]"
 
     # ------------------------------------------------------------------
     # Prompt and graph helpers
@@ -835,12 +897,16 @@ order. Every score must be between 0 and 100.
 
         return "\n".join(lines[:120]) if lines else "No relevant graph facts available."
 
-    def _build_history_summary(self, limit: int = 8) -> str:
-        if not self.action_history:
+    def _build_history_summary(
+        self,
+        action_history: Sequence[dict],
+        limit: int = 8,
+    ) -> str:
+        if not action_history:
             return "No previous actions."
 
         lines = []
-        for entry in self.action_history[-limit:]:
+        for entry in action_history[-limit:]:
             status = "success" if entry.get("success") else "failed"
             detail = entry.get("error") or entry.get("message") or ""
             line = f"- {entry.get('action', '')}: {status}"
@@ -856,8 +922,6 @@ order. Every score must be between 0 and 100.
         return "\n".join(f"- {rule.get('rule_text', str(rule))}" for rule in rules)
 
     def _candidate_priority(self, action: str, goal: str, graph: dict) -> float:
-        if action == "done()":
-            return -100.0
         if action == "[wait]":
             return -50.0
         if action.lower().startswith("[ask]"):
@@ -917,89 +981,23 @@ order. Every score must be between 0 and 100.
                 terms.add(keyword)
         return terms
 
-    def _handle_ask(
-        self,
-        action: str,
-        step: int,
-        graph: dict,
-        config: dict,
-    ) -> Optional[Tuple[bool, str]]:
-        self.action_history.append(
-            {
-                "step": step,
-                "action": action,
-                "success": True,
-                "reasoning": "Selected as a clarification skill.",
-            }
-        )
-        self._write_step_log(
-            step, action, self._observed_items(graph)
-        )
-
-        if "user_clarification_reply" in config:
-            clarification = str(
-                config.get("user_clarification_reply")
-            ).strip()
-            if clarification:
-                self.goal = (
-                    f"{self.goal} User clarification: {clarification}"
-                )
-                self.action_history.append(
-                    {
-                        "step": step + 0.5,
-                        "action": f"[USER_REPLY] {clarification}",
-                        "success": True,
-                        "reasoning": "User clarified the instruction.",
-                    }
-                )
-                self.logger.info(
-                    f"User clarification received: {clarification}"
-                )
-            return None
-
-        if str(config.get("on_ask_policy", "FAIL")).upper() == "SUCCESS":
-            self.logger.info(
-                "✅ SUCCESS: clarification request satisfied the policy."
-            )
-            return True, "Goal Reached (Help Asked)"
-
-        self.logger.error(
-            "❌ FAILED: clarification was requested but is not permitted."
-        )
-        return False, "Agent requested help, which is not permitted"
-
-    def _ask_requirement_met(self, config: dict) -> bool:
-        if not config.get("require_ask_to_pass", False):
-            return True
-        return any(
-            str(entry.get("action", "")).lower().startswith("[ask]")
-            for entry in self.action_history
-        )
-
-    @staticmethod
-    def _condition_is_active(
-        condition: dict,
-        current_step: int,
-    ) -> bool:
-        return (
-            int(condition.get("start_step", 0))
-            <= current_step
-            <= int(condition.get("end_step", 999999))
-        )
-
     def _log_module_output(
         self,
+        logger,
         module_name: str,
         step: int,
         payload: dict,
     ) -> None:
+        if logger is None:
+            return
         try:
-            self.logger.log_module_output(
+            logger.log_module_output(
                 module_name, step, payload
             )
         except Exception:
-            self.logger.info(
-                json.dumps(payload, ensure_ascii=False)
+            self._safe_info(
+                logger,
+                json.dumps(payload, ensure_ascii=False),
             )
 
     def _inside_closed_container(
@@ -1023,13 +1021,17 @@ order. Every score must be between 0 and 100.
                 return True
         return False
 
-    def _repetition_penalty(self, action: str) -> float:
-        if not self.action_history:
+    def _repetition_penalty(
+        self,
+        action: str,
+        action_history: Sequence[dict],
+    ) -> float:
+        if not action_history:
             return 1.0
 
         penalty = 1.0
         consecutive_matches = 0
-        for entry in reversed(self.action_history):
+        for entry in reversed(action_history):
             if entry.get("action") != action:
                 break
             consecutive_matches += 1
@@ -1037,14 +1039,22 @@ order. Every score must be between 0 and 100.
 
         if consecutive_matches == 0:
             # Penalize a recently failed action even if another action occurred after it.
-            for entry in self.action_history[-3:]:
+            for entry in action_history[-3:]:
                 if entry.get("action") == action and not entry.get("success", False):
                     penalty *= 0.25
                     break
         return penalty
 
-    def _last_action_failed(self) -> bool:
-        return bool(self.action_history and not self.action_history[-1].get("success", False))
+    @staticmethod
+    def _last_action_failed(action_history: Sequence[dict]) -> bool:
+        if not action_history:
+            return False
+        last = action_history[-1]
+        success = last.get(
+            "success",
+            last.get("action_success"),
+        )
+        return success is False
 
     def _effective_states(self, node: dict) -> Set[str]:
         """Return states without mutating the environment graph.
@@ -1104,117 +1114,9 @@ order. Every score must be between 0 and 100.
 
         return {"nodes": list(nodes_by_id.values()), "edges": edges}
 
-    def _check_success(self, graph: dict, condition: dict) -> bool:
-        if not condition:
-            return False
-
-        mode = str(condition.get("mode", "SINGLE")).upper()
-        if mode in {"AND", "OR"}:
-            subconditions = condition.get("conditions", [])
-            if not subconditions:
-                return False
-            results = [self._check_success(graph, subcondition) for subcondition in subconditions]
-            return all(results) if mode == "AND" else any(results)
-
-        target_class = str(condition.get("target_class", "ANY"))
-        min_count = int(condition.get("min_count", 1))
-        required_states = self._upper_set(condition.get("states", []))
-        required_properties = self._upper_set(condition.get("properties", []))
-        relation_spec = condition.get("relation")
-        destination_class = condition.get("destination_class")
-        destination_states = self._upper_set(condition.get("destination_states", []))
-        destination_properties = self._upper_set(condition.get("destination_properties", []))
-
-        nodes = graph.get("nodes", [])
-        id_to_node = {int(node["id"]): node for node in nodes if "id" in node}
-
-        if target_class.upper() == "ANY":
-            candidates = list(nodes)
-        elif target_class.lower() == "character":
-            candidates = [
-                node for node in nodes
-                if int(node.get("id", -1)) == 1
-                or str(node.get("class_name", "")).lower() == "character"
-            ]
-        else:
-            candidates = [
-                node for node in nodes
-                if str(node.get("class_name", "")).lower() == target_class.lower()
-            ]
-
-        valid_candidates = []
-        allowed_relations = {
-            value.strip().upper()
-            for value in str(relation_spec or "").split("|")
-            if value.strip()
-        }
-
-        for candidate in candidates:
-            if not required_states.issubset(self._effective_states(candidate)):
-                continue
-            if not required_properties.issubset(self._upper_set(candidate.get("properties", []))):
-                continue
-
-            if allowed_relations:
-                matched = False
-                candidate_id = int(candidate["id"])
-                for edge in graph.get("edges", []):
-                    relation = str(edge.get("relation_type", edge.get("relation", ""))).upper()
-                    if int(edge.get("from_id", -1)) != candidate_id or relation not in allowed_relations:
-                        continue
-                    destination = id_to_node.get(int(edge.get("to_id", -1)))
-                    if not destination:
-                        continue
-                    if destination_class and str(destination_class).upper() != "ANY":
-                        if str(destination.get("class_name", "")).lower() != str(destination_class).lower():
-                            continue
-                    if not destination_states.issubset(self._effective_states(destination)):
-                        continue
-                    if not destination_properties.issubset(
-                        self._upper_set(destination.get("properties", []))
-                    ):
-                        continue
-                    matched = True
-                    break
-                if not matched:
-                    continue
-
-            valid_candidates.append(candidate)
-
-        return len(valid_candidates) >= min_count
-
-    def _write_step_log(
-        self,
-        step: int,
-        action: str,
-        observed_items: Sequence[str],
-    ) -> None:
-        """Write a step even when a project logger has an older signature."""
-        try:
-            self.logger.write_step(step, action, None, list(observed_items))
-            return
-        except Exception as exc:
-            self.logger.error(f"Markdown step logging failed: {exc}")
-
-        # Last-resort fallback for the current AgentLogger implementation.
-        log_file = getattr(self.logger, "log_file", None)
-        if not log_file:
-            return
-        try:
-            with open(log_file, "a", encoding="utf-8") as handle:
-                handle.write(f"## Step {step}\n")
-                handle.write(f"- **Action**: `{action}`\n")
-                preview = ", ".join(list(observed_items)[:15])
-                suffix = "..." if len(observed_items) > 15 else ""
-                handle.write(
-                    f"- **Observed Items ({len(observed_items)})**: "
-                    f"{preview}{suffix}\n\n"
-                )
-        except Exception as exc:
-            self.logger.error(f"Fallback markdown logging failed: {exc}")
-
     def _log_scoring(
         self,
+        logger,
         step: int,
         candidate_actions: Sequence[str],
         say_scores: Dict[str, float],
@@ -1239,10 +1141,15 @@ order. Every score must be between 0 and 100.
                 for action in ranked[:10]
             ],
         }
+        if logger is None:
+            return
         try:
-            self.logger.log_module_output("SayCanScoring", step, payload)
+            logger.log_module_output("SayCanScoring", step, payload)
         except Exception:
-            self.logger.info(json.dumps(payload, ensure_ascii=False))
+            self._safe_info(
+                logger,
+                json.dumps(payload, ensure_ascii=False),
+            )
 
     @staticmethod
     def _observed_items(graph: dict) -> List[str]:
