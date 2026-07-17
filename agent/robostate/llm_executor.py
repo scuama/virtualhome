@@ -31,7 +31,15 @@ class LLMExecutor:
             
         return "\n".join(items)
 
-    def decide_next_action(self, filtered_graph, intent_dict, current_sdg, action_history, scheduled_rules=None):
+    def decide_next_action(
+        self,
+        filtered_graph,
+        intent_dict,
+        current_sdg,
+        action_history,
+        scheduled_rules=None,
+        allow_ask=True,
+    ):
         self.logger.info("LLMExecutor: Analyzing filtered graph to decide next action...")
         
         graph_str = self._compress_filtered_graph(filtered_graph)
@@ -51,11 +59,30 @@ class LLMExecutor:
         
         rules_str = "\n".join([f"- {r}" for r in active_rules]) if active_rules else "None"
         
-        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+        clarification_rule = (
+            "Clarification is still available once if genuinely required."
+            if allow_ask
+            else (
+                "A clarification reply has already been received. The [ask] "
+                "action is now strictly forbidden for the rest of this "
+                "episode. Continue autonomously using physical actions or "
+                "[wait]."
+            )
+        )
+        user_prompt = f"Goal Intent:\n{intent_str}\n\nRequired SDG:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nClarification Rule:\n{clarification_rule}\n\nWhat is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+
+        system_prompt = EXECUTOR_SYSTEM_PROMPT
+        if not allow_ask:
+            system_prompt += (
+                "\n\nEPISODE OVERRIDE (HIGHEST PRIORITY): A clarification "
+                "reply has already been provided. You MUST NOT output [ask] "
+                "again under any circumstances. Choose an autonomous physical "
+                "action or [wait]."
+            )
         
         try:
             result_str = self.llm.generate_response(
-                system_prompt=EXECUTOR_SYSTEM_PROMPT,
+                system_prompt=system_prompt,
                 user_prompt=user_prompt,
                 response_format="json_object",
                 model_override="gpt-5.4-mini" # Use fast model for action step
@@ -74,6 +101,16 @@ class LLMExecutor:
             mapped_vars = {}
             satisfied_nodes = []
             current_node_focus = ""
+
+        if not allow_ask and str(action).strip().lower().startswith("[ask]"):
+            self.logger.info(
+                "LLMExecutor suppressed a repeated [ask] after clarification."
+            )
+            action = "[wait]"
+            reasoning = (
+                reasoning
+                + " Repeated clarification is forbidden; waiting and replanning."
+            ).strip()
             
         self.logger.log_module_output("LLMExecutor", 0, {
             "reasoning": reasoning,

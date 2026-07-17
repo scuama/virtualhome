@@ -4,6 +4,8 @@ import glob
 import shutil
 import argparse
 import traceback
+import copy
+import re
 
 import sys
 import signal
@@ -25,6 +27,245 @@ class Logger:
 
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 from agent import AGENT_REGISTRY
+
+DEFAULT_CLARIFICATION_REPLY = "nothing to claim"
+
+
+class TaskProgressTracker:
+    """Tracks per-instruction completion without changing success semantics."""
+
+    def __init__(self, config):
+        configured_tasks = config.get("tasks") or []
+        if configured_tasks:
+            tasks = configured_tasks
+        else:
+            tasks = [
+                {
+                    "task_id": config.get("scenario_id", "task_1"),
+                    "instruction": config.get("goal_instruction", ""),
+                    "success_condition": config.get("success_condition", {}),
+                }
+            ]
+
+        self.tasks = [
+            {
+                "task_id": task.get("task_id", f"task_{index + 1}"),
+                "instruction": task.get("instruction", ""),
+                "success_condition": copy.deepcopy(task.get("success_condition", {})),
+                "completed": False,
+                "completion_step": None,
+            }
+            for index, task in enumerate(tasks)
+        ]
+
+    def update(self, graph, step, check_success, logger=None):
+        for task in self.tasks:
+            if task["completed"]:
+                continue
+            if check_success(graph, task["success_condition"]):
+                task["completed"] = True
+                task["completion_step"] = int(step)
+                if logger:
+                    logger.info(
+                        f"✅ TASK COMPLETED: {task['task_id']} at step {step}."
+                    )
+
+    def as_metrics(self):
+        total = len(self.tasks)
+        completed = sum(1 for task in self.tasks if task["completed"])
+        completion_steps = [
+            task["completion_step"]
+            for task in self.tasks
+            if task["completion_step"] is not None
+        ]
+        mean_completion_step = (
+            round(sum(completion_steps) / len(completion_steps), 4)
+            if completion_steps
+            else None
+        )
+        return {
+            "task_total": total,
+            "task_completed": completed,
+            # SR is strict episode success; PS exposes partial task progress.
+            "sr": 1.0 if total and completed == total else 0.0,
+            "ps": round(completed / total, 4) if total else 0.0,
+            "mean_completion_step": mean_completion_step,
+            "tasks": copy.deepcopy(self.tasks),
+        }
+
+
+class DynamicEventRuntime:
+    """Runner-owned deterministic action-triggered event scheduler."""
+
+    ACTION_PATTERN = re.compile(r"^\s*\[([^\]]+)\]")
+    OBJECT_PATTERN = re.compile(r"<([^>]+)>\s*\(\s*(\d+)\s*\)")
+
+    def __init__(self, env, configured_events, logger):
+        self.env = env
+        self.events = copy.deepcopy(configured_events or [])
+        self.logger = logger
+        self.hidden_until = {}
+        self.trace = []
+        for index, event in enumerate(self.events):
+            event["_runtime_id"] = event.get("event_id", f"event_{index + 1}")
+            event["_times_triggered"] = 0
+
+    @classmethod
+    def parse_action(cls, action_str):
+        action_match = cls.ACTION_PATTERN.search(action_str or "")
+        action = action_match.group(1).strip().lower() if action_match else ""
+        objects = [
+            {"class_name": class_name.strip().lower(), "id": int(object_id)}
+            for class_name, object_id in cls.OBJECT_PATTERN.findall(action_str or "")
+        ]
+        return action, objects
+
+    def expire(self, step):
+        expired = [
+            object_id
+            for object_id, visible_at_step in self.hidden_until.items()
+            if step >= visible_at_step
+        ]
+        for object_id in expired:
+            visible_at_step = self.hidden_until.pop(object_id)
+            if self.env.active_hidden_nodes.get(object_id) == visible_at_step:
+                del self.env.active_hidden_nodes[object_id]
+                self.env.changed_graph = True
+            self.trace.append(
+                {
+                    "step": int(step),
+                    "event": "reappear",
+                    "object_id": object_id,
+                }
+            )
+            self.logger.info(
+                f"⚡ DYNAMIC EVENT: object {object_id} reappeared at step {step}."
+            )
+
+    def before_action(self, step, action_str, graph):
+        action, action_objects = self.parse_action(action_str)
+        intercepted = False
+        message = None
+
+        for event in self.events:
+            trigger = event.get("trigger", {})
+            effect = event.get("effect", {})
+            max_triggers = int(event.get("max_triggers", 1))
+            if event["_times_triggered"] >= max_triggers:
+                continue
+            if str(trigger.get("type", "action")).lower() != "action":
+                continue
+            if action != str(trigger.get("action", "")).lower():
+                continue
+
+            target_class = str(
+                trigger.get("target", effect.get("target", ""))
+            ).lower()
+            target_arg = next(
+                (
+                    item
+                    for item in action_objects
+                    if item["class_name"] == target_class
+                ),
+                None,
+            )
+            if not target_arg:
+                continue
+
+            target_id = target_arg["id"]
+            if target_id in self.hidden_until:
+                continue
+
+            required_state = trigger.get("target_state")
+            if required_state:
+                target_node = next(
+                    (
+                        node
+                        for node in graph.get("nodes", [])
+                        if int(node.get("id", -1)) == target_id
+                    ),
+                    None,
+                )
+                states = {
+                    str(state).upper()
+                    for state in (target_node or {}).get("states", [])
+                }
+                if str(required_state).upper() not in states:
+                    continue
+
+            if effect.get("type") != "hide":
+                continue
+
+            duration = int(effect.get("duration_steps", 2))
+            # The triggering action is step t. The object is hidden for the
+            # complete decisions t+1..t+duration and restored before t+duration+1.
+            visible_at_step = int(step) + duration + 1
+            self.env.active_hidden_nodes[target_id] = visible_at_step
+            self.hidden_until[target_id] = visible_at_step
+            self.env.changed_graph = True
+            event["_times_triggered"] += 1
+            intercepted = True
+            message = (
+                "动作失败：目标物品突然消失了，请等待其重新出现后重试。"
+            )
+            self.trace.append(
+                {
+                    "step": int(step),
+                    "event": "hide",
+                    "event_id": event["_runtime_id"],
+                    "object_id": target_id,
+                    "duration_steps": duration,
+                    "trigger_index": event["_times_triggered"],
+                    "max_triggers": max_triggers,
+                    "visible_at_step": visible_at_step,
+                }
+            )
+            self.logger.info(
+                "⚡ DYNAMIC EVENT: "
+                f"{target_class}({target_id}) hidden for {duration} full steps "
+                f"({event['_times_triggered']}/{max_triggers}); "
+                f"returns before step {visible_at_step}."
+            )
+            break
+
+        if not intercepted:
+            hidden_target = next(
+                (
+                    item
+                    for item in action_objects
+                    if item["id"] in self.env.active_hidden_nodes
+                ),
+                None,
+            )
+            if hidden_target:
+                intercepted = True
+                message = "动作失败：目标物品当前不可见，请等待或重新规划。"
+
+        info = {"action_message": message} if intercepted else {}
+        return intercepted, info
+
+    def event_counts(self):
+        return {
+            event["_runtime_id"]: {
+                "times_triggered": event["_times_triggered"],
+                "max_triggers": int(event.get("max_triggers", 1)),
+            }
+            for event in self.events
+        }
+
+
+def reset_environment_runtime(env):
+    """Remove scenario-specific monkey patches and transient event state."""
+    if hasattr(env, "_test_runner_base_get_graph"):
+        env.get_graph = env._test_runner_base_get_graph
+    else:
+        env._test_runner_base_get_graph = env.get_graph
+
+    env.active_hidden_nodes = {}
+    env.active_teleports = {}
+    env.dynamic_events = []
+    env.scheduled_rules = []
+    env.current_step = 0
 
 
 def apply_overrides(env, config, debug=False):
@@ -65,7 +306,12 @@ def apply_overrides(env, config, debug=False):
                 target_ids = locked_assignments[ov_idx]
                 for node in graph['nodes']:
                     if node['id'] in target_ids:
-                        # Do not skip if in custom, we want to MERGE our colors with physics states like COLD!
+                        # Initial overrides establish the episode's starting
+                        # state. Once a real/mock action records a custom state
+                        # for this node, that action must take precedence.
+                        custom_states = getattr(env, 'custom_states', {}) or {}
+                        if node['id'] in custom_states:
+                            continue
                         st = set(node.get('states', []))
                         props = set(node.get('properties', []))
                         for s in rm: st.discard(s)
@@ -89,6 +335,8 @@ def apply_overrides(env, config, debug=False):
             env.active_hidden_nodes = {}
         for n in nodes_to_hide:
             env.active_hidden_nodes[n['id']] = float('inf')
+        if nodes_to_hide:
+            env.changed_graph = True
 
     def _already_has_relation(graph, s_node, rel, obj_node):
         return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
@@ -96,7 +344,24 @@ def apply_overrides(env, config, debug=False):
     def execute(action_str):
         obs, reward, done, info = env.step({0: action_str})
         success = info.get('action_success', False)
-        return success
+        return success, info.get('action_message', '')
+
+    def destination_candidates(graph, class_name, in_room=None):
+        candidates = find_all(graph, class_name)
+        if not in_room:
+            return candidates
+        room_ids = {
+            node['id']
+            for node in graph['nodes']
+            if node['class_name'].lower() == in_room.lower()
+        }
+        inside_ids = {
+            edge['from_id']
+            for edge in graph['edges']
+            if edge['relation_type'] == 'INSIDE'
+            and edge['to_id'] in room_ids
+        }
+        return [node for node in candidates if node['id'] in inside_ids]
 
     # 1. 状态覆盖
     state_overrides = config.get('initial_states_override', [])
@@ -136,22 +401,83 @@ def apply_overrides(env, config, debug=False):
             graph = env.get_graph()
             continue
 
-        obj_node   = find_node(graph, obj, in_room)
-        if not obj_node: continue
+        obj_nodes = destination_candidates(graph, obj, in_room)
+        if not obj_nodes:
+            raise RuntimeError(
+                f"Scene initialization failed: No destination '{obj}' "
+                f"matched in_room={in_room!r}."
+            )
 
-        # 依靠物理动作将物品就位
+        # Use real Unity actions so the configured graph and Unity physics stay
+        # aligned. Some scenes contain multiple surfaces of the same class and
+        # only a subset accept a given object, so try each matching instance.
         for s_node in subj_nodes[:count]:
-            if _already_has_relation(graph, s_node, rel, obj_node): continue
-            execute(f'[walk] <{subj}> ({s_node["id"]})')
-            execute(f'[grab] <{subj}> ({s_node["id"]})')
-            execute(f'[walk] <{obj}> ({obj_node["id"]})')
-            if rel == 'INSIDE':
-                execute(f'[open] <{obj}> ({obj_node["id"]})')
-                execute(f'[putin] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
-                execute(f'[close] <{obj}> ({obj_node["id"]})')
-            else:
-                execute(f'[putback] <{subj}> ({s_node["id"]}) <{obj}> ({obj_node["id"]})')
-        graph = env.get_graph()
+            if any(
+                _already_has_relation(graph, s_node, rel, obj_node)
+                for obj_node in obj_nodes
+            ):
+                continue
+
+            walked, walk_message = execute(
+                f'[walk] <{subj}> ({s_node["id"]})'
+            )
+            grabbed, grab_message = execute(
+                f'[grab] <{subj}> ({s_node["id"]})'
+            )
+            if not (walked and grabbed):
+                raise RuntimeError(
+                    f"Scene initialization failed while grabbing "
+                    f"{subj}({s_node['id']}): "
+                    f"walk={walked} {walk_message!r}, "
+                    f"grab={grabbed} {grab_message!r}."
+                )
+
+            placed = False
+            placement_errors = []
+            for obj_node in obj_nodes:
+                walked_to_dest, dest_message = execute(
+                    f'[walk] <{obj}> ({obj_node["id"]})'
+                )
+                if not walked_to_dest:
+                    placement_errors.append(
+                        f"{obj_node['id']}: walk failed {dest_message!r}"
+                    )
+                    continue
+
+                if rel == 'INSIDE':
+                    # Opening an already-open container may report failure;
+                    # placement itself is the authoritative check.
+                    execute(f'[open] <{obj}> ({obj_node["id"]})')
+                    placed, place_message = execute(
+                        f'[putin] <{subj}> ({s_node["id"]}) '
+                        f'<{obj}> ({obj_node["id"]})'
+                    )
+                else:
+                    placed, place_message = execute(
+                        f'[putback] <{subj}> ({s_node["id"]}) '
+                        f'<{obj}> ({obj_node["id"]})'
+                    )
+
+                if placed:
+                    break
+                placement_errors.append(
+                    f"{obj_node['id']}: placement failed {place_message!r}"
+                )
+
+            if not placed:
+                raise RuntimeError(
+                    f"Scene initialization failed while placing "
+                    f"{subj}({s_node['id']}) {rel} {obj}: "
+                    + "; ".join(placement_errors)
+                )
+
+            graph = env.get_graph()
+            if not _already_has_relation(graph, s_node, rel, obj_node):
+                raise RuntimeError(
+                    f"Scene initialization verification failed: "
+                    f"{subj}({s_node['id']}) is not {rel} "
+                    f"{obj}({obj_node['id']})."
+                )
 
     return True
 def ensure_unity_running(unity_path, force_restart=False):
@@ -218,6 +544,23 @@ def main():
         default='/Users/rushy/program/virtualhome/virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app/Contents/MacOS/VirtualHome',
         help='Path to Unity executable'
     )
+    extension_group = parser.add_mutually_exclusive_group()
+    extension_group.add_argument(
+        '--multi-scale',
+        type=int,
+        choices=[3, 5, 7],
+        help='Run E-only multi-task configs with the selected instruction scale'
+    )
+    extension_group.add_argument(
+        '--semantic-type',
+        choices=['sentence_wise', 'summarized', 'vague'],
+        help='Run single-task semantic-variation configs of the selected type'
+    )
+    extension_group.add_argument(
+        '--dynamic-difficulty',
+        choices=['low', 'medium', 'high'],
+        help='Run repeated-hide configs of the selected dynamic difficulty'
+    )
     # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -235,6 +578,14 @@ def main():
         # 传递 method 参数到子进程
         cmd.append("--method")
         cmd.extend(args.method)
+        cmd.extend(["--model", args.model])
+        cmd.extend(["--unity-path", args.unity_path])
+        if args.multi_scale is not None:
+            cmd.extend(["--multi-scale", str(args.multi_scale)])
+        elif args.semantic_type:
+            cmd.extend(["--semantic-type", args.semantic_type])
+        elif args.dynamic_difficulty:
+            cmd.extend(["--dynamic-difficulty", args.dynamic_difficulty])
         if args.force:
             cmd.append("--force")
         
@@ -249,17 +600,65 @@ def main():
     sys.stdout = Logger(log_path)
     sys.stderr = sys.stdout
 
-    # Gather configs
+    # Gather configs. Extension suites are intentionally mutually exclusive;
+    # without an extension selector, preserve the legacy dataset behavior.
     all_configs = []
-    for cls_dir in ['g_class', 'm_class', 'p_class','ExRAP']:
+    selected_extension = None
+    selected_value = None
+    if args.multi_scale is not None:
+        selected_dirs = ['multi']
+        selected_extension = 'multi'
+        selected_value = args.multi_scale
+    elif args.semantic_type:
+        selected_dirs = ['semantic']
+        selected_extension = 'semantic'
+        selected_value = args.semantic_type
+    elif args.dynamic_difficulty:
+        selected_dirs = ['dynamic']
+        selected_extension = 'dynamic'
+        selected_value = args.dynamic_difficulty
+    else:
+        selected_dirs = ['g_class', 'm_class', 'p_class', 'ExRAP']
+
+    for cls_dir in selected_dirs:
         target_dir = os.path.join(configs_dir, cls_dir)
         if os.path.exists(target_dir):
             for path in glob.glob(os.path.join(target_dir, '*.json')):
-                scenario_id = os.path.splitext(os.path.basename(path))[0]
+                with open(path, 'r', encoding='utf-8') as config_file:
+                    config_metadata = json.load(config_file)
+                scenario_id = config_metadata.get(
+                    'scenario_id',
+                    os.path.splitext(os.path.basename(path))[0]
+                )
+                if selected_extension == 'multi':
+                    matches_extension = (
+                        config_metadata.get('extension_type') == 'multi'
+                        and config_metadata.get('instruction_scale') == selected_value
+                    )
+                elif selected_extension == 'semantic':
+                    matches_extension = (
+                        config_metadata.get('extension_type') == 'semantic'
+                        and config_metadata.get('instruction_type') == selected_value
+                    )
+                elif selected_extension == 'dynamic':
+                    matches_extension = (
+                        config_metadata.get('extension_type') == 'dynamic'
+                        and config_metadata.get('dynamic_difficulty') == selected_value
+                    )
+                else:
+                    matches_extension = True
+                if not matches_extension:
+                    continue
                 if args.target and not scenario_id.startswith(tuple(args.target)):
                     continue
                 all_configs.append((scenario_id, path))
     all_configs = sorted(all_configs)
+
+    if selected_extension and not all_configs:
+        raise RuntimeError(
+            f"No configs matched extension={selected_extension!r}, "
+            f"value={selected_value!r}, targets={args.target!r}."
+        )
 
     # Init engine
     ensure_unity_running(args.unity_path)
@@ -268,6 +667,7 @@ def main():
         observation_types=['partial'],
         executable_args={'file_name': None}
     )
+    reset_environment_runtime(env)
 
     for method_name in args.method:
 
@@ -289,7 +689,8 @@ def main():
             "skipped": 0,
             "success": 0,
             "fail": 0,
-            "failures": []
+            "failures": [],
+            "extension_metrics": []
         }
 
         print(
@@ -319,6 +720,7 @@ def main():
             # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
 
             try:
+                reset_environment_runtime(env)
                 env.reset(environment_id=env_id)
             except Exception as e:
                 print(f"[WARN] Engine Reset Failed: {e}. Attempting to restart Unity engine...")
@@ -329,6 +731,7 @@ def main():
                         observation_types=['partial'],
                         executable_args={'file_name': None}
                     )
+                    reset_environment_runtime(env)
                     env.reset(environment_id=env_id)
                 except Exception as e2:
                     sys.stdout = old_stdout
@@ -379,6 +782,11 @@ def main():
 
             import time
             start_time = time.time()
+            step_count = 0
+            success = False
+            reason = "Max steps reached"
+            task_tracker = None
+            dynamic_runtime = None
 
             try:
                 signal.signal(signal.SIGALRM, timeout_handler)
@@ -399,25 +807,27 @@ def main():
                 # Adapt the observation types for the unity environment
                 env.observation_types = getattr(agent, "REQUIRED_OBSERVATION", ["partial"])
 
-                step_count = 0
-                success = False
-                reason = "Max steps reached"
-                
-                if not hasattr(env, 'active_hidden_nodes'):
-                    env.active_hidden_nodes = {}
-                env.dynamic_events = config.get("dynamic_events", [])
-                for ev in env.dynamic_events:
-                    ev["times_triggered"] = 0
-
-                # Initial observation
-                obs = env.get_observations()[0]
-                if isinstance(obs, list) and len(obs) == 1:
-                    obs = obs[0]
-
+                task_tracker = TaskProgressTracker(config)
+                dynamic_runtime = DynamicEventRuntime(
+                    env,
+                    config.get("dynamic_events", []),
+                    logger,
+                )
+                # UnityEnvironment has a legacy dynamic-event implementation
+                # with different countdown semantics. The runner is the sole
+                # owner for these deterministic extension events.
+                env.dynamic_events = []
                 action_history = list(config.get("prior_action_history", []))
 
                 while step_count < max_steps:
+                    dynamic_runtime.expire(step_count)
                     graph = env.get_graph()
+                    task_tracker.update(
+                        graph,
+                        step_count,
+                        check_success,
+                        logger,
+                    )
 
                     if check_success(graph, success_condition):
                         if config.get("require_ask_to_pass", False):
@@ -438,6 +848,10 @@ def main():
                             success = False
                             reason = "Failure condition met (Constraint Violated)"
                             break
+
+                    obs = env.get_observations()[0]
+                    if isinstance(obs, list) and len(obs) == 1:
+                        obs = obs[0]
 
                     env_info = {
                         "step": step_count,
@@ -464,56 +878,31 @@ def main():
                     info = {}
                     
                     if action_str.lower().startswith("[ask]"):
-                        if "user_clarification_reply" in config:
-                            intercepted = True
-                            info = {
-                                "action_success": True,
-                                "action_message": config["user_clarification_reply"]
-                            }
-                        else:
-                            policy = config.get("on_ask_policy", "FAIL")
-                            if policy == "SUCCESS":
-                                success = True
-                                reason = "Goal Reached (Help Asked)"
-                                break
-                            else:
-                                success = False
-                                reason = "Agent requested help, which is not permitted"
-                                break
+                        clarification_reply = config.get(
+                            "user_clarification_reply",
+                            config.get(
+                                "default_clarification_reply",
+                                DEFAULT_CLARIFICATION_REPLY,
+                            ),
+                        )
+                        intercepted = True
+                        info = {
+                            "action_success": True,
+                            "action_message": clarification_reply,
+                        }
+                        logger.info(
+                            "💬 CLARIFICATION: answered agent request with "
+                            f"{clarification_reply!r}."
+                        )
 
-                    import re
-                    
-                    for ev in env.dynamic_events:
-                        trigger = ev['trigger']
-                        if ev['times_triggered'] >= ev.get('max_triggers', 1):
-                            continue
-
-                        if f"[{trigger['action']}]" in action_str.lower() and f"<{trigger['target'].lower()}>" in action_str.lower():
-                            ev_match = re.search(r'\(\s*(\d+)\s*\)', action_str)
-                            if ev_match:
-                                t_id = int(ev_match.group(1))
-                                req_state = trigger.get('target_state')
-                                node_ok = True
-                                if req_state:
-                                    n_node = next((n for n in graph['nodes'] if n['id'] == t_id), None)
-                                    if n_node and req_state.upper() not in [s.upper() for s in n_node.get('states', [])]:
-                                        node_ok = False
-                                
-                                if node_ok:
-                                    effect = ev['effect']
-                                    if effect['type'] == 'hide':
-                                        dur = effect['duration_steps']
-                                        if t_id not in env.active_hidden_nodes:
-                                            env.active_hidden_nodes[t_id] = dur
-                                            ev['times_triggered'] += 1
-                                            logger.info(f"⚡ DYNAMIC EVENT: {trigger['target']}({t_id}) hidden for {dur} steps.")
-
-                    target_match = re.search(r'\(\s*(\d+)\s*\)', action_str)
-                    if target_match:
-                        target_id = int(target_match.group(1))
-                        if target_id in env.active_hidden_nodes:
-                            intercepted = True
-                            info = {"action_message": "动作失败：目标物品突然消失了，请等待或重新规划。"}
+                    if not intercepted:
+                        intercepted, event_info = dynamic_runtime.before_action(
+                            step_count,
+                            action_str,
+                            graph,
+                        )
+                        if intercepted:
+                            info = event_info
 
                     if not intercepted:
                         _, _, env_done, info = env.step({0: action_str})
@@ -540,26 +929,18 @@ def main():
                         reason = "Environment terminated unexpectedly"
                         break
 
-                    # Next observation
-                    obs = env.get_observations()[0]
-                    if isinstance(obs, list) and len(obs) == 1:
-                        obs = obs[0]
-                        
-                    expired = []
-                    for k, v in env.active_hidden_nodes.items():
-                        if v != float('inf'):
-                            env.active_hidden_nodes[k] = v - 1
-                            if env.active_hidden_nodes[k] <= 0:
-                                expired.append(k)
-                    for k in expired:
-                        del env.active_hidden_nodes[k]
-                        logger.info(f"⚡ DYNAMIC EVENT: object {k} reappeared.")
-
                     step_count += 1
 
                 # Final verification if loop finished
                 if not success and step_count == max_steps:
+                    dynamic_runtime.expire(step_count)
                     graph = env.get_graph()
+                    task_tracker.update(
+                        graph,
+                        step_count,
+                        check_success,
+                        logger,
+                    )
                     if check_success(graph, success_condition):
                         if config.get("require_ask_to_pass", False):
                             has_asked = any(entry.get('action', '').lower().startswith('[ask]') for entry in action_history)
@@ -587,8 +968,43 @@ def main():
 
             execution_time = time.time() - start_time
 
+            if task_tracker is None:
+                task_tracker = TaskProgressTracker(config)
+            metrics = task_tracker.as_metrics()
+            if config.get("extension_type") == "multi" and success and metrics["sr"] < 1.0:
+                success = False
+                reason = "Not all multi-task success conditions were completed"
+            metrics.update(
+                {
+                    "scenario_id": scenario_id,
+                    "extension_type": config.get("extension_type"),
+                    "method": method_name,
+                    "model": args.model,
+                    "success": bool(success),
+                    "reason": reason,
+                    "steps_executed": step_count,
+                    "execution_time_seconds": round(execution_time, 2),
+                    "dynamic_event_counts": (
+                        dynamic_runtime.event_counts()
+                        if dynamic_runtime is not None
+                        else {}
+                    ),
+                    "dynamic_event_trace": (
+                        copy.deepcopy(dynamic_runtime.trace)
+                        if dynamic_runtime is not None
+                        else []
+                    ),
+                }
+            )
+            summary["extension_metrics"].append(metrics)
+
             print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
             print(f"  Time: {execution_time:.2f} seconds")
+            print(
+                f"  Metrics: SR={metrics['sr']:.4f} | "
+                f"PS={metrics['ps']:.4f} | "
+                f"Tasks={metrics['task_completed']}/{metrics['task_total']}"
+            )
 
             dest_parent = success_dir if success else fail_dir
             dest_folder = os.path.join(dest_parent, scenario_id)
@@ -602,6 +1018,8 @@ def main():
             )
             with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
                 json.dump(config, cf, indent=4, ensure_ascii=False)
+            with open(os.path.join(dest_folder, 'metrics.json'), 'w', encoding='utf-8') as mf:
+                json.dump(metrics, mf, indent=4, ensure_ascii=False)
 
             if os.path.exists(scenario_log_file):
                 shutil.copy(
@@ -633,6 +1051,32 @@ def main():
             f"✅ Success: {summary['success']} | "
             f"❌ Fail: {summary['fail']}"
         )
+        if summary["extension_metrics"]:
+            measured = summary["extension_metrics"]
+            summary["aggregate_sr"] = round(
+                sum(item["sr"] for item in measured) / len(measured),
+                4,
+            )
+            summary["aggregate_ps"] = round(
+                sum(item["ps"] for item in measured) / len(measured),
+                4,
+            )
+            print(
+                f"Aggregate: SR={summary['aggregate_sr']:.4f} | "
+                f"PS={summary['aggregate_ps']:.4f}"
+            )
+
+        summary_suffix = (
+            f"{selected_extension}_{selected_value}"
+            if selected_extension
+            else "legacy"
+        )
+        summary_path = os.path.join(
+            results_dir,
+            f"summary_{summary_suffix}.json",
+        )
+        with open(summary_path, 'w', encoding='utf-8') as summary_file:
+            json.dump(summary, summary_file, indent=4, ensure_ascii=False)
 
     if hasattr(sys.stdout, 'log') and not sys.stdout.log.closed:
         sys.stdout.log.close()

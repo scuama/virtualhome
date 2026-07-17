@@ -1,0 +1,29 @@
+{
+    "scenario_id": "E_SEM_E1_03_summarized",
+    "extension_type": "semantic",
+    "source_scenario": "E1_03",
+    "instruction_type": "summarized",
+    "original_instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+    "environment_id": 2,
+    "goal_instruction": "Move any misplaced book to the sofa.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "book",
+        "relation": "ON",
+        "destination_class": "sofa",
+        "min_count": 1
+    },
+    "max_steps": 15
+}

@@ -145,6 +145,7 @@ class RoboStateAgent(BaseAgent):
             
             self.memory_nodes = {}
             self.memory_edges = {}
+            self.clarification_received = False
 
         # --- Check if previous step was an [ask] with a user reply ---
         if step > 0 and self.action_history:
@@ -152,6 +153,7 @@ class RoboStateAgent(BaseAgent):
             if last_entry.get("action", "").lower().startswith("[ask]") and last_entry.get("success"):
                 clarification = last_entry.get("message")
                 if clarification:
+                    self.clarification_received = True
                     rewrite_sys = "You are a helpful assistant rewriting instructions."
                     rewrite_user = f"Original instruction: '{goal_instruction}'\nUser clarification: '{clarification}'\nCombine them into a single, natural, and complete instruction in English. Output ONLY the instruction."
                     try:
@@ -200,7 +202,12 @@ class RoboStateAgent(BaseAgent):
 
         # Decide next action
         next_action, reasoning, current_node_focus, satisfied_nodes = self.llm_executor.decide_next_action(
-            filtered_graph, self.goal_intent, self.current_sdg, self.action_history, config.get('scheduled_rules')
+            filtered_graph,
+            self.goal_intent,
+            self.current_sdg,
+            self.action_history,
+            config.get('scheduled_rules'),
+            allow_ask=not getattr(self, 'clarification_received', False),
         )
         
         import re
@@ -214,6 +221,6 @@ class RoboStateAgent(BaseAgent):
             next_action = re.sub(r'\s+([A-Za-z0-9_]+)\s*\(\s*(\d+)\s*\)', add_brackets, next_action)
             
         else:
-            next_action = "WAIT"
+            next_action = "[wait]"
             
         return next_action
