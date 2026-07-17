@@ -1,0 +1,26 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If no one is watching the TV, turn it on.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "tv",
+            "relation": "ON",
+            "object": "tvstand"
+        }
+    ],
+    "success_condition": {
+        "target_class": "tv",
+        "states": [
+            "ON"
+        ],
+        "min_count": 1
+    },
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 9.41
+}
