@@ -1,41 +1,28 @@
 {
     "task_total": 7,
-    "task_completed": 5,
-    "sr": 0.7143,
-    "ps": 13.4,
-    "ps_sum": 67,
-    "ps_count": 5,
-    "mean_completion_step": 13.4,
+    "task_completed": 6,
+    "sr": 0.8571,
+    "ps": 13.6667,
+    "ps_sum": 82,
+    "ps_count": 6,
+    "mean_completion_step": 13.6667,
     "tasks": [
         {
-            "task_id": "G1_05",
-            "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
+            "task_id": "G1_04",
+            "instruction": "If the table lamp is on, turn it off.",
             "success_condition": {
-                "mode": "AND",
-                "conditions": [
-                    {
-                        "target_class": "mug",
-                        "destination_class": "cabinet",
-                        "relation": "INSIDE",
-                        "min_count": 1,
-                        "target_instance": 0,
-                        "destination_instance": 0
-                    },
-                    {
-                        "target_class": "mug",
-                        "states": [
-                            "EMPTY"
-                        ],
-                        "min_count": 1,
-                        "target_instance": 0
-                    }
-                ]
+                "target_class": "tablelamp",
+                "states": [
+                    "OFF"
+                ],
+                "min_count": 1,
+                "target_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6
         },
         {
             "task_id": "E1_01",
@@ -50,9 +37,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 17,
+            "first_satisfied_step": 20,
             "completed": true,
-            "completion_step": 17
+            "completion_step": 20
         },
         {
             "task_id": "E1_03",
@@ -67,9 +54,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 6,
+            "first_satisfied_step": 13,
             "completed": true,
-            "completion_step": 6
+            "completion_step": 13
         },
         {
             "task_id": "E1_11",
@@ -84,26 +71,26 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 19,
+            "first_satisfied_step": 22,
             "completed": true,
-            "completion_step": 19
+            "completion_step": 22
         },
         {
-            "task_id": "E1_15",
-            "instruction": "Put the folder in the closet.",
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
             "success_condition": {
-                "target_class": "folder",
-                "relation": "INSIDE",
-                "destination_class": "closet",
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
                 "min_count": 1,
                 "target_instance": 0,
                 "destination_instance": 0
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 11,
+            "first_satisfied_step": 17,
             "completed": true,
-            "completion_step": 11
+            "completion_step": 17
         },
         {
             "task_id": "E1_17",
@@ -123,27 +110,27 @@
             "completion_step": null
         },
         {
-            "task_id": "E1_02",
-            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "task_id": "E1_15",
+            "instruction": "Put the folder in the closet.",
             "success_condition": {
-                "target_class": "apple",
-                "relation": "ON",
-                "destination_class": "desk",
+                "target_class": "folder",
+                "relation": "INSIDE",
+                "destination_class": "closet",
                 "min_count": 1,
                 "target_instance": 0,
                 "destination_instance": 0
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 14,
+            "first_satisfied_step": 4,
             "completed": true,
-            "completion_step": 14
+            "completion_step": 4
         }
     ],
-    "scenario_id": "T1_SCALE_SG05_S7",
+    "scenario_id": "T1_SCALE_SG04_S7",
     "table_id": "table1",
     "experiment_axis": "scale",
-    "sample_id": "S-G05",
+    "sample_id": "S-G04",
     "setting": "S7",
     "extension_type": "table1_scale",
     "ablation_profile": null,
@@ -154,8 +141,8 @@
     "run_status": "incomplete",
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 34,
-    "execution_time_seconds": 106.61,
+    "steps_executed": 37,
+    "execution_time_seconds": 87.81,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

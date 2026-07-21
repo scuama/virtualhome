@@ -1,33 +1,33 @@
 {
-    "scenario_id": "T1_SCALE_SG01_S7",
+    "scenario_id": "T1_SCALE_SG04_S7",
     "extension_type": "table1_scale",
     "table_id": "table1",
     "experiment_axis": "scale",
-    "sample_id": "S-G01",
+    "sample_id": "S-G04",
     "setting": "S7",
     "single_run": true,
     "source_scenarios": [
-        "G1_01",
+        "G1_04",
         "E1_01",
         "E1_03",
-        "E1_04",
-        "E1_07",
         "E1_11",
+        "E1_07",
+        "E1_17",
         "E1_15"
     ],
     "instruction_scale": 7,
     "instruction_type": "sentence_wise",
-    "environment_id": 2,
-    "goal_instruction": "1. If there is milk in the fridge, please heat a cup of it in the microwave.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. The dishwasher must always be open to dry the dishwasher.\n5. The mug should always be on the coffeetable.\n6. If your computer stays off, turn it on.\n7. Put the folder in the closet.",
+    "environment_id": 0,
+    "goal_instruction": "1. If the table lamp is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. The mug should always be on the coffeetable.\n6. If the radio is off, turn it on\n7. Put the folder in the closet.",
     "tasks": [
         {
-            "task_id": "G1_01",
-            "instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
-            "source_scenario": "G1_01",
+            "task_id": "G1_04",
+            "instruction": "If the table lamp is on, turn it off.",
+            "source_scenario": "G1_04",
             "success_condition": {
-                "target_class": "milk",
+                "target_class": "tablelamp",
                 "states": [
-                    "HOT"
+                    "OFF"
                 ],
                 "min_count": 1,
                 "target_instance": 0
@@ -60,13 +60,13 @@
             }
         },
         {
-            "task_id": "E1_04",
-            "instruction": "The dishwasher must always be open to dry the dishwasher.",
-            "source_scenario": "E1_04",
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "source_scenario": "E1_11",
             "success_condition": {
-                "target_class": "dishwasher",
+                "target_class": "computer",
                 "states": [
-                    "OPEN"
+                    "ON"
                 ],
                 "min_count": 1,
                 "target_instance": 0
@@ -86,11 +86,11 @@
             }
         },
         {
-            "task_id": "E1_11",
-            "instruction": "If your computer stays off, turn it on.",
-            "source_scenario": "E1_11",
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on",
+            "source_scenario": "E1_17",
             "success_condition": {
-                "target_class": "computer",
+                "target_class": "radio",
                 "states": [
                     "ON"
                 ],
@@ -115,16 +115,27 @@
     "initial_states_override": [
         {
             "target_classes": [
-                "milk"
+                "tablelamp"
+            ],
+            "add_states": [
+                "ON"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "tablelamp"
             ],
             "instance_filter": {
                 "index": 0
             },
             "add_states": [
-                "COLD"
+                "ON"
             ],
             "remove_states": [
-                "HOT"
+                "OFF"
             ]
         },
         {
@@ -143,21 +154,21 @@
         },
         {
             "target_classes": [
-                "dishwasher"
+                "computer"
             ],
             "instance_filter": {
                 "index": 0
             },
             "add_states": [
-                "CLOSED"
+                "OFF"
             ],
             "remove_states": [
-                "OPEN"
+                "ON"
             ]
         },
         {
             "target_classes": [
-                "computer"
+                "radio"
             ],
             "instance_filter": {
                 "index": 0
@@ -188,15 +199,7 @@
         {
             "subject": "character",
             "relation": "INSIDE",
-            "object": "kitchen",
-            "object_instance": 0
-        },
-        {
-            "subject": "milk",
-            "relation": "INSIDE",
-            "object": "fridge",
-            "count": 1,
-            "subject_instance": 0,
+            "object": "bedroom",
             "object_instance": 0
         },
         {
@@ -228,9 +231,9 @@
         "mode": "AND",
         "conditions": [
             {
-                "target_class": "milk",
+                "target_class": "tablelamp",
                 "states": [
-                    "HOT"
+                    "OFF"
                 ],
                 "min_count": 1,
                 "target_instance": 0
@@ -252,9 +255,9 @@
                 "destination_instance": 0
             },
             {
-                "target_class": "dishwasher",
+                "target_class": "computer",
                 "states": [
-                    "OPEN"
+                    "ON"
                 ],
                 "min_count": 1,
                 "target_instance": 0
@@ -268,7 +271,7 @@
                 "destination_instance": 0
             },
             {
-                "target_class": "computer",
+                "target_class": "radio",
                 "states": [
                     "ON"
                 ],
@@ -288,5 +291,5 @@
     "max_steps": 105,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 108.08
+    "execution_time_seconds": 87.81
 }

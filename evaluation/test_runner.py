@@ -755,6 +755,12 @@ def main():
         help='Skip all scenarios that already have a complete result (even if they failed)'
     )
     parser.add_argument(
+        '--retry-sr-lt',
+        type=float,
+        default=None,
+        help='Retry completed scenarios with success rate <= this value (e.g. 0.5)'
+    )
+    parser.add_argument(
         '--unity-path',
         type=str,
         default='/Users/rushy/program/virtualhome/virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app/Contents/MacOS/VirtualHome',
@@ -787,6 +793,8 @@ def main():
             cmd.append("--force")
         if args.untested_only:
             cmd.append("--untested-only")
+        if args.retry_sr_lt is not None:
+            cmd.extend(["--retry-sr-lt", str(args.retry_sr_lt)])
         
         env = os.environ.copy()
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -894,19 +902,31 @@ def main():
             )
             if not args.force and os.path.exists(recorded_metrics):
                 with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
-                    prior_metrics = json.load(metrics_file)
+                    try:
+                        prior_metrics = json.load(metrics_file)
+                    except Exception:
+                        prior_metrics = {}
                 if prior_metrics.get('run_status') == 'complete':
                     sr = prior_metrics.get('sr', 0.0)
-                    if sr > 0.0:
-                        print(f"[SKIP] {scenario_id} — already succeeded partially/fully (SR={sr}).")
+                    
+                    if getattr(args, 'untested_only', False):
+                        print(f"[SKIP] {scenario_id} — previous run complete, skipped due to --untested-only.")
                         summary["skipped"] += 1
                         continue
-                    elif getattr(args, 'untested_only', False):
-                        print(f"[SKIP] {scenario_id} — previous run failed, but skipped due to --untested-only.")
-                        summary["skipped"] += 1
-                        continue
+                        
+                    retry_threshold = getattr(args, 'retry_sr_lt', None)
+                    if retry_threshold is not None:
+                        if sr <= retry_threshold:
+                            print(f"[RE-RUN] {scenario_id} — previous run SR={sr} <= {retry_threshold}.")
+                            # Fall through to re-run
+                        else:
+                            print(f"[SKIP] {scenario_id} — already succeeded with SR={sr} > {retry_threshold}.")
+                            summary["skipped"] += 1
+                            continue
                     else:
-                        print(f"[RE-RUN] {scenario_id} — previous run completely failed (SR={sr}).")
+                        print(f"[SKIP] {scenario_id} — already has a complete run (SR={sr}).")
+                        summary["skipped"] += 1
+                        continue
 
             print(f"\n==========================================")
             print(f"[RUN] {scenario_id}")

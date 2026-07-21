@@ -93,7 +93,12 @@ def aggregate(manifest: dict, results_root: Path, methods: list[str]) -> tuple[l
                     cell_issues.append(issue)
                     continue
 
-                if (
+                reason = metrics.get("reason", "")
+                is_agent_failure = any(
+                    x in reason for x in ["Agent stagnated", "Agent gave up", "Agent crashed"]
+                )
+
+                if not is_agent_failure and (
                     metrics.get("run_status") != "complete"
                     or not metrics.get("valid_for_aggregation", False)
                 ):
@@ -104,7 +109,7 @@ def aggregate(manifest: dict, results_root: Path, methods: list[str]) -> tuple[l
                         "method": method,
                         "sample_id": entry["sample_id"],
                         "metrics_path": str(path),
-                        "reason": metrics.get("reason", ""),
+                        "reason": reason,
                     }
                     issues.append(issue)
                     cell_issues.append(issue)

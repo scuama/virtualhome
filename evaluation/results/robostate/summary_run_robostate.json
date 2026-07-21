@@ -1,87 +1,43 @@
 {
     "method": "robostate",
     "model": "gpt-5.4-mini",
-    "total": 1,
+    "total": 3,
     "skipped": 0,
     "success": 0,
     "fail": 0,
-    "incomplete": 1,
+    "incomplete": 3,
     "failures": [
         {
-            "scenario": "T1_SCALE_SG02_S7",
+            "scenario": "T1_INST_G2_06_sentence_wise",
             "reason": "Agent stagnated (15 steps without progress)",
+            "run_status": "incomplete"
+        },
+        {
+            "scenario": "T1_INST_G2_06_summarized",
+            "reason": "Agent gave up (5 consecutive waits)",
+            "run_status": "incomplete"
+        },
+        {
+            "scenario": "T1_INST_G2_06_vague",
+            "reason": "Agent gave up (5 consecutive waits)",
             "run_status": "incomplete"
         }
     ],
     "extension_metrics": [
         {
-            "task_total": 7,
-            "task_completed": 5,
-            "sr": 0.7143,
-            "ps": 13.4,
-            "ps_sum": 67,
-            "ps_count": 5,
-            "mean_completion_step": 13.4,
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
             "tasks": [
                 {
-                    "task_id": "G1_02",
-                    "instruction": "If there are apples on the table, wash them clean and bring them over.",
+                    "task_id": "G2_06",
+                    "instruction": "If the TV is on, turn on the table lamp.",
                     "success_condition": {
-                        "target_class": "character",
-                        "destination_class": "apple",
-                        "relation": "HOLDS_RH",
-                        "min_count": 1,
-                        "destination_states": [
-                            "CLEAN"
-                        ],
-                        "target_instance": 0,
-                        "destination_instance": 0
-                    },
-                    "currently_satisfied": false,
-                    "ever_satisfied": false,
-                    "first_satisfied_step": null,
-                    "completed": false,
-                    "completion_step": null
-                },
-                {
-                    "task_id": "E1_11",
-                    "instruction": "If your computer stays off, turn it on.",
-                    "success_condition": {
-                        "target_class": "computer",
-                        "states": [
-                            "ON"
-                        ],
-                        "min_count": 1,
-                        "target_instance": 0
-                    },
-                    "currently_satisfied": true,
-                    "ever_satisfied": true,
-                    "first_satisfied_step": 17,
-                    "completed": true,
-                    "completion_step": 17
-                },
-                {
-                    "task_id": "E1_03",
-                    "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
-                    "success_condition": {
-                        "target_class": "book",
-                        "relation": "ON",
-                        "destination_class": "sofa",
-                        "min_count": 1,
-                        "target_instance": 0,
-                        "destination_instance": 0
-                    },
-                    "currently_satisfied": true,
-                    "ever_satisfied": true,
-                    "first_satisfied_step": 6,
-                    "completed": true,
-                    "completion_step": 6
-                },
-                {
-                    "task_id": "E1_17",
-                    "instruction": "If the radio is off, turn it on",
-                    "success_condition": {
-                        "target_class": "radio",
+                        "target_class": "tablelamp",
                         "states": [
                             "ON"
                         ],
@@ -93,65 +49,14 @@
                     "first_satisfied_step": null,
                     "completed": false,
                     "completion_step": null
-                },
-                {
-                    "task_id": "E1_07",
-                    "instruction": "The mug should always be on the coffeetable.",
-                    "success_condition": {
-                        "target_class": "mug",
-                        "relation": "ON",
-                        "destination_class": "coffeetable",
-                        "min_count": 1,
-                        "target_instance": 0,
-                        "destination_instance": 0
-                    },
-                    "currently_satisfied": true,
-                    "ever_satisfied": true,
-                    "first_satisfied_step": 10,
-                    "completed": true,
-                    "completion_step": 10
-                },
-                {
-                    "task_id": "E1_01",
-                    "instruction": "If no one is watching the TV, turn it on.",
-                    "success_condition": {
-                        "target_class": "tv",
-                        "states": [
-                            "ON"
-                        ],
-                        "min_count": 1,
-                        "target_instance": 0
-                    },
-                    "currently_satisfied": true,
-                    "ever_satisfied": true,
-                    "first_satisfied_step": 19,
-                    "completed": true,
-                    "completion_step": 19
-                },
-                {
-                    "task_id": "E1_15",
-                    "instruction": "Put the folder in the closet.",
-                    "success_condition": {
-                        "target_class": "folder",
-                        "relation": "INSIDE",
-                        "destination_class": "closet",
-                        "min_count": 1,
-                        "target_instance": 0,
-                        "destination_instance": 0
-                    },
-                    "currently_satisfied": true,
-                    "ever_satisfied": true,
-                    "first_satisfied_step": 15,
-                    "completed": true,
-                    "completion_step": 15
                 }
             ],
-            "scenario_id": "T1_SCALE_SG02_S7",
+            "scenario_id": "T1_INST_G2_06_sentence_wise",
             "table_id": "table1",
-            "experiment_axis": "scale",
-            "sample_id": "S-G02",
-            "setting": "S7",
-            "extension_type": "table1_scale",
+            "experiment_axis": "instruction_type",
+            "sample_id": "G2_06",
+            "setting": "sentence_wise",
+            "extension_type": "table1_instruction_type",
             "ablation_profile": null,
             "source_scenario_id": null,
             "method": "robostate",
@@ -160,8 +65,100 @@
             "run_status": "incomplete",
             "valid_for_aggregation": false,
             "reason": "Agent stagnated (15 steps without progress)",
-            "steps_executed": 34,
-            "execution_time_seconds": 117.16,
+            "steps_executed": 15,
+            "execution_time_seconds": 63.3,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": []
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "G2_06",
+                    "instruction": "Turn on the table lamp.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1,
+                        "target_instance": 0
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T1_INST_G2_06_summarized",
+            "table_id": "table1",
+            "experiment_axis": "instruction_type",
+            "sample_id": "G2_06",
+            "setting": "summarized",
+            "extension_type": "table1_instruction_type",
+            "ablation_profile": null,
+            "source_scenario_id": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "incomplete",
+            "valid_for_aggregation": false,
+            "reason": "Agent gave up (5 consecutive waits)",
+            "steps_executed": 4,
+            "execution_time_seconds": 21.4,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": []
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "G2_06",
+                    "instruction": "Provide some illumination by activating the desk lighting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1,
+                        "target_instance": 0
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T1_INST_G2_06_vague",
+            "table_id": "table1",
+            "experiment_axis": "instruction_type",
+            "sample_id": "G2_06",
+            "setting": "vague",
+            "extension_type": "table1_instruction_type",
+            "ablation_profile": null,
+            "source_scenario_id": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "incomplete",
+            "valid_for_aggregation": false,
+            "reason": "Agent gave up (5 consecutive waits)",
+            "steps_executed": 9,
+            "execution_time_seconds": 37.62,
             "dynamic_event_counts": {},
             "dynamic_event_trace": []
         }

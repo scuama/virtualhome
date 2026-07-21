@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "M1_03",
-            "instruction": "If you see dirty cups, put them in the sink right away.",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
             "success_condition": {
                 "target_class": "waterglass",
                 "destination_class": "sink",
@@ -43,7 +43,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (18 steps without progress)",
     "steps_executed": 18,
-    "execution_time_seconds": 7.91,
+    "execution_time_seconds": 100.64,
     "dynamic_event_counts": {
         "hide_waterglass": {
             "times_triggered": 0,

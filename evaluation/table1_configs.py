@@ -70,8 +70,7 @@ SCALE_GROUPS = {
 }
 
 INSTRUCTION_SAMPLES = [
-    "G1_01", "G1_02", "G1_03", "G1_04", "G1_05", "E1_03", "E1_11",
-    "G2_06", "G2_07", "G2_08", "G2_09"
+    "G1_01", "G1_02", "G1_03", "G1_04", "G1_05", "E1_03", "E1_11"
 ]
 
 INSTRUCTION_TEXT = {
@@ -126,8 +125,7 @@ INSTRUCTION_TEXT = {
 }
 
 DYNAMIC_SAMPLES = [
-    "M1_01", "M1_02", "M1_03", "M1_04", "M1_05", "E1_03", "E1_15",
-    "E1_02", "E1_07", "E1_08", "E1_10"
+    "M1_01", "M1_02", "M1_03", "M1_04", "M1_05", "E1_03", "E1_15"
 ]
 
 DYNAMIC_TARGETS = {
@@ -452,8 +450,8 @@ def generate_all() -> list[tuple[Path, dict]]:
 
 
 def validate(configs: list[tuple[Path, dict]]) -> None:
-    if len(configs) != 81:
-        raise ValueError(f"Expected 81 configs, generated {len(configs)}")
+    if len(configs) != 57:
+        raise ValueError(f"Expected 57 configs, generated {len(configs)}")
     scenario_ids = [config["scenario_id"] for _, config in configs]
     if len(set(scenario_ids)) != len(scenario_ids):
         raise ValueError("Generated scenario IDs are not unique")
@@ -488,7 +486,7 @@ def validate(configs: list[tuple[Path, dict]]) -> None:
             if "target_instance" not in condition_text:
                 raise ValueError(f"Unbound task target: {config['scenario_id']}")
 
-    if counts != {"scale": 15, "instruction_type": 33, "dynamic_difficulty": 33}:
+    if counts != {"scale": 15, "instruction_type": 21, "dynamic_difficulty": 21}:
         raise ValueError(f"Unexpected axis counts: {counts}")
 
     for group_id in SCALE_GROUPS:

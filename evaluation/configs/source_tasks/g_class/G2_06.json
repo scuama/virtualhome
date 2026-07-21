@@ -32,7 +32,8 @@
       ],
       "add_states": [
         "OFF"
-      ]
+      ],
+      "instance_filter": {}
     }
   ],
   "user_clarification_reply": "Just open it.",

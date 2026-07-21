@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To remove the water from the glass and store the glass in a cabinet."
+      "answer": "They want the glass to be emptied of water and then put away."
     },
     {
       "question": "Why is that important?",
-      "answer": "It likely helps put the item away, reducing clutter and leaving it ready for later use."
+      "answer": "To leave the container dry and stored in its designated place."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to organize and store household items while making the container empty and usable."
+      "answer": "It fulfills the need to tidy up and organize kitchen items."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may want tidiness, easier kitchen management, or to free the glass for reuse."
+      "answer": "It may support cleanliness, reduce clutter, and make the item ready for later use."
     }
   ],
-  "deep_intent": "The user wants to empty a drinking container and store it away.",
+  "deep_intent": "The user wants to tidy and store a kitchen container properly.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other drinking containers that can be emptied and stored away, such as a cup or mug"
+      "description": "Other similar drinking containers that can be emptied and put away, such as a cup or mug"
     },
     {
       "priority": 2,
-      "description": "Other kitchenware items that are meant to be put away after use, such as a bowl or small dish"
+      "description": "Other kitchen vessels or storage-safe drinkware that can be dried and stored, such as a tumbler or glass"
     },
     {
       "priority": 3,
-      "description": "Other empty reusable household containers that can be organized in a cabinet"
+      "description": "Other washable household containers that are meant to be put in a cabinet after use"
     },
     {
       "priority": 4,
-      "description": "Any similar item that can be cleared of contents and stored to reduce clutter"
+      "description": "Any comparable empty, cleanable item that can be organized away in indoor storage"
     }
   ]
 }
@@ -51,17 +51,17 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal requires the target drinking container and the storage location, plus the implied tools/place needed to empty it. Since the container must be emptied before being put away, a sink and water-removal related items are needed; the cabinet must be open to store it. I kept the exact target object and the kitchen cabinet, and included alternative drinking containers as functional backups only where relevant.",
+  "reasoning": "The goal is to empty and store the target waterglass in the kitchencabinet. So I must keep the target object and the required location/receptacle classes involved in the SDG: kitchencabinet, plus the likely supporting surface and openable storage context. Since emptying/cleaning is implied, I also keep the sink and washingsponge as necessary tools, and retain similar drinkware alternatives/backups mentioned by the goal context (mug, wineglass) for functional equivalence.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -70,23 +70,21 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to empty a waterglass and store it in a kitchen cabinet. A suitable target is waterglass(281) because it is a waterglass, grabbable, and currently CLOSE to the character. The cabinet goal node requires the cabinet to be OPEN before the glass can be placed inside. Since I am already near the waterglass, the next required step is to grab it so I can later walk to a sink to empty it.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N1",
+  "reasoning": "The target waterglass is currently reachable and close to the robot, so the next prerequisite toward emptying and storing it is to grab it. Among the visible instances, waterglass(270) is close to the character and is a valid bind for the goal object. No cabinet interaction is possible yet because the glass is not held, and the cabinet is currently closed but that comes later after retrieval and placing the glass away.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N2",
   "mapped_variables": {
-    "?Container": "sink(247)",
-    "?Surface": "plate(278)"
+    "?Surface": "unknown_surface",
+    "?Container": "kitchencabinet(234)"
   },
-  "action": "[grab] <waterglass> (281)"
+  "action": "[grab] <waterglass> (270)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <waterglass> (281)",
+  "action": "[grab] <waterglass> (270)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -97,7 +95,7 @@
 }
 ```
 ## Step 0
-- **Action**: `[grab] <waterglass> (281)`
+- **Action**: `[grab] <waterglass> (270)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -106,19 +104,24 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["waterglass<br>ON<br>?Surface"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["waterglass<br>(EMPTY)"]
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    N5["kitchencabinet<br>(OPEN)"]
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -127,14 +130,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -143,52 +146,60 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target waterglass is already being held and is close to the character, so the next logical step toward the SDG is to empty it. The sink is available in the kitchen and does not need opening; after this, the glass can later be placed in an open kitchen cabinet. Current satisfied nodes are none yet because the glass is not empty and not inside the cabinet.",
-  "satisfied_nodes": [],
+  "reasoning": "The target waterglass(270) is already held in the robot's right hand, which satisfies the grab prerequisite. The next required step in the SDG is to place the glass on a surface before later moving it into the kitchencabinet. The current graph shows kitchencounter(238) is a valid surface in the kitchen, so I should move toward that surface now before any putback action. This progresses toward making the glass reachable for the cabinet placement sequence.",
+  "satisfied_nodes": [
+    "N2"
+  ],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "sink(247)",
-    "?Surface": "sink(247)"
+    "?Surface": "kitchencounter(238)"
   },
-  "action": "[pour] <waterglass> (281) <sink> (247)"
+  "action": "[walk] <kitchencounter> (238)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <sink> (247)",
+  "action": "[walk] <kitchencounter> (238)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor_repaired"
+  "source": "llm_executor"
 }
 ```
 ## Step 1
-- **Action**: `[walk] <sink> (247)`
+- **Action**: `[walk] <kitchencounter> (238)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
+- **Decision Source**: `llm_executor`
 - **Task Progress**: G1_05=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
+    N1["waterglass<br>ON<br>?Surface"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    N5["kitchencabinet<br>(OPEN)"]
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -197,14 +208,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -213,21 +224,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target waterglass(281) is already held, and the robot is already close to the sink(247). To empty the glass, the next required step is to pour its water into the sink. The sink is the correct recipient for liquid disposal, and the glass is pourable, so this directly advances N3 (EMPTY) toward placing the empty glass into an open cabinet afterward.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N3",
+  "reasoning": "The waterglass is already held by the robot (N2 is satisfied), and the next required progression is to empty it before putting it away. The robot is currently close to the sink, which is the correct destination for pouring out the water. Since pouring requires holding the source and being near the target, the single next atomic action should be to pour the held waterglass into the sink. This should move the task toward the eventual cabinet storage steps after the glass is emptied.",
+  "satisfied_nodes": [
+    "N2"
+  ],
+  "current_node_focus": "N5",
   "mapped_variables": {
-    "?Container": "sink(247)",
-    "?Surface": "sink(247)"
+    "?Surface": "sink(247)",
+    "?Container": "kitchencabinet(235)"
   },
-  "action": "[pour] <waterglass> (281) <sink> (247)"
+  "action": "[pour] <waterglass> (270) <sink> (247)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[pour] <waterglass> (281) <sink> (247)",
+  "action": "[pour] <waterglass> (270) <sink> (247)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -238,7 +251,7 @@ graph TD
 }
 ```
 ## Step 2
-- **Action**: `[pour] <waterglass> (281) <sink> (247)`
+- **Action**: `[pour] <waterglass> (270) <sink> (247)`
 - **Action Success**: `False`
 - **Action Message**: Failed: Source is already empty or has no liquid.
 - **Active Task**: `task_1`
@@ -247,18 +260,25 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    N5["kitchencabinet<br>(OPEN)"]
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    style N5 fill:#ff9,stroke:#333,stroke-width:4px
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -267,14 +287,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -283,23 +303,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The held waterglass(281) is already empty because the attempted pour into the sink failed with 'Source is already empty or has no liquid.' So N3 (waterglass EMPTY) is satisfied. The remaining goal is to place this empty waterglass inside an open kitchencabinet. Since kitchencabinet(236) is currently close to the character and is a valid openable container, the next step is to open it before putting the glass inside.",
+  "reasoning": "The current held waterglass(270) is already empty, so the failed pour indicates no liquid-removal step is needed. The SDG still requires the glass to be placed away inside an open kitchencabinet. Since I am currently close to kitchencabinet(235) but it is closed, the next prerequisite is to open a cabinet. I will use the closest candidate cabinet instance as the target for opening.",
   "satisfied_nodes": [
-    "N3"
+    "N2"
   ],
-  "current_node_focus": "N5",
+  "current_node_focus": "N8",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "sink(247)"
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
   },
-  "action": "[open] <kitchencabinet> (236)"
+  "action": "[open] <kitchencabinet> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[open] <kitchencabinet> (236)",
+  "action": "[open] <kitchencabinet> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -310,7 +330,7 @@ graph TD
 }
 ```
 ## Step 3
-- **Action**: `[open] <kitchencabinet> (236)`
+- **Action**: `[open] <kitchencabinet> (235)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -319,19 +339,25 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#ff9,stroke:#333,stroke-width:4px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -340,14 +366,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -356,23 +382,26 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active waterglass(281) is already in hand and the previous pour attempt showed it is already empty, so N3 is satisfied. The cabinet that was opened is kitchencabinet(236), which satisfies the OPEN requirement N5. The remaining goal is to place the empty waterglass inside the open cabinet; since I am already close to that cabinet and holding the glass, the next needed step is to put it in the cabinet. However, per the proximity rule for putin, I must explicitly walk to the destination container first before putting it in. Among the cabinet instances, 236 is the one already open and close to the character, so it is the correct target.",
+  "reasoning": "The waterglass (270) is already held, and the previous pour attempt failed because it is empty, so emptying is complete. The remaining goal is to store it in the kitchen cabinet. The relevant cabinet is kitchencabinet(235), which is already OPEN, satisfying the container prerequisite. I should now move it into that cabinet; per the proximity rule, I must walk to the destination before putting it in.",
   "satisfied_nodes": [
-    "N3",
-    "N5"
+    "N2",
+    "N6",
+    "N4",
+    "N8"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N7",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)"
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
   },
-  "action": "[walk] <kitchencabinet> (236)"
+  "action": "[walk] <kitchencabinet> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <kitchencabinet> (236)",
+  "action": "[walk] <kitchencabinet> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -383,7 +412,7 @@ graph TD
 }
 ```
 ## Step 4
-- **Action**: `[walk] <kitchencabinet> (236)`
+- **Action**: `[walk] <kitchencabinet> (235)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -392,20 +421,28 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    style N6 fill:#9f9,stroke:#333,stroke-width:2px
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -414,14 +451,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -430,23 +467,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The held waterglass(281) has already been tested at the sink and the pour failed with 'already empty or has no liquid', so N3 (EMPTY) is satisfied. The cabinet kitchencabinet(236) is open, and the character is already close to it. The remaining goal is to place the empty waterglass inside the open cabinet, which requires being near the cabinet and holding the glass; both conditions are met.",
+  "reasoning": "The waterglass(270) is already held and the prior pour attempt failed because it is empty, so the next goal step is to place the empty glass into the open kitchen cabinet. Since the cabinet is already open and we are close to it, the single next action is to put the held waterglass into kitchencabinet(235).",
   "satisfied_nodes": [
-    "N3",
-    "N5"
+    "N2",
+    "N8"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N7",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)"
+    "?Container": "kitchencabinet(235)"
   },
-  "action": "[putin] <waterglass> (281) <kitchencabinet> (236)"
+  "action": "[putin] <waterglass> (270) <kitchencabinet> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putin] <waterglass> (281) <kitchencabinet> (236)",
+  "action": "[putin] <waterglass> (270) <kitchencabinet> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -457,7 +494,7 @@ graph TD
 }
 ```
 ## Step 5
-- **Action**: `[putin] <waterglass> (281) <kitchencabinet> (236)`
+- **Action**: `[putin] <waterglass> (270) <kitchencabinet> (235)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -466,20 +503,26 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -488,14 +531,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -504,16 +547,17 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active waterglass (281) has already been placed inside the open kitchencabinet (236), so N4 is satisfied. The glass is currently shown with no FILLED_WATER or DIRTY state, so the EMPTY prerequisite N3 is also satisfied. The remaining unmet requirement is keeping the cabinet open, and it is already OPEN. Since the task goal is achieved for the active object and the cabinet is still open, no further physical action is needed this step.",
+  "reasoning": "The waterglass(270) is already inside the open kitchencabinet(235), and the cabinet is currently open, satisfying the prerequisite for storage. The previous pour failed because the glass was already empty, so no further emptying is needed. The remaining goal is to ensure the glass is placed in the cabinet; the graph already shows it inside the correct cabinet, so the task is effectively at the final storage state. No additional physical action is required to progress safely.",
   "satisfied_nodes": [
-    "N3",
     "N4",
-    "N5"
+    "N3",
+    "N8",
+    "N7"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N7",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "kitchen floor/implicit prior surface"
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
   },
   "action": "[wait]"
 }
@@ -542,20 +586,27 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    N3["waterglass<br>INSIDE<br>?Container"]
     style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N4["?Container<br>(OPEN)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -564,14 +615,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -580,15 +631,18 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The selected waterglass(281) is already inside the open kitchencabinet(236), satisfying the storage relation. However, the graph does not show it as EMPTY, so the remaining unmet goal is to empty it before considering the task complete. Since the glass is already held? No current HOLD state is shown, so the next action should be to get to a pour target. The sink(247) is nearby, and pour is the correct way to remove water from a pourable container; if it turns out the glass is already empty, the environment will reject the pour and we can then reassess. But because the last attempted pour already failed with 'already empty or has no liquid,' the item may already be empty and the main remaining state may already be satisfied logically. The only explicitly unsatisfied node visible is the EMPTY state not yet confirmed in graph, so no further placement is needed right now. However, since the cabinet is already open and the glass is stored, the safest next step is to verify by attempting the only relevant remaining liquid-removal action if the glass were still held; yet it is no longer held after being put into the cabinet. Therefore there is no valid physical action on the glass from the current state without first walking back to the cabinet and grabbing it, which would be premature given the likely already-empty status. The current focus is to confirm completion status on the stored glass, but since the engine only allows a single atomic action and no direct inspection exists, the best immediate action is to wait for updated state after the successful putin and prior failed pour, because the object may have updated to EMPTY in the next perception cycle.",
+  "reasoning": "The waterglass (270) has already been taken out, emptied, and placed inside the open kitchencabinet (235). This satisfies the final storage intent: the glass is put away in the cabinet. No further physical action is needed for the active goal.",
   "satisfied_nodes": [
+    "N2",
     "N4",
-    "N5"
+    "N3",
+    "N8",
+    "N7"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N7",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "sink(247)"
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencabinet(235)"
   },
   "action": "[wait]"
 }
@@ -617,20 +671,28 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["?Container<br>(OPEN)"]
     style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -639,14 +701,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -655,27 +717,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target waterglass(281) is already empty and already inside the open kitchencabinet(236), so the SDG nodes for emptying and storing it are satisfied. No further physical action is needed for the active task.",
+  "reasoning": "The target waterglass(270) is currently inside the open kitchencabinet(235), and the next required step in the SDG is to have it held by the robot (N3 -> N2). Since the cabinet is already open and the robot is close to the cabinet, the correct next atomic action is to grab the waterglass from inside it. The earlier pour failure indicates the glass was already empty, so no further emptying is needed.",
   "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3",
     "N4",
-    "N5"
+    "N8"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N2",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "kitchen(205)"
+    "?Container": "kitchencabinet(235)"
   },
-  "action": "[wait]"
+  "action": "[grab] <waterglass> (270)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[wait]",
+  "action": "[grab] <waterglass> (270)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -686,31 +744,35 @@ graph TD
 }
 ```
 ## Step 8
-- **Action**: `[wait]`
+- **Action**: `[grab] <waterglass> (270)`
 - **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: G1_05=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["waterglass<br>ON<br>?Surface"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -719,14 +781,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -735,25 +797,25 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The waterglass(281) has already been emptied successfully and is currently inside the open kitchencabinet(236), so the remaining SDG nodes N3 and N4 are satisfied. The cabinet is open, and the target waterglass is in the correct location. No further action is needed for the active task.",
+  "reasoning": "The waterglass is already held by the robot (HOLDS_RH waterglass(270)) and the open cabinet is nearby. The SDG still requires the glass to end up inside the open kitchencabinet, so the next needed step is to place the held glass into the cabinet. Since putin requires being near the destination, I should first move to the open cabinet. The cabinet 235 is already OPEN and is the correct container for the final storage step.",
   "satisfied_nodes": [
-    "N3",
+    "N2",
     "N4",
-    "N5"
+    "N8"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N7",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "kitchencabinet(236)"
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
   },
-  "action": "[wait]"
+  "action": "[walk] <kitchencabinet> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[wait]",
+  "action": "[walk] <kitchencabinet> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -764,29 +826,36 @@ graph TD
 }
 ```
 ## Step 9
-- **Action**: `[wait]`
+- **Action**: `[walk] <kitchencabinet> (235)`
 - **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: G1_05=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["waterglass<br>INSIDE<br>?Container"]
-    N2["waterglass<br>ON<br>?Surface"]
-    N3["waterglass<br>(EMPTY)"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["waterglass<br>INSIDE<br>kitchencabinet"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N5["kitchencabinet<br>(OPEN)"]
-    style N5 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"To empty the waterglass, it must first be holding water."| N3
-    N2 -->|"The waterglass must be accessible on a surface before the liquid can be removed."| N1
-    N5 -->|"The kitchencabinet must be open before placing the waterglass inside."| N4
-    N3 -->|"The waterglass should be empty before it is placed in the kitchencabinet."| N4
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
 ```
-- **Observed Items (23)**: kitchencabinet(234) [CLOSED], kitchencabinet(235) [CLOSED], kitchencabinet(236) [OPEN], kitchencabinet(237) [CLOSED], sink(247), faucet(248) [OFF], waterglass(270), plate(273), waterglass(274), plate(277), plate(278), waterglass(281), waterglass(282), plate(285), wineglass(298)...
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
 
 
 ### [PerceptionFilter] Output
@@ -795,14 +864,14 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "kitchencabinet",
+    "kitchencounter",
+    "washingsponge",
     "wineglass",
-    "faucet",
+    "sink",
     "mug",
     "waterglass",
-    "dishbowl",
-    "sink",
-    "plate"
+    "kitchencabinet",
+    "door"
   ],
   "raw_class_count": 55
 }
@@ -811,27 +880,25 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target waterglass(281) is already empty enough for the failed pour attempt, and it has already been placed inside the kitchencabinet(236). The cabinet is currently OPEN, which satisfies the remaining storage condition. No further physical action is needed beyond confirming completion, so the next step should be to leave it as is. Since the cabinet state is the only remaining unmet relation in the SDG and it is already OPEN, the task is effectively completed.",
+  "reasoning": "The waterglass(270) is currently held by the robot and appears empty, so the next SDG step is to place it on a surface before later moving it into the open kitchencabinet. The robot is already close to the kitchencounter(238), which is a valid flat surface, so I will satisfy the intermediate ON relation by putting the glass there.",
   "satisfied_nodes": [
-    "N1",
     "N2",
-    "N3",
     "N4",
-    "N5"
+    "N8"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N5",
   "mapped_variables": {
-    "?Container": "kitchencabinet(236)",
-    "?Surface": "sink(247)"
+    "?Surface": "kitchencounter(238)",
+    "?Container": "kitchencabinet(235)"
   },
-  "action": "[wait]"
+  "action": "[putback] <waterglass> (270) <kitchencounter> (238)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[wait]",
+  "action": "[putback] <waterglass> (270) <kitchencounter> (238)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -841,3 +908,357 @@ graph TD
   "source": "llm_executor"
 }
 ```
+## Step 10
+- **Action**: `[putback] <waterglass> (270) <kitchencounter> (238)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["waterglass<br>ON<br>?Surface"]
+    style N5 fill:#ff9,stroke:#333,stroke-width:4px
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
+```
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "kitchencounter",
+    "washingsponge",
+    "wineglass",
+    "sink",
+    "mug",
+    "waterglass",
+    "kitchencabinet",
+    "door"
+  ],
+  "raw_class_count": 55
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The waterglass (270) is already outside the cabinet and on the kitchencounter, so the final storage container is accessible. The active cabinet target is kitchencabinet(235), which is currently OPEN, satisfying the prerequisite for putting the glass inside. We already walked to the cabinet recently, and the object is not being held right now in the current graph? Actually the graph shows waterglass(270) on kitchencounter and close to the robot, so the next necessary step to progress toward the goal is to pick it up before placing it into the open cabinet.",
+  "satisfied_nodes": [
+    "N1",
+    "N7",
+    "N8"
+  ],
+  "current_node_focus": "N6",
+  "mapped_variables": {
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
+  },
+  "action": "[grab] <waterglass> (270)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <waterglass> (270)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 11
+- **Action**: `[grab] <waterglass> (270)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>ON<br>?Surface"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["waterglass<br>HELD<br>robot"]
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    style N6 fill:#ff9,stroke:#333,stroke-width:4px
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#9f9,stroke:#333,stroke-width:2px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
+```
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "kitchencounter",
+    "washingsponge",
+    "wineglass",
+    "sink",
+    "mug",
+    "waterglass",
+    "kitchencabinet",
+    "door"
+  ],
+  "raw_class_count": 55
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The waterglass (270) is already held in the robot's right hand and is close to the sink and cabinet area. The pour attempt already failed because the glass is empty, so the remaining task is just to store the empty glass in the open kitchencabinet(235). According to the SDG, the next needed step toward N7 is to place the held waterglass into the open cabinet, and we are already near that destination from the prior context.",
+  "satisfied_nodes": [
+    "N2",
+    "N6"
+  ],
+  "current_node_focus": "N7",
+  "mapped_variables": {
+    "?Container": "kitchencabinet(235)"
+  },
+  "action": "[putin] <waterglass> (270) <kitchencabinet> (235)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[putin] <waterglass> (270) <kitchencabinet> (235)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 12
+- **Action**: `[putin] <waterglass> (270) <kitchencabinet> (235)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    style N6 fill:#9f9,stroke:#333,stroke-width:2px
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
+```
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "kitchencounter",
+    "washingsponge",
+    "wineglass",
+    "sink",
+    "mug",
+    "waterglass",
+    "kitchencabinet",
+    "door"
+  ],
+  "raw_class_count": 55
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The waterglass is currently inside the open kitchencabinet (235), but the task requires it to end up stored in the cabinet after being emptied. The current graph shows waterglass(270) inside kitchencabinet(235), and the cabinet is already OPEN, so the remaining necessary progression is to get the glass out and then put it away appropriately if needed. However, because the last successful action already put the waterglass into the cabinet, the immediate next step should be to verify/continue toward the final placement state by approaching the cabinet and preparing for interaction. Since interacting with an object inside a cabinet requires being near it first, the next atomic action is to walk to the open cabinet containing the target glass.",
+  "satisfied_nodes": [
+    "N8",
+    "N7"
+  ],
+  "current_node_focus": "N7",
+  "mapped_variables": {
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
+  },
+  "action": "[walk] <kitchencabinet> (235)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <kitchencabinet> (235)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 13
+- **Action**: `[walk] <kitchencabinet> (235)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    style N7 fill:#ff9,stroke:#333,stroke-width:4px
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
+```
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "kitchencounter",
+    "washingsponge",
+    "wineglass",
+    "sink",
+    "mug",
+    "waterglass",
+    "kitchencabinet",
+    "door"
+  ],
+  "raw_class_count": 55
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The target waterglass(270) is currently inside the open kitchencabinet(235), and the robot is already close to that cabinet. To continue toward the goal of emptying and storing the glass, the next required step is to take it out and hold it. This satisfies the SDG prerequisite for the glass being held before it can be moved or emptied further.",
+  "satisfied_nodes": [
+    "N8"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Container": "kitchencabinet(235)",
+    "?Surface": "kitchencounter(238)"
+  },
+  "action": "[grab] <waterglass> (270)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <waterglass> (270)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 14
+- **Action**: `[grab] <waterglass> (270)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>ON<br>?Surface"]
+    N2["waterglass<br>HELD<br>robot"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["waterglass<br>INSIDE<br>?Container"]
+    N4["?Container<br>(OPEN)"]
+    N5["waterglass<br>ON<br>?Surface"]
+    N6["waterglass<br>HELD<br>robot"]
+    N7["waterglass<br>INSIDE<br>kitchencabinet"]
+    N8["kitchencabinet<br>(OPEN)"]
+    style N8 fill:#9f9,stroke:#333,stroke-width:2px
+    N2 -->|"The waterglass must be reachable on a surface before the robot can grab it."| N1
+    N4 -->|"A container must be open before removing the waterglass from inside it."| N3
+    N3 -->|"The waterglass must be taken out of the container before it can be held."| N2
+    N1 -->|"The waterglass must be placed back on a surface after being emptied, before it can be moved again."| N6
+    N6 -->|"The robot must hold the waterglass before placing it on a surface."| N5
+    N8 -->|"The kitchencabinet must be open before placing the waterglass inside it."| N7
+    N5 -->|"The waterglass must be on a surface and held before it can be placed into the kitchencabinet."| N7
+```
+- **Observed Items (20)**: door(224) [OPEN], kitchencabinet(234) [CLOSED], kitchencabinet(235) [OPEN], kitchencabinet(236) [CLOSED], kitchencabinet(237) [CLOSED], kitchencounter(238) [CLOSED], sink(247), washingsponge(266), waterglass(270), waterglass(274), waterglass(281), waterglass(282), wineglass(298), wineglass(299), mug(194) [FILLED_WATER]...
+

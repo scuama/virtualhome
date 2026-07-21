@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the mug emptied and stored away."
+      "answer": "To manage the mug's contents and then store the mug away."
     },
     {
       "question": "Why is that important?",
-      "answer": "So the mug is no longer holding water and is placed in its storage location."
+      "answer": "To leave the mug empty and put it into its proper storage location."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It helps with tidying up and organizing household items."
+      "answer": "The user wants to tidy up by emptying a container and putting it away."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may want to reduce clutter, prevent spills, or return the mug to a designated place for later use."
+      "answer": "It likely serves an organization or cleanup goal, reducing clutter and preventing liquid from remaining in the mug."
     }
   ],
-  "deep_intent": "The user wants to tidy and organize a household item by emptying it and storing it away.",
+  "deep_intent": "The user wants to empty a container and store it away neatly.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other small drink containers or cups that can be emptied and put away"
+      "description": "Other drinkware or small containers that can be emptied and stored away, such as a cup, glass, or small bowl"
     },
     {
       "priority": 2,
-      "description": "Other washable kitchenware items that are meant to be stored in a cabinet, such as bowls or glasses"
+      "description": "Any similar kitchen container that is no longer needed on the counter and can be put into storage"
     },
     {
       "priority": 3,
-      "description": "Any empty reusable beverage container that can be dried and stored"
+      "description": "Other household items that serve the same cleanup-and-stow purpose, such as reusable food containers"
     },
     {
       "priority": 4,
-      "description": "Other household items that need to be cleared and returned to storage, if the exact container is unavailable"
+      "description": "Different small household objects that can be organized and placed in a cabinet or storage area"
     }
   ]
 }
@@ -74,14 +74,14 @@ graph TD
     N1["mug<br>INSIDE<br>?Container"]
     N2["?Container<br>(OPEN)"]
     N3["mug<br>(HELD)"]
-    N4["water<br>(HELD)"]
-    N5["water<br>INSIDE<br>mug"]
+    N4["water<br>HELD_BY<br>mug"]
+    N5["water<br>FILLED<br>?Container"]
     N6["mug<br>INSIDE<br>cabinet"]
     N7["cabinet<br>(OPEN)"]
     N2 -->|"A container must be open before placing the mug inside it."| N1
-    N3 -->|"The mug must be held before it can be moved into the cabinet."| N6
-    N7 -->|"The cabinet must be open before placing the mug inside."| N6
-    N5 -->|"To pour out the water, it must first be held in the mug before transfer occurs."| N4
+    N3 -->|"The mug must be held in order to pour out the water it contains."| N4
+    N4 -->|"Pouring the water out changes the receiving container state to filled with water."| N5
+    N7 -->|"The cabinet must be open before putting the mug inside it."| N6
 ```
 - **Observed Items (113)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -112,14 +112,14 @@ graph TD
     N1["mug<br>INSIDE<br>?Container"]
     N2["?Container<br>(OPEN)"]
     N3["mug<br>(HELD)"]
-    N4["water<br>(HELD)"]
-    N5["water<br>INSIDE<br>mug"]
+    N4["water<br>HELD_BY<br>mug"]
+    N5["water<br>FILLED<br>?Container"]
     N6["mug<br>INSIDE<br>cabinet"]
     N7["cabinet<br>(OPEN)"]
     N2 -->|"A container must be open before placing the mug inside it."| N1
-    N3 -->|"The mug must be held before it can be moved into the cabinet."| N6
-    N7 -->|"The cabinet must be open before placing the mug inside."| N6
-    N5 -->|"To pour out the water, it must first be held in the mug before transfer occurs."| N4
+    N3 -->|"The mug must be held in order to pour out the water it contains."| N4
+    N4 -->|"Pouring the water out changes the receiving container state to filled with water."| N5
+    N7 -->|"The cabinet must be open before putting the mug inside it."| N6
 ```
 - **Observed Items (174)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -150,14 +150,14 @@ graph TD
     N1["mug<br>INSIDE<br>?Container"]
     N2["?Container<br>(OPEN)"]
     N3["mug<br>(HELD)"]
-    N4["water<br>(HELD)"]
-    N5["water<br>INSIDE<br>mug"]
+    N4["water<br>HELD_BY<br>mug"]
+    N5["water<br>FILLED<br>?Container"]
     N6["mug<br>INSIDE<br>cabinet"]
     N7["cabinet<br>(OPEN)"]
     N2 -->|"A container must be open before placing the mug inside it."| N1
-    N3 -->|"The mug must be held before it can be moved into the cabinet."| N6
-    N7 -->|"The cabinet must be open before placing the mug inside."| N6
-    N5 -->|"To pour out the water, it must first be held in the mug before transfer occurs."| N4
+    N3 -->|"The mug must be held in order to pour out the water it contains."| N4
+    N4 -->|"Pouring the water out changes the receiving container state to filled with water."| N5
+    N7 -->|"The cabinet must be open before putting the mug inside it."| N6
 ```
 - **Observed Items (242)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 

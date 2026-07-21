@@ -273,7 +273,7 @@
         {
             "subject": "plate",
             "relation": "ON",
-            "object": "kitchencounter",
+            "object": "kitchentable",
             "count": 1
         }
     ],

@@ -51,9 +51,9 @@
     "success": false,
     "run_status": "incomplete",
     "valid_for_aggregation": false,
-    "reason": "Agent gave up (5 consecutive waits)",
-    "steps_executed": 10,
-    "execution_time_seconds": 45.73,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 54.91,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

@@ -1,31 +1,28 @@
 {
-    "task_total": 5,
-    "task_completed": 3,
-    "sr": 0.6,
-    "ps": 9.3333,
-    "ps_sum": 28,
-    "ps_count": 3,
-    "mean_completion_step": 9.3333,
+    "task_total": 7,
+    "task_completed": 6,
+    "sr": 0.8571,
+    "ps": 19.1667,
+    "ps_sum": 115,
+    "ps_count": 6,
+    "mean_completion_step": 19.1667,
     "tasks": [
         {
-            "task_id": "G1_02",
-            "instruction": "If there are apples on the table, wash them clean and bring them over.",
+            "task_id": "G1_03",
+            "instruction": "If the TV is on, bring the remote control here.",
             "success_condition": {
                 "target_class": "character",
-                "destination_class": "apple",
+                "destination_class": "remotecontrol",
                 "relation": "HOLDS_RH",
                 "min_count": 1,
-                "destination_states": [
-                    "CLEAN"
-                ],
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
         },
         {
             "task_id": "E1_11",
@@ -40,9 +37,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 12,
+            "first_satisfied_step": 14,
             "completed": true,
-            "completion_step": 12
+            "completion_step": 14
         },
         {
             "task_id": "E1_03",
@@ -57,9 +54,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 6,
+            "first_satisfied_step": 22,
             "completed": true,
-            "completion_step": 6
+            "completion_step": 22
         },
         {
             "task_id": "E1_17",
@@ -91,16 +88,50 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 10,
+            "first_satisfied_step": 9,
             "completed": true,
-            "completion_step": 10
+            "completion_step": 9
+        },
+        {
+            "task_id": "E1_05",
+            "instruction": "It is good for maintenance if the microwave is always open.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 35,
+            "completed": true,
+            "completion_step": 35
+        },
+        {
+            "task_id": "E1_15",
+            "instruction": "Put the folder in the closet.",
+            "success_condition": {
+                "target_class": "folder",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 32,
+            "completed": true,
+            "completion_step": 32
         }
     ],
-    "scenario_id": "T1_SCALE_SG02_S5",
+    "scenario_id": "T1_SCALE_SG03_S7",
     "table_id": "table1",
     "experiment_axis": "scale",
-    "sample_id": "S-G02",
-    "setting": "S5",
+    "sample_id": "S-G03",
+    "setting": "S7",
     "extension_type": "table1_scale",
     "ablation_profile": null,
     "source_scenario_id": null,
@@ -110,8 +141,8 @@
     "run_status": "incomplete",
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 27,
-    "execution_time_seconds": 68.78,
+    "steps_executed": 50,
+    "execution_time_seconds": 114.04,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

@@ -43,7 +43,7 @@
     {
       "subject": "plate",
       "relation": "ON",
-      "object": "kitchencounter",
+      "object": "kitchentable",
       "count": 1,
       "subject_instance": 0,
       "object_instance": 0

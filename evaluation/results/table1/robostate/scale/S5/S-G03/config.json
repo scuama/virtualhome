@@ -205,5 +205,5 @@
     "max_steps": 75,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 58.78
+    "execution_time_seconds": 64.37
 }

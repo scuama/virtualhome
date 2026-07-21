@@ -50,9 +50,21 @@
       "add_states": [
         "OFF"
       ],
+      "instance_filter": {}
+    },
+    {
+      "target_classes": [
+        "tablelamp"
+      ],
       "instance_filter": {
         "index": 0
-      }
+      },
+      "add_states": [
+        "OFF"
+      ],
+      "remove_states": [
+        "ON"
+      ]
     }
   ],
   "initial_relations_override": [

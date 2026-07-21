@@ -16,11 +16,11 @@
     "instruction_scale": 5,
     "instruction_type": "sentence_wise",
     "environment_id": 0,
-    "goal_instruction": "1. If the light is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. The mug should always be on the coffeetable.",
+    "goal_instruction": "1. If the table lamp is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. The mug should always be on the coffeetable.",
     "tasks": [
         {
             "task_id": "G1_04",
-            "instruction": "If the light is on, turn it off.",
+            "instruction": "If the table lamp is on, turn it off.",
             "source_scenario": "G1_04",
             "success_condition": {
                 "target_class": "tablelamp",
@@ -211,5 +211,5 @@
     "max_steps": 75,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 36.92
+    "execution_time_seconds": 78.27
 }

@@ -6,43 +6,43 @@
 {
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
-  "target_object": "dirty cups",
+  "target_object": "dirty water glasses",
   "location_hint": "sink",
   "reasoning_chain": [
     {
-      "question": "Why does the user want this object moved to the sink?",
-      "answer": "To remove dirty cups from their current place immediately."
+      "question": "Why does the user want this object moved?",
+      "answer": "To remove dirty water glasses from where they are seen and place them in the sink."
     },
     {
       "question": "Why is that important?",
-      "answer": "To keep the area tidy and prevent dirty cups from დარჩing out in the open."
+      "answer": "Because leaving dirty glasses out creates clutter and indicates they should be collected for washing."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It helps maintain cleanliness and order in the indoor environment."
+      "answer": "It fulfills the need to tidy the space and prepare used drinkware for cleaning."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may reduce clutter, avoid buildup of dirty dishes, and make later washing easier."
+      "answer": "It likely supports maintaining cleanliness, reducing visual mess, and keeping the area organized."
     }
   ],
-  "deep_intent": "The user wants to maintain cleanliness and reduce clutter by relocating dirty dishes for washing.",
+  "deep_intent": "The user wants to keep the space tidy by collecting used drinkware for cleaning.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other dirty dishware or used eating/drinking items that should be gathered for washing, such as plates, bowls, or utensils"
+      "description": "Other used drinkware that should be washed, such as cups, mugs, or tumblers."
     },
     {
       "priority": 2,
-      "description": "Other washable kitchen items that are visibly soiled and belong with dishes, such as mugs, glasses, or servingware"
+      "description": "Other dirty dishes or tableware that belong in the sink for cleaning."
     },
     {
       "priority": 3,
-      "description": "Any used food-related items that are part of kitchen cleanup and should be collected together for washing"
+      "description": "Any visibly used kitchen items that need to be gathered and prepared for washing."
     },
     {
       "priority": 4,
-      "description": "Other household items that are visibly dirty and need to be moved to their proper cleaning area"
+      "description": "Small household clutter that can be cleared away to improve tidiness, if drinkware is unavailable."
     }
   ]
 }
@@ -71,9 +71,7 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["dirty cup<br>ON<br>?Surface"]
-    N2["dirty cup<br>ON<br>sink"]
-    N1 -->|"The cup must be detected as dirty before it can be moved to the sink."| N2
+    N1["dirty water glass<br>ON<br>?Surface"]
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -101,9 +99,7 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["dirty cup<br>ON<br>?Surface"]
-    N2["dirty cup<br>ON<br>sink"]
-    N1 -->|"The cup must be detected as dirty before it can be moved to the sink."| N2
+    N1["dirty water glass<br>ON<br>?Surface"]
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -131,9 +127,7 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["dirty cup<br>ON<br>?Surface"]
-    N2["dirty cup<br>ON<br>sink"]
-    N1 -->|"The cup must be detected as dirty before it can be moved to the sink."| N2
+    N1["dirty water glass<br>ON<br>?Surface"]
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -161,9 +155,7 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["dirty cup<br>ON<br>?Surface"]
-    N2["dirty cup<br>ON<br>sink"]
-    N1 -->|"The cup must be detected as dirty before it can be moved to the sink."| N2
+    N1["dirty water glass<br>ON<br>?Surface"]
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

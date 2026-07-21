@@ -16,11 +16,11 @@
         "instance_index": 0
     },
     "environment_id": 2,
-    "goal_instruction": "If you see dirty cups, put them in the sink right away.",
+    "goal_instruction": "If you see dirty water glasses, put them in the sink right away.",
     "tasks": [
         {
             "task_id": "M1_03",
-            "instruction": "If you see dirty cups, put them in the sink right away.",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
             "source_scenario": "M1_03",
             "success_condition": {
                 "target_class": "waterglass",
@@ -117,5 +117,5 @@
     "max_steps": 45,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 7.91
+    "execution_time_seconds": 100.64
 }

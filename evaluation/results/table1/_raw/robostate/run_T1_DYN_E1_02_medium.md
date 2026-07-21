@@ -1,2 +1,0 @@
-# 🚀 VirtualHome Agent Episode Log
-

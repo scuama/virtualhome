@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have a glass of juice poured for them if it is available on the table."
+      "answer": "To get a drink of juice if it is available on the table."
     },
     {
       "question": "Why is that important?",
-      "answer": "Because they likely want something to drink."
+      "answer": "Because having a glass of juice provides a beverage the user can consume now."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to drink and hydrate, possibly also to enjoy a beverage."
+      "answer": "It fulfills the need to drink and possibly to quench thirst or enjoy a beverage."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may be thirsty, want refreshment, or want a convenient ready-to-drink option."
+      "answer": "The motivation is likely to obtain a convenient, ready-to-drink liquid, either for hydration, refreshment, or preference."
     }
   ],
-  "deep_intent": "The user wants to satisfy thirst or obtain refreshment with a drink.",
+  "deep_intent": "The user wants to obtain a drink to quench thirst or refresh themselves.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-drink beverages found indoors, such as water, milk, or another juice-like drink"
+      "description": "Other ready-to-drink beverages available on the table, such as water or another fruit drink"
     },
     {
       "priority": 2,
-      "description": "Similar liquid beverages that can be poured into a glass, such as tea, lemonade, or flavored drinks"
+      "description": "Similar non-alcoholic drinks in a glass-friendly form, such as tea, milk, or a soft drink"
     },
     {
       "priority": 3,
-      "description": "Packaged drinks or drinkable liquids that provide refreshment and hydration"
+      "description": "Any chilled or drinkable household beverage that can provide refreshment"
     },
     {
       "priority": 4,
-      "description": "Any safe hydrating beverage, such as plain water, if the preferred drink is unavailable"
+      "description": "Plain water, which can satisfy thirst even if juice is unavailable"
     }
   ]
 }
@@ -74,8 +74,8 @@ graph TD
     N1["juice<br>ON<br>table"]
     N2["juice<br>(HELD)"]
     N3["glass<br>(FILLED_JUICE)"]
-    N1 -->|"Juice must be accessible and held before pouring."| N2
-    N2 -->|"The agent must hold the juice source directly to pour it into the glass."| N3
+    N1 -->|"Juice must be picked up from the table before it can be poured."| N2
+    N2 -->|"The juice must be held directly to pour it into the glass."| N3
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -106,8 +106,8 @@ graph TD
     N1["juice<br>ON<br>table"]
     N2["juice<br>(HELD)"]
     N3["glass<br>(FILLED_JUICE)"]
-    N1 -->|"Juice must be accessible and held before pouring."| N2
-    N2 -->|"The agent must hold the juice source directly to pour it into the glass."| N3
+    N1 -->|"Juice must be picked up from the table before it can be poured."| N2
+    N2 -->|"The juice must be held directly to pour it into the glass."| N3
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -138,8 +138,8 @@ graph TD
     N1["juice<br>ON<br>table"]
     N2["juice<br>(HELD)"]
     N3["glass<br>(FILLED_JUICE)"]
-    N1 -->|"Juice must be accessible and held before pouring."| N2
-    N2 -->|"The agent must hold the juice source directly to pour it into the glass."| N3
+    N1 -->|"Juice must be picked up from the table before it can be poured."| N2
+    N2 -->|"The juice must be held directly to pour it into the glass."| N3
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -170,8 +170,8 @@ graph TD
     N1["juice<br>ON<br>table"]
     N2["juice<br>(HELD)"]
     N3["glass<br>(FILLED_JUICE)"]
-    N1 -->|"Juice must be accessible and held before pouring."| N2
-    N2 -->|"The agent must hold the juice source directly to pour it into the glass."| N3
+    N1 -->|"Juice must be picked up from the table before it can be poured."| N2
+    N2 -->|"The juice must be held directly to pour it into the glass."| N3
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

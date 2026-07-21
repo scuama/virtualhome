@@ -2,10 +2,10 @@
     "task_total": 7,
     "task_completed": 6,
     "sr": 0.8571,
-    "ps": 15.6667,
-    "ps_sum": 94,
+    "ps": 16.5,
+    "ps_sum": 99,
     "ps_count": 6,
-    "mean_completion_step": 15.6667,
+    "mean_completion_step": 16.5,
     "tasks": [
         {
             "task_id": "G1_01",
@@ -37,9 +37,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 18,
+            "first_satisfied_step": 19,
             "completed": true,
-            "completion_step": 18
+            "completion_step": 19
         },
         {
             "task_id": "E1_03",
@@ -54,9 +54,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 7,
+            "first_satisfied_step": 8,
             "completed": true,
-            "completion_step": 7
+            "completion_step": 8
         },
         {
             "task_id": "E1_04",
@@ -71,9 +71,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 20,
+            "first_satisfied_step": 21,
             "completed": true,
-            "completion_step": 20
+            "completion_step": 21
         },
         {
             "task_id": "E1_07",
@@ -88,9 +88,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 11,
+            "first_satisfied_step": 12,
             "completed": true,
-            "completion_step": 11
+            "completion_step": 12
         },
         {
             "task_id": "E1_11",
@@ -105,9 +105,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 22,
+            "first_satisfied_step": 23,
             "completed": true,
-            "completion_step": 22
+            "completion_step": 23
         },
         {
             "task_id": "E1_15",
@@ -141,8 +141,8 @@
     "run_status": "incomplete",
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 37,
-    "execution_time_seconds": 95.75,
+    "steps_executed": 38,
+    "execution_time_seconds": 108.08,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }
