@@ -374,21 +374,32 @@ def table1_result_folder(base_dir, config, method_name):
         str(config.get('sample_id', 'unknown'))
     )
 
-def table2_result_folder(base_dir, config):
+def table2_result_folder(base_dir, config, method_name):
     """Return the non-overlapping Table 2 result location."""
     axis = str(config.get('experiment_axis', 'unknown'))
     if axis == 'dynamic_difficulty':
         axis = 'non_stationarity'
+        
+    setting = str(config.get('setting', 'unknown'))
+    if setting == 'unknown':
+        if axis == 'non_stationarity':
+            setting = str(config.get('dynamic_difficulty', 'unknown'))
+        elif axis == 'scale':
+            scale_val = config.get('instruction_scale', 'unknown')
+            setting = f"S{scale_val}" if scale_val != 'unknown' else 'unknown'
+        elif axis == 'instruction_type':
+            setting = str(config.get('instruction_type', 'unknown'))
+            
     return os.path.join(
-        base_dir, 'results', 'table2', axis,
-        str(config.get('setting', 'unknown')),
+        base_dir, 'results', 'table2', method_name, axis,
+        setting,
         str(config.get('task_id', config.get('scenario_id', 'unknown')))
     )
 
-def table3_result_folder(base_dir, config):
+def table3_result_folder(base_dir, config, method_name):
     """Return the non-overlapping Table 3 ablation result location."""
     return os.path.join(
-        base_dir, 'results', 'table3', 'runs',
+        base_dir, 'results', 'table3', method_name, 'runs',
         str(config.get('ablation_profile', 'unknown')),
         str(config.get('source_scenario_id', config.get('scenario_id', 'unknown')))
     )
@@ -878,11 +889,11 @@ def main():
                 )
             elif table2_run:
                 configured_result_folder = table2_result_folder(
-                    base_dir, config
+                    base_dir, config, method_name
                 )
             elif table3_run:
                 configured_result_folder = table3_result_folder(
-                    base_dir, config
+                    base_dir, config, method_name
                 )
             else:
                 configured_result_folder = source_tasks_result_folder(
@@ -1389,9 +1400,9 @@ def main():
             if table1_run:
                 dest_folder = table1_result_folder(base_dir, config, method_name)
             elif table2_run:
-                dest_folder = table2_result_folder(base_dir, config)
+                dest_folder = table2_result_folder(base_dir, config, method_name)
             elif table3_run:
-                dest_folder = table3_result_folder(base_dir, config)
+                dest_folder = table3_result_folder(base_dir, config, method_name)
             else:
                 dest_folder = source_tasks_result_folder(base_dir, config, method_name, config_path)
             write_result_artifacts(

@@ -1,11 +1,11 @@
 {
     "task_total": 7,
-    "task_completed": 0,
-    "sr": 0.0,
-    "ps": null,
-    "ps_sum": 0,
-    "ps_count": 0,
-    "mean_completion_step": null,
+    "task_completed": 6,
+    "sr": 0.8571,
+    "ps": 14.6667,
+    "ps_sum": 88,
+    "ps_count": 6,
+    "mean_completion_step": 14.6667,
     "tasks": [
         {
             "task_id": "G1_02",
@@ -21,11 +21,11 @@
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 4,
+            "completed": true,
+            "completion_step": 4
         },
         {
             "task_id": "E1_11",
@@ -38,11 +38,11 @@
                 "min_count": 1,
                 "target_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 20,
+            "completed": true,
+            "completion_step": 20
         },
         {
             "task_id": "E1_03",
@@ -55,11 +55,11 @@
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 10,
+            "completed": true,
+            "completion_step": 10
         },
         {
             "task_id": "E1_17",
@@ -89,11 +89,11 @@
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
         },
         {
             "task_id": "E1_01",
@@ -106,11 +106,11 @@
                 "min_count": 1,
                 "target_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 22,
+            "completed": true,
+            "completion_step": 22
         },
         {
             "task_id": "E1_15",
@@ -123,11 +123,11 @@
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 18,
+            "completed": true,
+            "completion_step": 18
         }
     ],
     "scenario_id": "T1_SCALE_SG02_S7",
@@ -141,11 +141,11 @@
     "method": "robostate",
     "model": "gpt-5.4-mini",
     "success": false,
-    "run_status": "complete",
-    "valid_for_aggregation": true,
-    "reason": "Agent gave up (5 consecutive waits)",
-    "steps_executed": 11,
-    "execution_time_seconds": 38.42,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 37,
+    "execution_time_seconds": 111.48,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

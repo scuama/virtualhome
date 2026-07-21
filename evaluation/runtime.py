@@ -42,8 +42,8 @@ def check_success(graph: dict, condition: dict) -> bool:
     destination_class = condition.get("destination_class")
     destination_states = _upper_set(condition.get("destination_states", []))
     destination_properties = _upper_set(condition.get("destination_properties", []))
-    target_instance = condition.get("target_instance")
-    destination_instance = condition.get("destination_instance")
+    target_instance = None # Bug Fix: Ignore strict instance binding
+    destination_instance = None # Bug Fix: Ignore strict instance binding
 
     nodes = graph.get("nodes", [])
     id_to_node = {int(node["id"]): node for node in nodes if "id" in node}

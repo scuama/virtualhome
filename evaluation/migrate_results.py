@@ -137,6 +137,47 @@ def migrate():
         except:
             pass
 
+    # 4. Migrate Table 2 Raw Results
+    table2_raw_dir = results_dir / "robostate" / "raw"
+    if table2_raw_dir.exists():
+        print("Migrating Table 2 Raw Results...")
+        table2_dir_configs = configs_dir / "table2"
+        t2_config_info = {}
+        if table2_dir_configs.exists():
+            for p in table2_dir_configs.rglob("*.json"):
+                try:
+                    with open(p, 'r') as f:
+                        cfg = json.load(f)
+                    axis = cfg.get("experiment_axis", "unknown")
+                    if axis == "dynamic_difficulty":
+                        axis = "non_stationarity"
+                    
+                    setting = cfg.get("setting", "unknown")
+                    if setting == "unknown":
+                        if axis == "non_stationarity":
+                            setting = str(cfg.get('dynamic_difficulty', 'unknown'))
+                        elif axis == "scale":
+                            scale_val = cfg.get('instruction_scale', 'unknown')
+                            setting = f"S{scale_val}" if scale_val != 'unknown' else 'unknown'
+                        elif axis == "instruction_type":
+                            setting = str(cfg.get('instruction_type', 'unknown'))
+                            
+                    t2_config_info[p.stem] = (axis, setting)
+                except Exception as e:
+                    pass
+        
+        for md_file in table2_raw_dir.glob("run_*.md"):
+            scenario_id = md_file.stem[4:]  # remove 'run_' prefix
+            if scenario_id in t2_config_info:
+                axis, setting = t2_config_info[scenario_id]
+                target_dir = results_dir / "table2" / "robostate" / axis / setting / scenario_id
+                target_dir.mkdir(parents=True, exist_ok=True)
+                
+                target_file = target_dir / md_file.name
+                if not target_file.exists():
+                    shutil.move(str(md_file), str(target_file))
+                    print(f"Moved T2 Raw: {md_file.name} -> {target_dir}")
+
     print("Migration complete!")
 
 if __name__ == "__main__":

@@ -22,6 +22,19 @@ ROOT = Path(__file__).resolve().parent
 CONFIGS = ROOT / "configs"
 OUTPUT = CONFIGS / "table1"
 CATALOG = ROOT.parent / "doc" / "scene_room_objects_catalog.md"
+
+def scene_grounding_candidates(environment_id):
+    """Return every object class listed for one scene in the public catalog."""
+    text = CATALOG.read_text(encoding="utf-8")
+    sections = re.split(r"^## .*?Scene\s+(\d+)\s*$", text, flags=re.MULTILINE)
+    scenes = {}
+    for index in range(1, len(sections), 2):
+        scene_id = int(sections[index])
+        scenes[scene_id] = sorted(set(re.findall(
+            r"`([a-z0-9_]+)`\s*\(x\d+\)", sections[index + 1]
+        )))
+    return scenes.get(int(environment_id), [])
+
 DEFAULT_MANIFEST = OUTPUT / "manifest.json"
 DEFAULT_UNITY = (
     ROOT.parent / "virtualhome" / "simulation" / "unity_simulator"
@@ -331,13 +344,14 @@ def build_instruction(sample_id: str, instruction_type: str) -> dict:
     states, relations = source_initialization(sample_id, source)
     task = task_from_source(sample_id, source, instruction)
     scenario_id = f"T1_INST_{sample_id}_{instruction_type}"
-    return {
+    is_preprocessed = instruction_type not in ["vague", "summarized"]
+    config_dict = {
         "scenario_id": scenario_id,
         "extension_type": "table1_instruction_type",
         **base_metadata("instruction_type", sample_id, instruction_type),
         "source_scenarios": [sample_id],
         "instruction_type": instruction_type,
-        "preprocessed_instruction": True,
+        "preprocessed_instruction": is_preprocessed,
         "environment_id": int(source["environment_id"]),
         "goal_instruction": instruction,
         "tasks": [task],
@@ -346,6 +360,9 @@ def build_instruction(sample_id: str, instruction_type: str) -> dict:
         "success_condition": copy.deepcopy(task["success_condition"]),
         "max_steps": 45,
     }
+    if not is_preprocessed:
+        config_dict["grounding_candidates"] = scene_grounding_candidates(int(source["environment_id"]))
+    return config_dict
 
 
 def build_dynamic(sample_id: str, difficulty: str) -> dict:
