@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 import re
-from typing import Dict, Iterable, List, Optional, Set
+from typing import Iterable, List, Optional, Set
 
 
 def _compact(value: str) -> str:
@@ -14,6 +14,10 @@ NON_ENVIRONMENT_CLASSES = {
     "robot",
     "character",
     "human",
+    "person",
+    "people",
+    "nobody",
+    "someone",
     "user",
     "self",
     "hand",
@@ -40,9 +44,15 @@ class TaskState:
 
 
 class MultiTaskManager:
-    """Own task state while treating evaluator progress as authoritative."""
+    """Own task state while using evaluator booleans for task completion."""
 
-    def __init__(self, config: dict, logger=None, failure_limit: int = 2):
+    def __init__(
+        self,
+        config: dict,
+        logger=None,
+        failure_limit: int = 2,
+        instruction_overrides: Optional[List[str]] = None,
+    ):
         configured_tasks = config.get("tasks") or []
         if configured_tasks:
             task_specs = configured_tasks
@@ -61,7 +71,11 @@ class MultiTaskManager:
             if task_id in seen_ids:
                 task_id = f"{task_id}_{index + 1}"
             seen_ids.add(task_id)
-            instruction = str(spec.get("instruction") or "").strip()
+            instruction = (
+                str(instruction_overrides[index]).strip()
+                if instruction_overrides and index < len(instruction_overrides)
+                else str(spec.get("instruction") or "").strip()
+            )
             if not instruction and len(task_specs) == 1:
                 instruction = str(config.get("goal_instruction", "")).strip()
             self.tasks.append(TaskState(task_id, instruction, index))
@@ -69,7 +83,11 @@ class MultiTaskManager:
         self.logger = logger
         self.failure_limit = max(1, int(failure_limit))
         self.active_task_id: Optional[str] = None
-        self.progress_available = False
+        self.scene_classes = {
+            str(value).strip().lower().replace(" ", "_")
+            for value in config.get("grounding_candidates", []) or []
+            if str(value).strip()
+        }
 
     @property
     def active_task(self) -> Optional[TaskState]:
@@ -79,21 +97,19 @@ class MultiTaskManager:
         return next((task for task in self.tasks if task.task_id == task_id), None)
 
     def update_progress(self, progress: Optional[Iterable[dict]], step: int) -> None:
+        """Consume only public task IDs and their evaluator completion booleans."""
         if progress is None:
             return
-        self.progress_available = True
         progress_by_id = {
-            str(item.get("task_id")): item
+            str(item.get("task_id")): bool(item.get("currently_satisfied", False))
             for item in progress
             if item.get("task_id") is not None
         }
-
         for task in self.tasks:
-            item = progress_by_id.get(task.task_id)
-            if item is None:
+            if task.task_id not in progress_by_id:
                 continue
             was_satisfied = task.currently_satisfied
-            task.currently_satisfied = bool(item.get("currently_satisfied", False))
+            task.currently_satisfied = progress_by_id[task.task_id]
             if task.currently_satisfied:
                 task.status = "satisfied"
                 task.failure_count = 0
@@ -101,14 +117,9 @@ class MultiTaskManager:
                 if self.active_task_id == task.task_id:
                     self.active_task_id = None
             elif was_satisfied:
-                # Evaluator state may regress after a reversible goal is disturbed.
                 task.status = "pending"
                 task.cooldown_until = 0
-                self._log(
-                    f"Task {task.task_id} regressed at step {step}; reopening it."
-                )
-            elif task.status == "satisfied":
-                task.status = "pending"
+                self._log(f"Task {task.task_id} regressed at step {step}; reopening it.")
 
     def select_task(
         self,
@@ -264,8 +275,11 @@ class MultiTaskManager:
                 value = re.sub(r"_\d+$", "", value)
                 if value.replace(" ", "_") in NON_ENVIRONMENT_CLASSES:
                     continue
+                normalized = value.replace(" ", "_")
+                if self.scene_classes and normalized not in self.scene_classes:
+                    continue
                 if re.fullmatch(r"[a-z][a-z0-9_ -]*", value):
-                    task.required_classes.add(value.replace(" ", "_"))
+                    task.required_classes.add(normalized)
 
     def _log(self, message: str) -> None:
         if self.logger:

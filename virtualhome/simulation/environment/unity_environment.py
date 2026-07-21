@@ -602,6 +602,16 @@ class UnityEnvironment(BaseEnvironment):
                 nid = node['id']
                 if nid in self.custom_states:
                     current_states = set(node.get('states', []))
+                    mutually_exclusive = {
+                        'ON': 'OFF', 'OFF': 'ON',
+                        'OPEN': 'CLOSED', 'CLOSED': 'OPEN',
+                        'PLUGGED_IN': 'PLUGGED_OUT',
+                        'PLUGGED_OUT': 'PLUGGED_IN',
+                    }
+                    for custom_state in self.custom_states[nid]:
+                        opposite = mutually_exclusive.get(custom_state)
+                        if opposite:
+                            current_states.discard(opposite)
                     current_states.update(self.custom_states[nid])
                     if 'COLD' in current_states and 'HOT' in self.custom_states[nid]:
                         current_states.discard('COLD') # Heating overrides

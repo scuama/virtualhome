@@ -1,0 +1,115 @@
+{
+    "task_total": 3,
+    "task_completed": 3,
+    "sr": 1.0,
+    "ps": 1.0,
+    "mean_completion_step": 9.3333,
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 13,
+            "completed": true,
+            "completion_step": 13
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 9,
+            "completed": true,
+            "completion_step": 9
+        }
+    ],
+    "scenario_id": "E_DYN_G03_S3_high",
+    "extension_type": "dynamic",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "reason": "Goal Reached",
+    "steps_executed": 13,
+    "execution_time_seconds": 43.99,
+    "dynamic_event_counts": {
+        "disturb_computer": {
+            "times_triggered": 3,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 4,
+            "event": "set_state",
+            "event_id": "disturb_computer",
+            "object_id": 397,
+            "target": "computer",
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "step": 8,
+            "event": "set_state",
+            "event_id": "disturb_computer",
+            "object_id": 397,
+            "target": "computer",
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "step": 12,
+            "event": "set_state",
+            "event_id": "disturb_computer",
+            "object_id": 397,
+            "target": "computer",
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ]
+}

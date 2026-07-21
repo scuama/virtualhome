@@ -1,5 +1,6 @@
-"""RoboState agent with evaluator-driven multi-task control."""
+"""RoboState agent with observation-driven multi-task control."""
 
+import json
 import re
 from typing import Optional, Set
 
@@ -48,13 +49,8 @@ class RoboStateAgent(BaseAgent):
 
         self._consume_previous_result(step)
         self._handle_clarification()
-        memory_graph, effective_graph = self._update_memory(
-            obs, step, env_info.get("hidden_nodes", {})
-        )
-
-        self.task_manager.update_progress(
-            env_info.get("task_progress"), step
-        )
+        memory_graph, effective_graph, _ = self._update_memory(obs, step)
+        self.task_manager.update_progress(env_info.get("task_progress"), step)
         self.task_manager.refresh_graph_classes(memory_graph)
         self.explorer.update(obs, step)
 
@@ -63,9 +59,7 @@ class RoboStateAgent(BaseAgent):
                 step, "done()", None, effective_graph, source="all_tasks_satisfied"
             )
 
-        hidden_nodes = env_info.get("hidden_nodes", {})
         attempted_tasks: Set[str] = set()
-        hidden_task_ids: Set[str] = set()
 
         for _ in range(max(1, len(self.task_manager.tasks))):
             task = self.task_manager.select_task(
@@ -87,34 +81,6 @@ class RoboStateAgent(BaseAgent):
                     task.task_id, step, "intent or SDG generation failed"
                 )
                 continue
-
-            hidden_ids = self.explorer.relevant_hidden_ids(
-                task.required_classes,
-                hidden_nodes,
-                memory_graph,
-            )
-            if hidden_ids:
-                hidden_task_ids.add(task.task_id)
-                unfinished_count = sum(
-                    1
-                    for item in self.task_manager.tasks
-                    if not item.currently_satisfied
-                    and item.task_id not in attempted_tasks
-                )
-                if unfinished_count:
-                    self.task_manager.defer(
-                        task.task_id,
-                        step,
-                        f"dynamic object(s) hidden: {sorted(hidden_ids)}",
-                    )
-                    continue
-                return self._return_action(
-                    step,
-                    "[wait]",
-                    task,
-                    effective_graph,
-                    source="relevant_dynamic_object_hidden",
-                )
 
             missing_classes = self.explorer.missing_classes(
                 task.required_classes, memory_graph
@@ -215,7 +181,7 @@ class RoboStateAgent(BaseAgent):
                 effective_graph,
                 source="loop_recovery_room_revisit",
             )
-        if hidden_task_ids or self._temporary_rule_active(config, step):
+        if self._temporary_rule_active(config, step):
             return self._return_action(
                 step,
                 "[wait]",
@@ -241,10 +207,19 @@ class RoboStateAgent(BaseAgent):
         self.sdg_planner = SDGPlanner(self.llm, self.logger)
         self.perception_filter = PerceptionFilter(self.llm, self.logger)
         self.llm_executor = LLMExecutor(self.llm, self.logger)
+        instruction_overrides = None
+        if config.get("instruction_type") == "summarized":
+            instruction_overrides = self._decompose_summarized_instruction(
+                goal,
+                len(config.get("tasks") or []),
+            )
+        elif config.get("instruction_type") == "vague":
+            instruction_overrides = self._ground_vague_instructions(config)
         self.task_manager = MultiTaskManager(
             config,
             logger=self.logger,
             failure_limit=int(config.get("robostate_task_failure_limit", 2)),
+            instruction_overrides=instruction_overrides,
         )
         self.explorer = RoomFrontierExplorer(self.logger)
         self.action_validator = ActionValidator()
@@ -252,6 +227,7 @@ class RoboStateAgent(BaseAgent):
         self.memory_nodes = {}
         self.memory_edges = {}
         self.memory_last_seen = {}
+        self._observation_signatures = {}
         self.clarification_received = False
         self._processed_history_steps = set()
         self._processed_clarification_steps = set()
@@ -264,6 +240,100 @@ class RoboStateAgent(BaseAgent):
         self.logger.info(
             f"Starting RoboState episode with {len(self.task_manager.tasks)} "
             f"task(s): {label}"
+        )
+
+    def _decompose_summarized_instruction(
+        self, instruction: str, expected_count: int
+    ) -> list:
+        """Restore a summarized prompt to ordered concrete tasks without evaluator hints."""
+        if expected_count < 1:
+            raise ValueError("Summarized instruction has no configured task IDs")
+        system_prompt = (
+            "You decompose summarized embodied household instructions into concrete, "
+            "independent tasks. Preserve every condition, object, destination, and state; "
+            "resolve pronouns only from the text; never invent information. Return JSON only."
+        )
+        validation_error = ""
+        for attempt in range(2):
+            user_prompt = (
+                f"Summarized instruction: {instruction!r}\n"
+                f"Return exactly {expected_count} tasks in their original order as "
+                '{"tasks": ["complete task 1", "complete task 2"]}. '
+                "Each item must be a non-empty, distinct, directly executable English instruction."
+            )
+            if validation_error:
+                user_prompt += f"\nPrevious output was invalid: {validation_error}"
+            payload = self.llm.generate_json(system_prompt, user_prompt)
+            tasks = payload.get("tasks") if isinstance(payload, dict) else None
+            if not isinstance(tasks, list):
+                validation_error = "the JSON field 'tasks' was not a list"
+                continue
+            normalized = []
+            for item in tasks:
+                text = item.get("instruction", "") if isinstance(item, dict) else item
+                normalized.append(str(text).strip())
+            if len(normalized) != expected_count:
+                validation_error = (
+                    f"expected {expected_count} tasks but received {len(normalized)}"
+                )
+                continue
+            if any(not item for item in normalized):
+                validation_error = "one or more tasks were empty"
+                continue
+            if len({item.lower() for item in normalized}) != expected_count:
+                validation_error = "tasks were not distinct"
+                continue
+            self.logger.info(
+                "Summarized instruction decomposed into: "
+                + json.dumps(normalized, ensure_ascii=False)
+            )
+            return normalized
+        raise ValueError(
+            f"InstructionDecompositionError: {validation_error or 'invalid output'}"
+        )
+
+    def _ground_vague_instructions(self, config: dict) -> list:
+        """Ground abstract object descriptions against public scene candidates."""
+        source_tasks = [
+            str(task.get("instruction", "")).strip()
+            for task in config.get("tasks", []) or []
+        ]
+        candidates = [
+            str(value).strip().lower()
+            for value in config.get("grounding_candidates", [])
+            if str(value).strip()
+        ]
+        system_prompt = (
+            "You ground vague embodied household instructions to concrete VirtualHome "
+            "object classes. Rewrite each task independently using the best matching "
+            "candidate classes. Preserve conditions, actions, and order; do not add tasks. "
+            "Return JSON only."
+        )
+        validation_error = ""
+        for _ in range(2):
+            prompt = (
+                f"Vague tasks: {json.dumps(source_tasks)}\n"
+                f"Available scene object classes: {json.dumps(candidates)}\n"
+                f"Return exactly {len(source_tasks)} concrete strings in a 'tasks' list."
+            )
+            if validation_error:
+                prompt += f"\nPrevious output was invalid: {validation_error}"
+            payload = self.llm.generate_json(system_prompt, prompt)
+            tasks = payload.get("tasks") if isinstance(payload, dict) else None
+            grounded = [str(item).strip() for item in tasks] if isinstance(tasks, list) else []
+            if len(grounded) != len(source_tasks):
+                validation_error = "wrong number of grounded tasks"
+                continue
+            if any(not item for item in grounded):
+                validation_error = "one or more grounded tasks were empty"
+                continue
+            self.logger.info(
+                "Vague instructions grounded into: "
+                + json.dumps(grounded, ensure_ascii=False)
+            )
+            return grounded
+        raise ValueError(
+            f"InstructionGroundingError: {validation_error or 'invalid output'}"
         )
 
     def _consume_previous_result(self, step: int) -> None:
@@ -319,10 +389,28 @@ class RoboStateAgent(BaseAgent):
             rewritten = f"{task.instruction} {clarification}".strip()
         self.task_manager.revise_task(task.task_id, rewritten)
 
-    def _update_memory(self, obs: dict, step: int, hidden_nodes) -> tuple:
+    def _update_memory(self, obs: dict, step: int) -> tuple:
+        outgoing = {}
+        for edge in obs.get("edges", []):
+            outgoing.setdefault(int(edge.get("from_id", -1)), []).append(
+                (
+                    str(edge.get("relation_type", edge.get("relation", ""))).upper(),
+                    int(edge.get("to_id", -1)),
+                )
+            )
+        changed_classes = set()
         visible_ids = set()
         for node in obs.get("nodes", []):
             node_id = int(node["id"])
+            signature = (
+                tuple(sorted(str(value).upper() for value in node.get("states", []))),
+                tuple(sorted(str(value).upper() for value in node.get("properties", []))),
+                tuple(sorted(outgoing.get(node_id, []))),
+            )
+            previous = self._observation_signatures.get(node_id)
+            if previous is not None and previous != signature:
+                changed_classes.add(str(node.get("class_name", "")).lower())
+            self._observation_signatures[node_id] = signature
             self.memory_nodes[node_id] = dict(node)
             self.memory_last_seen[node_id] = int(step)
             self.memory_edges[node_id] = []
@@ -341,21 +429,7 @@ class RoboStateAgent(BaseAgent):
                 for edge in edges
             ],
         }
-        hidden_ids = {int(node_id) for node_id in (hidden_nodes or {})}
-        effective_graph = {
-            "nodes": [
-                node
-                for node in memory_graph["nodes"]
-                if int(node.get("id", -1)) not in hidden_ids
-            ],
-            "edges": [
-                edge
-                for edge in memory_graph["edges"]
-                if int(edge.get("from_id", -1)) not in hidden_ids
-                and int(edge.get("to_id", -1)) not in hidden_ids
-            ],
-        }
-        return memory_graph, effective_graph
+        return memory_graph, memory_graph, changed_classes
 
     def _return_action(
         self,
@@ -373,7 +447,7 @@ class RoboStateAgent(BaseAgent):
         observed_items = self._get_observed_items(graph)
         self.last_decision = {
             "active_task_id": task_id,
-            "task_progress": self.task_manager.task_context(),
+            "task_context": self.task_manager.task_context(),
             "sdg": task.sdg if task else None,
             "observed_items": observed_items,
             "current_node_focus": focus,

@@ -1,0 +1,245 @@
+{
+    "scenario_id": "E_DYN_G01_S3_medium",
+    "extension_type": "dynamic",
+    "experiment_axis": "non_stationarity",
+    "group_id": "G01",
+    "source_scenarios": [
+        "E1_11",
+        "E1_03",
+        "E1_07"
+    ],
+    "instruction_scale": 3,
+    "instruction_type": "sentence_wise",
+    "environment_id": 2,
+    "grounding_candidates": [
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "chair",
+        "closet",
+        "clothespile",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cookingpot",
+        "cpuscreen",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "cutlets",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwasher",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "juice",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "knifeblock",
+        "lightswitch",
+        "microwave",
+        "milk",
+        "mincedmeat",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "perfume",
+        "photoframe",
+        "pillow",
+        "plate",
+        "poundcake",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "toy",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "waterglass",
+        "window"
+    ],
+    "goal_instruction": "1. If your computer stays off, turn it on.\n2. If you see a book somewhere unorganized, bring it to the sofa.\n3. The mug should always be on the coffeetable.",
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1,
+            "subject_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        ]
+    },
+    "max_steps": 45,
+    "dynamic_difficulty": "medium",
+    "dynamic_events": [
+        {
+            "event_id": "disturb_computer",
+            "trigger": {
+                "type": "step_interval",
+                "interval_steps": 6,
+                "start_step": 6
+            },
+            "effect": {
+                "type": "set_state",
+                "target": "computer",
+                "instance_index": 0,
+                "add_states": [
+                    "OFF"
+                ],
+                "remove_states": [
+                    "ON"
+                ]
+            }
+        }
+    ],
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 46.59
+}

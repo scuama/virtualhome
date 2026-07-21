@@ -1,0 +1,234 @@
+{
+    "scenario_id": "E_SEM_G02_S3_summarized",
+    "extension_type": "semantic",
+    "experiment_axis": "instruction_type",
+    "group_id": "G02",
+    "source_scenarios": [
+        "E1_01",
+        "E1_04",
+        "E1_05"
+    ],
+    "instruction_scale": 3,
+    "instruction_type": "summarized",
+    "environment_id": 2,
+    "grounding_candidates": [
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "chair",
+        "closet",
+        "clothespile",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cookingpot",
+        "cpuscreen",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "cutlets",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwasher",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "juice",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "knifeblock",
+        "lightswitch",
+        "microwave",
+        "milk",
+        "mincedmeat",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "perfume",
+        "photoframe",
+        "pillow",
+        "plate",
+        "poundcake",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "toy",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "waterglass",
+        "window"
+    ],
+    "goal_instruction": "Maintain the living area by keeping the TV on while nobody watches it, leaving the dishwasher open for drying, and keeping the microwave open for maintenance.",
+    "tasks": [
+        {
+            "task_id": "E1_01",
+            "instruction": "If no one is watching the TV, turn it on.",
+            "success_condition": {
+                "target_class": "tv",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_04",
+            "instruction": "The dishwasher must always be open to dry the dishwasher.",
+            "success_condition": {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_05",
+            "instruction": "It is good for maintenance if the microwave is always open.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "dishwasher"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLOSED"
+            ],
+            "remove_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "microwave"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLOSED"
+            ],
+            "remove_states": [
+                "OPEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "tv",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        ]
+    },
+    "max_steps": 45
+}

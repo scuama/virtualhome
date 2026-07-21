@@ -144,7 +144,7 @@ CRITICAL RULES:
     - You MUST perform "Memory Alignment": compare the `states` and `properties` of the newly observed objects against your memory of the lost object's final state (e.g., look for a DIRTY cup nearby).
     - Even if the ID is completely different, if the physical states perfectly match the logical outcome of your past actions, treat it as the SAME object and continue your task with this new ID.
     - WARNING: The prior memory is a NON-CONTINUOUS slice of the past! You are currently NOT holding the target object unless explicitly shown as HELD in your current observation. If you need to manipulate the remembered object, you MUST first locate it, `[walk]` to it, and `[grab]` it before any other interactions.
-19. SUCCESS CONDITION RETENTION (CRITICAL): The `success_condition` in the task configuration defines the absolute physical end state of the task. You MUST explicitly include ALL object classes that appear in the `destination_class` or `target_class` of the success conditions. For example, if the condition says `INSIDE closet`, you MUST include `closet` (NOT just `closetdrawer`) in `selected_classes`. If you drop the exact target container, the robot will never be able to complete the task.
+19. FINAL GOAL RETENTION (CRITICAL): Preserve every object and destination explicitly named by the user's instruction and the SDG. For example, if the instruction says `inside closet`, include `closet` (not merely `closetdrawer`) in `selected_classes`; otherwise the robot cannot verify or complete the requested end state.
 20. P2 PARALLEL GRABBING: If the task requires moving/pouring multiple identical items (e.g., two milk bottles) and both hands are empty, you MUST grab the first item, then grab the second item BEFORE walking to the destination. Do NOT grab one item, walk, pour, then go back for the second. The goal of P2 is to minimize steps by using both hands.
 
 
@@ -201,5 +201,4 @@ SDG_USER_PROMPT = """
 Please generate a complete State Dependency Graph (SDG) for the following user task:
 Task: {goal_description}
 """
-
 

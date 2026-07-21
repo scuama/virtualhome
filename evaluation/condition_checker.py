@@ -38,6 +38,8 @@ def check_success(graph: dict, condition: dict) -> bool:
     destination_class = condition.get("destination_class")
     destination_states = _upper_set(condition.get("destination_states", []))
     destination_properties = _upper_set(condition.get("destination_properties", []))
+    target_instance = condition.get("target_instance")
+    destination_instance = condition.get("destination_instance")
 
     nodes = graph.get("nodes", [])
     id_to_node = {int(node["id"]): node for node in nodes if "id" in node}
@@ -51,10 +53,13 @@ def check_success(graph: dict, condition: dict) -> bool:
             or str(node.get("class_name", "")).lower() == "character"
         ]
     else:
-        candidates = [
+        candidates = sorted([
             node for node in nodes
             if str(node.get("class_name", "")).lower() == target_class.lower()
-        ]
+        ], key=lambda node: int(node.get("id", -1)))
+    if target_instance is not None:
+        index = int(target_instance)
+        candidates = [candidates[index]] if 0 <= index < len(candidates) else []
 
     valid_candidates = []
     allowed_relations = {
@@ -88,6 +93,22 @@ def check_success(graph: dict, condition: dict) -> bool:
                     _upper_set(destination.get("properties", []))
                 ):
                     continue
+                if destination_instance is not None and destination_class:
+                    destination_candidates = sorted(
+                        [
+                            node for node in nodes
+                            if str(node.get("class_name", "")).lower()
+                            == str(destination_class).lower()
+                        ],
+                        key=lambda node: int(node.get("id", -1)),
+                    )
+                    index = int(destination_instance)
+                    if not 0 <= index < len(destination_candidates):
+                        continue
+                    if int(destination.get("id", -1)) != int(
+                        destination_candidates[index].get("id", -2)
+                    ):
+                        continue
                 matched = True
                 break
             if not matched:

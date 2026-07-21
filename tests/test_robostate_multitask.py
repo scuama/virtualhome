@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import patch
+import json
+from pathlib import Path
 import re
 
 from agent.robostate_agent import RoboStateAgent
@@ -7,8 +9,14 @@ from agent.robostate.action_validator import ActionValidator
 from agent.robostate.exploration import RoomFrontierExplorer
 from agent.robostate.loop_detector import LoopDetector
 from agent.robostate.task_manager import MultiTaskManager
+from evaluation.condition_checker import check_success
+from evaluation.generate_robostate_experiments import scene_grounding_candidates
 from evaluation.task_progress import TaskProgressTracker
-from evaluation.test_runner import apply_overrides
+from evaluation.test_runner import (
+    DynamicEventRuntime,
+    apply_overrides,
+    build_agent_config,
+)
 
 
 def node(node_id, class_name, category="Objects", properties=None, states=None):
@@ -96,34 +104,23 @@ class MultiTaskManagerTests(unittest.TestCase):
             "edges": [],
         }
 
-    def test_scheduler_uses_evaluator_progress_and_reopens_regression(self):
+    def test_scheduler_uses_evaluator_booleans_and_reopens_regression(self):
         manager = MultiTaskManager(self.config)
-        manager.update_progress(
-            [
-                {"task_id": "book_task", "currently_satisfied": False},
-                {"task_id": "computer_task", "currently_satisfied": False},
-            ],
-            0,
-        )
+        manager.update_progress([
+            {"task_id": "book_task", "currently_satisfied": False},
+            {"task_id": "computer_task", "currently_satisfied": False},
+        ], 0)
         manager.refresh_graph_classes(self.graph)
         self.assertEqual(manager.select_task(self.graph, 0).task_id, "book_task")
-
-        manager.update_progress(
-            [
-                {"task_id": "book_task", "currently_satisfied": True},
-                {"task_id": "computer_task", "currently_satisfied": False},
-            ],
-            1,
-        )
+        manager.update_progress([
+            {"task_id": "book_task", "currently_satisfied": True},
+            {"task_id": "computer_task", "currently_satisfied": False},
+        ], 1)
         self.assertEqual(manager.select_task(self.graph, 1).task_id, "computer_task")
-
-        manager.update_progress(
-            [
-                {"task_id": "book_task", "currently_satisfied": False},
-                {"task_id": "computer_task", "currently_satisfied": False},
-            ],
-            2,
-        )
+        manager.update_progress([
+            {"task_id": "book_task", "currently_satisfied": False},
+            {"task_id": "computer_task", "currently_satisfied": False},
+        ], 2)
         reopened = manager.get("book_task")
         self.assertEqual(reopened.status, "pending")
         self.assertFalse(reopened.currently_satisfied)
@@ -137,6 +134,19 @@ class MultiTaskManagerTests(unittest.TestCase):
 
         self.assertEqual(reasoner.instructions, ["Put the book on the sofa."])
         self.assertEqual(planner.instructions, ["Put the book on the sofa."])
+        self.assertEqual(task.required_classes, {"book", "sofa"})
+
+    def test_sdg_requirements_are_limited_to_public_scene_catalog(self):
+        config = dict(self.config, grounding_candidates=["book", "sofa", "computer"])
+        manager = MultiTaskManager(config)
+        task = manager.select_task(self.graph, 0)
+        task.sdg = {
+            "nodes": [
+                {"id": "N1", "object": "book", "target": "sofa"},
+                {"id": "N2", "object": "drying", "target": "person"},
+            ]
+        }
+        manager._extract_required_classes(task)
         self.assertEqual(task.required_classes, {"book", "sofa"})
 
 
@@ -161,7 +171,194 @@ class TaskProgressTrackerTests(unittest.TestCase):
         self.assertEqual(metrics["tasks"][0]["first_satisfied_step"], 3)
         self.assertTrue(metrics["tasks"][0]["ever_satisfied"])
         self.assertFalse(metrics["tasks"][0]["currently_satisfied"])
-        self.assertNotIn("success_condition", tracker.as_env_info()[0])
+        self.assertNotIn("success_condition", tracker.as_log_info()[0])
+        self.assertNotIn("instruction", tracker.as_log_info()[0])
+        self.assertEqual(tracker.as_agent_info(), [{
+            "task_id": "task_1", "currently_satisfied": False
+        }])
+
+
+class SummarizedInstructionTests(unittest.TestCase):
+    def test_decomposition_retries_and_returns_three_tasks(self):
+        class RetryLLM:
+            def __init__(self):
+                self.calls = 0
+
+            def generate_json(self, *args, **kwargs):
+                self.calls += 1
+                if self.calls == 1:
+                    return {"tasks": ["only one"]}
+                return {"tasks": ["Turn on the computer.", "Move the book.", "Place the mug."]}
+
+        agent = RoboStateAgent.__new__(RoboStateAgent)
+        agent.llm = RetryLLM()
+        agent.logger = FakeLogger()
+        tasks = agent._decompose_summarized_instruction("Maintain the room.", 3)
+        self.assertEqual(len(tasks), 3)
+        self.assertEqual(agent.llm.calls, 2)
+
+    def test_decomposition_never_falls_back_to_evaluator_text(self):
+        class InvalidLLM:
+            def generate_json(self, *args, **kwargs):
+                return {"tasks": []}
+
+        agent = RoboStateAgent.__new__(RoboStateAgent)
+        agent.llm = InvalidLLM()
+        agent.logger = FakeLogger()
+        with self.assertRaisesRegex(ValueError, "InstructionDecompositionError"):
+            agent._decompose_summarized_instruction("Maintain the room.", 3)
+
+    def test_vague_tasks_are_grounded_against_scene_candidates(self):
+        class GroundingLLM:
+            def generate_json(self, *args, **kwargs):
+                return {"tasks": ["Turn on the computer.", "Move the book to the sofa."]}
+
+        agent = RoboStateAgent.__new__(RoboStateAgent)
+        agent.llm = GroundingLLM()
+        agent.logger = FakeLogger()
+        grounded = agent._ground_vague_instructions({
+            "tasks": [
+                {"instruction": "Turn on the workstation device."},
+                {"instruction": "Move reading material to the sitting place."},
+            ],
+            "grounding_candidates": ["computer", "book", "sofa", "chair"],
+        })
+        self.assertEqual(grounded, [
+            "Turn on the computer.", "Move the book to the sofa."
+        ])
+
+
+class IntervalDynamicEventTests(unittest.TestCase):
+    def test_interval_event_changes_state_only_on_schedule(self):
+        class Env:
+            def __init__(self):
+                self.custom_states = {}
+                self.changed_graph = False
+
+            def get_graph(self):
+                return {"nodes": [node(2, "computer", states=["ON"])], "edges": []}
+
+        env = Env()
+        runtime = DynamicEventRuntime(env, [{
+            "event_id": "off",
+            "trigger": {"type": "step_interval", "interval_steps": 4, "start_step": 4},
+            "effect": {
+                "type": "set_state", "target": "computer",
+                "add_states": ["OFF"], "remove_states": ["ON"],
+            },
+        }], FakeLogger())
+        runtime.before_step(3)
+        self.assertEqual(env.custom_states, {})
+        self.assertTrue(runtime.before_step(4))
+        self.assertEqual(env.custom_states[2], {"OFF"})
+        self.assertFalse(runtime.before_step(4))
+        self.assertEqual(runtime.event_counts()["off"]["times_triggered"], 1)
+        runtime.before_step(8)
+        self.assertEqual(runtime.event_counts()["off"]["times_triggered"], 2)
+
+
+class GeneratedExperimentConfigTests(unittest.TestCase):
+    def test_five_groups_cover_all_three_experiment_axes(self):
+        root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
+        expected = {"scale": 15, "non_stationarity": 15, "instruction_type": 15}
+        observed = {key: [] for key in expected}
+        for directory in ("multi", "dynamic", "semantic"):
+            for path in (root / directory).glob("E_*_G*_*.json"):
+                payload = json.loads(path.read_text())
+                axis = payload.get("experiment_axis")
+                if axis in observed:
+                    observed[axis].append(payload)
+        self.assertEqual({key: len(value) for key, value in observed.items()}, expected)
+        for payloads in observed.values():
+            self.assertEqual({item["group_id"] for item in payloads}, {
+                "G01", "G02", "G03", "G04", "G05"
+            })
+            for payload in payloads:
+                self.assertEqual(len(payload["tasks"]), payload["instruction_scale"])
+
+        scale_by_group = {}
+        for payload in observed["scale"]:
+            scale_by_group.setdefault(payload["group_id"], {})[
+                payload["instruction_scale"]
+            ] = payload["source_scenarios"]
+        for scales in scale_by_group.values():
+            self.assertEqual(scales[5][:3], scales[3])
+            self.assertEqual(scales[7][:5], scales[5])
+
+    def test_vague_candidates_are_complete_scene_catalogs(self):
+        root = Path(__file__).resolve().parents[1] / "evaluation" / "configs" / "semantic"
+        for path in root.glob("E_SEM_G*_S3_vague.json"):
+            payload = json.loads(path.read_text())
+            expected = scene_grounding_candidates(payload["environment_id"])
+            self.assertEqual(payload["grounding_candidates"], expected)
+            self.assertGreater(len(expected), 70)
+
+    def test_every_extension_config_uses_the_complete_scene_catalog(self):
+        root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
+        for directory in ("multi", "dynamic", "semantic"):
+            for path in (root / directory).glob("E_*_G*_*.json"):
+                payload = json.loads(path.read_text())
+                self.assertEqual(
+                    payload["grounding_candidates"],
+                    scene_grounding_candidates(payload["environment_id"]),
+                    path.name,
+                )
+
+    def test_every_task_condition_and_initializer_is_instance_bound(self):
+        root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
+        for directory in ("multi", "dynamic", "semantic"):
+            for path in (root / directory).glob("E_*_G*_*.json"):
+                payload = json.loads(path.read_text())
+                for task in payload["tasks"]:
+                    condition = task["success_condition"]
+                    self.assertEqual(condition.get("target_instance"), 0, path.name)
+                    if condition.get("destination_class"):
+                        self.assertEqual(condition.get("destination_instance"), 0, path.name)
+                for override in payload.get("initial_relations_override", []):
+                    if override.get("subject") != "character":
+                        self.assertEqual(override.get("subject_instance"), 0, path.name)
+
+
+class ProtocolIsolationTests(unittest.TestCase):
+    def test_agent_config_is_strict_allowlist_and_uses_neutral_task_ids(self):
+        private = {
+            "scenario_id": "secret",
+            "goal_instruction": "Do it.",
+            "instruction_type": "sentence_wise",
+            "tasks": [{
+                "task_id": "E1_11",
+                "instruction": "Turn on the computer.",
+                "success_condition": {"target_class": "computer", "states": ["ON"]},
+            }],
+            "success_condition": {"mode": "AND"},
+            "dynamic_events": [{"target": "computer"}],
+            "source_scenarios": ["E1_11"],
+            "dynamic_difficulty": "high",
+            "environment_id": 2,
+        }
+        public = build_agent_config(private)
+        self.assertEqual(public["tasks"], [{
+            "task_id": "task_1", "instruction": "Turn on the computer."
+        }])
+        for key in (
+            "success_condition", "dynamic_events", "source_scenarios",
+            "dynamic_difficulty", "environment_id", "scenario_id",
+        ):
+            self.assertNotIn(key, public)
+
+    def test_condition_checker_binds_target_and_destination_instances(self):
+        graph = {
+            "nodes": [node(2, "book"), node(3, "book"), node(4, "sofa"), node(5, "sofa")],
+            "edges": [{"from_id": 3, "to_id": 5, "relation_type": "ON"}],
+        }
+        base = {
+            "target_class": "book", "target_instance": 0,
+            "relation": "ON", "destination_class": "sofa",
+            "destination_instance": 0,
+        }
+        self.assertFalse(check_success(graph, base))
+        bound_second = dict(base, target_instance=1, destination_instance=1)
+        self.assertTrue(check_success(graph, bound_second))
 
 
 class FakeInitializationEnvironment:
@@ -390,6 +587,24 @@ class RoboStateAgentIntegrationTests(unittest.TestCase):
         self.assertEqual(first, "[grab] <book> (2)")
         self.assertEqual(agent.last_decision["active_task_id"], "book_task")
 
+        graph["edges"].append(
+            {"from_id": 2, "to_id": 3, "relation_type": "ON"}
+        )
+        original_generate = agent.llm.generate_response
+
+        def completed_book(system_prompt, user_prompt, **kwargs):
+            if (
+                "Execution Engine" in system_prompt
+                and '"active_task_id": "book_task"' in user_prompt
+            ):
+                return (
+                    '{"reasoning":"goal observed","satisfied_nodes":["N1"], '
+                    '"current_node_focus":"N1","mapped_variables":{}, '
+                    '"action":"[wait]"}'
+                )
+            return original_generate(system_prompt, user_prompt, **kwargs)
+
+        agent.llm.generate_response = completed_book
         second = agent.get_action(
             graph,
             config,

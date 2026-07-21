@@ -32,9 +32,37 @@ from agent import AGENT_REGISTRY
 
 DEFAULT_CLARIFICATION_REPLY = "nothing to claim"
 
+AGENT_CONFIG_ALLOWLIST = {
+    "goal_instruction",
+    "grounding_candidates",
+    "instruction_type",
+    "log_mode",
+    "robostate_task_failure_limit",
+    "scheduled_rules",
+    "tasks",
+}
+
+
+def build_agent_config(config):
+    """Build the complete agent-visible config from an explicit public allowlist."""
+    agent_config = {
+        key: copy.deepcopy(config[key])
+        for key in AGENT_CONFIG_ALLOWLIST
+        if key in config
+    }
+    sanitized_tasks = []
+    for index, task in enumerate(config.get("tasks", []) or [], 1):
+        public_task = {"task_id": f"task_{index}"}
+        if config.get("instruction_type") != "summarized":
+            public_task["instruction"] = task.get("instruction", "")
+        sanitized_tasks.append(public_task)
+    if sanitized_tasks:
+        agent_config["tasks"] = sanitized_tasks
+    return agent_config
+
 
 class DynamicEventRuntime:
-    """Runner-owned deterministic action-triggered event scheduler."""
+    """Runner-owned deterministic action- and step-triggered event scheduler."""
 
     ACTION_PATTERN = re.compile(r"^\s*\[([^\]]+)\]")
     OBJECT_PATTERN = re.compile(r"<([^>]+)>\s*\(\s*(\d+)\s*\)")
@@ -48,6 +76,72 @@ class DynamicEventRuntime:
         for index, event in enumerate(self.events):
             event["_runtime_id"] = event.get("event_id", f"event_{index + 1}")
             event["_times_triggered"] = 0
+            event["_last_trigger_step"] = None
+
+    @staticmethod
+    def _trigger_limit(event):
+        value = event.get("max_triggers")
+        return int(value) if value is not None else None
+
+    def before_step(self, step):
+        """Apply interval state changes before success checking and observation."""
+        environment_changed = False
+        for event in self.events:
+            trigger = event.get("trigger", {})
+            effect = event.get("effect", {})
+            if str(trigger.get("type", "")).lower() != "step_interval":
+                continue
+            interval = int(trigger.get("interval_steps", 0))
+            start = int(trigger.get("start_step", interval))
+            if interval <= 0 or step < start or (step - start) % interval:
+                continue
+            if event["_last_trigger_step"] == int(step):
+                continue
+            limit = self._trigger_limit(event)
+            if limit is not None and event["_times_triggered"] >= limit:
+                continue
+            if effect.get("type") != "set_state":
+                continue
+
+            target_class = str(effect.get("target", "")).lower()
+            graph = self.env.get_graph()
+            candidates = [
+                node for node in graph.get("nodes", [])
+                if str(node.get("class_name", "")).lower() == target_class
+            ]
+            index = int(effect.get("instance_index", 0))
+            if index >= len(candidates):
+                raise RuntimeError(
+                    f"Dynamic event {event['_runtime_id']} cannot find "
+                    f"{target_class}[{index}]"
+                )
+            target = candidates[index]
+            target_id = int(target["id"])
+            if not hasattr(self.env, "custom_states"):
+                self.env.custom_states = {}
+            current = self.env.custom_states.setdefault(target_id, set())
+            for state in effect.get("remove_states", []):
+                current.discard(str(state).upper())
+            for state in effect.get("add_states", []):
+                current.add(str(state).upper())
+            self.env.changed_graph = True
+            event["_times_triggered"] += 1
+            event["_last_trigger_step"] = int(step)
+            self.trace.append({
+                "step": int(step),
+                "event": "set_state",
+                "event_id": event["_runtime_id"],
+                "object_id": target_id,
+                "target": target_class,
+                "add_states": list(effect.get("add_states", [])),
+                "remove_states": list(effect.get("remove_states", [])),
+            })
+            self.logger.info(
+                f"⚡ DYNAMIC EVENT: {target_class}({target_id}) state changed "
+                f"at step {step}."
+            )
+            environment_changed = True
+        return environment_changed
 
     @classmethod
     def parse_action(cls, action_str):
@@ -187,7 +281,7 @@ class DynamicEventRuntime:
         return {
             event["_runtime_id"]: {
                 "times_triggered": event["_times_triggered"],
-                "max_triggers": int(event.get("max_triggers", 1)),
+                "max_triggers": self._trigger_limit(event),
             }
             for event in self.events
         }
@@ -230,7 +324,10 @@ def apply_overrides(env, config, debug=False):
                 if ov_idx not in locked_assignments:
                     assigned_ids = []
                     for cls in ov.get('target_classes', []):
-                        candidates = [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()]
+                        candidates = sorted(
+                            [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()],
+                            key=lambda node: int(node.get('id', -1)),
+                        )
                         if in_room:
                             room_ids  = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
                             inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
@@ -286,7 +383,10 @@ def apply_overrides(env, config, debug=False):
         return success, info.get('action_message', '')
 
     def destination_candidates(graph, class_name, in_room=None):
-        candidates = find_all(graph, class_name)
+        candidates = sorted(
+            find_all(graph, class_name),
+            key=lambda node: int(node.get('id', -1)),
+        )
         if not in_room:
             return candidates
         room_ids = {
@@ -323,10 +423,17 @@ def apply_overrides(env, config, debug=False):
         subj   = ro['subject'].lower()
         count  = ro.get('count', 1)
         
-        subj_nodes = find_all(graph, subj)
+        subj_nodes = sorted(
+            find_all(graph, subj),
+            key=lambda node: int(node.get('id', -1)),
+        )
+        subject_instance = ro.get('subject_instance')
 
-        # 隐藏多余的对象实例
-        if len(subj_nodes) > count:
+        # Explicitly bound benchmark tasks keep every non-target scene instance.
+        if subject_instance is not None:
+            start = int(subject_instance)
+            subj_nodes = subj_nodes[start:start + count]
+        elif len(subj_nodes) > count:
             _hide_extra_nodes(env, subj_nodes[count:])
             subj_nodes = subj_nodes[:count]
 
@@ -351,6 +458,10 @@ def apply_overrides(env, config, debug=False):
             continue
 
         obj_nodes = destination_candidates(graph, obj, in_room)
+        object_instance = ro.get('object_instance')
+        if object_instance is not None:
+            index = int(object_instance)
+            obj_nodes = obj_nodes[index:index + 1]
         if not obj_nodes:
             raise RuntimeError(
                 f"Scene initialization failed: No destination '{obj}' "
@@ -494,21 +605,19 @@ def main():
         help='Path to Unity executable'
     )
     extension_group = parser.add_mutually_exclusive_group()
+    extension_group.add_argument('--scale', action='store_true',
+                                 help='Run all RoboState scale configs (3, 5, 7)')
     extension_group.add_argument(
-        '--multi-scale',
-        type=int,
-        choices=[3, 5, 7],
-        help='Run E-only multi-task configs with the selected instruction scale'
+        '--instruction-type', action='store_true',
+        help='Run all S3 instruction-type configs'
     )
     extension_group.add_argument(
-        '--semantic-type',
-        choices=['sentence_wise', 'summarized', 'vague'],
-        help='Run single-task semantic-variation configs of the selected type'
+        '--non-stationarity', action='store_true',
+        help='Run all S3 non-stationarity configs'
     )
     extension_group.add_argument(
-        '--dynamic-difficulty',
-        choices=['low', 'medium', 'high'],
-        help='Run repeated-hide configs of the selected dynamic difficulty'
+        '--all-extensions', action='store_true',
+        help='Run all 45 RoboState extension configs'
     )
     # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
@@ -529,12 +638,14 @@ def main():
         cmd.extend(args.method)
         cmd.extend(["--model", args.model])
         cmd.extend(["--unity-path", args.unity_path])
-        if args.multi_scale is not None:
-            cmd.extend(["--multi-scale", str(args.multi_scale)])
-        elif args.semantic_type:
-            cmd.extend(["--semantic-type", args.semantic_type])
-        elif args.dynamic_difficulty:
-            cmd.extend(["--dynamic-difficulty", args.dynamic_difficulty])
+        if args.all_extensions:
+            cmd.append("--all-extensions")
+        elif args.scale:
+            cmd.append("--scale")
+        elif args.instruction_type:
+            cmd.append("--instruction-type")
+        elif args.non_stationarity:
+            cmd.append("--non-stationarity")
         if args.force:
             cmd.append("--force")
         
@@ -563,19 +674,19 @@ def main():
     # without an extension selector, preserve the legacy dataset behavior.
     all_configs = []
     selected_extension = None
-    selected_value = None
-    if args.multi_scale is not None:
+    selected_value = "all"
+    if args.all_extensions:
+        selected_dirs = ['multi', 'semantic', 'dynamic']
+        selected_extension = 'all_extensions'
+    elif args.scale:
         selected_dirs = ['multi']
-        selected_extension = 'multi'
-        selected_value = args.multi_scale
-    elif args.semantic_type:
+        selected_extension = 'scale'
+    elif args.instruction_type:
         selected_dirs = ['semantic']
-        selected_extension = 'semantic'
-        selected_value = args.semantic_type
-    elif args.dynamic_difficulty:
+        selected_extension = 'instruction_type'
+    elif args.non_stationarity:
         selected_dirs = ['dynamic']
-        selected_extension = 'dynamic'
-        selected_value = args.dynamic_difficulty
+        selected_extension = 'non_stationarity'
     else:
         selected_dirs = ['g_class', 'm_class', 'p_class', 'ExRAP']
 
@@ -589,20 +700,13 @@ def main():
                     'scenario_id',
                     os.path.splitext(os.path.basename(path))[0]
                 )
-                if selected_extension == 'multi':
+                if selected_extension == 'all_extensions':
+                    matches_extension = config_metadata.get('experiment_axis') in {
+                        'scale', 'instruction_type', 'non_stationarity'
+                    }
+                elif selected_extension:
                     matches_extension = (
-                        config_metadata.get('extension_type') == 'multi'
-                        and config_metadata.get('instruction_scale') == selected_value
-                    )
-                elif selected_extension == 'semantic':
-                    matches_extension = (
-                        config_metadata.get('extension_type') == 'semantic'
-                        and config_metadata.get('instruction_type') == selected_value
-                    )
-                elif selected_extension == 'dynamic':
-                    matches_extension = (
-                        config_metadata.get('extension_type') == 'dynamic'
-                        and config_metadata.get('dynamic_difficulty') == selected_value
+                        config_metadata.get('experiment_axis') == selected_extension
                     )
                 else:
                     matches_extension = True
@@ -673,6 +777,8 @@ def main():
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = json.load(f)
 
+            agent_config = build_agent_config(config)
+
             env_id = config.get('environment_id', 0)
 
             old_stdout = sys.stdout
@@ -715,7 +821,11 @@ def main():
             agent_cls = AGENT_REGISTRY[method_name]
             agent = agent_cls(
                 model_name=args.model,
-                scenario_id=scenario_id
+                scenario_id=(
+                    "evaluation_episode"
+                    if method_name == "robostate"
+                    else scenario_id
+                )
             )
             # ================================================================
 
@@ -779,6 +889,7 @@ def main():
                 action_history = list(config.get("prior_action_history", []))
 
                 while step_count < max_steps:
+                    dynamic_runtime.before_step(step_count)
                     dynamic_runtime.expire(step_count)
                     graph = env.get_graph()
                     task_tracker.update(
@@ -787,6 +898,20 @@ def main():
                         check_success,
                         logger,
                     )
+
+                    if step_count == 0:
+                        initially_satisfied = [
+                            task["task_id"]
+                            for task in task_tracker.tasks
+                            if task["currently_satisfied"]
+                        ]
+                        if initially_satisfied:
+                            success = False
+                            reason = (
+                                "Invalid benchmark: task(s) already satisfied at "
+                                f"step 0: {initially_satisfied}"
+                            )
+                            break
 
                     if check_success(graph, success_condition):
                         if config.get("require_ask_to_pass", False):
@@ -816,12 +941,11 @@ def main():
                         "step": step_count,
                         "logger": logger,
                         "action_history": action_history,
-                        "hidden_nodes": env.active_hidden_nodes,
-                        "task_progress": task_tracker.as_env_info(),
+                        "task_progress": task_tracker.as_agent_info(),
                     }
 
                     try:
-                        action_str = agent.get_action(obs, config, env_info)
+                        action_str = agent.get_action(obs, agent_config, env_info)
                     except Exception as e:
                         success = False
                         reason = f"Agent generation crashed: {e}"
@@ -906,7 +1030,7 @@ def main():
                             action_message=(
                                 info.get("action_message") if info else None
                             ),
-                            task_progress=task_tracker.as_env_info(),
+                            task_progress=task_tracker.as_log_info(),
                             active_task_id=decision.get("active_task_id"),
                             decision_source=decision.get("source"),
                         )

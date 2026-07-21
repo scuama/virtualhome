@@ -1,4 +1,4 @@
-"""Evaluator-owned per-task progress exposed to agents without goal leakage."""
+"""Evaluator-owned per-task progress used only for metrics and logs."""
 
 import copy
 
@@ -52,15 +52,24 @@ class TaskProgressTracker:
                     f"↩️ TASK REGRESSED: {task['task_id']} at step {step}."
                 )
 
-    def as_env_info(self):
-        """Expose no success-condition details to the agent."""
+    def as_log_info(self):
+        """Return evaluator progress for result logging, never agent input."""
         return [
             {
                 "task_id": task["task_id"],
-                "instruction": task["instruction"],
                 "currently_satisfied": task["currently_satisfied"],
             }
             for task in self.tasks
+        ]
+
+    def as_agent_info(self):
+        """Expose only neutral task IDs and completion booleans to the agent."""
+        return [
+            {
+                "task_id": f"task_{index}",
+                "currently_satisfied": task["currently_satisfied"],
+            }
+            for index, task in enumerate(self.tasks, 1)
         ]
 
     def as_metrics(self):

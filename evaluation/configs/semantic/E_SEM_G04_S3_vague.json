@@ -1,0 +1,233 @@
+{
+    "scenario_id": "E_SEM_G04_S3_vague",
+    "extension_type": "semantic",
+    "experiment_axis": "instruction_type",
+    "group_id": "G04",
+    "source_scenarios": [
+        "E1_11",
+        "E1_03",
+        "E1_07"
+    ],
+    "instruction_scale": 3,
+    "instruction_type": "vague",
+    "environment_id": 0,
+    "grounding_candidates": [
+        "apple",
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bellpepper",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "candybar",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "cereal",
+        "chair",
+        "chips",
+        "chocolatesyrup",
+        "clock",
+        "closet",
+        "closetdrawer",
+        "clothespants",
+        "clothespile",
+        "clothesshirt",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cpuscreen",
+        "crackers",
+        "creamybuns",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwashingliquid",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "hanger",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "lightswitch",
+        "lime",
+        "microwave",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "paper",
+        "peach",
+        "perfume",
+        "photoframe",
+        "pie",
+        "pillow",
+        "plate",
+        "plum",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "washingsponge",
+        "waterglass",
+        "whippedcream",
+        "window",
+        "wineglass"
+    ],
+    "goal_instruction": "1. If the workstation device is off, turn it on.\n2. If you notice something to read left unorganized, bring it to the main place for sitting.\n3. Keep the drinking vessel on the small living-room table.",
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If the workstation device is off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you notice something to read left unorganized, bring it to the main place for sitting.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "Keep the drinking vessel on the small living-room table.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1,
+            "subject_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        ]
+    },
+    "max_steps": 45
+}
