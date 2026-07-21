@@ -1,0 +1,100 @@
+{
+    "scenario_id": "T1_DYN_M1_02_high",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_02",
+    "setting": "high",
+    "single_run": true,
+    "source_scenarios": [
+        "M1_02"
+    ],
+    "dynamic_difficulty": "high",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "waterglass",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "If there is juice on the table, pour me a glass of juice.",
+    "tasks": [
+        {
+            "task_id": "M1_02",
+            "instruction": "If there is juice on the table, pour me a glass of juice.",
+            "source_scenario": "M1_02",
+            "success_condition": {
+                "target_class": "character",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "destination_class": "waterglass",
+                "destination_properties": [
+                    "POURABLE"
+                ],
+                "destination_states": [
+                    "FILLED_JUICE"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "juice",
+            "relation": "ON",
+            "object": "kitchentable",
+            "subject_instance": 0,
+            "object_instance": 0
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "min_count": 1,
+        "destination_class": "waterglass",
+        "destination_properties": [
+            "POURABLE"
+        ],
+        "destination_states": [
+            "FILLED_JUICE"
+        ],
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "waterglass",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "waterglass",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_waterglass",
+            "max_triggers": 3
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 14.81
+}

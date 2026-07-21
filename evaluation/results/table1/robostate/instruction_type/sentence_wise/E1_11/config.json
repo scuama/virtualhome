@@ -1,0 +1,67 @@
+{
+    "scenario_id": "T1_INST_E1_11_sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "E1_11",
+    "setting": "sentence_wise",
+    "single_run": true,
+    "source_scenarios": [
+        "E1_11"
+    ],
+    "instruction_type": "sentence_wise",
+    "preprocessed_instruction": true,
+    "environment_id": 2,
+    "goal_instruction": "If your computer stays off, turn it on.",
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "source_scenario": "E1_11",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "computer",
+        "states": [
+            "ON"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+    },
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 10.9
+}

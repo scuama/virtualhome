@@ -1,0 +1,65 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 14.0,
+    "ps_sum": 14,
+    "ps_count": 1,
+    "mean_completion_step": 14.0,
+    "tasks": [
+        {
+            "task_id": "M1_04",
+            "instruction": "If there is a pillow on the sofa, please bring me one.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "pillow",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        }
+    ],
+    "scenario_id": "T1_DYN_M1_04_low",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_04",
+    "setting": "low",
+    "extension_type": "table1_dynamic",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 14,
+    "execution_time_seconds": 46.46,
+    "dynamic_event_counts": {
+        "hide_pillow": {
+            "times_triggered": 1,
+            "max_triggers": 1
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 9,
+            "event": "hide",
+            "event_id": "hide_pillow",
+            "object_id": 122,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 13
+        },
+        {
+            "step": 13,
+            "event": "reappear",
+            "object_id": 122
+        }
+    ]
+}

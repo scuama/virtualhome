@@ -1,0 +1,26 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "It is good for maintenance if the microwave is always open.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "microwave",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "microwave",
+        "states": [
+            "OPEN"
+        ],
+        "min_count": 1
+    },
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

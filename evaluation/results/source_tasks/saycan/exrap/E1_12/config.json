@@ -1,0 +1,26 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If the cabinet is open, close it.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "cabinet",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        }
+    ],
+    "success_condition": {
+        "target_class": "cabinet",
+        "states": [
+            "CLOSED"
+        ],
+        "min_count": 1
+    },
+    "evaluation_method": "saycan",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

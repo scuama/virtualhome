@@ -1,0 +1,115 @@
+{
+    "task_total": 5,
+    "task_completed": 2,
+    "sr": 0.4,
+    "ps": 7.5,
+    "ps_sum": 15,
+    "ps_count": 2,
+    "mean_completion_step": 7.5,
+    "tasks": [
+        {
+            "task_id": "G1_02",
+            "instruction": "If there are apples on the table, wash them clean and bring them over.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "apple",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "CLEAN"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 4,
+            "completed": true,
+            "completion_step": 4
+        },
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 11,
+            "completed": true,
+            "completion_step": 11
+        },
+        {
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on",
+            "success_condition": {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_SCALE_SG02_S5",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G02",
+    "setting": "S5",
+    "extension_type": "table1_scale",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Max steps reached",
+    "steps_executed": 75,
+    "execution_time_seconds": 370.06,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

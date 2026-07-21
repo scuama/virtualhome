@@ -1,0 +1,26 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "The mug should always be on the coffeetable.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "mug",
+        "relation": "ON",
+        "destination_class": "coffeetable",
+        "min_count": 1
+    },
+    "evaluation_method": "saycan",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

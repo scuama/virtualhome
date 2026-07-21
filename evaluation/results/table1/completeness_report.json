@@ -1,0 +1,95 @@
+{
+  "table_id": "table1",
+  "complete": false,
+  "methods": [
+    "robostate"
+  ],
+  "expected_configs": 57,
+  "expected_episodes": 57,
+  "complete_episodes": 47,
+  "missing_or_invalid_episodes": 10,
+  "complete_cells": 6,
+  "expected_cells": 9,
+  "issues": [
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "robostate",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S3/robostate/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "robostate",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S3/robostate/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "robostate",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S3/robostate/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "robostate",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S5/robostate/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "robostate",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S5/robostate/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "robostate",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S5/robostate/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S7/robostate/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S7/robostate/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S7/robostate/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/scale/S7/robostate/S-G05/metrics.json"
+    }
+  ]
+}

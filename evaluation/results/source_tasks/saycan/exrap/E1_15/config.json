@@ -1,0 +1,44 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Put the folder in the closet.",
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "closet"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "folder",
+            "relation": "ON",
+            "object": "desk",
+            "count": 1
+        },
+        {
+            "subject": "closet",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        }
+    ],
+    "success_condition": {
+        "target_class": "folder",
+        "relation": "INSIDE",
+        "destination_class": "closet",
+        "min_count": 1
+    },
+    "evaluation_method": "saycan",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

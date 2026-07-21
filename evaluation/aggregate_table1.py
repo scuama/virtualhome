@@ -27,11 +27,14 @@ SETTING_ORDER = {
 
 
 def result_path(results_root: Path, entry: dict, method: str) -> Path:
+    axis = entry["experiment_axis"]
+    if axis == "dynamic_difficulty":
+        axis = "dynamic"
     return (
         results_root
-        / entry["experiment_axis"]
-        / entry["setting"]
         / method
+        / axis
+        / entry["setting"]
         / entry["sample_id"]
         / "metrics.json"
     )

@@ -1,0 +1,39 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the computer is on, turn off the desk lamp.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF",
+                "BROKEN"
+            ]
+        }
+    ],
+    "on_ask_policy": "SUCCESS",
+    "scenario_id": "T3_without_intention_G3_12",
+    "source_scenario_id": "G3_12",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_intention",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G3",
+    "source_config": "configs/source_tasks/g_class/G3_12.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 8.25
+}

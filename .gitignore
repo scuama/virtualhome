@@ -199,10 +199,7 @@ validate_configs.py
 
 .agents
 # Evaluation results
-evaluation/results/*
-!evaluation/results/*/
-evaluation/results/*/*
-!evaluation/results/*/success/
+evaluation/results/**/raw/
 
 # Old framework archive
 archive/

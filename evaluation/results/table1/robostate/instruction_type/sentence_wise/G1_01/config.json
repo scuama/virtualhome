@@ -1,0 +1,75 @@
+{
+    "scenario_id": "T1_INST_G1_01_sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_01",
+    "setting": "sentence_wise",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_01"
+    ],
+    "instruction_type": "sentence_wise",
+    "preprocessed_instruction": true,
+    "environment_id": 2,
+    "goal_instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+    "tasks": [
+        {
+            "task_id": "G1_01",
+            "instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+            "source_scenario": "G1_01",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "COLD"
+            ],
+            "remove_states": [
+                "HOT"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+    },
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 10.85
+}

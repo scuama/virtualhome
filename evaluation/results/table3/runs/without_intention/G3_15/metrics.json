@@ -1,0 +1,39 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T3_without_intention_G3_15",
+            "instruction": "If the stove is on, please heat a glass of milk and a cup of coffee and bring them to the table.",
+            "success_condition": {},
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T3_without_intention_G3_15",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_intention",
+    "source_scenario_id": "G3_15",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Max steps reached",
+    "steps_executed": 45,
+    "execution_time_seconds": 9.16,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

@@ -1,0 +1,44 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If you see towels, put them in the dishwasher.",
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "dishwasher"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bathroom"
+        },
+        {
+            "subject": "towel",
+            "relation": "ON",
+            "object": "bathroomcounter",
+            "count": 1
+        },
+        {
+            "subject": "dishwasher",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "towel",
+        "relation": "INSIDE",
+        "destination_class": "dishwasher",
+        "min_count": 1
+    },
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

@@ -422,11 +422,7 @@ class SayCanAgent(BaseAgent):
                         )
 
         # WAIT is an environment skill for temporary-event scenarios.
-        if (
-            config.get("dynamic_events")
-            or config.get("scheduled_rules")
-            or self._last_action_failed(action_history)
-        ):
+        if self._last_action_failed(action_history):
             actions.append("[wait]")
 
         # ASK is available only when the benchmark permits or requires it.
@@ -683,11 +679,7 @@ order. Every score must be between 0 and 100.
 
         for action in candidate_actions:
             if action == "[wait]":
-                scores[action] = 0.25 if (
-                    config.get("dynamic_events")
-                    or config.get("scheduled_rules")
-                    or self._last_action_failed(action_history)
-                ) else 0.02
+                scores[action] = 0.25 if self._last_action_failed(action_history) else 0.15
                 continue
             if action.lower().startswith("[ask]"):
                 scores[action] = 0.55 if (

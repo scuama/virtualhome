@@ -1,0 +1,10 @@
+table_id,experiment_axis,setting,method,sr,sr_percent,sr_numerator,sr_denominator,expected_sr_denominator,ps,ps_sum,ps_count,complete_samples,expected_samples,complete
+table1,scale,S3,robostate,0.666667,66.67,4,6,15,11.25,45,4,2,5,False
+table1,scale,S5,robostate,0.5,50.0,5,10,25,9.4,47,5,2,5,False
+table1,scale,S7,robostate,0.714286,71.43,5,7,35,17.8,89,5,1,5,False
+table1,instruction_type,sentence_wise,robostate,0.571429,57.14,4,7,7,4.25,17,4,7,7,True
+table1,instruction_type,summarized,robostate,0.714286,71.43,5,7,7,3.6,18,5,7,7,True
+table1,instruction_type,vague,robostate,0.0,0.0,0,7,7,,0,0,7,7,True
+table1,dynamic_difficulty,low,robostate,0.571429,57.14,4,7,7,13.25,53,4,7,7,True
+table1,dynamic_difficulty,medium,robostate,0.285714,28.57,2,7,7,14.5,29,2,7,7,True
+table1,dynamic_difficulty,high,robostate,0.285714,28.57,2,7,7,21.5,43,2,7,7,True

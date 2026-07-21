@@ -365,26 +365,47 @@ def reset_environment_runtime(env):
 
 def table1_result_folder(base_dir, config, method_name):
     """Return the non-overlapping Table 1 result location."""
+    axis = str(config.get('experiment_axis', 'unknown'))
+    if axis == 'dynamic_difficulty':
+        axis = 'dynamic'
     return os.path.join(
-        base_dir,
-        'results',
-        'table1',
-        str(config['experiment_axis']),
-        str(config['setting']),
-        method_name,
-        str(config['sample_id']),
+        base_dir, 'results', 'table1', method_name, axis,
+        str(config.get('setting', 'unknown')),
+        str(config.get('sample_id', 'unknown'))
     )
 
+def table2_result_folder(base_dir, config):
+    """Return the non-overlapping Table 2 result location."""
+    axis = str(config.get('experiment_axis', 'unknown'))
+    if axis == 'dynamic_difficulty':
+        axis = 'non_stationarity'
+    return os.path.join(
+        base_dir, 'results', 'table2', axis,
+        str(config.get('setting', 'unknown')),
+        str(config.get('task_id', config.get('scenario_id', 'unknown')))
+    )
 
-def table3_result_folder(base_dir, config, method_name):
+def table3_result_folder(base_dir, config):
     """Return the non-overlapping Table 3 ablation result location."""
     return os.path.join(
-        base_dir,
-        'results',
-        'table3',
-        str(config['ablation_profile']),
-        method_name,
-        str(config['source_scenario_id']),
+        base_dir, 'results', 'table3', 'runs',
+        str(config.get('ablation_profile', 'unknown')),
+        str(config.get('source_scenario_id', config.get('scenario_id', 'unknown')))
+    )
+
+def source_tasks_result_folder(base_dir, config, method_name, config_path):
+    """Return the result location for standard source tasks."""
+    # config_path typically looks like: .../configs/source_tasks/<subclass>/E1_07.json
+    path_parts = str(config_path).split(os.sep)
+    subclass = 'unknown'
+    if 'source_tasks' in path_parts:
+        st_index = path_parts.index('source_tasks')
+        if st_index + 1 < len(path_parts):
+            subclass = path_parts[st_index + 1]
+    
+    return os.path.join(
+        base_dir, 'results', 'source_tasks', method_name, subclass,
+        str(config.get('scenario_id', 'unknown'))
     )
 
 
@@ -729,6 +750,11 @@ def main():
         help='Force re-run even if scenario already succeeded'
     )
     parser.add_argument(
+        '--untested-only',
+        action='store_true',
+        help='Skip all scenarios that already have a complete result (even if they failed)'
+    )
+    parser.add_argument(
         '--unity-path',
         type=str,
         default='/Users/rushy/program/virtualhome/virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app/Contents/MacOS/VirtualHome',
@@ -759,6 +785,8 @@ def main():
         cmd.extend(["--unity-path", args.unity_path])
         if args.force:
             cmd.append("--force")
+        if args.untested_only:
+            cmd.append("--untested-only")
         
         env = os.environ.copy()
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -837,6 +865,7 @@ def main():
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = json.load(f)
             table1_run = config.get('table_id') == 'table1'
+            table2_run = config.get('table_id') == 'table2'
             table3_run = config.get('table_id') == 'table3'
             raw_logs_dir = (
                 table1_raw_logs_dir if table1_run else standard_raw_logs_dir
@@ -847,39 +876,37 @@ def main():
                 configured_result_folder = table1_result_folder(
                     base_dir, config, method_name
                 )
-                recorded_metrics = os.path.join(
-                    configured_result_folder, 'metrics.json'
+            elif table2_run:
+                configured_result_folder = table2_result_folder(
+                    base_dir, config
                 )
-                if not args.force and os.path.exists(recorded_metrics):
-                    with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
-                        prior_metrics = json.load(metrics_file)
-                    if prior_metrics.get('run_status') == 'complete':
-                        print(f"[SKIP] {scenario_id} — complete Table 1 result exists.")
-                        summary["skipped"] += 1
-                        continue
             elif table3_run:
                 configured_result_folder = table3_result_folder(
-                    base_dir, config, method_name
+                    base_dir, config
                 )
-                recorded_metrics = os.path.join(
-                    configured_result_folder, 'metrics.json'
+            else:
+                configured_result_folder = source_tasks_result_folder(
+                    base_dir, config, method_name, config_path
                 )
-                if not args.force and os.path.exists(recorded_metrics):
-                    with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
-                        prior_metrics = json.load(metrics_file)
-                    if prior_metrics.get('run_status') == 'complete':
-                        print(f"[SKIP] {scenario_id} — complete Table 3 result exists.")
+
+            recorded_metrics = os.path.join(
+                configured_result_folder, 'metrics.json'
+            )
+            if not args.force and os.path.exists(recorded_metrics):
+                with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
+                    prior_metrics = json.load(metrics_file)
+                if prior_metrics.get('run_status') == 'complete':
+                    sr = prior_metrics.get('sr', 0.0)
+                    if sr > 0.0:
+                        print(f"[SKIP] {scenario_id} — already succeeded partially/fully (SR={sr}).")
                         summary["skipped"] += 1
                         continue
-            elif not args.force and os.path.exists(
-                os.path.join(success_dir, scenario_id)
-            ):
-                print(f"[SKIP] {scenario_id} — already succeeded.")
-                summary["skipped"] += 1
-                fail_path = os.path.join(fail_dir, scenario_id)
-                if os.path.exists(fail_path):
-                    shutil.rmtree(fail_path, ignore_errors=True)
-                continue
+                    elif getattr(args, 'untested_only', False):
+                        print(f"[SKIP] {scenario_id} — previous run failed, but skipped due to --untested-only.")
+                        summary["skipped"] += 1
+                        continue
+                    else:
+                        print(f"[RE-RUN] {scenario_id} — previous run completely failed (SR={sr}).")
 
             print(f"\n==========================================")
             print(f"[RUN] {scenario_id}")
@@ -1045,6 +1072,10 @@ def main():
                 # owner for these deterministic extension events.
                 env.dynamic_events = []
                 action_history = list(config.get("prior_action_history", []))
+                
+                consecutive_waits = 0
+                last_task_completion_step = 0
+                last_satisfied_count = 0
 
                 while step_count < max_steps:
                     dynamic_runtime.before_step(step_count)
@@ -1056,6 +1087,16 @@ def main():
                         check_success,
                         logger,
                     )
+                    
+                    current_satisfied_count = sum(1 for t in task_tracker.tasks if t["currently_satisfied"])
+                    if current_satisfied_count > last_satisfied_count:
+                        last_satisfied_count = current_satisfied_count
+                        last_task_completion_step = step_count
+                    elif step_count - last_task_completion_step >= 15:
+                        success = False
+                        reason = "Agent stagnated (15 steps without progress)"
+                        run_status = "incomplete"
+                        break
 
                     if step_count == 0:
                         initially_satisfied = [
@@ -1115,6 +1156,16 @@ def main():
                         success = False
                         reason = "Agent terminated early without reaching goal"
                         break
+                        
+                    if action_str == "[wait]":
+                        consecutive_waits += 1
+                        if consecutive_waits >= 5:
+                            success = False
+                            reason = "Agent gave up (5 consecutive waits)"
+                            run_status = "incomplete"
+                            break
+                    else:
+                        consecutive_waits = 0
                         
                     intercepted = False
                     action_success = False
@@ -1337,11 +1388,12 @@ def main():
 
             if table1_run:
                 dest_folder = table1_result_folder(base_dir, config, method_name)
+            elif table2_run:
+                dest_folder = table2_result_folder(base_dir, config)
             elif table3_run:
-                dest_folder = table3_result_folder(base_dir, config, method_name)
+                dest_folder = table3_result_folder(base_dir, config)
             else:
-                dest_parent = success_dir if success else fail_dir
-                dest_folder = os.path.join(dest_parent, scenario_id)
+                dest_folder = source_tasks_result_folder(base_dir, config, method_name, config_path)
             write_result_artifacts(
                 dest_folder,
                 config,

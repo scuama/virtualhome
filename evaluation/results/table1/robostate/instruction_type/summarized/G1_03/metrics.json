@@ -1,0 +1,44 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 3.0,
+    "ps_sum": 3,
+    "ps_count": 1,
+    "mean_completion_step": 3.0,
+    "tasks": [
+        {
+            "task_id": "G1_03",
+            "instruction": "When the TV is on, bring its remote control.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "remotecontrol",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        }
+    ],
+    "scenario_id": "T1_INST_G1_03_summarized",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_03",
+    "setting": "summarized",
+    "extension_type": "table1_instruction_type",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 3,
+    "execution_time_seconds": 12.64,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

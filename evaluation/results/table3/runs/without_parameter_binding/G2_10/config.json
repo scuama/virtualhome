@@ -1,0 +1,42 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there is no one in the kitchen, make sure the kitchen is safe.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "stove"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "user_clarification_reply": "Turn off the stove.",
+    "success_condition": {
+        "target_class": "stove",
+        "states": [
+            "OFF"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_parameter_binding_G2_10",
+    "source_scenario_id": "G2_10",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_parameter_binding",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G2",
+    "source_config": "configs/source_tasks/g_class/G2_10.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 101.7
+}

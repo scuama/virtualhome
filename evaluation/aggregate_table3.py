@@ -103,7 +103,7 @@ def audit_baseline(manifest: dict, baseline_root: Path) -> tuple[dict, list[dict
 def _ablation_record(
     results_root: Path, profile: str, scenario_id: str, method: str
 ) -> Tuple[Optional[dict], Optional[dict]]:
-    path = results_root / profile / method / scenario_id / "metrics.json"
+    path = results_root / "runs" / profile / scenario_id / "metrics.json"
     if not path.exists():
         return None, {
             "type": "missing_ablation_result",

@@ -19,12 +19,11 @@ class LoopDetector:
             for item in action_history[-11:]
         ]
 
+        if action == "[wait]":
+            return LoopDetection(False)
+
         if len(recent) >= 2 and action and recent[-2:] == [action, action]:
-            if action == "[wait]":
-                if len(recent) >= 10 and recent[-10:] == ["[wait]"] * 10:
-                    raise RuntimeError("wait action issued too many times (max 10)")
-            else:
-                return LoopDetection(True, "same action would be issued three times")
+            return LoopDetection(True, "same action would be issued three times")
 
         sequence = recent + [action]
         if len(sequence) >= 5 and sequence[-5] == sequence[-3] == sequence[-1]:

@@ -1,0 +1,26 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "To wash dishes, place the plates in the microwave as shown.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "plate",
+            "relation": "ON",
+            "object": "kitchencounter",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "relation": "INSIDE",
+        "destination_class": "microwave",
+        "min_count": 1
+    },
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0.0
+}

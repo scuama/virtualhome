@@ -1,0 +1,11 @@
+table_id,profile,module,method,sr,sr_percent,sr_numerator,sr_denominator,ps,ps_sum,ps_count,GoalAlign,SlotID,Halluc,complete
+table3,full,full,robostate,0.866667,86.67,52,60,5.0,260.0,52,,,,True
+table3,without_goal_reasoning,goal,robostate,,,1,20,,2.0,1,,,,False
+table3,without_intention,goal,robostate,,,10,20,,38.0,10,,,,False
+table3,without_parameter_binding,goal,robostate,,,16,20,,106.0,16,,,,False
+table3,without_memory,memory,robostate,,,0,20,,0,0,,,,False
+table3,without_memory_structure,memory,robostate,,,13,20,,75.0,13,,,,False
+table3,without_state_alignment,memory,robostate,,,13,20,,66.0,13,,,,False
+table3,without_stg_planning,planning,robostate,,,0,20,,0,0,,,,False
+table3,without_stg_construction,planning,robostate,,,7,20,,27.0,7,,,,False
+table3,without_path_merging,planning,robostate,,,7,20,,53.0,7,,,,False
