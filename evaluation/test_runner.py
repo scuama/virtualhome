@@ -43,6 +43,8 @@ AGENT_CONFIG_ALLOWLIST = {
     "preprocessed_instruction",
     "robostate_task_failure_limit",
     "scheduled_rules",
+    "ablation_profile",
+    "table3_source_subclass",
     "tasks",
 }
 
@@ -54,6 +56,7 @@ def build_agent_config(config):
         for key in AGENT_CONFIG_ALLOWLIST
         if key in config
     }
+
     sanitized_tasks = []
     for index, task in enumerate(config.get("tasks", []) or [], 1):
         public_task = {"task_id": f"task_{index}"}
@@ -370,6 +373,18 @@ def table1_result_folder(base_dir, config, method_name):
         str(config['setting']),
         method_name,
         str(config['sample_id']),
+    )
+
+
+def table3_result_folder(base_dir, config, method_name):
+    """Return the non-overlapping Table 3 ablation result location."""
+    return os.path.join(
+        base_dir,
+        'results',
+        'table3',
+        str(config['ablation_profile']),
+        method_name,
+        str(config['source_scenario_id']),
     )
 
 
@@ -768,11 +783,23 @@ def main():
 
     # Init engine
     ensure_unity_running(args.unity_path)
-    env = UnityEnvironment(
-        num_agents=1,
-        observation_types=['partial'],
-        executable_args={'file_name': None}
-    )
+    try:
+        env = UnityEnvironment(
+            num_agents=1,
+            observation_types=['partial'],
+            executable_args={'file_name': None}
+        )
+    except Exception as initial_engine_error:
+        print(
+            f"[WARN] Unity port was open but the engine health check failed: "
+            f"{initial_engine_error}. Restarting Unity..."
+        )
+        ensure_unity_running(args.unity_path, force_restart=True)
+        env = UnityEnvironment(
+            num_agents=1,
+            observation_types=['partial'],
+            executable_args={'file_name': None}
+        )
     reset_environment_runtime(env)
 
     for method_name in args.method:
@@ -810,6 +837,7 @@ def main():
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = json.load(f)
             table1_run = config.get('table_id') == 'table1'
+            table3_run = config.get('table_id') == 'table3'
             raw_logs_dir = (
                 table1_raw_logs_dir if table1_run else standard_raw_logs_dir
             )
@@ -827,6 +855,20 @@ def main():
                         prior_metrics = json.load(metrics_file)
                     if prior_metrics.get('run_status') == 'complete':
                         print(f"[SKIP] {scenario_id} — complete Table 1 result exists.")
+                        summary["skipped"] += 1
+                        continue
+            elif table3_run:
+                configured_result_folder = table3_result_folder(
+                    base_dir, config, method_name
+                )
+                recorded_metrics = os.path.join(
+                    configured_result_folder, 'metrics.json'
+                )
+                if not args.force and os.path.exists(recorded_metrics):
+                    with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
+                        prior_metrics = json.load(metrics_file)
+                    if prior_metrics.get('run_status') == 'complete':
+                        print(f"[SKIP] {scenario_id} — complete Table 3 result exists.")
                         summary["skipped"] += 1
                         continue
             elif not args.force and os.path.exists(
@@ -881,6 +923,14 @@ def main():
                         method_name,
                         args.model,
                     )
+                elif table3_run:
+                    write_result_artifacts(
+                        table3_result_folder(base_dir, config, method_name),
+                        config,
+                        metrics,
+                        method_name,
+                        args.model,
+                    )
 
             old_stdout = sys.stdout
             # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
@@ -903,7 +953,7 @@ def main():
                     sys.stdout = old_stdout
                     reason = f"Engine Reset Failed twice: {e2}"
                     print(f"  {reason}")
-                    if table1_run:
+                    if table1_run or table3_run:
                         record_initialization_incomplete(reason)
                     else:
                         summary["fail"] += 1
@@ -917,7 +967,7 @@ def main():
                 sys.stdout = old_stdout
                 reason = f"Initialization Failed: {e}"
                 print(f"  {reason}")
-                if table1_run:
+                if table1_run or table3_run:
                     record_initialization_incomplete(reason)
                 else:
                     summary["fail"] += 1
@@ -964,6 +1014,7 @@ def main():
             run_status = "complete"
             task_tracker = None
             dynamic_runtime = None
+            ask_policy_satisfied_step = None
 
             try:
                 signal.signal(signal.SIGALRM, timeout_handler)
@@ -1149,6 +1200,15 @@ def main():
                     except Exception:
                         pass
 
+                    if (
+                        action_str.lower().startswith("[ask]")
+                        and str(config.get("on_ask_policy", "")).upper() == "SUCCESS"
+                    ):
+                        ask_policy_satisfied_step = step_count
+                        success = True
+                        reason = "Clarification/impossibility correctly requested"
+                        break
+
                     if env_done:
                         success = False
                         reason = "Environment terminated unexpectedly"
@@ -1199,6 +1259,25 @@ def main():
             if task_tracker is None:
                 task_tracker = TaskProgressTracker(config)
             metrics = task_tracker.as_metrics()
+            if ask_policy_satisfied_step is not None and success:
+                metrics.update({
+                    "task_completed": 1,
+                    "task_total": 1,
+                    "sr": 1.0,
+                    "ps": float(ask_policy_satisfied_step),
+                    "ps_sum": int(ask_policy_satisfied_step),
+                    "ps_count": 1,
+                    "mean_completion_step": float(ask_policy_satisfied_step),
+                    "tasks": [{
+                        "task_id": config.get("scenario_id", "task_1"),
+                        "currently_satisfied": True,
+                        "ever_satisfied": True,
+                        "first_satisfied_step": int(ask_policy_satisfied_step),
+                        "completed": True,
+                        "completion_step": int(ask_policy_satisfied_step),
+                        "completion_evidence": "on_ask_policy",
+                    }],
+                })
             if len(task_tracker.tasks) > 1 and success and metrics["sr"] < 1.0:
                 success = False
                 reason = "Not all multi-task success conditions were completed"
@@ -1228,6 +1307,8 @@ def main():
                     "sample_id": config.get("sample_id"),
                     "setting": config.get("setting"),
                     "extension_type": config.get("extension_type"),
+                    "ablation_profile": config.get("ablation_profile"),
+                    "source_scenario_id": config.get("source_scenario_id"),
                     "method": method_name,
                     "model": args.model,
                     "success": bool(success),
@@ -1256,6 +1337,8 @@ def main():
 
             if table1_run:
                 dest_folder = table1_result_folder(base_dir, config, method_name)
+            elif table3_run:
+                dest_folder = table3_result_folder(base_dir, config, method_name)
             else:
                 dest_parent = success_dir if success else fail_dir
                 dest_folder = os.path.join(dest_parent, scenario_id)
@@ -1275,6 +1358,12 @@ def main():
                     "reason": reason,
                     "run_status": run_status,
                 })
+                print(f"[WARN] Run was {run_status} ({reason}). Proactively restarting Unity...")
+                try:
+                    ensure_unity_running(args.unity_path, force_restart=True)
+                    env = UnityEnvironment(num_agents=1, observation_types=['partial'], executable_args={'file_name': None})
+                except Exception as ex:
+                    print(f"[ERROR] Proactive restart failed: {ex}")
             elif success:
                 summary["success"] += 1
                 if not table1_run:

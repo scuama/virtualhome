@@ -6,6 +6,7 @@ from typing import Optional, Set
 
 from .base_agent import BaseAgent
 from .robostate.action_validator import ActionValidator
+from .robostate.ablation import get_ablation_policy
 from .robostate.exploration import RoomFrontierExplorer
 from .robostate.goal_reasoner import GoalReasoner
 from .robostate.llm_executor import LLMExecutor
@@ -120,12 +121,11 @@ class RoboStateAgent(BaseAgent):
                     task.sdg,
                     self.action_history,
                     config.get("scheduled_rules"),
-                    allow_ask=not self.clarification_received,
+                    allow_ask=self._allow_ask(),
                     task_context=self.task_manager.task_context(),
                 )
             )
             candidate = self._normalize_action(candidate)
-            allow_wait = self._temporary_rule_active(config, step)
 
             loop = self.loop_detector.check(candidate, self.action_history)
             if loop.detected:
@@ -141,7 +141,6 @@ class RoboStateAgent(BaseAgent):
                 protected_classes=(
                     self.task_manager.protected_classes()
                 ),
-                allow_wait=allow_wait,
             )
             if not validation.valid or not validation.action:
                 self.logger.info(
@@ -202,11 +201,24 @@ class RoboStateAgent(BaseAgent):
             source="no_safe_action",
         )
 
+    def _allow_ask(self) -> bool:
+        if self.clarification_received:
+            return False
+        if (
+            self.table3_source_subclass == "G2"
+            and not self.ablation_policy.parameter_binding
+        ):
+            return False
+        return True
+
     def _initialize_episode(self, config: dict, goal: str) -> None:
-        self.goal_reasoner = GoalReasoner(self.llm, self.logger)
-        self.sdg_planner = SDGPlanner(self.llm, self.logger)
+        profile = config.get("ablation_profile", "full")
+        self.ablation_policy = get_ablation_policy(profile)
+        self.table3_source_subclass = str(config.get("table3_source_subclass", ""))
+        self.goal_reasoner = GoalReasoner(self.llm, self.logger, profile)
+        self.sdg_planner = SDGPlanner(self.llm, self.logger, profile)
         self.perception_filter = PerceptionFilter(self.llm, self.logger)
-        self.llm_executor = LLMExecutor(self.llm, self.logger)
+        self.llm_executor = LLMExecutor(self.llm, self.logger, profile)
         instruction_overrides = None
         instruction_is_preprocessed = bool(config.get("preprocessed_instruction"))
         if (
@@ -227,6 +239,7 @@ class RoboStateAgent(BaseAgent):
             logger=self.logger,
             failure_limit=int(config.get("robostate_task_failure_limit", 2)),
             instruction_overrides=instruction_overrides,
+            fixed_order=not self.ablation_policy.path_merging,
         )
         self.explorer = RoomFrontierExplorer(self.logger)
         self.action_validator = ActionValidator()
@@ -397,6 +410,29 @@ class RoboStateAgent(BaseAgent):
         self.task_manager.revise_task(task.task_id, rewritten)
 
     def _update_memory(self, obs: dict, step: int) -> tuple:
+        if not self.ablation_policy.memory:
+            current = {
+                "nodes": [dict(node) for node in obs.get("nodes", [])],
+                "edges": [dict(edge) for edge in obs.get("edges", [])],
+            }
+            return current, current, set()
+
+        if not self.ablation_policy.memory_structure:
+            # IDs remain transient action handles; all semantic node attributes,
+            # relations, and cross-step instance memory are removed.
+            current = {
+                "nodes": [
+                    {
+                        "id": int(node["id"]),
+                        "class_name": str(node.get("class_name", "")),
+                        "category": str(node.get("category", "")),
+                    }
+                    for node in obs.get("nodes", [])
+                ],
+                "edges": [],
+            }
+            return current, current, set()
+
         outgoing = {}
         for edge in obs.get("edges", []):
             outgoing.setdefault(int(edge.get("from_id", -1)), []).append(

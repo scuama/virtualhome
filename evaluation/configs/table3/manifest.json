@@ -1,0 +1,2519 @@
+{
+  "table_id": "table3",
+  "methods": [
+    "robostate"
+  ],
+  "baseline": [
+    {
+      "scenario_id": "G1_01",
+      "category": "G",
+      "subclass": "G1",
+      "source_config": "configs/source_tasks/g_class/G1_01.json"
+    },
+    {
+      "scenario_id": "G1_02",
+      "category": "G",
+      "subclass": "G1",
+      "source_config": "configs/source_tasks/g_class/G1_02.json"
+    },
+    {
+      "scenario_id": "G1_03",
+      "category": "G",
+      "subclass": "G1",
+      "source_config": "configs/source_tasks/g_class/G1_03.json"
+    },
+    {
+      "scenario_id": "G1_04",
+      "category": "G",
+      "subclass": "G1",
+      "source_config": "configs/source_tasks/g_class/G1_04.json"
+    },
+    {
+      "scenario_id": "G1_05",
+      "category": "G",
+      "subclass": "G1",
+      "source_config": "configs/source_tasks/g_class/G1_05.json"
+    },
+    {
+      "scenario_id": "G2_06",
+      "category": "G",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_06.json"
+    },
+    {
+      "scenario_id": "G2_07",
+      "category": "G",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_07.json"
+    },
+    {
+      "scenario_id": "G2_08",
+      "category": "G",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_08.json"
+    },
+    {
+      "scenario_id": "G2_09",
+      "category": "G",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_09.json"
+    },
+    {
+      "scenario_id": "G2_10",
+      "category": "G",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_10.json"
+    },
+    {
+      "scenario_id": "G3_11",
+      "category": "G",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_11.json"
+    },
+    {
+      "scenario_id": "G3_12",
+      "category": "G",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_12.json"
+    },
+    {
+      "scenario_id": "G3_13",
+      "category": "G",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_13.json"
+    },
+    {
+      "scenario_id": "G3_14",
+      "category": "G",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_14.json"
+    },
+    {
+      "scenario_id": "G3_15",
+      "category": "G",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_15.json"
+    },
+    {
+      "scenario_id": "G4_16",
+      "category": "G",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_16.json"
+    },
+    {
+      "scenario_id": "G4_17",
+      "category": "G",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_17.json"
+    },
+    {
+      "scenario_id": "G4_18",
+      "category": "G",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_18.json"
+    },
+    {
+      "scenario_id": "G4_19",
+      "category": "G",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_19.json"
+    },
+    {
+      "scenario_id": "G4_20",
+      "category": "G",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_20.json"
+    },
+    {
+      "scenario_id": "M1_01",
+      "category": "M",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_01.json"
+    },
+    {
+      "scenario_id": "M1_02",
+      "category": "M",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_02.json"
+    },
+    {
+      "scenario_id": "M1_03",
+      "category": "M",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_03.json"
+    },
+    {
+      "scenario_id": "M1_04",
+      "category": "M",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_04.json"
+    },
+    {
+      "scenario_id": "M1_05",
+      "category": "M",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_05.json"
+    },
+    {
+      "scenario_id": "M2_06",
+      "category": "M",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_06.json"
+    },
+    {
+      "scenario_id": "M2_07",
+      "category": "M",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_07.json"
+    },
+    {
+      "scenario_id": "M2_08",
+      "category": "M",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_08.json"
+    },
+    {
+      "scenario_id": "M2_09",
+      "category": "M",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_09.json"
+    },
+    {
+      "scenario_id": "M2_10",
+      "category": "M",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_10.json"
+    },
+    {
+      "scenario_id": "M3_11",
+      "category": "M",
+      "subclass": "M3",
+      "source_config": "configs/source_tasks/m_class/M3_11.json"
+    },
+    {
+      "scenario_id": "M3_12",
+      "category": "M",
+      "subclass": "M3",
+      "source_config": "configs/source_tasks/m_class/M3_12.json"
+    },
+    {
+      "scenario_id": "M3_13",
+      "category": "M",
+      "subclass": "M3",
+      "source_config": "configs/source_tasks/m_class/M3_13.json"
+    },
+    {
+      "scenario_id": "M3_14",
+      "category": "M",
+      "subclass": "M3",
+      "source_config": "configs/source_tasks/m_class/M3_14.json"
+    },
+    {
+      "scenario_id": "M3_15",
+      "category": "M",
+      "subclass": "M3",
+      "source_config": "configs/source_tasks/m_class/M3_15.json"
+    },
+    {
+      "scenario_id": "M4_16",
+      "category": "M",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_16.json"
+    },
+    {
+      "scenario_id": "M4_17",
+      "category": "M",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_17.json"
+    },
+    {
+      "scenario_id": "M4_18",
+      "category": "M",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_18.json"
+    },
+    {
+      "scenario_id": "M4_19",
+      "category": "M",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_19.json"
+    },
+    {
+      "scenario_id": "M4_20",
+      "category": "M",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_20.json"
+    },
+    {
+      "scenario_id": "P1_01",
+      "category": "P",
+      "subclass": "P1",
+      "source_config": "configs/source_tasks/p_class/P1_01.json"
+    },
+    {
+      "scenario_id": "P1_02",
+      "category": "P",
+      "subclass": "P1",
+      "source_config": "configs/source_tasks/p_class/P1_02.json"
+    },
+    {
+      "scenario_id": "P1_03",
+      "category": "P",
+      "subclass": "P1",
+      "source_config": "configs/source_tasks/p_class/P1_03.json"
+    },
+    {
+      "scenario_id": "P1_04",
+      "category": "P",
+      "subclass": "P1",
+      "source_config": "configs/source_tasks/p_class/P1_04.json"
+    },
+    {
+      "scenario_id": "P1_05",
+      "category": "P",
+      "subclass": "P1",
+      "source_config": "configs/source_tasks/p_class/P1_05.json"
+    },
+    {
+      "scenario_id": "P2_06",
+      "category": "P",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_06.json"
+    },
+    {
+      "scenario_id": "P2_07",
+      "category": "P",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_07.json"
+    },
+    {
+      "scenario_id": "P2_08",
+      "category": "P",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_08.json"
+    },
+    {
+      "scenario_id": "P2_09",
+      "category": "P",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_09.json"
+    },
+    {
+      "scenario_id": "P2_10",
+      "category": "P",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_10.json"
+    },
+    {
+      "scenario_id": "P3_11",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_11.json"
+    },
+    {
+      "scenario_id": "P3_12",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_12.json"
+    },
+    {
+      "scenario_id": "P3_13",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_13.json"
+    },
+    {
+      "scenario_id": "P3_14",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_14.json"
+    },
+    {
+      "scenario_id": "P3_15",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_15.json"
+    },
+    {
+      "scenario_id": "P3_16",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_16.json"
+    },
+    {
+      "scenario_id": "P3_17",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_17.json"
+    },
+    {
+      "scenario_id": "P3_18",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_18.json"
+    },
+    {
+      "scenario_id": "P3_19",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_19.json"
+    },
+    {
+      "scenario_id": "P3_20",
+      "category": "P",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_20.json"
+    }
+  ],
+  "profiles": {
+    "without_goal_reasoning": {
+      "module": "goal",
+      "category": "G",
+      "rerun_subclasses": [
+        "G1",
+        "G2",
+        "G3",
+        "G4"
+      ]
+    },
+    "without_intention": {
+      "module": "goal",
+      "category": "G",
+      "rerun_subclasses": [
+        "G3",
+        "G4"
+      ]
+    },
+    "without_parameter_binding": {
+      "module": "goal",
+      "category": "G",
+      "rerun_subclasses": [
+        "G2"
+      ]
+    },
+    "without_memory": {
+      "module": "memory",
+      "category": "M",
+      "rerun_subclasses": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
+    },
+    "without_memory_structure": {
+      "module": "memory",
+      "category": "M",
+      "rerun_subclasses": [
+        "M2"
+      ]
+    },
+    "without_state_alignment": {
+      "module": "memory",
+      "category": "M",
+      "rerun_subclasses": [
+        "M4"
+      ]
+    },
+    "without_stg_planning": {
+      "module": "planning",
+      "category": "P",
+      "rerun_subclasses": [
+        "P1",
+        "P2",
+        "P3"
+      ]
+    },
+    "without_stg_construction": {
+      "module": "planning",
+      "category": "P",
+      "rerun_subclasses": [
+        "P3"
+      ]
+    },
+    "without_path_merging": {
+      "module": "planning",
+      "category": "P",
+      "rerun_subclasses": [
+        "P1",
+        "P2"
+      ]
+    }
+  },
+  "runnable_configs": [
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G1_01",
+      "source_scenario_id": "G1_01",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G1_01.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G1_02",
+      "source_scenario_id": "G1_02",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G1_02.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G1_03",
+      "source_scenario_id": "G1_03",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G1_03.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G1_04",
+      "source_scenario_id": "G1_04",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G1_04.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G1_05",
+      "source_scenario_id": "G1_05",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G1_05.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G2_06",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G2_06.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G2_07",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G2_07.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G2_08",
+      "source_scenario_id": "G2_08",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G2_08.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G2_09",
+      "source_scenario_id": "G2_09",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G2_09.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G2_10",
+      "source_scenario_id": "G2_10",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G2_10.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G3_11",
+      "source_scenario_id": "G3_11",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G3_11.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G3_12",
+      "source_scenario_id": "G3_12",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G3_12.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G3_13",
+      "source_scenario_id": "G3_13",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G3_13.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G3_14",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G3_14.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G3_15",
+      "source_scenario_id": "G3_15",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G3_15.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G4_16",
+      "source_scenario_id": "G4_16",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G4_16.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G4_17",
+      "source_scenario_id": "G4_17",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G4_17.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G4_18",
+      "source_scenario_id": "G4_18",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G4_18.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G4_19",
+      "source_scenario_id": "G4_19",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G4_19.json"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "scenario_id": "T3_without_goal_reasoning_G4_20",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table3/runs/without_goal_reasoning/G4_20.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G3_11",
+      "source_scenario_id": "G3_11",
+      "config_path": "configs/table3/runs/without_intention/G3_11.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G3_12",
+      "source_scenario_id": "G3_12",
+      "config_path": "configs/table3/runs/without_intention/G3_12.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G3_13",
+      "source_scenario_id": "G3_13",
+      "config_path": "configs/table3/runs/without_intention/G3_13.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G3_14",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table3/runs/without_intention/G3_14.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G3_15",
+      "source_scenario_id": "G3_15",
+      "config_path": "configs/table3/runs/without_intention/G3_15.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G4_16",
+      "source_scenario_id": "G4_16",
+      "config_path": "configs/table3/runs/without_intention/G4_16.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G4_17",
+      "source_scenario_id": "G4_17",
+      "config_path": "configs/table3/runs/without_intention/G4_17.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G4_18",
+      "source_scenario_id": "G4_18",
+      "config_path": "configs/table3/runs/without_intention/G4_18.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G4_19",
+      "source_scenario_id": "G4_19",
+      "config_path": "configs/table3/runs/without_intention/G4_19.json"
+    },
+    {
+      "profile": "without_intention",
+      "scenario_id": "T3_without_intention_G4_20",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table3/runs/without_intention/G4_20.json"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "scenario_id": "T3_without_parameter_binding_G2_06",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table3/runs/without_parameter_binding/G2_06.json"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "scenario_id": "T3_without_parameter_binding_G2_07",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table3/runs/without_parameter_binding/G2_07.json"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "scenario_id": "T3_without_parameter_binding_G2_08",
+      "source_scenario_id": "G2_08",
+      "config_path": "configs/table3/runs/without_parameter_binding/G2_08.json"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "scenario_id": "T3_without_parameter_binding_G2_09",
+      "source_scenario_id": "G2_09",
+      "config_path": "configs/table3/runs/without_parameter_binding/G2_09.json"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "scenario_id": "T3_without_parameter_binding_G2_10",
+      "source_scenario_id": "G2_10",
+      "config_path": "configs/table3/runs/without_parameter_binding/G2_10.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M1_01",
+      "source_scenario_id": "M1_01",
+      "config_path": "configs/table3/runs/without_memory/M1_01.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M1_02",
+      "source_scenario_id": "M1_02",
+      "config_path": "configs/table3/runs/without_memory/M1_02.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M1_03",
+      "source_scenario_id": "M1_03",
+      "config_path": "configs/table3/runs/without_memory/M1_03.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M1_04",
+      "source_scenario_id": "M1_04",
+      "config_path": "configs/table3/runs/without_memory/M1_04.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M1_05",
+      "source_scenario_id": "M1_05",
+      "config_path": "configs/table3/runs/without_memory/M1_05.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M2_06",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table3/runs/without_memory/M2_06.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M2_07",
+      "source_scenario_id": "M2_07",
+      "config_path": "configs/table3/runs/without_memory/M2_07.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M2_08",
+      "source_scenario_id": "M2_08",
+      "config_path": "configs/table3/runs/without_memory/M2_08.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M2_09",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table3/runs/without_memory/M2_09.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M2_10",
+      "source_scenario_id": "M2_10",
+      "config_path": "configs/table3/runs/without_memory/M2_10.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M3_11",
+      "source_scenario_id": "M3_11",
+      "config_path": "configs/table3/runs/without_memory/M3_11.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M3_12",
+      "source_scenario_id": "M3_12",
+      "config_path": "configs/table3/runs/without_memory/M3_12.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M3_13",
+      "source_scenario_id": "M3_13",
+      "config_path": "configs/table3/runs/without_memory/M3_13.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M3_14",
+      "source_scenario_id": "M3_14",
+      "config_path": "configs/table3/runs/without_memory/M3_14.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M3_15",
+      "source_scenario_id": "M3_15",
+      "config_path": "configs/table3/runs/without_memory/M3_15.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M4_16",
+      "source_scenario_id": "M4_16",
+      "config_path": "configs/table3/runs/without_memory/M4_16.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M4_17",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table3/runs/without_memory/M4_17.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M4_18",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table3/runs/without_memory/M4_18.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M4_19",
+      "source_scenario_id": "M4_19",
+      "config_path": "configs/table3/runs/without_memory/M4_19.json"
+    },
+    {
+      "profile": "without_memory",
+      "scenario_id": "T3_without_memory_M4_20",
+      "source_scenario_id": "M4_20",
+      "config_path": "configs/table3/runs/without_memory/M4_20.json"
+    },
+    {
+      "profile": "without_memory_structure",
+      "scenario_id": "T3_without_memory_structure_M2_06",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table3/runs/without_memory_structure/M2_06.json"
+    },
+    {
+      "profile": "without_memory_structure",
+      "scenario_id": "T3_without_memory_structure_M2_07",
+      "source_scenario_id": "M2_07",
+      "config_path": "configs/table3/runs/without_memory_structure/M2_07.json"
+    },
+    {
+      "profile": "without_memory_structure",
+      "scenario_id": "T3_without_memory_structure_M2_08",
+      "source_scenario_id": "M2_08",
+      "config_path": "configs/table3/runs/without_memory_structure/M2_08.json"
+    },
+    {
+      "profile": "without_memory_structure",
+      "scenario_id": "T3_without_memory_structure_M2_09",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table3/runs/without_memory_structure/M2_09.json"
+    },
+    {
+      "profile": "without_memory_structure",
+      "scenario_id": "T3_without_memory_structure_M2_10",
+      "source_scenario_id": "M2_10",
+      "config_path": "configs/table3/runs/without_memory_structure/M2_10.json"
+    },
+    {
+      "profile": "without_state_alignment",
+      "scenario_id": "T3_without_state_alignment_M4_16",
+      "source_scenario_id": "M4_16",
+      "config_path": "configs/table3/runs/without_state_alignment/M4_16.json"
+    },
+    {
+      "profile": "without_state_alignment",
+      "scenario_id": "T3_without_state_alignment_M4_17",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table3/runs/without_state_alignment/M4_17.json"
+    },
+    {
+      "profile": "without_state_alignment",
+      "scenario_id": "T3_without_state_alignment_M4_18",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table3/runs/without_state_alignment/M4_18.json"
+    },
+    {
+      "profile": "without_state_alignment",
+      "scenario_id": "T3_without_state_alignment_M4_19",
+      "source_scenario_id": "M4_19",
+      "config_path": "configs/table3/runs/without_state_alignment/M4_19.json"
+    },
+    {
+      "profile": "without_state_alignment",
+      "scenario_id": "T3_without_state_alignment_M4_20",
+      "source_scenario_id": "M4_20",
+      "config_path": "configs/table3/runs/without_state_alignment/M4_20.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P1_01",
+      "source_scenario_id": "P1_01",
+      "config_path": "configs/table3/runs/without_stg_planning/P1_01.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P1_02",
+      "source_scenario_id": "P1_02",
+      "config_path": "configs/table3/runs/without_stg_planning/P1_02.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P1_03",
+      "source_scenario_id": "P1_03",
+      "config_path": "configs/table3/runs/without_stg_planning/P1_03.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P1_04",
+      "source_scenario_id": "P1_04",
+      "config_path": "configs/table3/runs/without_stg_planning/P1_04.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P1_05",
+      "source_scenario_id": "P1_05",
+      "config_path": "configs/table3/runs/without_stg_planning/P1_05.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P2_06",
+      "source_scenario_id": "P2_06",
+      "config_path": "configs/table3/runs/without_stg_planning/P2_06.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P2_07",
+      "source_scenario_id": "P2_07",
+      "config_path": "configs/table3/runs/without_stg_planning/P2_07.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P2_08",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table3/runs/without_stg_planning/P2_08.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P2_09",
+      "source_scenario_id": "P2_09",
+      "config_path": "configs/table3/runs/without_stg_planning/P2_09.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P2_10",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table3/runs/without_stg_planning/P2_10.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_11",
+      "source_scenario_id": "P3_11",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_11.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_12",
+      "source_scenario_id": "P3_12",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_12.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_13",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_13.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_14",
+      "source_scenario_id": "P3_14",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_14.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_15",
+      "source_scenario_id": "P3_15",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_15.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_16",
+      "source_scenario_id": "P3_16",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_16.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_17",
+      "source_scenario_id": "P3_17",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_17.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_18",
+      "source_scenario_id": "P3_18",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_18.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_19",
+      "source_scenario_id": "P3_19",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_19.json"
+    },
+    {
+      "profile": "without_stg_planning",
+      "scenario_id": "T3_without_stg_planning_P3_20",
+      "source_scenario_id": "P3_20",
+      "config_path": "configs/table3/runs/without_stg_planning/P3_20.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_11",
+      "source_scenario_id": "P3_11",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_11.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_12",
+      "source_scenario_id": "P3_12",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_12.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_13",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_13.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_14",
+      "source_scenario_id": "P3_14",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_14.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_15",
+      "source_scenario_id": "P3_15",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_15.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_16",
+      "source_scenario_id": "P3_16",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_16.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_17",
+      "source_scenario_id": "P3_17",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_17.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_18",
+      "source_scenario_id": "P3_18",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_18.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_19",
+      "source_scenario_id": "P3_19",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_19.json"
+    },
+    {
+      "profile": "without_stg_construction",
+      "scenario_id": "T3_without_stg_construction_P3_20",
+      "source_scenario_id": "P3_20",
+      "config_path": "configs/table3/runs/without_stg_construction/P3_20.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P1_01",
+      "source_scenario_id": "P1_01",
+      "config_path": "configs/table3/runs/without_path_merging/P1_01.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P1_02",
+      "source_scenario_id": "P1_02",
+      "config_path": "configs/table3/runs/without_path_merging/P1_02.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P1_03",
+      "source_scenario_id": "P1_03",
+      "config_path": "configs/table3/runs/without_path_merging/P1_03.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P1_04",
+      "source_scenario_id": "P1_04",
+      "config_path": "configs/table3/runs/without_path_merging/P1_04.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P1_05",
+      "source_scenario_id": "P1_05",
+      "config_path": "configs/table3/runs/without_path_merging/P1_05.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P2_06",
+      "source_scenario_id": "P2_06",
+      "config_path": "configs/table3/runs/without_path_merging/P2_06.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P2_07",
+      "source_scenario_id": "P2_07",
+      "config_path": "configs/table3/runs/without_path_merging/P2_07.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P2_08",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table3/runs/without_path_merging/P2_08.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P2_09",
+      "source_scenario_id": "P2_09",
+      "config_path": "configs/table3/runs/without_path_merging/P2_09.json"
+    },
+    {
+      "profile": "without_path_merging",
+      "scenario_id": "T3_without_path_merging_P2_10",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table3/runs/without_path_merging/P2_10.json"
+    }
+  ],
+  "cells": [
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_01",
+      "subclass": "G1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_02",
+      "subclass": "G1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_03",
+      "subclass": "G1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_04",
+      "subclass": "G1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_05",
+      "subclass": "G1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_06",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_07",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_08",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_09",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_10",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_11",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_12",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_13",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_14",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_15",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_16",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_17",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_18",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_19",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_20",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_01",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_02",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_03",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_04",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_05",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_06",
+      "subclass": "G2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_07",
+      "subclass": "G2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_08",
+      "subclass": "G2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_09",
+      "subclass": "G2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_10",
+      "subclass": "G2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_11",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_12",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_13",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_14",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_15",
+      "subclass": "G3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_16",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_17",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_18",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_19",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_intention",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_20",
+      "subclass": "G4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_01",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_02",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_03",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_04",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G1_05",
+      "subclass": "G1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_06",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_07",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_08",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_09",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G2_10",
+      "subclass": "G2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_11",
+      "subclass": "G3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_12",
+      "subclass": "G3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_13",
+      "subclass": "G3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_14",
+      "subclass": "G3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G3_15",
+      "subclass": "G3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_16",
+      "subclass": "G4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_17",
+      "subclass": "G4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_18",
+      "subclass": "G4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_19",
+      "subclass": "G4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_parameter_binding",
+      "module": "goal",
+      "category": "G",
+      "scenario_id": "G4_20",
+      "subclass": "G4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_01",
+      "subclass": "M1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_02",
+      "subclass": "M1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_03",
+      "subclass": "M1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_04",
+      "subclass": "M1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_05",
+      "subclass": "M1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_06",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_07",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_08",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_09",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_10",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_11",
+      "subclass": "M3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_12",
+      "subclass": "M3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_13",
+      "subclass": "M3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_14",
+      "subclass": "M3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_15",
+      "subclass": "M3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_16",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_17",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_18",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_19",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_20",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_01",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_02",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_03",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_04",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_05",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_06",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_07",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_08",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_09",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_10",
+      "subclass": "M2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_11",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_12",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_13",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_14",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_15",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_16",
+      "subclass": "M4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_17",
+      "subclass": "M4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_18",
+      "subclass": "M4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_19",
+      "subclass": "M4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_memory_structure",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_20",
+      "subclass": "M4",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_01",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_02",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_03",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_04",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M1_05",
+      "subclass": "M1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_06",
+      "subclass": "M2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_07",
+      "subclass": "M2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_08",
+      "subclass": "M2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_09",
+      "subclass": "M2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M2_10",
+      "subclass": "M2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_11",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_12",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_13",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_14",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M3_15",
+      "subclass": "M3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_16",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_17",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_18",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_19",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_state_alignment",
+      "module": "memory",
+      "category": "M",
+      "scenario_id": "M4_20",
+      "subclass": "M4",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_01",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_02",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_03",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_04",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_05",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_06",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_07",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_08",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_09",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_10",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_11",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_12",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_13",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_14",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_15",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_16",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_17",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_18",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_19",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_planning",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_20",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_01",
+      "subclass": "P1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_02",
+      "subclass": "P1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_03",
+      "subclass": "P1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_04",
+      "subclass": "P1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_05",
+      "subclass": "P1",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_06",
+      "subclass": "P2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_07",
+      "subclass": "P2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_08",
+      "subclass": "P2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_09",
+      "subclass": "P2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_10",
+      "subclass": "P2",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_11",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_12",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_13",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_14",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_15",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_16",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_17",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_18",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_19",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_stg_construction",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_20",
+      "subclass": "P3",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_01",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_02",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_03",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_04",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P1_05",
+      "subclass": "P1",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_06",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_07",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_08",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_09",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P2_10",
+      "subclass": "P2",
+      "result_source": "ablation"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_11",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_12",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_13",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_14",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_15",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_16",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_17",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_18",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_19",
+      "subclass": "P3",
+      "result_source": "baseline"
+    },
+    {
+      "profile": "without_path_merging",
+      "module": "planning",
+      "category": "P",
+      "scenario_id": "P3_20",
+      "subclass": "P3",
+      "result_source": "baseline"
+    }
+  ],
+  "expected_runnable_episodes": 105,
+  "expected_cell_contributions": 180
+}

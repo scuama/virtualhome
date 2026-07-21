@@ -1,0 +1,93 @@
+{
+  "scenario_id": "T3_without_state_alignment_M4_17",
+  "scenario_type": "M",
+  "goal_instruction": "If the kitchencabinet is open, put the waterglass you just washed inside.",
+  "environment_id": 2,
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "kitchencabinet"
+      ],
+      "add_states": [
+        "OPEN"
+      ]
+    },
+    {
+      "target_classes": [
+        "waterglass"
+      ],
+      "instance_filter": {
+        "index": 0
+      },
+      "add_states": [
+        "CLEAN",
+        "EMPTY"
+      ],
+      "remove_states": [
+        "DIRTY",
+        "FILLED_MILK",
+        "FILLED_WATER"
+      ]
+    },
+    {
+      "target_classes": [
+        "waterglass"
+      ],
+      "instance_filter": {
+        "index": 1
+      },
+      "add_states": [
+        "DIRTY"
+      ]
+    },
+    {
+      "target_classes": [
+        "waterglass"
+      ],
+      "instance_filter": {
+        "index": 2
+      },
+      "add_states": [
+        "DIRTY"
+      ]
+    }
+  ],
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    },
+    {
+      "subject": "waterglass",
+      "count": 3,
+      "relation": "ON",
+      "object": "kitchentable"
+    }
+  ],
+  "prior_action_history": [
+    {
+      "step": -1,
+      "action": "[wash] <waterglass> (15)",
+      "success": true,
+      "reasoning": "I washed the waterglass. It is CLEAN and EMPTY."
+    }
+  ],
+  "success_condition": {
+    "target_class": "waterglass",
+    "states": [
+      "CLEAN"
+    ],
+    "relation": "INSIDE",
+    "destination_class": "kitchencabinet"
+  },
+  "source_scenario_id": "M4_17",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_state_alignment",
+  "ablation_module": "memory",
+  "table3_source_subclass": "M4",
+  "source_config": "configs/source_tasks/m_class/M4_17.json",
+  "single_run": true,
+  "max_steps": 45
+}

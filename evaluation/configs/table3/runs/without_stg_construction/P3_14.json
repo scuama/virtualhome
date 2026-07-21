@@ -1,0 +1,61 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If the pie is uncut, slice it with the cutleryknife and then put it inside the fridge.",
+  "initial_relations_override": [
+    {
+      "subject": "pie",
+      "relation": "ON",
+      "object": "kitchencounter",
+      "count": 1
+    },
+    {
+      "subject": "fridge",
+      "relation": "ON",
+      "object": "kitchencounter",
+      "count": 1
+    },
+    {
+      "subject": "cutleryknife",
+      "relation": "ON",
+      "object": "kitchencounter",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "fridge",
+      "states": [
+        "OPEN"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "state",
+        "target_class": "pie",
+        "require_states": [
+          "SLICED"
+        ]
+      },
+      {
+        "check_type": "relation",
+        "target_class": "pie",
+        "relation": "INSIDE",
+        "destination_class": "fridge"
+      }
+    ]
+  },
+  "execution_time_seconds": 60.0,
+  "scenario_id": "T3_without_stg_construction_P3_14",
+  "source_scenario_id": "P3_14",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_stg_construction",
+  "ablation_module": "planning",
+  "table3_source_subclass": "P3",
+  "source_config": "configs/source_tasks/p_class/P3_14.json",
+  "single_run": true,
+  "max_steps": 90
+}

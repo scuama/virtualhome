@@ -44,7 +44,6 @@ class ActionValidator:
         action: str,
         graph: dict,
         protected_classes: Optional[Iterable[str]] = None,
-        allow_wait: bool = False,
     ) -> ActionValidation:
         match = self.ACTION_PATTERN.match(str(action or ""))
         if not match:
@@ -55,9 +54,7 @@ class ActionValidator:
         if action_name == "wait":
             if arguments:
                 return ActionValidation(False, reason="wait takes no arguments")
-            if allow_wait:
-                return ActionValidation(True, "[wait]")
-            return ActionValidation(False, reason="wait is not allowed in this state")
+            return ActionValidation(True, "[wait]")
         if action_name == "ask":
             if not arguments:
                 return ActionValidation(False, reason="ask requires a message")

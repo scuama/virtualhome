@@ -1,0 +1,53 @@
+{
+  "scenario_id": "T3_without_state_alignment_M4_19",
+  "scenario_type": "M",
+  "goal_instruction": "If the TV is off, turn it on.",
+  "environment_id": 0,
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "tv"
+      ],
+      "add_states": [
+        "OFF"
+      ]
+    }
+  ],
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "livingroom"
+    },
+    {
+      "subject": "remotecontrol",
+      "count": 1,
+      "relation": "ON",
+      "object": "nightstand",
+      "in_room": "bedroom"
+    }
+  ],
+  "prior_action_history": [
+    {
+      "step": -1,
+      "action": "[switchoff] <tv> (18)",
+      "success": true,
+      "reasoning": "I turned off the tv in the livingroom using the remotecontrol."
+    }
+  ],
+  "success_condition": {
+    "target_class": "tv",
+    "states": [
+      "ON"
+    ]
+  },
+  "source_scenario_id": "M4_19",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_state_alignment",
+  "ablation_module": "memory",
+  "table3_source_subclass": "M4",
+  "source_config": "configs/source_tasks/m_class/M4_19.json",
+  "single_run": true,
+  "max_steps": 45
+}

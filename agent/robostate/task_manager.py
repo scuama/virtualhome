@@ -52,6 +52,7 @@ class MultiTaskManager:
         logger=None,
         failure_limit: int = 2,
         instruction_overrides: Optional[List[str]] = None,
+        fixed_order: bool = False,
     ):
         configured_tasks = config.get("tasks") or []
         if configured_tasks:
@@ -83,6 +84,7 @@ class MultiTaskManager:
         self.logger = logger
         self.failure_limit = max(1, int(failure_limit))
         self.active_task_id: Optional[str] = None
+        self.fixed_order = bool(fixed_order)
         self.scene_classes = {
             str(value).strip().lower().replace(" ", "_")
             for value in config.get("grounding_candidates", []) or []
@@ -175,7 +177,11 @@ class MultiTaskManager:
             # Prefer grounded tasks, then fewer failures, then stable config order.
             return (mentioned_visible + planned_visible, -task.failure_count, -task.order)
 
-        selected = max(candidates, key=score)
+        selected = (
+            min(candidates, key=lambda task: task.order)
+            if self.fixed_order
+            else max(candidates, key=score)
+        )
         selected.status = "active"
         selected.last_activated_step = int(step)
         if selected.first_activated_step is None:
