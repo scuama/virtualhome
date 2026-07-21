@@ -79,29 +79,26 @@ def scene_grounding_candidates(environment_id):
 
 
 def bind_condition(condition):
+    """Keep evaluator conditions semantic; never add hidden scene ordinals."""
     result = copy.deepcopy(condition)
-    mode = str(result.get("mode", "SINGLE")).upper()
-    if mode in {"AND", "OR"}:
+    result.pop("target_instance", None)
+    result.pop("destination_instance", None)
+    if str(result.get("mode", "SINGLE")).upper() in {"AND", "OR"}:
         result["conditions"] = [
             bind_condition(item) for item in result.get("conditions", [])
         ]
-        return result
-    if str(result.get("target_class", "ANY")).upper() != "ANY":
-        result["target_instance"] = 0
-    if result.get("destination_class"):
-        result["destination_instance"] = 0
     return result
 
 
 def bind_relation_override(override):
     result = copy.deepcopy(override)
-    if str(result.get("subject", "")).lower() != "character":
-        result["subject_instance"] = 0
+    result.pop("subject_instance", None)
+    result.pop("object_instance", None)
     return result
 
 
 def force_initially_unsatisfied(condition):
-    """Create an instance-bound inverse for simple state goals."""
+    """Force every semantic match to the inverse of a simple state goal."""
     mode = str(condition.get("mode", "SINGLE")).upper()
     if mode in {"AND", "OR"}:
         return [
@@ -115,7 +112,6 @@ def force_initially_unsatisfied(condition):
         return []
     return [{
         "target_classes": [condition["target_class"]],
-        "instance_filter": {"index": int(condition.get("target_instance", 0))},
         "add_states": opposites,
         "remove_states": required,
     }]
@@ -150,10 +146,9 @@ def build(group_id, scale):
     ]
     states = dedupe([
         {
-            **copy.deepcopy(override),
-            "instance_filter": copy.deepcopy(
-                override.get("instance_filter", {"index": 0})
-            ),
+            key: copy.deepcopy(value)
+            for key, value in override.items()
+            if key != "instance_filter"
         }
         for _, source in sources
         for override in (source.get("initial_states_override") or [])
@@ -250,7 +245,8 @@ def main():
                 "effect": {
                     "type": "set_state",
                     "target": target,
-                    "instance_index": 0,
+                    "match_states": remove_states,
+                    "apply_to": "all_matching",
                     "add_states": add_states,
                     "remove_states": remove_states,
                 },

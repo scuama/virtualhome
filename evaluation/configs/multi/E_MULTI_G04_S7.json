@@ -138,8 +138,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -149,9 +148,7 @@
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -161,9 +158,7 @@
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -174,8 +169,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -186,8 +180,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -197,9 +190,7 @@
                 "target_class": "plate",
                 "relation": "INSIDE",
                 "destination_class": "microwave",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -210,8 +201,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -220,9 +210,6 @@
             "target_classes": [
                 "computer"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -234,9 +221,6 @@
             "target_classes": [
                 "microwave"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -248,9 +232,6 @@
             "target_classes": [
                 "stove"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -262,9 +243,6 @@
             "target_classes": [
                 "radio"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -283,22 +261,19 @@
             "subject": "book",
             "relation": "ON",
             "object": "coffeetable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "mug",
             "relation": "ON",
             "object": "kitchentable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "plate",
             "relation": "ON",
             "object": "kitchencounter",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         }
     ],
     "success_condition": {
@@ -309,56 +284,46 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "microwave",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "stove",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "plate",
                 "relation": "INSIDE",
                 "destination_class": "microwave",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "radio",
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         ]
     },

@@ -37,6 +37,7 @@ AGENT_CONFIG_ALLOWLIST = {
     "grounding_candidates",
     "instruction_type",
     "log_mode",
+    "preprocessed_instruction",
     "robostate_task_failure_limit",
     "scheduled_rules",
     "tasks",
@@ -59,6 +60,28 @@ def build_agent_config(config):
     if sanitized_tasks:
         agent_config["tasks"] = sanitized_tasks
     return agent_config
+
+
+def set_environment_state(env, object_id, add_states=None, remove_states=None):
+    """Apply a persistent state overlay through the environment public hook."""
+    additions = {str(state).upper() for state in (add_states or [])}
+    removals = {str(state).upper() for state in (remove_states or [])}
+    if hasattr(env, "set_state_override"):
+        env.set_state_override(object_id, additions, removals)
+        return
+
+    # Small fake environments used by tests may not implement the Unity hook.
+    if not hasattr(env, "custom_states"):
+        env.custom_states = {}
+    if not hasattr(env, "custom_removed_states"):
+        env.custom_removed_states = {}
+    stored_additions = env.custom_states.setdefault(int(object_id), set())
+    stored_removals = env.custom_removed_states.setdefault(int(object_id), set())
+    stored_additions.difference_update(removals)
+    stored_additions.update(additions)
+    stored_removals.difference_update(additions)
+    stored_removals.update(removals)
+    env.changed_graph = True
 
 
 class DynamicEventRuntime:
@@ -109,35 +132,45 @@ class DynamicEventRuntime:
                 node for node in graph.get("nodes", [])
                 if str(node.get("class_name", "")).lower() == target_class
             ]
-            index = int(effect.get("instance_index", 0))
-            if index >= len(candidates):
+            required_states = {
+                str(state).upper() for state in effect.get("match_states", [])
+            }
+            matching = [
+                node for node in candidates
+                if required_states.issubset({
+                    str(state).upper() for state in node.get("states", [])
+                })
+            ]
+            if not matching:
+                # No completed target currently exists, so this interval did
+                # not produce an environmental change and is not consumed.
+                continue
+            if effect.get("apply_to", "all_matching") != "all_matching":
                 raise RuntimeError(
-                    f"Dynamic event {event['_runtime_id']} cannot find "
-                    f"{target_class}[{index}]"
+                    f"Dynamic event {event['_runtime_id']} has unsupported "
+                    f"apply_to={effect.get('apply_to')!r}"
                 )
-            target = candidates[index]
-            target_id = int(target["id"])
-            if not hasattr(self.env, "custom_states"):
-                self.env.custom_states = {}
-            current = self.env.custom_states.setdefault(target_id, set())
-            for state in effect.get("remove_states", []):
-                current.discard(str(state).upper())
-            for state in effect.get("add_states", []):
-                current.add(str(state).upper())
-            self.env.changed_graph = True
+            target_ids = [int(node["id"]) for node in matching]
+            for target_id in target_ids:
+                set_environment_state(
+                    self.env,
+                    target_id,
+                    effect.get("add_states", []),
+                    effect.get("remove_states", []),
+                )
             event["_times_triggered"] += 1
             event["_last_trigger_step"] = int(step)
             self.trace.append({
                 "step": int(step),
                 "event": "set_state",
                 "event_id": event["_runtime_id"],
-                "object_id": target_id,
+                "object_ids": target_ids,
                 "target": target_class,
                 "add_states": list(effect.get("add_states", [])),
                 "remove_states": list(effect.get("remove_states", [])),
             })
             self.logger.info(
-                f"⚡ DYNAMIC EVENT: {target_class}({target_id}) state changed "
+                f"⚡ DYNAMIC EVENT: {target_class}{target_ids} state changed "
                 f"at step {step}."
             )
             environment_changed = True
@@ -209,6 +242,22 @@ class DynamicEventRuntime:
             if target_id in self.hidden_until:
                 continue
 
+            # Table 1 binds disturbance to one concrete instance. An action on
+            # another object of the same class must not consume a trigger.
+            target_candidates = sorted(
+                [
+                    node for node in graph.get("nodes", [])
+                    if str(node.get("class_name", "")).lower() == target_class
+                ],
+                key=lambda node: int(node.get("id", -1)),
+            )
+            instance_index = int(effect.get("instance_index", 0))
+            if (
+                instance_index >= len(target_candidates)
+                or int(target_candidates[instance_index].get("id", -1)) != target_id
+            ):
+                continue
+
             required_state = trigger.get("target_state")
             if required_state:
                 target_node = next(
@@ -238,9 +287,7 @@ class DynamicEventRuntime:
             self.env.changed_graph = True
             event["_times_triggered"] += 1
             intercepted = True
-            message = (
-                "动作失败：目标物品突然消失了，请等待其重新出现后重试。"
-            )
+            message = "temporary_unavailable: target disappeared; wait or search and retry"
             self.trace.append(
                 {
                     "step": int(step),
@@ -272,9 +319,18 @@ class DynamicEventRuntime:
             )
             if hidden_target:
                 intercepted = True
-                message = "动作失败：目标物品当前不可见，请等待或重新规划。"
+                message = "temporary_unavailable: target is temporarily hidden"
 
-        info = {"action_message": message} if intercepted else {}
+        info = (
+            {
+                "action_success": False,
+                "action_message": message,
+                "error_type": "temporary_unavailable",
+                "temporary": True,
+            }
+            if intercepted
+            else {}
+        )
         return intercepted, info
 
     def event_counts(self):
@@ -301,78 +357,50 @@ def reset_environment_runtime(env):
     env.current_step = 0
 
 
+def table1_result_folder(base_dir, config, method_name):
+    """Return the non-overlapping Table 1 result location."""
+    return os.path.join(
+        base_dir,
+        'results',
+        'table1',
+        str(config['experiment_axis']),
+        str(config['setting']),
+        method_name,
+        str(config['sample_id']),
+    )
+
+
+def write_result_artifacts(
+    dest_folder,
+    config,
+    metrics,
+    method_name,
+    model_name,
+    scenario_log_file=None,
+):
+    os.makedirs(dest_folder, exist_ok=True)
+    recorded_config = copy.deepcopy(config)
+    recorded_config['evaluation_method'] = method_name
+    recorded_config['evaluation_model'] = model_name
+    recorded_config['execution_time_seconds'] = metrics.get(
+        'execution_time_seconds', 0
+    )
+    with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
+        json.dump(recorded_config, cf, indent=4, ensure_ascii=False)
+    with open(os.path.join(dest_folder, 'metrics.json'), 'w', encoding='utf-8') as mf:
+        json.dump(metrics, mf, indent=4, ensure_ascii=False)
+    if scenario_log_file and os.path.exists(scenario_log_file):
+        shutil.copy(
+            scenario_log_file,
+            os.path.join(dest_folder, f"run_{config['scenario_id']}.md"),
+        )
+
+
 def apply_overrides(env, config, debug=False):
     """
-    Applies scenario overrides using monkey-patching for states and physical actions for relations.
+    Apply persistent state overlays and physical relation initialization.
     """
-    def _install_state_patch(env, overrides, debug):
-        original = env.get_graph
-        # Map to store which IDs get which overrides so they don't shift
-        # Key: override index, Value: list of node IDs assigned to this override
-        locked_assignments = {}
-        
-        def patched(*args, **kwargs):
-            graph = original(*args, **kwargs)
-            
-            for ov_idx, ov in enumerate(overrides):
-                rm, add = ov.get('remove_states', []), ov.get('add_states', [])
-                add_props = ov.get('add_properties', [])
-                i_filter = ov.get('instance_filter')
-                in_room  = ov.get('in_room')
-                
-                # If we haven't locked IDs for this override yet, do it now
-                if ov_idx not in locked_assignments:
-                    assigned_ids = []
-                    for cls in ov.get('target_classes', []):
-                        candidates = sorted(
-                            [n for n in graph['nodes'] if n['class_name'].lower() == cls.lower()],
-                            key=lambda node: int(node.get('id', -1)),
-                        )
-                        if in_room:
-                            room_ids  = {n['id'] for n in graph['nodes'] if n['class_name'].lower() == in_room.lower()}
-                            inside_ids = {e['from_id'] for e in graph['edges'] if e['relation_type']=='INSIDE' and e['to_id'] in room_ids}
-                            candidates = [n for n in candidates if n['id'] in inside_ids]
-                        if i_filter and 'index' in i_filter:
-                            idx = i_filter['index']
-                            candidates = [candidates[idx]] if idx < len(candidates) else []
-                        assigned_ids.extend([n['id'] for n in candidates])
-                    locked_assignments[ov_idx] = assigned_ids
-                
-                # Apply patches to the locked IDs
-                target_ids = locked_assignments[ov_idx]
-                for node in graph['nodes']:
-                    if node['id'] in target_ids:
-                        # Initial overrides establish the episode's starting
-                        # state. Once a real/mock action records a custom state
-                        # for this node, that action must take precedence.
-                        custom_states = getattr(env, 'custom_states', {}) or {}
-                        if node['id'] in custom_states:
-                            continue
-                        st = set(node.get('states', []))
-                        props = set(node.get('properties', []))
-                        for s in rm: st.discard(s)
-                        for s in add:
-                            if s == 'PLUGGED_OUT' and 'HAS_PLUG' not in props: continue
-                            if s == 'OFF' and 'HAS_SWITCH' not in props: continue
-                            st.add(s)
-                        for p in add_props:
-                            props.add(p)
-                        node['states'] = list(st)
-                        node['properties'] = list(props)
-                        
-            return graph
-            
-        env.get_graph = patched
-
     from agent.utils.graph_utils import find_node, find_all
-
-    def _hide_extra_nodes(env, nodes_to_hide):
-        if not hasattr(env, 'active_hidden_nodes'):
-            env.active_hidden_nodes = {}
-        for n in nodes_to_hide:
-            env.active_hidden_nodes[n['id']] = float('inf')
-        if nodes_to_hide:
-            env.changed_graph = True
 
     def _already_has_relation(graph, s_node, rel, obj_node):
         return any(e for e in graph['edges'] if e['from_id'] == s_node['id'] and e['relation_type'] == rel and e['to_id'] == obj_node['id'])
@@ -402,10 +430,80 @@ def apply_overrides(env, config, debug=False):
         }
         return [node for node in candidates if node['id'] in inside_ids]
 
+    def conflicting_relation_subject_ids(graph, subject_class):
+        """Find visible subjects that already satisfy a configured task goal."""
+        ids = set()
+
+        def visit(condition):
+            if str(condition.get('mode', 'SINGLE')).upper() in {'AND', 'OR'}:
+                for child in condition.get('conditions', []):
+                    visit(child)
+                return
+            if str(condition.get('target_class', '')).lower() != subject_class:
+                return
+            relations = {
+                value.strip().upper()
+                for value in str(condition.get('relation') or '').split('|')
+                if value.strip()
+            }
+            destination = str(condition.get('destination_class', '')).lower()
+            if not relations or not destination:
+                return
+            destination_ids = {
+                node['id'] for node in graph.get('nodes', [])
+                if str(node.get('class_name', '')).lower() == destination
+            }
+            ids.update(
+                edge['from_id'] for edge in graph.get('edges', [])
+                if str(edge.get('relation_type', '')).upper() in relations
+                and edge.get('to_id') in destination_ids
+            )
+
+        for task in config.get('tasks', []):
+            visit(task.get('success_condition', {}))
+        return ids
+
     # 1. 状态覆盖
     state_overrides = config.get('initial_states_override', [])
-    if state_overrides:
-        _install_state_patch(env, state_overrides, debug)
+    graph = env.get_graph()
+    for override in state_overrides:
+        target_ids = []
+        for class_name in override.get('target_classes', []):
+            candidates = sorted(
+                [
+                    node for node in graph.get('nodes', [])
+                    if str(node.get('class_name', '')).lower()
+                    == str(class_name).lower()
+                ],
+                key=lambda node: int(node.get('id', -1)),
+            )
+            in_room = override.get('in_room')
+            if in_room:
+                room_ids = {
+                    node['id'] for node in graph.get('nodes', [])
+                    if str(node.get('class_name', '')).lower()
+                    == str(in_room).lower()
+                }
+                inside_ids = {
+                    edge['from_id'] for edge in graph.get('edges', [])
+                    if edge.get('relation_type') == 'INSIDE'
+                    and edge.get('to_id') in room_ids
+                }
+                candidates = [
+                    node for node in candidates if node['id'] in inside_ids
+                ]
+            instance_filter = override.get('instance_filter')
+            if instance_filter and 'index' in instance_filter:
+                index = int(instance_filter['index'])
+                candidates = candidates[index:index + 1]
+            target_ids.extend(node['id'] for node in candidates)
+        for target_id in target_ids:
+            set_environment_state(
+                env,
+                target_id,
+                override.get('add_states', []),
+                override.get('remove_states', []),
+            )
 
     # 2. 关系覆盖 (位置)
     graph = env.get_graph()
@@ -428,14 +526,25 @@ def apply_overrides(env, config, debug=False):
             key=lambda node: int(node.get('id', -1)),
         )
         subject_instance = ro.get('subject_instance')
+        conflicting_ids = conflicting_relation_subject_ids(graph, subj)
 
         # Explicitly bound benchmark tasks keep every non-target scene instance.
         if subject_instance is not None:
             start = int(subject_instance)
             subj_nodes = subj_nodes[start:start + count]
-        elif len(subj_nodes) > count:
-            _hide_extra_nodes(env, subj_nodes[count:])
-            subj_nodes = subj_nodes[:count]
+        else:
+            conflicting = [
+                node for node in subj_nodes if node['id'] in conflicting_ids
+            ]
+            remaining = [
+                node for node in subj_nodes if node['id'] not in conflicting_ids
+            ]
+            # Move every already-satisfying subject out of the goal relation;
+            # otherwise move only the configured count. No instance is hidden.
+            subj_nodes = conflicting + remaining[
+                :max(0, int(count) - len(conflicting))
+            ]
+            count = len(subj_nodes)
 
         # 验证必需物品是否充足
         if len(subj_nodes) < count:
@@ -472,7 +581,7 @@ def apply_overrides(env, config, debug=False):
         # aligned. Some scenes contain multiple surfaces of the same class and
         # only a subset accept a given object, so try each matching instance.
         for s_node in subj_nodes[:count]:
-            if any(
+            if s_node['id'] not in conflicting_ids and any(
                 _already_has_relation(graph, s_node, rel, obj_node)
                 for obj_node in obj_nodes
             ):
@@ -619,6 +728,16 @@ def main():
         '--all-extensions', action='store_true',
         help='Run all 45 RoboState extension configs'
     )
+    extension_group.add_argument(
+        '--table1-axis',
+        choices=['scale', 'instruction_type', 'dynamic_difficulty', 'all'],
+        help='Run Table 1 configs for one axis, or all 57 configs'
+    )
+    parser.add_argument(
+        '--table1-manifest',
+        default=None,
+        help='Optional Table 1 manifest path (defaults to configs/table1/manifest.json)'
+    )
     # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -646,6 +765,10 @@ def main():
             cmd.append("--instruction-type")
         elif args.non_stationarity:
             cmd.append("--non-stationarity")
+        elif args.table1_axis:
+            cmd.extend(["--table1-axis", args.table1_axis])
+            if args.table1_manifest:
+                cmd.extend(["--table1-manifest", args.table1_manifest])
         if args.force:
             cmd.append("--force")
         
@@ -675,7 +798,31 @@ def main():
     all_configs = []
     selected_extension = None
     selected_value = "all"
-    if args.all_extensions:
+    if args.table1_axis:
+        manifest_path = args.table1_manifest or os.path.join(
+            configs_dir, 'table1', 'manifest.json'
+        )
+        with open(manifest_path, 'r', encoding='utf-8') as manifest_file:
+            table1_manifest = json.load(manifest_file)
+        if table1_manifest.get('table_id') != 'table1':
+            raise RuntimeError(f"Not a Table 1 manifest: {manifest_path}")
+        selected_extension = 'table1'
+        selected_value = args.table1_axis
+        evaluation_dir = os.path.dirname(configs_dir)
+        for entry in table1_manifest.get('configs', []):
+            axis = entry.get('experiment_axis')
+            if args.table1_axis != 'all' and axis != args.table1_axis:
+                continue
+            config_path = entry.get('config_path', '')
+            if not os.path.isabs(config_path):
+                # Manifest paths are relative to evaluation/, not to manifest/.
+                config_path = os.path.join(evaluation_dir, config_path)
+            scenario_id = entry.get('scenario_id')
+            if args.target and not scenario_id.startswith(tuple(args.target)):
+                continue
+            all_configs.append((scenario_id, config_path, copy.deepcopy(entry)))
+        selected_dirs = []
+    elif args.all_extensions:
         selected_dirs = ['multi', 'semantic', 'dynamic']
         selected_extension = 'all_extensions'
     elif args.scale:
@@ -714,7 +861,7 @@ def main():
                     continue
                 if args.target and not scenario_id.startswith(tuple(args.target)):
                     continue
-                all_configs.append((scenario_id, path))
+                all_configs.append((scenario_id, path, config_metadata))
     all_configs = sorted(all_configs)
 
     if selected_extension and not all_configs:
@@ -733,14 +880,18 @@ def main():
     reset_environment_runtime(env)
 
     for method_name in args.method:
-
-        results_dir = os.path.join(base_dir, 'results', method_name)
-        success_dir = os.path.join(results_dir, 'success')
-        fail_dir = os.path.join(results_dir, 'fail')
-        raw_logs_dir = os.path.join(results_dir, 'raw')
-        
-        os.makedirs(success_dir, exist_ok=True)
-        os.makedirs(fail_dir, exist_ok=True)
+        table1_run = selected_extension == 'table1'
+        if table1_run:
+            results_dir = os.path.join(base_dir, 'results', 'table1')
+            success_dir = None
+            fail_dir = None
+            raw_logs_dir = os.path.join(results_dir, '_raw', method_name)
+        else:
+            results_dir = os.path.join(base_dir, 'results', method_name)
+            success_dir = os.path.join(results_dir, 'success')
+            fail_dir = os.path.join(results_dir, 'fail')
+            os.makedirs(success_dir, exist_ok=True)
+            os.makedirs(fail_dir, exist_ok=True)
         os.makedirs(raw_logs_dir, exist_ok=True)
         
         
@@ -752,6 +903,7 @@ def main():
             "skipped": 0,
             "success": 0,
             "fail": 0,
+            "incomplete": 0,
             "failures": [],
             "extension_metrics": []
         }
@@ -762,8 +914,27 @@ def main():
             f"Timeout=Dynamic (max_steps * 5)s"
         )
 
-        for scenario_id, config_path in all_configs:
-            if not args.force and os.path.exists(os.path.join(success_dir, scenario_id)):
+        for scenario_id, config_path, _config_metadata in all_configs:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+
+            if table1_run:
+                configured_result_folder = table1_result_folder(
+                    base_dir, config, method_name
+                )
+                recorded_metrics = os.path.join(
+                    configured_result_folder, 'metrics.json'
+                )
+                if not args.force and os.path.exists(recorded_metrics):
+                    with open(recorded_metrics, 'r', encoding='utf-8') as metrics_file:
+                        prior_metrics = json.load(metrics_file)
+                    if prior_metrics.get('run_status') == 'complete':
+                        print(f"[SKIP] {scenario_id} — complete Table 1 result exists.")
+                        summary["skipped"] += 1
+                        continue
+            elif not args.force and os.path.exists(
+                os.path.join(success_dir, scenario_id)
+            ):
                 print(f"[SKIP] {scenario_id} — already succeeded.")
                 summary["skipped"] += 1
                 fail_path = os.path.join(fail_dir, scenario_id)
@@ -774,12 +945,45 @@ def main():
             print(f"\n==========================================")
             print(f"[RUN] {scenario_id}")
 
-            with open(config_path, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-
             agent_config = build_agent_config(config)
 
             env_id = config.get('environment_id', 0)
+
+            def record_initialization_incomplete(reason):
+                metrics = TaskProgressTracker(config).as_metrics()
+                metrics.update({
+                    "scenario_id": scenario_id,
+                    "table_id": config.get("table_id"),
+                    "experiment_axis": config.get("experiment_axis"),
+                    "sample_id": config.get("sample_id"),
+                    "setting": config.get("setting"),
+                    "extension_type": config.get("extension_type"),
+                    "method": method_name,
+                    "model": args.model,
+                    "success": False,
+                    "run_status": "incomplete",
+                    "valid_for_aggregation": False,
+                    "reason": reason,
+                    "steps_executed": 0,
+                    "execution_time_seconds": 0,
+                    "dynamic_event_counts": {},
+                    "dynamic_event_trace": [],
+                })
+                summary["extension_metrics"].append(metrics)
+                summary["incomplete"] += 1
+                summary["failures"].append({
+                    "scenario": scenario_id,
+                    "reason": reason,
+                    "run_status": "incomplete",
+                })
+                if table1_run:
+                    write_result_artifacts(
+                        table1_result_folder(base_dir, config, method_name),
+                        config,
+                        metrics,
+                        method_name,
+                        args.model,
+                    )
 
             old_stdout = sys.stdout
             # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
@@ -802,8 +1006,11 @@ def main():
                     sys.stdout = old_stdout
                     reason = f"Engine Reset Failed twice: {e2}"
                     print(f"  {reason}")
-                    summary["fail"] += 1
-                    summary["failures"].append({"scenario": scenario_id, "reason": reason})
+                    if table1_run:
+                        record_initialization_incomplete(reason)
+                    else:
+                        summary["fail"] += 1
+                        summary["failures"].append({"scenario": scenario_id, "reason": reason})
                     continue
 
             try:
@@ -813,8 +1020,11 @@ def main():
                 sys.stdout = old_stdout
                 reason = f"Initialization Failed: {e}"
                 print(f"  {reason}")
-                summary["fail"] += 1
-                summary["failures"].append({"scenario": scenario_id, "reason": reason})
+                if table1_run:
+                    record_initialization_incomplete(reason)
+                else:
+                    summary["fail"] += 1
+                    summary["failures"].append({"scenario": scenario_id, "reason": reason})
                 continue
 
             # ===================== 根据 method 选择 Agent =====================
@@ -854,6 +1064,7 @@ def main():
             step_count = 0
             success = False
             reason = "Max steps reached"
+            run_status = "complete"
             task_tracker = None
             dynamic_runtime = None
 
@@ -911,6 +1122,7 @@ def main():
                                 "Invalid benchmark: task(s) already satisfied at "
                                 f"step 0: {initially_satisfied}"
                             )
+                            run_status = "invalid"
                             break
 
                     if check_success(graph, success_condition):
@@ -949,6 +1161,7 @@ def main():
                     except Exception as e:
                         success = False
                         reason = f"Agent generation crashed: {e}"
+                        run_status = "incomplete"
                         break
 
                     if action_str == "done()":
@@ -1000,6 +1213,9 @@ def main():
                     }
                     if info and info.get("action_message"):
                         history_entry["message" if action_success else "error"] = info["action_message"]
+                    if info and info.get("error_type"):
+                        history_entry["error_type"] = info["error_type"]
+                        history_entry["temporary"] = bool(info.get("temporary"))
                     action_history.append(history_entry)
 
                     # Refresh evaluator truth immediately so the step log and
@@ -1040,6 +1256,7 @@ def main():
                     if env_done:
                         success = False
                         reason = "Environment terminated unexpectedly"
+                        run_status = "incomplete"
                         break
 
                     step_count += 1
@@ -1071,10 +1288,12 @@ def main():
             except TimeoutException as e:
                 success = False
                 reason = str(e)
+                run_status = "incomplete"
             except Exception as e:
                 signal.alarm(0)
                 success = False
                 reason = f"Exception: {e}"
+                run_status = "incomplete"
             finally:
                 # sys.stdout.close()
                 sys.stdout = old_stdout
@@ -1084,24 +1303,44 @@ def main():
             if task_tracker is None:
                 task_tracker = TaskProgressTracker(config)
             metrics = task_tracker.as_metrics()
-            if config.get("extension_type") == "multi" and success and metrics["sr"] < 1.0:
+            if len(task_tracker.tasks) > 1 and success and metrics["sr"] < 1.0:
                 success = False
                 reason = "Not all multi-task success conditions were completed"
+            event_counts = (
+                dynamic_runtime.event_counts()
+                if dynamic_runtime is not None
+                else {}
+            )
+            missing_dynamic_events = [
+                event_id
+                for event_id, counts in event_counts.items()
+                if counts.get("max_triggers") is not None
+                and counts.get("times_triggered") != counts.get("max_triggers")
+            ]
+            if success and missing_dynamic_events:
+                success = False
+                run_status = "invalid"
+                reason = (
+                    "Invalid benchmark: success before configured dynamic "
+                    f"events completed: {missing_dynamic_events}"
+                )
             metrics.update(
                 {
                     "scenario_id": scenario_id,
+                    "table_id": config.get("table_id"),
+                    "experiment_axis": config.get("experiment_axis"),
+                    "sample_id": config.get("sample_id"),
+                    "setting": config.get("setting"),
                     "extension_type": config.get("extension_type"),
                     "method": method_name,
                     "model": args.model,
                     "success": bool(success),
+                    "run_status": run_status,
+                    "valid_for_aggregation": run_status == "complete",
                     "reason": reason,
                     "steps_executed": step_count,
                     "execution_time_seconds": round(execution_time, 2),
-                    "dynamic_event_counts": (
-                        dynamic_runtime.event_counts()
-                        if dynamic_runtime is not None
-                        else {}
-                    ),
+                    "dynamic_event_counts": event_counts,
                     "dynamic_event_trace": (
                         copy.deepcopy(dynamic_runtime.trace)
                         if dynamic_runtime is not None
@@ -1115,39 +1354,37 @@ def main():
             print(f"  Time: {execution_time:.2f} seconds")
             print(
                 f"  Metrics: SR={metrics['sr']:.4f} | "
-                f"PS={metrics['ps']:.4f} | "
+                f"PS={metrics['ps'] if metrics['ps'] is not None else 'n/a'} | "
                 f"Tasks={metrics['task_completed']}/{metrics['task_total']}"
             )
 
-            dest_parent = success_dir if success else fail_dir
-            dest_folder = os.path.join(dest_parent, scenario_id)
-            os.makedirs(dest_folder, exist_ok=True)
-
-            config['evaluation_method'] = method_name
-            config['evaluation_model'] = args.model
-            config['execution_time_seconds'] = round(
-                execution_time,
-                2
+            if table1_run:
+                dest_folder = table1_result_folder(base_dir, config, method_name)
+            else:
+                dest_parent = success_dir if success else fail_dir
+                dest_folder = os.path.join(dest_parent, scenario_id)
+            write_result_artifacts(
+                dest_folder,
+                config,
+                metrics,
+                method_name,
+                args.model,
+                scenario_log_file,
             )
-            with open(os.path.join(dest_folder, 'config.json'), 'w', encoding='utf-8') as cf:
-                json.dump(config, cf, indent=4, ensure_ascii=False)
-            with open(os.path.join(dest_folder, 'metrics.json'), 'w', encoding='utf-8') as mf:
-                json.dump(metrics, mf, indent=4, ensure_ascii=False)
 
-            if os.path.exists(scenario_log_file):
-                shutil.copy(
-                    scenario_log_file,
-                    os.path.join(
-                        dest_folder,
-                        f"run_{scenario_id}.md"
-                    )
-                )
-
-            if success:
+            if run_status != "complete":
+                summary["incomplete"] += 1
+                summary["failures"].append({
+                    "scenario": scenario_id,
+                    "reason": reason,
+                    "run_status": run_status,
+                })
+            elif success:
                 summary["success"] += 1
-                fail_path = os.path.join(fail_dir, scenario_id)
-                if os.path.exists(fail_path):
-                    shutil.rmtree(fail_path, ignore_errors=True)
+                if not table1_run:
+                    fail_path = os.path.join(fail_dir, scenario_id)
+                    if os.path.exists(fail_path):
+                        shutil.rmtree(fail_path, ignore_errors=True)
             else:
                 summary["fail"] += 1
                 summary["failures"].append({"scenario": scenario_id, "reason": reason})
@@ -1162,21 +1399,30 @@ def main():
             f"Total: {summary['total']} | "
             f"Skipped: {summary['skipped']} | "
             f"✅ Success: {summary['success']} | "
-            f"❌ Fail: {summary['fail']}"
+            f"❌ Fail: {summary['fail']} | "
+            f"Incomplete/invalid: {summary['incomplete']}"
         )
         if summary["extension_metrics"]:
-            measured = summary["extension_metrics"]
-            summary["aggregate_sr"] = round(
-                sum(item["sr"] for item in measured) / len(measured),
-                4,
+            measured = [
+                item for item in summary["extension_metrics"]
+                if item.get("valid_for_aggregation", True)
+            ]
+            task_total = sum(item["task_total"] for item in measured)
+            task_completed = sum(item["task_completed"] for item in measured)
+            ps_sum = sum(item.get("ps_sum", 0) for item in measured)
+            ps_count = sum(item.get("ps_count", 0) for item in measured)
+            summary["aggregate_task_completed"] = task_completed
+            summary["aggregate_task_total"] = task_total
+            summary["aggregate_ps_count"] = ps_count
+            summary["aggregate_sr"] = (
+                round(task_completed / task_total, 4) if task_total else None
             )
-            summary["aggregate_ps"] = round(
-                sum(item["ps"] for item in measured) / len(measured),
-                4,
+            summary["aggregate_ps"] = (
+                round(ps_sum / ps_count, 4) if ps_count else None
             )
             print(
-                f"Aggregate: SR={summary['aggregate_sr']:.4f} | "
-                f"PS={summary['aggregate_ps']:.4f}"
+                f"Aggregate: SR={summary['aggregate_sr']} | "
+                f"PS={summary['aggregate_ps']}"
             )
 
         summary_suffix = (
@@ -1186,7 +1432,7 @@ def main():
         )
         summary_path = os.path.join(
             results_dir,
-            f"summary_{summary_suffix}.json",
+            f"summary_{summary_suffix}_{method_name}.json",
         )
         with open(summary_path, 'w', encoding='utf-8') as summary_file:
             json.dump(summary, summary_file, indent=4, ensure_ascii=False)

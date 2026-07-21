@@ -121,8 +121,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -133,8 +132,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -145,8 +143,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -155,9 +152,6 @@
             "target_classes": [
                 "tv"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -169,9 +163,6 @@
             "target_classes": [
                 "dishwasher"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -183,9 +174,6 @@
             "target_classes": [
                 "microwave"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -209,24 +197,21 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "dishwasher",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "microwave",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         ]
     },

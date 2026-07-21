@@ -208,12 +208,19 @@ class RoboStateAgent(BaseAgent):
         self.perception_filter = PerceptionFilter(self.llm, self.logger)
         self.llm_executor = LLMExecutor(self.llm, self.logger)
         instruction_overrides = None
-        if config.get("instruction_type") == "summarized":
+        instruction_is_preprocessed = bool(config.get("preprocessed_instruction"))
+        if (
+            config.get("instruction_type") == "summarized"
+            and not instruction_is_preprocessed
+        ):
             instruction_overrides = self._decompose_summarized_instruction(
                 goal,
                 len(config.get("tasks") or []),
             )
-        elif config.get("instruction_type") == "vague":
+        elif (
+            config.get("instruction_type") == "vague"
+            and not instruction_is_preprocessed
+        ):
             instruction_overrides = self._ground_vague_instructions(config)
         self.task_manager = MultiTaskManager(
             config,

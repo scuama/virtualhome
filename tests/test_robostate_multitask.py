@@ -11,12 +11,14 @@ from agent.robostate.loop_detector import LoopDetector
 from agent.robostate.task_manager import MultiTaskManager
 from evaluation.condition_checker import check_success
 from evaluation.generate_robostate_experiments import scene_grounding_candidates
+from evaluation.preflight_robostate_experiments import validate_static
 from evaluation.task_progress import TaskProgressTracker
 from evaluation.test_runner import (
     DynamicEventRuntime,
     apply_overrides,
     build_agent_config,
 )
+from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 
 
 def node(node_id, class_name, category="Objects", properties=None, states=None):
@@ -236,7 +238,23 @@ class IntervalDynamicEventTests(unittest.TestCase):
                 self.changed_graph = False
 
             def get_graph(self):
-                return {"nodes": [node(2, "computer", states=["ON"])], "edges": []}
+                result = {
+                    "nodes": [
+                        node(2, "computer", states=["ON"]),
+                        node(3, "computer", states=["ON"]),
+                        node(4, "computer", states=["OFF"]),
+                    ],
+                    "edges": [],
+                }
+                for item in result["nodes"]:
+                    additions = self.custom_states.get(item["id"], set())
+                    removals = self.custom_removed_states.get(item["id"], set())
+                    item["states"] = list(
+                        (set(item["states"]) - removals) | additions
+                    )
+                return result
+
+            custom_removed_states = {}
 
         env = Env()
         runtime = DynamicEventRuntime(env, [{
@@ -244,6 +262,7 @@ class IntervalDynamicEventTests(unittest.TestCase):
             "trigger": {"type": "step_interval", "interval_steps": 4, "start_step": 4},
             "effect": {
                 "type": "set_state", "target": "computer",
+                "match_states": ["ON"], "apply_to": "all_matching",
                 "add_states": ["OFF"], "remove_states": ["ON"],
             },
         }], FakeLogger())
@@ -251,10 +270,12 @@ class IntervalDynamicEventTests(unittest.TestCase):
         self.assertEqual(env.custom_states, {})
         self.assertTrue(runtime.before_step(4))
         self.assertEqual(env.custom_states[2], {"OFF"})
+        self.assertEqual(env.custom_states[3], {"OFF"})
+        self.assertNotIn(4, env.custom_states)
         self.assertFalse(runtime.before_step(4))
         self.assertEqual(runtime.event_counts()["off"]["times_triggered"], 1)
         runtime.before_step(8)
-        self.assertEqual(runtime.event_counts()["off"]["times_triggered"], 2)
+        self.assertEqual(runtime.event_counts()["off"]["times_triggered"], 1)
 
 
 class GeneratedExperimentConfigTests(unittest.TestCase):
@@ -304,19 +325,52 @@ class GeneratedExperimentConfigTests(unittest.TestCase):
                     path.name,
                 )
 
-    def test_every_task_condition_and_initializer_is_instance_bound(self):
+    def test_configs_use_semantic_matching_without_hidden_ordinals(self):
         root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
+        forbidden = {
+            "target_instance", "destination_instance", "subject_instance",
+            "object_instance", "instance_index", "instance_filter",
+        }
+
+        def mappings(value):
+            if isinstance(value, dict):
+                yield value
+                for child in value.values():
+                    yield from mappings(child)
+            elif isinstance(value, list):
+                for child in value:
+                    yield from mappings(child)
+
         for directory in ("multi", "dynamic", "semantic"):
             for path in (root / directory).glob("E_*_G*_*.json"):
                 payload = json.loads(path.read_text())
-                for task in payload["tasks"]:
-                    condition = task["success_condition"]
-                    self.assertEqual(condition.get("target_instance"), 0, path.name)
-                    if condition.get("destination_class"):
-                        self.assertEqual(condition.get("destination_instance"), 0, path.name)
-                for override in payload.get("initial_relations_override", []):
-                    if override.get("subject") != "character":
-                        self.assertEqual(override.get("subject_instance"), 0, path.name)
+                for mapping in mappings(payload):
+                    self.assertFalse(forbidden.intersection(mapping), path.name)
+
+    def test_static_preflight_accepts_all_45_configs(self):
+        self.assertEqual(len(validate_static()), 45)
+
+
+class PersistentStateOverlayTests(unittest.TestCase):
+    def test_later_action_replaces_initial_state_overlay(self):
+        class Comm:
+            def environment_graph(self):
+                return True, {
+                    "nodes": [node(2, "dishwasher", states=["CLOSED"])],
+                    "edges": [],
+                }
+
+        env = UnityEnvironment.__new__(UnityEnvironment)
+        env.comm = Comm()
+        env.changed_graph = True
+        env.custom_states = {}
+        env.custom_removed_states = {}
+        env.set_state_override(2, ["CLOSED"], ["OPEN"])
+        self.assertIn("CLOSED", env.get_graph()["nodes"][0]["states"])
+        env.set_state_override(2, ["OPEN"], ["CLOSED"])
+        states = set(env.get_graph()["nodes"][0]["states"])
+        self.assertIn("OPEN", states)
+        self.assertNotIn("CLOSED", states)
 
 
 class ProtocolIsolationTests(unittest.TestCase):

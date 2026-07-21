@@ -123,8 +123,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -134,9 +133,7 @@
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -146,9 +143,7 @@
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -158,9 +153,7 @@
                 "target_class": "folder",
                 "relation": "INSIDE",
                 "destination_class": "closet",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -170,9 +163,7 @@
                 "target_class": "plate",
                 "relation": "INSIDE",
                 "destination_class": "dishwasher",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -186,10 +177,7 @@
             ],
             "remove_states": [
                 "CLOSED"
-            ],
-            "instance_filter": {
-                "index": 0
-            }
+            ]
         },
         {
             "target_classes": [
@@ -200,18 +188,12 @@
             ],
             "remove_states": [
                 "CLOSED"
-            ],
-            "instance_filter": {
-                "index": 0
-            }
+            ]
         },
         {
             "target_classes": [
                 "computer"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -230,29 +212,25 @@
             "subject": "book",
             "relation": "ON",
             "object": "coffeetable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "mug",
             "relation": "ON",
             "object": "kitchentable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "folder",
             "relation": "ON",
             "object": "desk",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "plate",
             "relation": "ON",
             "object": "kitchencounter",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         }
     ],
     "success_condition": {
@@ -263,40 +241,31 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "folder",
                 "relation": "INSIDE",
                 "destination_class": "closet",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "plate",
                 "relation": "INSIDE",
                 "destination_class": "dishwasher",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         ]
     },

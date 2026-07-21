@@ -123,8 +123,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -134,9 +133,7 @@
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -146,9 +143,7 @@
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -158,9 +153,7 @@
                 "target_class": "towel",
                 "relation": "INSIDE",
                 "destination_class": "dishwasher",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -171,8 +164,7 @@
                 "states": [
                     "CLOSED"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -186,18 +178,12 @@
             ],
             "remove_states": [
                 "CLOSED"
-            ],
-            "instance_filter": {
-                "index": 0
-            }
+            ]
         },
         {
             "target_classes": [
                 "computer"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -209,9 +195,6 @@
             "target_classes": [
                 "cabinet"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OPEN"
             ],
@@ -230,22 +213,19 @@
             "subject": "book",
             "relation": "ON",
             "object": "coffeetable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "mug",
             "relation": "ON",
             "object": "kitchentable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "towel",
             "relation": "ON",
             "object": "bathroomcounter",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         }
     ],
     "success_condition": {
@@ -256,40 +236,32 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "mug",
                 "relation": "ON",
                 "destination_class": "coffeetable",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "towel",
                 "relation": "INSIDE",
                 "destination_class": "dishwasher",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "cabinet",
                 "states": [
                     "CLOSED"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         ]
     },

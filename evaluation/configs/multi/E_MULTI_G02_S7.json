@@ -125,8 +125,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -137,8 +136,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -149,8 +147,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -161,8 +158,7 @@
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -173,8 +169,7 @@
                 "states": [
                     "CLOSED"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -185,8 +180,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -197,8 +191,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -207,9 +200,6 @@
             "target_classes": [
                 "tv"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -221,9 +211,6 @@
             "target_classes": [
                 "dishwasher"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -235,9 +222,6 @@
             "target_classes": [
                 "microwave"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -249,9 +233,6 @@
             "target_classes": [
                 "stove"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "CLOSED"
             ],
@@ -263,9 +244,6 @@
             "target_classes": [
                 "cabinet"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OPEN"
             ],
@@ -277,9 +255,6 @@
             "target_classes": [
                 "stove"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -291,9 +266,6 @@
             "target_classes": [
                 "radio"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -317,56 +289,49 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "dishwasher",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "microwave",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "stove",
                 "states": [
                     "OPEN"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "cabinet",
                 "states": [
                     "CLOSED"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "stove",
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "radio",
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         ]
     },

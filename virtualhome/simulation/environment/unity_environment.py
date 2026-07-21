@@ -329,11 +329,13 @@ class UnityEnvironment(BaseEnvironment):
                                     self.custom_states[obj_id] = set()
                                 
                                 if '[plugin]' in action_str:
-                                    self.custom_states[obj_id].add('PLUGGED_IN')
-                                    self.custom_states[obj_id].discard('PLUGGED_OUT')
+                                    self.set_state_override(
+                                        obj_id, ['PLUGGED_IN'], ['PLUGGED_OUT']
+                                    )
                                 else:
-                                    self.custom_states[obj_id].add('PLUGGED_OUT')
-                                    self.custom_states[obj_id].discard('PLUGGED_IN')
+                                    self.set_state_override(
+                                        obj_id, ['PLUGGED_OUT'], ['PLUGGED_IN']
+                                    )
                                 self.changed_graph = True
                             else:
                                 # For switchon/switchoff, pass to Unity for visual effect
@@ -359,11 +361,13 @@ class UnityEnvironment(BaseEnvironment):
                                 if obj_id not in self.custom_states:
                                     self.custom_states[obj_id] = set()
                                 if '[switchon]' in action_str:
-                                    self.custom_states[obj_id].add('ON')
-                                    self.custom_states[obj_id].discard('OFF')
+                                    self.set_state_override(
+                                        obj_id, ['ON'], ['OFF']
+                                    )
                                 elif '[switchoff]' in action_str:
-                                    self.custom_states[obj_id].add('OFF')
-                                    self.custom_states[obj_id].discard('ON')
+                                    self.set_state_override(
+                                        obj_id, ['OFF'], ['ON']
+                                    )
                                 self.changed_graph = True
                     else:
                         success = False
@@ -386,6 +390,14 @@ class UnityEnvironment(BaseEnvironment):
             if not success:
                 print(message)
             else:
+                if '[open]' in action_str or '[close]' in action_str:
+                    ids = re.findall(r'\(\s*(\d+)\s*\)', action_str)
+                    if ids:
+                        desired = 'OPEN' if '[open]' in action_str else 'CLOSED'
+                        opposite = 'CLOSED' if desired == 'OPEN' else 'OPEN'
+                        self.set_state_override(
+                            int(ids[0]), [desired], [opposite]
+                        )
                 self.changed_graph = True
 
             # --- DYNAMIC EVENTS ENGINE ---
@@ -476,6 +488,7 @@ class UnityEnvironment(BaseEnvironment):
         self.env_id = environment_id
         print("Resetting env", self.env_id)
         self.custom_states = {}
+        self.custom_removed_states = {}
 
         if self.env_id is not None:
             self.comm.reset(self.env_id)
@@ -527,9 +540,29 @@ class UnityEnvironment(BaseEnvironment):
         self.prev_reward = 0.
         return obs
 
+    def set_state_override(self, object_id, add_states=None, remove_states=None):
+        """Persist evaluator/runtime state changes above Unity's raw graph."""
+        if getattr(self, 'custom_states', None) is None:
+            self.custom_states = {}
+        if getattr(self, 'custom_removed_states', None) is None:
+            self.custom_removed_states = {}
+
+        object_id = int(object_id)
+        additions = {str(state).upper() for state in (add_states or [])}
+        removals = {str(state).upper() for state in (remove_states or [])}
+        stored_additions = self.custom_states.setdefault(object_id, set())
+        stored_removals = self.custom_removed_states.setdefault(object_id, set())
+        stored_additions.difference_update(removals)
+        stored_additions.update(additions)
+        stored_removals.difference_update(additions)
+        stored_removals.update(removals)
+        self.changed_graph = True
+
     def get_graph(self):
         if getattr(self, 'custom_states', None) is None:
             self.custom_states = {}
+        if getattr(self, 'custom_removed_states', None) is None:
+            self.custom_removed_states = {}
             
         if self.changed_graph:
             s, raw_graph = self.comm.environment_graph()
@@ -600,22 +633,25 @@ class UnityEnvironment(BaseEnvironment):
             # Merge custom states back into the graph natively
             for node in graph.get('nodes', []):
                 nid = node['id']
-                if nid in self.custom_states:
+                if nid in self.custom_states or nid in self.custom_removed_states:
                     current_states = set(node.get('states', []))
+                    current_states.difference_update(
+                        self.custom_removed_states.get(nid, set())
+                    )
                     mutually_exclusive = {
                         'ON': 'OFF', 'OFF': 'ON',
                         'OPEN': 'CLOSED', 'CLOSED': 'OPEN',
                         'PLUGGED_IN': 'PLUGGED_OUT',
                         'PLUGGED_OUT': 'PLUGGED_IN',
                     }
-                    for custom_state in self.custom_states[nid]:
+                    for custom_state in self.custom_states.get(nid, set()):
                         opposite = mutually_exclusive.get(custom_state)
                         if opposite:
                             current_states.discard(opposite)
-                    current_states.update(self.custom_states[nid])
-                    if 'COLD' in current_states and 'HOT' in self.custom_states[nid]:
+                    current_states.update(self.custom_states.get(nid, set()))
+                    if 'COLD' in current_states and 'HOT' in self.custom_states.get(nid, set()):
                         current_states.discard('COLD') # Heating overrides
-                    elif 'HOT' in current_states and 'COLD' in self.custom_states[nid]:
+                    elif 'HOT' in current_states and 'COLD' in self.custom_states.get(nid, set()):
                         current_states.discard('HOT') # Cooling overrides
                     node['states'] = list(current_states)
             # ==========================================

@@ -80,9 +80,10 @@ class TaskProgressTracker:
         first_steps = [
             task["first_satisfied_step"]
             for task in self.tasks
-            if task["first_satisfied_step"] is not None
+            if task["currently_satisfied"]
+            and task["first_satisfied_step"] is not None
         ]
-        mean_completion_step = (
+        ps = (
             round(sum(first_steps) / len(first_steps), 4)
             if first_steps
             else None
@@ -98,9 +99,11 @@ class TaskProgressTracker:
         return {
             "task_total": total,
             "task_completed": completed,
-            # Retained for old consumers; raw counts above remain authoritative.
-            "sr": 1.0 if total and completed == total else 0.0,
-            "ps": round(completed / total, 4) if total else 0.0,
-            "mean_completion_step": mean_completion_step,
+            "sr": round(completed / total, 4) if total else 0.0,
+            "ps": ps,
+            "ps_sum": sum(first_steps),
+            "ps_count": len(first_steps),
+            # Compatibility alias for existing local result readers.
+            "mean_completion_step": ps,
             "tasks": task_records,
         }

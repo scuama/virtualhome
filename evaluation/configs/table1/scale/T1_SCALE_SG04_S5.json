@@ -1,0 +1,212 @@
+{
+  "scenario_id": "T1_SCALE_SG04_S5",
+  "extension_type": "table1_scale",
+  "table_id": "table1",
+  "experiment_axis": "scale",
+  "sample_id": "S-G04",
+  "setting": "S5",
+  "single_run": true,
+  "source_scenarios": [
+    "G1_04",
+    "E1_01",
+    "E1_03",
+    "E1_11",
+    "E1_07"
+  ],
+  "instruction_scale": 5,
+  "instruction_type": "sentence_wise",
+  "environment_id": 0,
+  "goal_instruction": "1. If the light is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. The mug should always be on the coffeetable.",
+  "tasks": [
+    {
+      "task_id": "G1_04",
+      "instruction": "If the light is on, turn it off.",
+      "source_scenario": "G1_04",
+      "success_condition": {
+        "target_class": "tablelamp",
+        "states": [
+          "OFF"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      }
+    },
+    {
+      "task_id": "E1_01",
+      "instruction": "If no one is watching the TV, turn it on.",
+      "source_scenario": "E1_01",
+      "success_condition": {
+        "target_class": "tv",
+        "states": [
+          "ON"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      }
+    },
+    {
+      "task_id": "E1_03",
+      "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+      "source_scenario": "E1_03",
+      "success_condition": {
+        "target_class": "book",
+        "relation": "ON",
+        "destination_class": "sofa",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+      }
+    },
+    {
+      "task_id": "E1_11",
+      "instruction": "If your computer stays off, turn it on.",
+      "source_scenario": "E1_11",
+      "success_condition": {
+        "target_class": "computer",
+        "states": [
+          "ON"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      }
+    },
+    {
+      "task_id": "E1_07",
+      "instruction": "The mug should always be on the coffeetable.",
+      "source_scenario": "E1_07",
+      "success_condition": {
+        "target_class": "mug",
+        "relation": "ON",
+        "destination_class": "coffeetable",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+      }
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "tablelamp"
+      ],
+      "add_states": [
+        "ON"
+      ],
+      "instance_filter": {
+        "index": 0
+      }
+    },
+    {
+      "target_classes": [
+        "tablelamp"
+      ],
+      "instance_filter": {
+        "index": 0
+      },
+      "add_states": [
+        "ON"
+      ],
+      "remove_states": [
+        "OFF"
+      ]
+    },
+    {
+      "target_classes": [
+        "tv"
+      ],
+      "instance_filter": {
+        "index": 0
+      },
+      "add_states": [
+        "OFF"
+      ],
+      "remove_states": [
+        "ON"
+      ]
+    },
+    {
+      "target_classes": [
+        "computer"
+      ],
+      "instance_filter": {
+        "index": 0
+      },
+      "add_states": [
+        "OFF"
+      ],
+      "remove_states": [
+        "ON"
+      ]
+    }
+  ],
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "bedroom",
+      "object_instance": 0
+    },
+    {
+      "subject": "book",
+      "relation": "ON",
+      "object": "coffeetable",
+      "count": 1,
+      "subject_instance": 0,
+      "object_instance": 0
+    },
+    {
+      "subject": "mug",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1,
+      "subject_instance": 0,
+      "object_instance": 0
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "target_class": "tablelamp",
+        "states": [
+          "OFF"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      },
+      {
+        "target_class": "tv",
+        "states": [
+          "ON"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      },
+      {
+        "target_class": "book",
+        "relation": "ON",
+        "destination_class": "sofa",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+      },
+      {
+        "target_class": "computer",
+        "states": [
+          "ON"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+      },
+      {
+        "target_class": "mug",
+        "relation": "ON",
+        "destination_class": "coffeetable",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+      }
+    ]
+  },
+  "max_steps": 75
+}

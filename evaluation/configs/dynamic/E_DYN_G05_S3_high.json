@@ -121,8 +121,7 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -132,9 +131,7 @@
                 "target_class": "apple",
                 "relation": "ON",
                 "destination_class": "desk",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         },
         {
@@ -144,9 +141,7 @@
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         }
     ],
@@ -155,9 +150,6 @@
             "target_classes": [
                 "microwave"
             ],
-            "instance_filter": {
-                "index": 0
-            },
             "add_states": [
                 "OFF"
             ],
@@ -176,15 +168,13 @@
             "subject": "apple",
             "relation": "ON",
             "object": "kitchentable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         },
         {
             "subject": "book",
             "relation": "ON",
             "object": "coffeetable",
-            "count": 1,
-            "subject_instance": 0
+            "count": 1
         }
     ],
     "success_condition": {
@@ -195,24 +185,19 @@
                 "states": [
                     "ON"
                 ],
-                "min_count": 1,
-                "target_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "apple",
                 "relation": "ON",
                 "destination_class": "desk",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             },
             {
                 "target_class": "book",
                 "relation": "ON",
                 "destination_class": "sofa",
-                "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "min_count": 1
             }
         ]
     },
@@ -229,7 +214,10 @@
             "effect": {
                 "type": "set_state",
                 "target": "microwave",
-                "instance_index": 0,
+                "match_states": [
+                    "ON"
+                ],
+                "apply_to": "all_matching",
                 "add_states": [
                     "OFF"
                 ],
