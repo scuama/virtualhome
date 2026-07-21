@@ -6,8 +6,8 @@ Table 1 is a single-run benchmark generated from the checked-in source JSON.
 ## Generate and validate
 
 ```bash
-./venv/bin/python evaluation/generate_table1_experiments.py
-PYTHONPATH=. ./venv/bin/python -m evaluation.validate_table1
+./venv/bin/python evaluation/table1_configs.py generate
+./venv/bin/python evaluation/table1_configs.py validate
 ```
 
 The generator writes 57 configs and
@@ -20,7 +20,7 @@ The generator writes 57 configs and
 To validate initialization against Unity without calling an LLM:
 
 ```bash
-PYTHONPATH=. ./venv/bin/python -m evaluation.validate_table1 --unity
+./venv/bin/python evaluation/table1_configs.py validate --unity
 ```
 
 Use `--target` followed by scenario ID prefixes to validate a smoke subset.
@@ -32,15 +32,15 @@ Run axes in the planned order. The runner starts in the background unless
 
 ```bash
 ./venv/bin/python evaluation/test_runner.py \
-  --table1-axis scale \
+  evaluation/configs/table1/scale \
   --method robostate saycan llm_planner exrap flare
 
 ./venv/bin/python evaluation/test_runner.py \
-  --table1-axis instruction_type \
+  evaluation/configs/table1/instruction_type \
   --method robostate saycan llm_planner exrap flare
 
 ./venv/bin/python evaluation/test_runner.py \
-  --table1-axis dynamic_difficulty \
+  evaluation/configs/table1/dynamic \
   --method robostate saycan llm_planner exrap flare
 ```
 

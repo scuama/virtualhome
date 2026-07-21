@@ -1,0 +1,259 @@
+{
+    "table_id": "table2",
+    "scenario_id": "E_MULTI_G05_S5",
+    "extension_type": "multi",
+    "experiment_axis": "scale",
+    "group_id": "G05",
+    "source_scenarios": [
+        "E1_19",
+        "E1_02",
+        "E1_03",
+        "E1_04",
+        "E1_07"
+    ],
+    "instruction_scale": 5,
+    "instruction_type": "sentence_wise",
+    "environment_id": 1,
+    "grounding_candidates": [
+        "apple",
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bed",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "chair",
+        "chicken",
+        "chips",
+        "chocolatesyrup",
+        "closet",
+        "clothespants",
+        "clothespile",
+        "clothesshirt",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentshaker",
+        "cookingpot",
+        "cpuscreen",
+        "creamybuns",
+        "curtains",
+        "cutleryknife",
+        "cutlets",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwasher",
+        "dishwashingliquid",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "hanger",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "knifeblock",
+        "lightswitch",
+        "lime",
+        "microwave",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "paper",
+        "papertray",
+        "peach",
+        "photoframe",
+        "pillow",
+        "plate",
+        "plum",
+        "poundcake",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "sink",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toiletpaper",
+        "toothbrush",
+        "toothpaste",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "washingmachine",
+        "waterglass",
+        "window"
+    ],
+    "goal_instruction": "1. If your microwave is off, turn it on.\n2. If you have an apple somewhere, bring it to your desk.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. The dishwasher must always be open to dry the dishwasher.\n5. The mug should always be on the coffeetable.",
+    "tasks": [
+        {
+            "task_id": "E1_19",
+            "instruction": "If your microwave is off, turn it on.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_02",
+            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "success_condition": {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_04",
+            "instruction": "The dishwasher must always be open to dry the dishwasher.",
+            "success_condition": {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "microwave"
+            ],
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "dishwasher"
+            ],
+            "add_states": [
+                "CLOSED"
+            ],
+            "remove_states": [
+                "OPEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "microwave",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1
+            },
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            }
+        ]
+    },
+    "max_steps": 75
+}

@@ -66,7 +66,9 @@ AGENT_REGISTRY = {
 
 在终端中执行：
 ```bash
-python evaluation/test_runner.py E1_01 --method my_custom --force
+python evaluation/test_runner.py \
+  evaluation/configs/source_tasks/exrap/E1_01.json \
+  --method my_custom --force
 ```
 
 - `E1_01`: 测试场景的 ID（也可以传入配置文件的完整路径）。

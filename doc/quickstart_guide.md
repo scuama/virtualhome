@@ -34,26 +34,28 @@
 - 📖 [Unity 引擎连接与通讯最佳实践](file:///mnt/disk1/decom/virtualhome/doc/unity_connection_guide.md)：这篇文档包含了启动引擎的 Bash 命令（使用 `xvfb-run`）以及排障方法。请在运行任何 Python 测试前，确保 8080 端口存活。
 
 ### 2.2 启动自动化测试 (Client)
-引擎就绪后，您可以调用测试运行器。主入口脚本为 `agent/test_runner.py`。
+引擎就绪后，您可以调用测试运行器。主入口脚本为
+`evaluation/test_runner.py`。
 
 - **运行指定的单个用例**：
   ```bash
-  # 指定前缀或具体的 ID
-  python3 agent/test_runner.py M1_01
-  python3 agent/test_runner.py P3_12
+  python3 evaluation/test_runner.py \
+    evaluation/configs/source_tasks/m_class/M1_01.json
+  python3 evaluation/test_runner.py \
+    evaluation/configs/source_tasks/p_class/P3_12.json
   ```
 
 - **批量运行**：
   ```bash
   # 运行所有 G 系列
-  python3 agent/test_runner.py G
-  # 运行所有配置
-  python3 agent/test_runner.py
+  python3 evaluation/test_runner.py evaluation/configs/source_tasks/g_class
+  # 运行完整 Table 2（递归读取三个实验轴，共 45 个配置）
+  python3 evaluation/test_runner.py evaluation/configs/table2
   ```
 
 **运行状态监控**：测试命令执行后会进入后台并提示您查看日志文件。使用以下命令可以实时查看 Agent 执行进度：
 ```bash
-tail -f agent/logs/test_runner.log
+tail -f evaluation/test_runner.log
 ```
 
 ---

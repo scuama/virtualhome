@@ -9,10 +9,12 @@ from agent.robostate.action_validator import ActionValidator
 from agent.robostate.exploration import RoomFrontierExplorer
 from agent.robostate.loop_detector import LoopDetector
 from agent.robostate.task_manager import MultiTaskManager
-from evaluation.condition_checker import check_success
-from evaluation.generate_robostate_experiments import scene_grounding_candidates
-from evaluation.preflight_robostate_experiments import validate_static
-from evaluation.task_progress import TaskProgressTracker
+from evaluation.runtime import (
+    TaskProgressTracker,
+    check_success,
+    resolve_config_paths,
+)
+from evaluation.table2_configs import scene_grounding_candidates, validate_static
 from evaluation.test_runner import (
     DynamicEventRuntime,
     apply_overrides,
@@ -279,12 +281,14 @@ class IntervalDynamicEventTests(unittest.TestCase):
 
 
 class GeneratedExperimentConfigTests(unittest.TestCase):
+    AXIS_DIRS = ("scale", "non_stationarity", "instruction_type")
+
     def test_five_groups_cover_all_three_experiment_axes(self):
         root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
         expected = {"scale": 15, "non_stationarity": 15, "instruction_type": 15}
         observed = {key: [] for key in expected}
-        for directory in ("multi", "dynamic", "semantic"):
-            for path in (root / directory).glob("E_*_G*_*.json"):
+        for directory in self.AXIS_DIRS:
+            for path in (root / "table2" / directory).glob("*.json"):
                 payload = json.loads(path.read_text())
                 axis = payload.get("experiment_axis")
                 if axis in observed:
@@ -307,7 +311,10 @@ class GeneratedExperimentConfigTests(unittest.TestCase):
             self.assertEqual(scales[7][:5], scales[5])
 
     def test_vague_candidates_are_complete_scene_catalogs(self):
-        root = Path(__file__).resolve().parents[1] / "evaluation" / "configs" / "semantic"
+        root = (
+            Path(__file__).resolve().parents[1]
+            / "evaluation" / "configs" / "table2" / "instruction_type"
+        )
         for path in root.glob("E_SEM_G*_S3_vague.json"):
             payload = json.loads(path.read_text())
             expected = scene_grounding_candidates(payload["environment_id"])
@@ -316,8 +323,8 @@ class GeneratedExperimentConfigTests(unittest.TestCase):
 
     def test_every_extension_config_uses_the_complete_scene_catalog(self):
         root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
-        for directory in ("multi", "dynamic", "semantic"):
-            for path in (root / directory).glob("E_*_G*_*.json"):
+        for directory in self.AXIS_DIRS:
+            for path in (root / "table2" / directory).glob("*.json"):
                 payload = json.loads(path.read_text())
                 self.assertEqual(
                     payload["grounding_candidates"],
@@ -341,14 +348,40 @@ class GeneratedExperimentConfigTests(unittest.TestCase):
                 for child in value:
                     yield from mappings(child)
 
-        for directory in ("multi", "dynamic", "semantic"):
-            for path in (root / directory).glob("E_*_G*_*.json"):
+        for directory in self.AXIS_DIRS:
+            for path in (root / "table2" / directory).glob("*.json"):
                 payload = json.loads(path.read_text())
                 for mapping in mappings(payload):
                     self.assertFalse(forbidden.intersection(mapping), path.name)
 
     def test_static_preflight_accepts_all_45_configs(self):
         self.assertEqual(len(validate_static()), 45)
+
+
+class ConfigResolverTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[1] / "evaluation" / "configs"
+
+    def test_directory_counts_match_named_suites(self):
+        self.assertEqual(len(resolve_config_paths([self.root / "table1"])), 57)
+        self.assertEqual(len(resolve_config_paths([self.root / "table2"])), 45)
+        self.assertEqual(
+            len(resolve_config_paths([self.root / "source_tasks"])), 79
+        )
+
+    def test_single_file_and_overlapping_directory_are_deduplicated(self):
+        config = self.root / "table2" / "scale" / "E_MULTI_G01_S3.json"
+        resolved = resolve_config_paths([config, config.parent])
+        self.assertEqual(len(resolved), 15)
+        self.assertEqual(
+            sum(item[0] == "E_MULTI_G01_S3" for item in resolved), 1
+        )
+
+    def test_explicit_manifest_is_rejected_as_non_runnable(self):
+        manifest = self.root / "table1" / "manifest.json"
+        with self.assertRaisesRegex(ValueError, "Not a runnable"):
+            resolve_config_paths([manifest])
 
 
 class PersistentStateOverlayTests(unittest.TestCase):

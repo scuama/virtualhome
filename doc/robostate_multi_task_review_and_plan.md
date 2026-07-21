@@ -443,7 +443,7 @@ env_info["task_progress"] = [
 
 - `evaluation/config_selector.py`
 - `evaluation/initialization.py`
-- `evaluation/task_progress.py`
+- `evaluation/runtime.py`（条件检查、配置解析和任务进度）
 - `evaluation/dynamic_runtime.py`
 - `evaluation/action_validator.py`
 - `evaluation/result_recorder.py`

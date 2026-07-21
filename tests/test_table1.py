@@ -5,8 +5,8 @@ import tempfile
 import unittest
 
 from evaluation.aggregate_table1 import aggregate
-from evaluation.condition_checker import check_success
-from evaluation.generate_table1_experiments import (
+from evaluation.runtime import TaskProgressTracker, check_success
+from evaluation.table1_configs import (
     DIFFICULTY_TRIGGERS,
     DYNAMIC_SAMPLES,
     INSTRUCTION_SAMPLES,
@@ -15,7 +15,6 @@ from evaluation.generate_table1_experiments import (
     read_source,
     validate,
 )
-from evaluation.task_progress import TaskProgressTracker
 from evaluation.test_runner import DynamicEventRuntime, build_agent_config
 
 

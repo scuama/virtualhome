@@ -1,6 +1,5 @@
 import os
 import json
-import glob
 import shutil
 import argparse
 import traceback
@@ -11,7 +10,11 @@ import sys
 import signal
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from evaluation.task_progress import TaskProgressTracker
+from evaluation.runtime import (
+    TaskProgressTracker,
+    check_success,
+    resolve_config_paths,
+)
 
 class Logger:
     def __init__(self, filename):
@@ -685,8 +688,11 @@ def ensure_unity_running(unity_path, force_restart=False):
 
 def main():
     parser = argparse.ArgumentParser(description='VirtualHome E2E Test Runner')
-    parser.add_argument('target', type=str, nargs='*', default=[],
-                        help='Target scenario IDs or prefixes (e.g. P3 P3_12). Leave empty for all.')
+    parser.add_argument(
+        'config_paths',
+        nargs='+',
+        help='One or more config JSON files or directories (searched recursively).',
+    )
     # ===================== 新增 --method 参数 =====================
     parser.add_argument(
         '--method',
@@ -713,62 +719,29 @@ def main():
         default='/Users/rushy/program/virtualhome/virtualhome/simulation/unity_simulator/macos_exec.v2.3.0.app/Contents/MacOS/VirtualHome',
         help='Path to Unity executable'
     )
-    extension_group = parser.add_mutually_exclusive_group()
-    extension_group.add_argument('--scale', action='store_true',
-                                 help='Run all RoboState scale configs (3, 5, 7)')
-    extension_group.add_argument(
-        '--instruction-type', action='store_true',
-        help='Run all S3 instruction-type configs'
-    )
-    extension_group.add_argument(
-        '--non-stationarity', action='store_true',
-        help='Run all S3 non-stationarity configs'
-    )
-    extension_group.add_argument(
-        '--all-extensions', action='store_true',
-        help='Run all 45 RoboState extension configs'
-    )
-    extension_group.add_argument(
-        '--table1-axis',
-        choices=['scale', 'instruction_type', 'dynamic_difficulty', 'all'],
-        help='Run Table 1 configs for one axis, or all 57 configs'
-    )
-    parser.add_argument(
-        '--table1-manifest',
-        default=None,
-        help='Optional Table 1 manifest path (defaults to configs/table1/manifest.json)'
-    )
-    # ============================================================
     parser.add_argument('--daemon', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
 
     base_dir = os.path.dirname(__file__)
-    configs_dir = os.path.join(base_dir, 'configs')
+    config_inputs = [
+        os.path.abspath(os.path.expanduser(path)) for path in args.config_paths
+    ]
+    try:
+        all_configs = resolve_config_paths(config_inputs)
+    except ValueError as exc:
+        parser.error(str(exc))
 
     log_path = os.path.join(base_dir, 'test_runner.log')
     if not args.daemon:
         import subprocess
         cmd = [sys.executable, __file__]
-        if args.target:
-            cmd.extend(args.target)
+        cmd.extend(config_inputs)
         cmd.append("--daemon")
         # 传递 method 参数到子进程
         cmd.append("--method")
         cmd.extend(args.method)
         cmd.extend(["--model", args.model])
         cmd.extend(["--unity-path", args.unity_path])
-        if args.all_extensions:
-            cmd.append("--all-extensions")
-        elif args.scale:
-            cmd.append("--scale")
-        elif args.instruction_type:
-            cmd.append("--instruction-type")
-        elif args.non_stationarity:
-            cmd.append("--non-stationarity")
-        elif args.table1_axis:
-            cmd.extend(["--table1-axis", args.table1_axis])
-            if args.table1_manifest:
-                cmd.extend(["--table1-manifest", args.table1_manifest])
         if args.force:
             cmd.append("--force")
         
@@ -793,83 +766,6 @@ def main():
     sys.stdout = Logger(log_path)
     sys.stderr = sys.stdout
 
-    # Gather configs. Extension suites are intentionally mutually exclusive;
-    # without an extension selector, preserve the legacy dataset behavior.
-    all_configs = []
-    selected_extension = None
-    selected_value = "all"
-    if args.table1_axis:
-        manifest_path = args.table1_manifest or os.path.join(
-            configs_dir, 'table1', 'manifest.json'
-        )
-        with open(manifest_path, 'r', encoding='utf-8') as manifest_file:
-            table1_manifest = json.load(manifest_file)
-        if table1_manifest.get('table_id') != 'table1':
-            raise RuntimeError(f"Not a Table 1 manifest: {manifest_path}")
-        selected_extension = 'table1'
-        selected_value = args.table1_axis
-        evaluation_dir = os.path.dirname(configs_dir)
-        for entry in table1_manifest.get('configs', []):
-            axis = entry.get('experiment_axis')
-            if args.table1_axis != 'all' and axis != args.table1_axis:
-                continue
-            config_path = entry.get('config_path', '')
-            if not os.path.isabs(config_path):
-                # Manifest paths are relative to evaluation/, not to manifest/.
-                config_path = os.path.join(evaluation_dir, config_path)
-            scenario_id = entry.get('scenario_id')
-            if args.target and not scenario_id.startswith(tuple(args.target)):
-                continue
-            all_configs.append((scenario_id, config_path, copy.deepcopy(entry)))
-        selected_dirs = []
-    elif args.all_extensions:
-        selected_dirs = ['multi', 'semantic', 'dynamic']
-        selected_extension = 'all_extensions'
-    elif args.scale:
-        selected_dirs = ['multi']
-        selected_extension = 'scale'
-    elif args.instruction_type:
-        selected_dirs = ['semantic']
-        selected_extension = 'instruction_type'
-    elif args.non_stationarity:
-        selected_dirs = ['dynamic']
-        selected_extension = 'non_stationarity'
-    else:
-        selected_dirs = ['g_class', 'm_class', 'p_class', 'ExRAP']
-
-    for cls_dir in selected_dirs:
-        target_dir = os.path.join(configs_dir, cls_dir)
-        if os.path.exists(target_dir):
-            for path in glob.glob(os.path.join(target_dir, '*.json')):
-                with open(path, 'r', encoding='utf-8') as config_file:
-                    config_metadata = json.load(config_file)
-                scenario_id = config_metadata.get(
-                    'scenario_id',
-                    os.path.splitext(os.path.basename(path))[0]
-                )
-                if selected_extension == 'all_extensions':
-                    matches_extension = config_metadata.get('experiment_axis') in {
-                        'scale', 'instruction_type', 'non_stationarity'
-                    }
-                elif selected_extension:
-                    matches_extension = (
-                        config_metadata.get('experiment_axis') == selected_extension
-                    )
-                else:
-                    matches_extension = True
-                if not matches_extension:
-                    continue
-                if args.target and not scenario_id.startswith(tuple(args.target)):
-                    continue
-                all_configs.append((scenario_id, path, config_metadata))
-    all_configs = sorted(all_configs)
-
-    if selected_extension and not all_configs:
-        raise RuntimeError(
-            f"No configs matched extension={selected_extension!r}, "
-            f"value={selected_value!r}, targets={args.target!r}."
-        )
-
     # Init engine
     ensure_unity_running(args.unity_path)
     env = UnityEnvironment(
@@ -880,19 +776,15 @@ def main():
     reset_environment_runtime(env)
 
     for method_name in args.method:
-        table1_run = selected_extension == 'table1'
-        if table1_run:
-            results_dir = os.path.join(base_dir, 'results', 'table1')
-            success_dir = None
-            fail_dir = None
-            raw_logs_dir = os.path.join(results_dir, '_raw', method_name)
-        else:
-            results_dir = os.path.join(base_dir, 'results', method_name)
-            success_dir = os.path.join(results_dir, 'success')
-            fail_dir = os.path.join(results_dir, 'fail')
-            os.makedirs(success_dir, exist_ok=True)
-            os.makedirs(fail_dir, exist_ok=True)
-        os.makedirs(raw_logs_dir, exist_ok=True)
+        results_dir = os.path.join(base_dir, 'results', method_name)
+        success_dir = os.path.join(results_dir, 'success')
+        fail_dir = os.path.join(results_dir, 'fail')
+        standard_raw_logs_dir = os.path.join(results_dir, 'raw')
+        table1_raw_logs_dir = os.path.join(
+            base_dir, 'results', 'table1', '_raw', method_name
+        )
+        os.makedirs(success_dir, exist_ok=True)
+        os.makedirs(fail_dir, exist_ok=True)
         
         
 
@@ -917,6 +809,11 @@ def main():
         for scenario_id, config_path, _config_metadata in all_configs:
             with open(config_path, 'r', encoding='utf-8') as f:
                 config = json.load(f)
+            table1_run = config.get('table_id') == 'table1'
+            raw_logs_dir = (
+                table1_raw_logs_dir if table1_run else standard_raw_logs_dir
+            )
+            os.makedirs(raw_logs_dir, exist_ok=True)
 
             if table1_run:
                 configured_result_folder = table1_result_folder(
@@ -1072,7 +969,6 @@ def main():
                 signal.signal(signal.SIGALRM, timeout_handler)
                 signal.alarm(timeout_seconds)
 
-                from evaluation.condition_checker import check_success
                 from agent.utils.logger import AgentLogger
 
                 logger = AgentLogger(
@@ -1425,14 +1321,9 @@ def main():
                 f"PS={summary['aggregate_ps']}"
             )
 
-        summary_suffix = (
-            f"{selected_extension}_{selected_value}"
-            if selected_extension
-            else "legacy"
-        )
         summary_path = os.path.join(
             results_dir,
-            f"summary_{summary_suffix}_{method_name}.json",
+            f"summary_run_{method_name}.json",
         )
         with open(summary_path, 'w', encoding='utf-8') as summary_file:
             json.dump(summary, summary_file, indent=4, ensure_ascii=False)
