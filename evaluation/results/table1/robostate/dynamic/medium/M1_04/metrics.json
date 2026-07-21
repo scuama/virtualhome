@@ -8,12 +8,12 @@
     "mean_completion_step": null,
     "tasks": [
         {
-            "task_id": "E1_15",
-            "instruction": "Put the folder in the closet.",
+            "task_id": "M1_04",
+            "instruction": "If there is a pillow on the sofa, please bring me one.",
             "success_condition": {
-                "target_class": "folder",
-                "relation": "INSIDE",
-                "destination_class": "closet",
+                "target_class": "character",
+                "destination_class": "pillow",
+                "relation": "HOLDS_RH|HOLDS_LH",
                 "min_count": 1,
                 "target_instance": 0,
                 "destination_instance": 0
@@ -25,10 +25,10 @@
             "completion_step": null
         }
     ],
-    "scenario_id": "T1_DYN_E1_15_medium",
+    "scenario_id": "T1_DYN_M1_04_medium",
     "table_id": "table1",
     "experiment_axis": "dynamic_difficulty",
-    "sample_id": "E1_15",
+    "sample_id": "M1_04",
     "setting": "medium",
     "extension_type": "table1_dynamic",
     "ablation_profile": null,
@@ -38,11 +38,11 @@
     "success": false,
     "run_status": "complete",
     "valid_for_aggregation": true,
-    "reason": "Agent gave up (5 consecutive waits)",
-    "steps_executed": 14,
-    "execution_time_seconds": 40.3,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 50.09,
     "dynamic_event_counts": {
-        "hide_folder": {
+        "hide_pillow": {
             "times_triggered": 0,
             "max_triggers": 2
         }

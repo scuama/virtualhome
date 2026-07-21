@@ -1,96 +1,107 @@
 {
-    "scenario_id": "T1_DYN_E1_15_medium",
+    "scenario_id": "T1_DYN_M1_05_medium",
     "extension_type": "table1_dynamic",
     "table_id": "table1",
     "experiment_axis": "dynamic_difficulty",
-    "sample_id": "E1_15",
+    "sample_id": "M1_05",
     "setting": "medium",
     "single_run": true,
     "source_scenarios": [
-        "E1_15"
+        "M1_05"
     ],
     "dynamic_difficulty": "medium",
     "dynamic_policy": "action_triggered_disturbance_count",
     "dynamic_target": {
-        "class_name": "folder",
+        "class_name": "milk",
         "instance_index": 0
     },
     "environment_id": 2,
-    "goal_instruction": "Put the folder in the closet.",
+    "goal_instruction": "If the milk is cold, put it in the microwave to heat it up.",
     "tasks": [
         {
-            "task_id": "E1_15",
-            "instruction": "Put the folder in the closet.",
-            "source_scenario": "E1_15",
+            "task_id": "M1_05",
+            "instruction": "If the milk is cold, put it in the microwave to heat it up.",
+            "source_scenario": "M1_05",
             "success_condition": {
-                "target_class": "folder",
-                "relation": "INSIDE",
-                "destination_class": "closet",
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
                 "min_count": 1,
-                "target_instance": 0,
-                "destination_instance": 0
+                "target_instance": 0
             }
         }
     ],
     "initial_states_override": [
         {
             "target_classes": [
-                "closet"
+                "milk"
             ],
             "add_states": [
-                "OPEN"
-            ],
-            "remove_states": [
-                "CLOSED"
+                "COLD"
             ],
             "instance_filter": {
                 "index": 0
             }
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "COLD"
+            ],
+            "remove_states": [
+                "HOT"
+            ]
         }
     ],
     "initial_relations_override": [
         {
             "subject": "character",
             "relation": "INSIDE",
-            "object": "bedroom",
+            "object": "kitchen",
             "object_instance": 0
         },
         {
-            "subject": "folder",
+            "subject": "milk",
             "relation": "ON",
-            "object": "desk",
+            "object": "kitchentable",
             "count": 1,
             "subject_instance": 0,
             "object_instance": 0
         }
     ],
     "success_condition": {
-        "target_class": "folder",
-        "relation": "INSIDE",
-        "destination_class": "closet",
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
         "min_count": 1,
-        "target_instance": 0,
-        "destination_instance": 0
+        "target_instance": 0
     },
     "dynamic_events": [
         {
             "trigger": {
                 "action": "grab",
-                "target": "folder",
+                "target": "milk",
                 "type": "action"
             },
             "effect": {
                 "type": "hide",
-                "target": "folder",
+                "target": "milk",
                 "duration_steps": 3,
                 "instance_index": 0
             },
-            "event_id": "hide_folder",
+            "event_id": "hide_milk",
             "max_triggers": 2
         }
     ],
     "max_steps": 45,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 40.3
+    "execution_time_seconds": 49.23
 }
