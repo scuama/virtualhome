@@ -1,26 +1,89 @@
 {
-    "environment_id": 1,  
-    "goal_instruction": "If there is chicken in the fridge, heat the chicken and cutlets in the microwave, put them on a plate, and place the plate on the table.",
-    "initial_relations_override": [
-        {"subject": "chicken", "relation": "INSIDE", "object": "fridge", "count": 1},
-        {"subject": "cutlets", "relation": "INSIDE", "object": "fridge", "count": 1},
-        {"subject": "plate", "relation": "ON", "object": "kitchencounter", "count": 1}
-    ],
-    "initial_states_override": [
-        {"subject": "chicken", "states": ["COLD"]},
-        {"subject": "cutlets", "states": ["COLD"]},
-        {"subject": "fridge", "states": ["CLOSED"]},
-        {"subject": "microwave", "states": ["OFF", "PLUGGED_IN"]}
-    ],
-    "success_condition": {
-        "mode": "AND",
-        "conditions": [
-            {"check_type": "state", "target_class": "chicken", "require_states": ["HOT"]},
-            {"check_type": "state", "target_class": "cutlets", "require_states": ["HOT"]},
-            {"check_type": "relation", "target_class": "chicken", "relation": "INSIDE", "destination_class": "plate"},
-            {"check_type": "relation", "target_class": "cutlets", "relation": "INSIDE", "destination_class": "plate"},
-            {"check_type": "relation", "target_class": "plate", "relation": "ON", "destination_class": "kitchentable"}
-        ]
+  "environment_id": 1,
+  "goal_instruction": "If there is chicken in the fridge, heat the chicken and cutlets in the microwave, put them on a plate, and place the plate on the kitchen table.",
+  "initial_relations_override": [
+    {
+      "subject": "chicken",
+      "relation": "INSIDE",
+      "object": "fridge",
+      "count": 1
     },
-    "execution_time_seconds": 90
+    {
+      "subject": "cutlets",
+      "relation": "INSIDE",
+      "object": "fridge",
+      "count": 1
+    },
+    {
+      "subject": "plate",
+      "relation": "ON",
+      "object": "kitchencounter",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "chicken",
+      "states": [
+        "COLD"
+      ]
+    },
+    {
+      "subject": "cutlets",
+      "states": [
+        "COLD"
+      ]
+    },
+    {
+      "subject": "fridge",
+      "states": [
+        "CLOSED"
+      ]
+    },
+    {
+      "subject": "microwave",
+      "states": [
+        "OFF",
+        "PLUGGED_IN"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "state",
+        "target_class": "chicken",
+        "require_states": [
+          "HOT"
+        ]
+      },
+      {
+        "check_type": "state",
+        "target_class": "cutlets",
+        "require_states": [
+          "HOT"
+        ]
+      },
+      {
+        "check_type": "relation",
+        "target_class": "chicken",
+        "relation": "INSIDE",
+        "destination_class": "plate"
+      },
+      {
+        "check_type": "relation",
+        "target_class": "cutlets",
+        "relation": "INSIDE",
+        "destination_class": "plate"
+      },
+      {
+        "check_type": "relation",
+        "target_class": "plate",
+        "relation": "ON",
+        "destination_class": "kitchentable"
+      }
+    ]
+  },
+  "execution_time_seconds": 90
 }

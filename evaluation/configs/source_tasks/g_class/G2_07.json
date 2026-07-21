@@ -1,25 +1,25 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If you see the cup on the table, put it where it belongs.",
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        },
-        {
-            "subject": "mug",
-            "relation": "ON",
-            "object": "kitchentable",
-            "count": 1
-        }
-    ],
-    "user_clarification_reply": "Put it in the cabinet.",
-    "success_condition": {
-        "target_class": "mug",
-        "destination_class": "kitchencabinet",
-        "relation": "INSIDE",
-        "min_count": 1
+  "environment_id": 0,
+  "goal_instruction": "If you see the mug on the table, put it where it belongs.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
     },
-    "require_ask_to_pass": true
+    {
+      "subject": "mug",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    }
+  ],
+  "user_clarification_reply": "Put it in the cabinet.",
+  "success_condition": {
+    "target_class": "mug",
+    "destination_class": "kitchencabinet",
+    "relation": "INSIDE",
+    "min_count": 1
+  },
+  "require_ask_to_pass": true
 }

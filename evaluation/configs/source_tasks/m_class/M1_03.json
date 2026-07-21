@@ -1,60 +1,60 @@
 {
-    "scenario_id": "M1_03",
-    "scenario_type": "M",
-    "goal_instruction": "If you see dirty cups, put them in the sink right away.",
-    "environment_id": 2,
-    "initial_states_override": [
-        {
-            "target_classes": [
-                "waterglass"
-            ],
-            "add_states": [
-                "DIRTY"
-            ],
-            "instance_filter": {
-                "index": 0
-            }
-        }
-    ],
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        },
-        {
-            "subject": "mug",
-            "count": 0,
-            "object": "kitchentable"
-        },
-        {
-            "subject": "waterglass",
-            "relation": "ON",
-            "object": "kitchentable",
-            "count": 1
-        }
-    ],
-    "dynamic_events": [
-        {
-            "trigger": {
-                "action": "grab",
-                "target": "waterglass",
-                "target_state": "DIRTY"
-            },
-            "effect": {
-                "type": "hide",
-                "target": "waterglass",
-                "duration_steps": 3
-            }
-        }
-    ],
-    "success_condition": {
-        "target_class": "waterglass",
-        "destination_class": "sink",
-        "relation": "ON",
-        "min_count": 1,
-        "states": [
-            "DIRTY"
-        ]
+  "scenario_id": "M1_03",
+  "scenario_type": "M",
+  "goal_instruction": "If you see dirty water glasses, put them in the sink right away.",
+  "environment_id": 2,
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "waterglass"
+      ],
+      "add_states": [
+        "DIRTY"
+      ],
+      "instance_filter": {
+        "index": 0
+      }
     }
+  ],
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    },
+    {
+      "subject": "mug",
+      "count": 0,
+      "object": "kitchentable"
+    },
+    {
+      "subject": "waterglass",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    }
+  ],
+  "dynamic_events": [
+    {
+      "trigger": {
+        "action": "grab",
+        "target": "waterglass",
+        "target_state": "DIRTY"
+      },
+      "effect": {
+        "type": "hide",
+        "target": "waterglass",
+        "duration_steps": 3
+      }
+    }
+  ],
+  "success_condition": {
+    "target_class": "waterglass",
+    "destination_class": "sink",
+    "relation": "ON",
+    "min_count": 1,
+    "states": [
+      "DIRTY"
+    ]
+  }
 }

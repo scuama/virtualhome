@@ -1,40 +1,47 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If the washing machine is not working, turn it on and wash the two piles of dirty clothes on the floor.",
-    "initial_relations_override": [
-        {
-            "subject": "washingmachine",
-            "relation": "ON",
-            "object": "floor",
-            "count": 1
-        },
-        {
-            "subject": "clothespile",
-            "relation": "ON",
-            "object": "floor",
-            "count": 2
-        }
-    ],
-    "initial_states_override": [
-        {
-            "subject": "clothespile",
-            "states": ["DIRTY"]
-        },
-        {
-            "subject": "washingmachine",
-            "states": ["OFF", "PLUGGED_IN"]
-        }
-    ],
-    "success_condition": {
-        "mode": "AND",
-        "conditions": [
-            {
-                "check_type": "state",
-                "target_class": "clothespile",
-                "require_states": ["CLEAN"],
-                "min_count": 2
-            }
-        ]
+  "environment_id": 0,
+  "goal_instruction": "If the washing machine is not working, turn it on and wash the two clothes piles on the floor.",
+  "initial_relations_override": [
+    {
+      "subject": "washingmachine",
+      "relation": "ON",
+      "object": "floor",
+      "count": 1
     },
-    "execution_time_seconds": 60
+    {
+      "subject": "clothespile",
+      "relation": "ON",
+      "object": "floor",
+      "count": 2
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "clothespile",
+      "states": [
+        "DIRTY"
+      ]
+    },
+    {
+      "subject": "washingmachine",
+      "states": [
+        "OFF",
+        "PLUGGED_IN"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "state",
+        "target_class": "clothespile",
+        "require_states": [
+          "CLEAN"
+        ],
+        "min_count": 2
+      }
+    ]
+  },
+  "execution_time_seconds": 60
 }

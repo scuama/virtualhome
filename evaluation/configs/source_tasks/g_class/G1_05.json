@@ -1,56 +1,56 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        },
-        {
-            "subject": "mug",
-            "relation": "ON",
-            "object": "kitchentable",
-            "count": 1
-        }
-    ],
-    "initial_states_override": [
-        {
-            "target_classes": [
-                "cabinet"
-            ],
-            "remove_states": [
-                "OPEN"
-            ],
-            "add_states": [
-                "CLOSED"
-            ]
-        },
-        {
-            "target_classes": [
-                "mug"
-            ],
-            "add_states": [
-                "FILLED_WATER"
-            ]
-        }
-    ],
-    "success_condition": {
-        "mode": "AND",
-        "conditions": [
-            {
-                "target_class": "mug",
-                "destination_class": "cabinet",
-                "relation": "INSIDE",
-                "min_count": 1
-            },
-            {
-                "target_class": "mug",
-                "states": [
-                    "EMPTY"
-                ],
-                "min_count": 1
-            }
-        ]
+  "environment_id": 0,
+  "goal_instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    },
+    {
+      "subject": "mug",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
     }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "cabinet"
+      ],
+      "remove_states": [
+        "OPEN"
+      ],
+      "add_states": [
+        "CLOSED"
+      ]
+    },
+    {
+      "target_classes": [
+        "mug"
+      ],
+      "add_states": [
+        "FILLED_WATER"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "target_class": "mug",
+        "destination_class": "cabinet",
+        "relation": "INSIDE",
+        "min_count": 1
+      },
+      {
+        "target_class": "mug",
+        "states": [
+          "EMPTY"
+        ],
+        "min_count": 1
+      }
+    ]
+  }
 }

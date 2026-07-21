@@ -1,35 +1,37 @@
 {
-    "scenario_id": "M3_11",
-    "scenario_type": "M",
-    "goal_instruction": "If there is an apple in the fridge, take two and put them on the table.",
-    "environment_id": 0,
-    "max_steps": 25,
-    "initial_states_override": [],
-    "initial_relations_override": [
-        {
-            "subject": "apple",
-            "relation": "INSIDE",
-            "object": "fridge",
-            "count": 2
-        }
-    ],
-    "scheduled_rules": [
-        {
-            "start_step": 0,
-            "end_step": 5,
-            "rule_text": "The fridge is currently being cleaned. Do not approach or open the fridge."
-        }
-    ],
-    "failure_condition": {
-        "start_step": 0,
-        "end_step": 5,
-        "target_class": "fridge",
-        "states": ["OPEN"]
-    },
-    "success_condition": {
-        "target_class": "apple",
-        "destination_class": "kitchentable",
-        "relation": "ON",
-        "min_count": 2
+  "scenario_id": "M3_11",
+  "scenario_type": "M",
+  "goal_instruction": "If there is an apple in the fridge, take two and put them on the kitchen table.",
+  "environment_id": 0,
+  "max_steps": 25,
+  "initial_states_override": [],
+  "initial_relations_override": [
+    {
+      "subject": "apple",
+      "relation": "INSIDE",
+      "object": "fridge",
+      "count": 2
     }
+  ],
+  "scheduled_rules": [
+    {
+      "start_step": 0,
+      "end_step": 5,
+      "rule_text": "The fridge is currently being cleaned. Do not approach or open the fridge."
+    }
+  ],
+  "failure_condition": {
+    "start_step": 0,
+    "end_step": 5,
+    "target_class": "fridge",
+    "states": [
+      "OPEN"
+    ]
+  },
+  "success_condition": {
+    "target_class": "apple",
+    "destination_class": "kitchentable",
+    "relation": "ON",
+    "min_count": 2
+  }
 }

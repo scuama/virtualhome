@@ -1,30 +1,30 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If there is no one in the kitchen, make sure the kitchen is safe.",
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        }
+  "environment_id": 0,
+  "goal_instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "stove"
+      ],
+      "add_states": [
+        "ON"
+      ]
+    }
+  ],
+  "user_clarification_reply": "Turn off the stove.",
+  "success_condition": {
+    "target_class": "stove",
+    "states": [
+      "OFF"
     ],
-    "initial_states_override": [
-        {
-            "target_classes": [
-                "stove"
-            ],
-            "add_states": [
-                "ON"
-            ]
-        }
-    ],
-    "user_clarification_reply": "Turn off the stove.",
-    "success_condition": {
-        "target_class": "stove",
-        "states": [
-            "OFF"
-        ],
-        "min_count": 1
-    },
-    "require_ask_to_pass": true
+    "min_count": 1
+  },
+  "require_ask_to_pass": true
 }

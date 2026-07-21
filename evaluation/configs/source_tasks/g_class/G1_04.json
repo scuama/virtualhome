@@ -1,34 +1,34 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If the light is on, turn it off.",
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "bedroom"
-        },
-        {
-            "subject": "tablelamp",
-            "relation": "INSIDE",
-            "object": "bedroom",
-            "count": 1
-        }
-    ],
-    "initial_states_override": [
-        {
-            "target_classes": [
-                "tablelamp"
-            ],
-            "add_states": [
-                "ON"
-            ]
-        }
-    ],
-    "success_condition": {
-        "target_class": "tablelamp",
-        "states": [
-            "OFF"
-        ],
-        "min_count": 1
+  "environment_id": 0,
+  "goal_instruction": "If the table lamp is on, turn it off.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "bedroom"
+    },
+    {
+      "subject": "tablelamp",
+      "relation": "INSIDE",
+      "object": "bedroom",
+      "count": 1
     }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "tablelamp"
+      ],
+      "add_states": [
+        "ON"
+      ]
+    }
+  ],
+  "success_condition": {
+    "target_class": "tablelamp",
+    "states": [
+      "OFF"
+    ],
+    "min_count": 1
+  }
 }

@@ -1,40 +1,44 @@
 {
-    "environment_id": 0,
-    "goal_instruction": "If you see dirty cups on the table, put them in the sink.",
-    "initial_relations_override": [
-        {
-            "subject": "character",
-            "relation": "INSIDE",
-            "object": "kitchen"
-        },
-        {
-            "subject": "waterglass",
-            "relation": "ON",
-            "object": "kitchentable",
-            "count": 2
-        }
-    ],
-    "initial_states_override": [
+  "environment_id": 0,
+  "goal_instruction": "If you see dirty water glasses on the table, put them in the sink.",
+  "initial_relations_override": [
     {
-        "subject": "waterglass",
-        "states": ["DIRTY"]
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
     },
     {
-        "subject": "mug",
-        "states": ["DIRTY"]
+      "subject": "waterglass",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 2
     }
-],
-    "success_condition": {
-        "mode": "AND",
-        "conditions": [
-            {
-                "check_type": "relation",
-                "target_class": "waterglass",
-                "relation": "INSIDE",
-                "destination_class": "sink",
-                "min_count": 2
-            }
-        ]
+  ],
+  "initial_states_override": [
+    {
+      "subject": "waterglass",
+      "states": [
+        "DIRTY"
+      ]
     },
-    "execution_time_seconds": 60
+    {
+      "subject": "mug",
+      "states": [
+        "DIRTY"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "relation",
+        "target_class": "waterglass",
+        "relation": "INSIDE",
+        "destination_class": "sink",
+        "min_count": 2
+      }
+    ]
+  },
+  "execution_time_seconds": 60
 }
