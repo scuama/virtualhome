@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "G1_05",
-            "instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+            "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [
@@ -53,7 +53,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
     "steps_executed": 15,
-    "execution_time_seconds": 8.59,
+    "execution_time_seconds": 7.24,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

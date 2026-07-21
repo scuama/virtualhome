@@ -9,7 +9,7 @@ table1,scale,S5,saycan,,,0,0,25,,0,0,0,5,False
 table1,scale,S5,llm_planner,,,0,0,25,,0,0,0,5,False
 table1,scale,S5,exrap,,,0,0,25,,0,0,0,5,False
 table1,scale,S5,flare,,,0,0,25,,0,0,0,5,False
-table1,scale,S7,robostate,0.321429,32.14,9,28,35,12.8889,116,9,4,5,False
+table1,scale,S7,robostate,,,0,0,35,,0,0,0,5,False
 table1,scale,S7,saycan,,,0,0,35,,0,0,0,5,False
 table1,scale,S7,llm_planner,,,0,0,35,,0,0,0,5,False
 table1,scale,S7,exrap,,,0,0,35,,0,0,0,5,False

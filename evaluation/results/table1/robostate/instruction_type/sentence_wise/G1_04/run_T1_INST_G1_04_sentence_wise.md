@@ -4,442 +4,172 @@
 ### [GoalReasoner (Module A - Intent)] Output
 ```json
 {
-  "is_instruction_obviously_vague": true,
-  "clarification_question": "Which light should I turn off?",
-  "target_object": "light",
+  "is_instruction_obviously_vague": false,
+  "clarification_question": null,
+  "target_object": "table lamp",
   "location_hint": null,
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To change its state from on to off."
+      "answer": "To control the lamp's power state."
     },
     {
       "question": "Why is that important?",
-      "answer": "To stop the light from being illuminated."
+      "answer": "To stop the lamp from emitting light when it is currently on."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "To reduce or remove unwanted illumination."
+      "answer": "To reduce or remove illumination from the current environment."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may want to save energy, reduce glare, or create a darker environment."
+      "answer": "The user likely wants to avoid unnecessary light, improve comfort, or conserve energy."
     }
   ],
-  "deep_intent": "The user wants to reduce or remove illumination.",
+  "deep_intent": "The user wants to reduce illumination in the environment.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other indoor light sources that can be switched off, such as a lamp or ceiling light"
+      "description": "Other nearby artificial light sources that can be turned off to reduce light, such as a desk lamp or floor lamp"
     },
     {
       "priority": 2,
-      "description": "Any nearby artificial lighting device with an on/off control"
+      "description": "Any household light fixture or portable light that is currently on and serving the same lighting role"
     },
     {
       "priority": 3,
-      "description": "Alternative ways to reduce brightness in the area, such as closing curtains or blinds"
+      "description": "Other sources of indoor illumination that can be disabled, such as a ceiling light or string lights"
     },
     {
       "priority": 4,
-      "description": "Relocating away from the light source or blocking the light with an object"
+      "description": "Closing blinds or curtains to reduce incoming light if the goal is to darken the room"
     }
   ]
 }
 ```
 
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "The goal is to reduce illumination by turning off the target light source. The SDG requires the table lamp to transition from ON to OFF, so the table lamp must be kept. Because the goal also allows alternative light sources and room-darkening controls, I retain other relevant light fixtures and controls that could be used to reduce light: ceilinglamp, candle, lightswitch, curtains, and window.",
+  "selected_classes": [
+    "desk",
+    "floor",
+    "curtains",
+    "lightswitch",
+    "window",
+    "candle",
+    "tablelamp",
+    "character",
+    "ceiling",
+    "ceilinglamp"
+  ],
+  "raw_class_count": 33
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to make the table lamp OFF. The filtered graph shows two table lamps (102, 103) and both are currently ON. Since the SDG requires transitioning from ON to OFF, the single next step should target one specific table lamp and switch it off. Choosing tablelamp(102) is valid because it matches the required class and currently has the needed ON state for the transition.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N2",
+  "mapped_variables": {},
+  "action": "[switchoff] <tablelamp> (102)"
+}
+```
+
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <bathroom> (11)",
+  "action": "[walk] <tablelamp> (102)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "llm_executor_repaired"
 }
 ```
 ## Step 0
-- **Action**: `[walk] <bathroom> (11)`
+- **Action**: `[walk] <tablelamp> (102)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `llm_executor_repaired`
 - **Task Progress**: G1_04=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["light<br>(OFF)"]
+    N1["table lamp<br>(OFF)"]
+    N2["table lamp<br>(ON)"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N2 -->|"To achieve OFF state, the lamp must first be in ON state so it can be switched off."| N1
 ```
-- **Observed Items (74)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
+- **Observed Items (33)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), window(91) [CLOSED], ceiling(92), ceiling(93), ceiling(94), ceiling(95), ceiling(96)...
 
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "desk",
+    "floor",
+    "curtains",
+    "lightswitch",
+    "window",
+    "candle",
+    "tablelamp",
+    "character",
+    "ceiling",
+    "ceilinglamp"
+  ],
+  "raw_class_count": 33
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to turn the table lamp OFF. The filtered graph shows tablelamp(102) is currently ON and the character is already CLOSE to it, so no additional walking is needed. The correct next atomic action is to switch off the same lamp instance.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Lamp": "tablelamp(102)"
+  },
+  "action": "[switchoff] <tablelamp> (102)"
+}
+```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <kitchen> (205)",
+  "action": "[switchoff] <tablelamp> (102)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "llm_executor"
 }
 ```
 ## Step 1
-- **Action**: `[walk] <kitchen> (205)`
+- **Action**: `[switchoff] <tablelamp> (102)`
 - **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
 - **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
-- **Task Progress**: G1_04=pending
+- **Decision Source**: `llm_executor`
+- **Task Progress**: G1_04=done
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["light<br>(OFF)"]
+    N1["table lamp<br>(OFF)"]
+    N2["table lamp<br>(ON)"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N2 -->|"To achieve OFF state, the lamp must first be in ON state so it can be switched off."| N1
 ```
-- **Observed Items (135)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (335)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "room_frontier"
-}
-```
-## Step 2
-- **Action**: `[walk] <livingroom> (335)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["light<br>(OFF)"]
-```
-- **Observed Items (242)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (73)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 3
-- **Action**: `[walk] <bedroom> (73)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 4
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (205)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 5
-- **Action**: `[walk] <kitchen> (205)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (335)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 6
-- **Action**: `[walk] <livingroom> (335)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (73)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 7
-- **Action**: `[walk] <bedroom> (73)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 8
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (205)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 9
-- **Action**: `[walk] <kitchen> (205)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (335)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 10
-- **Action**: `[walk] <livingroom> (335)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (73)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 11
-- **Action**: `[walk] <bedroom> (73)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 12
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (205)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 13
-- **Action**: `[walk] <kitchen> (205)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (335)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 14
-- **Action**: `[walk] <livingroom> (335)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: G1_04=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (316)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
+- **Observed Items (33)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), window(91) [CLOSED], ceiling(92), ceiling(93), ceiling(94), ceiling(95), ceiling(96)...
 

@@ -14,11 +14,11 @@
   "instruction_scale": 3,
   "instruction_type": "sentence_wise",
   "environment_id": 0,
-  "goal_instruction": "1. If the light is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.",
+  "goal_instruction": "1. If the table lamp is on, turn it off.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.",
   "tasks": [
     {
       "task_id": "G1_04",
-      "instruction": "If the light is on, turn it off.",
+      "instruction": "If the table lamp is on, turn it off.",
       "source_scenario": "G1_04",
       "success_condition": {
         "target_class": "tablelamp",

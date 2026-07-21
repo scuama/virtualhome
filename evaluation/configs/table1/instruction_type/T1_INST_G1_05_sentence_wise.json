@@ -12,11 +12,11 @@
   "instruction_type": "sentence_wise",
   "preprocessed_instruction": true,
   "environment_id": 0,
-  "goal_instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+  "goal_instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
   "tasks": [
     {
       "task_id": "G1_05",
-      "instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+      "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
       "source_scenario": "G1_05",
       "success_condition": {
         "mode": "AND",

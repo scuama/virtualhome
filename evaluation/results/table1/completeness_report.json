@@ -10,8 +10,8 @@
   ],
   "expected_configs": 81,
   "expected_episodes": 405,
-  "complete_episodes": 47,
-  "missing_or_invalid_episodes": 358,
+  "complete_episodes": 43,
+  "missing_or_invalid_episodes": 362,
   "complete_cells": 1,
   "expected_cells": 45,
   "issues": [
@@ -349,9 +349,43 @@
       "axis": "scale",
       "setting": "S7",
       "method": "robostate",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G01/metrics.json",
+      "reason": "Agent stagnated (15 steps without progress)"
+    },
+    {
+      "type": "incomplete",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
       "sample_id": "S-G02",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G02/metrics.json",
       "reason": "Agent stagnated (15 steps without progress)"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G04/metrics.json"
+    },
+    {
+      "type": "incomplete",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "robostate",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G05/metrics.json",
+      "reason": "Initialization Failed: HTTPConnectionPool(host='127.0.0.1', port=8080): Read timed out. (read timeout=5)"
     },
     {
       "type": "missing",

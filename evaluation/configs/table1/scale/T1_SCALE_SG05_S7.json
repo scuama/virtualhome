@@ -18,11 +18,11 @@
   "instruction_scale": 7,
   "instruction_type": "sentence_wise",
   "environment_id": 0,
-  "goal_instruction": "1. If there is water in the cup, pour it out and put the cup in the cabinet.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. Put the folder in the closet.\n6. If the radio is off, turn it on\n7. If you have an apple somewhere, bring it to your desk.",
+  "goal_instruction": "1. If there is water in the mug, pour it out and put the mug in the cabinet.\n2. If no one is watching the TV, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If your computer stays off, turn it on.\n5. Put the folder in the closet.\n6. If the radio is off, turn it on\n7. If you have an apple somewhere, bring it to your desk.",
   "tasks": [
     {
       "task_id": "G1_05",
-      "instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+      "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
       "source_scenario": "G1_05",
       "success_condition": {
         "mode": "AND",

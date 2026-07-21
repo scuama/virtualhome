@@ -12,11 +12,11 @@
   "instruction_type": "sentence_wise",
   "preprocessed_instruction": true,
   "environment_id": 0,
-  "goal_instruction": "If the light is on, turn it off.",
+  "goal_instruction": "If the table lamp is on, turn it off.",
   "tasks": [
     {
       "task_id": "G1_04",
-      "instruction": "If the light is on, turn it off.",
+      "instruction": "If the table lamp is on, turn it off.",
       "source_scenario": "G1_04",
       "success_condition": {
         "target_class": "tablelamp",

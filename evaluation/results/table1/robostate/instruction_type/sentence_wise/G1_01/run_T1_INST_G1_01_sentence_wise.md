@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To heat a cup of milk in the microwave if it is available in the fridge."
+      "answer": "To have milk heated and ready to drink or use."
     },
     {
       "question": "Why is that important?",
-      "answer": "Because the user likely wants the milk in a warmed, ready-to-consume state."
+      "answer": "Heating it makes it warm, which may be more suitable for consumption or preparation."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need for a warm beverage or warmed dairy drink."
+      "answer": "It fulfills the need for a warm beverage or warm liquid to consume."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may want comfort, convenience, or to consume the milk at a preferred warm temperature."
+      "answer": "The user may want comfort, warmth, or a preferred temperature for drinking."
     }
   ],
-  "deep_intent": "The user wants a warm drink for consumption.",
+  "deep_intent": "The user wants to warm a drink for consumption.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-heat dairy or beverage items that can be warmed and consumed, such as hot cocoa, coffee, or tea with milk."
+      "description": "Other drinkable liquids that can be safely warmed, such as hot chocolate or a milk alternative."
     },
     {
       "priority": 2,
-      "description": "Similar refrigerated drink items that can be heated, such as flavored milk or a milk-based beverage."
+      "description": "Any similar dairy or non-dairy beverage intended to be consumed warm."
     },
     {
       "priority": 3,
-      "description": "Warm, drinkable beverages that provide comfort or hydration, such as broth or warm cereal drink."
+      "description": "Warm beverages that provide comfort and hydration, such as tea or broth."
     },
     {
       "priority": 4,
-      "description": "Other indoor beverages that can be consumed warm, such as juice or water heated to a drinkable temperature."
+      "description": "Other warm liquids suitable for drinking, if the original beverage is unavailable."
     }
   ]
 }
@@ -71,23 +71,20 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(OPEN)"]
-    N3["milk<br>(HELD)"]
+    N1["milk<br>(HELD)"]
+    N2["milk<br>INSIDE<br>?Container"]
+    N3["?Container<br>(OPEN)"]
     N4["milk<br>ON<br>cup"]
     N5["cup<br>INSIDE<br>?Heater"]
     N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(PLUGGED_IN)"]
-    N8["milk<br>(HOT)"]
-    N2 -->|"The cooler must be open to access the milk inside it."| N1
-    N3 -->|"Milk must be held before it can be taken out of the cooler."| N1
-    N1 -->|"To hold the milk, it must first be available inside the cooler and then taken out."| N3
-    N3 -->|"The milk must be held to pour it into the cup."| N4
-    N2 -->|"The cooler must be open before taking out the milk."| N3
-    N4 -->|"The cup must contain the milk before it can be heated together with the milk."| N5
-    N7 -->|"The heater may need to be plugged in before it can be switched on."| N6
-    N5 -->|"The cup with milk must be inside the heater for the milk to become hot."| N8
-    N6 -->|"The heater must be on to heat the milk."| N8
+    N7["milk<br>(HOT)"]
+    N8["cup<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(OPEN)"]
+    N3 -->|"A container must be open before taking milk out of it."| N2
+    N2 -->|"Milk must be held to move it out of the container."| N1
+    N1 -->|"The milk must be held before it can be placed into the cup."| N4
+    N6 -->|"The microwave-like heater must be on to heat items inside it."| N5
+    N5 -->|"Milk in the cup inside the heater becomes hot when the heater is on."| N7
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -115,23 +112,20 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(OPEN)"]
-    N3["milk<br>(HELD)"]
+    N1["milk<br>(HELD)"]
+    N2["milk<br>INSIDE<br>?Container"]
+    N3["?Container<br>(OPEN)"]
     N4["milk<br>ON<br>cup"]
     N5["cup<br>INSIDE<br>?Heater"]
     N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(PLUGGED_IN)"]
-    N8["milk<br>(HOT)"]
-    N2 -->|"The cooler must be open to access the milk inside it."| N1
-    N3 -->|"Milk must be held before it can be taken out of the cooler."| N1
-    N1 -->|"To hold the milk, it must first be available inside the cooler and then taken out."| N3
-    N3 -->|"The milk must be held to pour it into the cup."| N4
-    N2 -->|"The cooler must be open before taking out the milk."| N3
-    N4 -->|"The cup must contain the milk before it can be heated together with the milk."| N5
-    N7 -->|"The heater may need to be plugged in before it can be switched on."| N6
-    N5 -->|"The cup with milk must be inside the heater for the milk to become hot."| N8
-    N6 -->|"The heater must be on to heat the milk."| N8
+    N7["milk<br>(HOT)"]
+    N8["cup<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(OPEN)"]
+    N3 -->|"A container must be open before taking milk out of it."| N2
+    N2 -->|"Milk must be held to move it out of the container."| N1
+    N1 -->|"The milk must be held before it can be placed into the cup."| N4
+    N6 -->|"The microwave-like heater must be on to heat items inside it."| N5
+    N5 -->|"Milk in the cup inside the heater becomes hot when the heater is on."| N7
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -159,23 +153,20 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(OPEN)"]
-    N3["milk<br>(HELD)"]
+    N1["milk<br>(HELD)"]
+    N2["milk<br>INSIDE<br>?Container"]
+    N3["?Container<br>(OPEN)"]
     N4["milk<br>ON<br>cup"]
     N5["cup<br>INSIDE<br>?Heater"]
     N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(PLUGGED_IN)"]
-    N8["milk<br>(HOT)"]
-    N2 -->|"The cooler must be open to access the milk inside it."| N1
-    N3 -->|"Milk must be held before it can be taken out of the cooler."| N1
-    N1 -->|"To hold the milk, it must first be available inside the cooler and then taken out."| N3
-    N3 -->|"The milk must be held to pour it into the cup."| N4
-    N2 -->|"The cooler must be open before taking out the milk."| N3
-    N4 -->|"The cup must contain the milk before it can be heated together with the milk."| N5
-    N7 -->|"The heater may need to be plugged in before it can be switched on."| N6
-    N5 -->|"The cup with milk must be inside the heater for the milk to become hot."| N8
-    N6 -->|"The heater must be on to heat the milk."| N8
+    N7["milk<br>(HOT)"]
+    N8["cup<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(OPEN)"]
+    N3 -->|"A container must be open before taking milk out of it."| N2
+    N2 -->|"Milk must be held to move it out of the container."| N1
+    N1 -->|"The milk must be held before it can be placed into the cup."| N4
+    N6 -->|"The microwave-like heater must be on to heat items inside it."| N5
+    N5 -->|"Milk in the cup inside the heater becomes hot when the heater is on."| N7
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -203,23 +194,20 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(OPEN)"]
-    N3["milk<br>(HELD)"]
+    N1["milk<br>(HELD)"]
+    N2["milk<br>INSIDE<br>?Container"]
+    N3["?Container<br>(OPEN)"]
     N4["milk<br>ON<br>cup"]
     N5["cup<br>INSIDE<br>?Heater"]
     N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(PLUGGED_IN)"]
-    N8["milk<br>(HOT)"]
-    N2 -->|"The cooler must be open to access the milk inside it."| N1
-    N3 -->|"Milk must be held before it can be taken out of the cooler."| N1
-    N1 -->|"To hold the milk, it must first be available inside the cooler and then taken out."| N3
-    N3 -->|"The milk must be held to pour it into the cup."| N4
-    N2 -->|"The cooler must be open before taking out the milk."| N3
-    N4 -->|"The cup must contain the milk before it can be heated together with the milk."| N5
-    N7 -->|"The heater may need to be plugged in before it can be switched on."| N6
-    N5 -->|"The cup with milk must be inside the heater for the milk to become hot."| N8
-    N6 -->|"The heater must be on to heat the milk."| N8
+    N7["milk<br>(HOT)"]
+    N8["cup<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(OPEN)"]
+    N3 -->|"A container must be open before taking milk out of it."| N2
+    N2 -->|"Milk must be held to move it out of the container."| N1
+    N1 -->|"The milk must be held before it can be placed into the cup."| N4
+    N6 -->|"The microwave-like heater must be on to heat items inside it."| N5
+    N5 -->|"Milk in the cup inside the heater becomes hot when the heater is on."| N7
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

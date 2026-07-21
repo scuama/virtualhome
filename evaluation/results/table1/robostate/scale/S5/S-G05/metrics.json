@@ -2,10 +2,10 @@
     "task_total": 5,
     "task_completed": 4,
     "sr": 0.8,
-    "ps": 15.25,
-    "ps_sum": 61,
+    "ps": 12.0,
+    "ps_sum": 48,
     "ps_count": 4,
-    "mean_completion_step": 15.25,
+    "mean_completion_step": 12.0,
     "tasks": [
         {
             "task_id": "G1_05",
@@ -50,9 +50,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 3,
+            "first_satisfied_step": 2,
             "completed": true,
-            "completion_step": 3
+            "completion_step": 2
         },
         {
             "task_id": "E1_03",
@@ -67,9 +67,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 20,
+            "first_satisfied_step": 10,
             "completed": true,
-            "completion_step": 20
+            "completion_step": 10
         },
         {
             "task_id": "E1_11",
@@ -84,9 +84,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 22,
+            "first_satisfied_step": 19,
             "completed": true,
-            "completion_step": 22
+            "completion_step": 19
         },
         {
             "task_id": "E1_15",
@@ -101,9 +101,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 16,
+            "first_satisfied_step": 17,
             "completed": true,
-            "completion_step": 16
+            "completion_step": 17
         }
     ],
     "scenario_id": "T1_SCALE_SG05_S5",
@@ -120,8 +120,8 @@
     "run_status": "incomplete",
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 37,
-    "execution_time_seconds": 92.5,
+    "steps_executed": 34,
+    "execution_time_seconds": 97.33,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }
