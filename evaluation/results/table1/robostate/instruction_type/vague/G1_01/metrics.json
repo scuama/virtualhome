@@ -1,11 +1,11 @@
 {
     "task_total": 1,
-    "task_completed": 0,
-    "sr": 0.0,
-    "ps": null,
-    "ps_sum": 0,
-    "ps_count": 0,
-    "mean_completion_step": null,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 15.0,
+    "ps_sum": 15,
+    "ps_count": 1,
+    "mean_completion_step": 15.0,
     "tasks": [
         {
             "task_id": "G1_01",
@@ -18,11 +18,11 @@
                 "min_count": 1,
                 "target_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 15,
+            "completed": true,
+            "completion_step": 15
         }
     ],
     "scenario_id": "T1_INST_G1_01_vague",
@@ -35,12 +35,12 @@
     "source_scenario_id": null,
     "method": "robostate",
     "model": "gpt-5.4-mini",
-    "success": false,
-    "run_status": "incomplete",
-    "valid_for_aggregation": false,
-    "reason": "Agent stagnated (15 steps without progress)",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
     "steps_executed": 15,
-    "execution_time_seconds": 58.89,
+    "execution_time_seconds": 42.59,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

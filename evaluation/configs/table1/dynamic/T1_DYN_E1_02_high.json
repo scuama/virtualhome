@@ -1,0 +1,78 @@
+{
+  "scenario_id": "T1_DYN_E1_02_high",
+  "extension_type": "table1_dynamic",
+  "table_id": "table1",
+  "experiment_axis": "dynamic_difficulty",
+  "sample_id": "E1_02",
+  "setting": "high",
+  "single_run": true,
+  "source_scenarios": [
+    "E1_02"
+  ],
+  "dynamic_difficulty": "high",
+  "dynamic_policy": "action_triggered_disturbance_count",
+  "dynamic_target": {
+    "class_name": "apple",
+    "instance_index": 0
+  },
+  "environment_id": 0,
+  "goal_instruction": "If you have an apple somewhere, bring it to your desk.",
+  "tasks": [
+    {
+      "task_id": "E1_02",
+      "instruction": "If you have an apple somewhere, bring it to your desk.",
+      "source_scenario": "E1_02",
+      "success_condition": {
+        "target_class": "apple",
+        "relation": "ON",
+        "destination_class": "desk",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+      }
+    }
+  ],
+  "initial_states_override": [],
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "bedroom",
+      "object_instance": 0
+    },
+    {
+      "subject": "apple",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1,
+      "subject_instance": 0,
+      "object_instance": 0
+    }
+  ],
+  "success_condition": {
+    "target_class": "apple",
+    "relation": "ON",
+    "destination_class": "desk",
+    "min_count": 1,
+    "target_instance": 0,
+    "destination_instance": 0
+  },
+  "dynamic_events": [
+    {
+      "trigger": {
+        "action": "grab",
+        "target": "apple",
+        "type": "action"
+      },
+      "effect": {
+        "type": "hide",
+        "target": "apple",
+        "duration_steps": 3,
+        "instance_index": 0
+      },
+      "event_id": "hide_apple",
+      "max_triggers": 3
+    }
+  ],
+  "max_steps": 45
+}

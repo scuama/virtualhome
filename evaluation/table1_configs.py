@@ -70,7 +70,8 @@ SCALE_GROUPS = {
 }
 
 INSTRUCTION_SAMPLES = [
-    "G1_01", "G1_02", "G1_03", "G1_04", "G1_05", "E1_03", "E1_11"
+    "G1_01", "G1_02", "G1_03", "G1_04", "G1_05", "E1_03", "E1_11",
+    "G2_06", "G2_07", "G2_08", "G2_09"
 ]
 
 INSTRUCTION_TEXT = {
@@ -102,10 +103,31 @@ INSTRUCTION_TEXT = {
         "summarized": "Turn on the inactive computer.",
         "vague": "Power on the inactive workstation device.",
     },
+    "G2_06": {
+        "sentence_wise": "If the TV is on, turn on the table lamp.",
+        "summarized": "Turn on the table lamp.",
+        "vague": "Provide some illumination by activating the desk lighting.",
+    },
+    "G2_07": {
+        "sentence_wise": "If you see the cup on the table, put it inside the kitchen cabinet.",
+        "summarized": "Put the cup inside the kitchen cabinet.",
+        "vague": "Store the drinking vessel away in the kitchen storage.",
+    },
+    "G2_08": {
+        "sentence_wise": "If you see milk, heat a cup of it and bring it over.",
+        "summarized": "Heat the milk and hold it in your hand.",
+        "vague": "Warm up the dairy beverage and bring it to me.",
+    },
+    "G2_09": {
+        "sentence_wise": "If the book falls on the floor, please pick it up and put it on the desk.",
+        "summarized": "Put the book on the desk.",
+        "vague": "Return the reading material from the ground to a proper surface.",
+    },
 }
 
 DYNAMIC_SAMPLES = [
-    "M1_01", "M1_02", "M1_03", "M1_04", "M1_05", "E1_03", "E1_15"
+    "M1_01", "M1_02", "M1_03", "M1_04", "M1_05", "E1_03", "E1_15",
+    "E1_02", "E1_07", "E1_08", "E1_10"
 ]
 
 DYNAMIC_TARGETS = {
@@ -116,6 +138,10 @@ DYNAMIC_TARGETS = {
     "M1_05": "milk",
     "E1_03": "book",
     "E1_15": "folder",
+    "E1_02": "apple",
+    "E1_07": "mug",
+    "E1_08": "plate",
+    "E1_10": "towel",
 }
 
 DIFFICULTY_TRIGGERS = {"low": 1, "medium": 2, "high": 3}
@@ -338,7 +364,7 @@ def build_scale(group_id: str, scale: int) -> dict:
 def build_instruction(sample_id: str, instruction_type: str) -> dict:
     source = read_source(sample_id)
     if instruction_type == "sentence_wise":
-        instruction = source["goal_instruction"]
+        instruction = INSTRUCTION_TEXT.get(sample_id, {}).get("sentence_wise", source["goal_instruction"])
     else:
         instruction = INSTRUCTION_TEXT[sample_id][instruction_type]
     states, relations = source_initialization(sample_id, source)
@@ -426,8 +452,8 @@ def generate_all() -> list[tuple[Path, dict]]:
 
 
 def validate(configs: list[tuple[Path, dict]]) -> None:
-    if len(configs) != 57:
-        raise ValueError(f"Expected 57 configs, generated {len(configs)}")
+    if len(configs) != 81:
+        raise ValueError(f"Expected 81 configs, generated {len(configs)}")
     scenario_ids = [config["scenario_id"] for _, config in configs]
     if len(set(scenario_ids)) != len(scenario_ids):
         raise ValueError("Generated scenario IDs are not unique")
@@ -462,7 +488,7 @@ def validate(configs: list[tuple[Path, dict]]) -> None:
             if "target_instance" not in condition_text:
                 raise ValueError(f"Unbound task target: {config['scenario_id']}")
 
-    if counts != {"scale": 15, "instruction_type": 21, "dynamic_difficulty": 21}:
+    if counts != {"scale": 15, "instruction_type": 33, "dynamic_difficulty": 33}:
         raise ValueError(f"Unexpected axis counts: {counts}")
 
     for group_id in SCALE_GROUPS:
@@ -500,8 +526,8 @@ def build_manifest(configs: list[tuple[Path, dict]]) -> dict:
         "version": 1,
         "single_run": True,
         "methods": ["robostate", "saycan", "llm_planner", "exrap", "flare"],
-        "expected_config_count": 57,
-        "expected_episode_count": 285,
+        "expected_config_count": 81,
+        "expected_episode_count": 405,
         "aggregation": {
             "sr": "sum(final_satisfied_tasks) / sum(tasks)",
             "ps": "mean(first_satisfied_step for finally_satisfied_tasks)",
@@ -509,9 +535,9 @@ def build_manifest(configs: list[tuple[Path, dict]]) -> dict:
             "expected_sample_denominators": {
                 "scale": {"S3": 15, "S5": 25, "S7": 35},
                 "instruction_type": {
-                    "sentence_wise": 7, "summarized": 7, "vague": 7,
+                    "sentence_wise": 11, "summarized": 11, "vague": 11,
                 },
-                "dynamic_difficulty": {"low": 7, "medium": 7, "high": 7},
+                "dynamic_difficulty": {"low": 11, "medium": 11, "high": 11},
             },
         },
         "configs": entries,

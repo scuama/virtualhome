@@ -2,15 +2,179 @@
   "table_id": "table1",
   "complete": false,
   "methods": [
-    "robostate"
+    "robostate",
+    "saycan",
+    "llm_planner",
+    "exrap",
+    "flare"
   ],
-  "expected_configs": 57,
-  "expected_episodes": 57,
-  "complete_episodes": 36,
-  "missing_or_invalid_episodes": 21,
+  "expected_configs": 81,
+  "expected_episodes": 405,
+  "complete_episodes": 47,
+  "missing_or_invalid_episodes": 358,
   "complete_cells": 1,
-  "expected_cells": 9,
+  "expected_cells": 45,
   "issues": [
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "saycan",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S3/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "saycan",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S3/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "saycan",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S3/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "saycan",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S3/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "saycan",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S3/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "llm_planner",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S3/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "llm_planner",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S3/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "llm_planner",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S3/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "llm_planner",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S3/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "llm_planner",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S3/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "exrap",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S3/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "exrap",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S3/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "exrap",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S3/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "exrap",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S3/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "exrap",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S3/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "flare",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S3/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "flare",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S3/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "flare",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S3/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "flare",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S3/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S3",
+      "method": "flare",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S3/S-G05/metrics.json"
+    },
     {
       "type": "incomplete",
       "axis": "scale",
@@ -21,13 +185,333 @@
       "reason": "Agent stagnated (15 steps without progress)"
     },
     {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "saycan",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S5/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "saycan",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S5/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "saycan",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S5/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "saycan",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S5/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "saycan",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S5/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "llm_planner",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S5/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "llm_planner",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S5/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "llm_planner",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S5/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "llm_planner",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S5/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "llm_planner",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S5/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "exrap",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S5/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "exrap",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S5/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "exrap",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S5/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "exrap",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S5/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "exrap",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S5/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "flare",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S5/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "flare",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S5/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "flare",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S5/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "flare",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S5/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S5",
+      "method": "flare",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S5/S-G05/metrics.json"
+    },
+    {
       "type": "incomplete",
       "axis": "scale",
       "setting": "S7",
       "method": "robostate",
       "sample_id": "S-G02",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/scale/S7/S-G02/metrics.json",
-      "reason": "Exception: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x15a080550>: Failed to establish a new connection: [Errno 61] Connection refused'))"
+      "reason": "Agent stagnated (15 steps without progress)"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "saycan",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S7/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "saycan",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S7/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "saycan",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S7/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "saycan",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S7/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "saycan",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/scale/S7/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "llm_planner",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S7/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "llm_planner",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S7/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "llm_planner",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S7/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "llm_planner",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S7/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "llm_planner",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/scale/S7/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "exrap",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S7/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "exrap",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S7/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "exrap",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S7/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "exrap",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S7/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "exrap",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/scale/S7/S-G05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "flare",
+      "sample_id": "S-G01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S7/S-G01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "flare",
+      "sample_id": "S-G02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S7/S-G02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "flare",
+      "sample_id": "S-G03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S7/S-G03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "flare",
+      "sample_id": "S-G04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S7/S-G04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "scale",
+      "setting": "S7",
+      "method": "flare",
+      "sample_id": "S-G05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/scale/S7/S-G05/metrics.json"
     },
     {
       "type": "incomplete",
@@ -57,31 +541,772 @@
       "reason": "Agent stagnated (15 steps without progress)"
     },
     {
-      "type": "incomplete",
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "robostate",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/sentence_wise/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "robostate",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/sentence_wise/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "robostate",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/sentence_wise/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "robostate",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/sentence_wise/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "saycan",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/sentence_wise/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "llm_planner",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/sentence_wise/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "exrap",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/sentence_wise/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "sentence_wise",
+      "method": "flare",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/sentence_wise/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
       "axis": "instruction_type",
       "setting": "summarized",
       "method": "robostate",
-      "sample_id": "G1_05",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/summarized/G1_05/metrics.json",
-      "reason": "Agent gave up (5 consecutive waits)"
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/summarized/G2_06/metrics.json"
     },
     {
-      "type": "incomplete",
+      "type": "missing",
       "axis": "instruction_type",
-      "setting": "vague",
+      "setting": "summarized",
       "method": "robostate",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/summarized/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "robostate",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/summarized/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "robostate",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/summarized/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
       "sample_id": "G1_01",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G1_01/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G1_01/metrics.json"
     },
     {
-      "type": "incomplete",
+      "type": "missing",
       "axis": "instruction_type",
-      "setting": "vague",
-      "method": "robostate",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
       "sample_id": "G1_04",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G1_04/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "saycan",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/summarized/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "llm_planner",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/summarized/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "exrap",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/summarized/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "summarized",
+      "method": "flare",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/summarized/G2_09/metrics.json"
     },
     {
       "type": "incomplete",
@@ -90,7 +1315,391 @@
       "method": "robostate",
       "sample_id": "G1_05",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G1_05/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent gave up (5 consecutive waits)"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "robostate",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "robostate",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "robostate",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "robostate",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/instruction_type/vague/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "saycan",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/instruction_type/vague/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "llm_planner",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/instruction_type/vague/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "exrap",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/instruction_type/vague/G2_09/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "E1_11",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/E1_11/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G2_06",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G2_06/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G2_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G2_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G2_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G2_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "instruction_type",
+      "setting": "vague",
+      "method": "flare",
+      "sample_id": "G2_09",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/instruction_type/vague/G2_09/metrics.json"
     },
     {
       "type": "incomplete",
@@ -99,7 +1708,7 @@
       "method": "robostate",
       "sample_id": "M1_02",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/M1_02/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (18 steps without progress)"
     },
     {
       "type": "incomplete",
@@ -108,16 +1717,383 @@
       "method": "robostate",
       "sample_id": "M1_03",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/M1_03/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (18 steps without progress)"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "low",
       "method": "robostate",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "robostate",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "robostate",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
       "sample_id": "E1_15",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/low/E1_15/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_folder']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "saycan",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/low/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "llm_planner",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/low/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "exrap",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/low/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "low",
+      "method": "flare",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/low/E1_10/metrics.json"
     },
     {
       "type": "incomplete",
@@ -126,7 +2102,7 @@
       "method": "robostate",
       "sample_id": "M1_02",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/M1_02/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (21 steps without progress)"
     },
     {
       "type": "incomplete",
@@ -135,25 +2111,391 @@
       "method": "robostate",
       "sample_id": "M1_03",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/M1_03/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (21 steps without progress)"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "medium",
       "method": "robostate",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "robostate",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "robostate",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "robostate",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
       "sample_id": "M1_04",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/M1_04/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_pillow']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/M1_04/metrics.json"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "medium",
-      "method": "robostate",
+      "method": "saycan",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
       "sample_id": "E1_15",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/medium/E1_15/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_folder']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "saycan",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/medium/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "llm_planner",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/medium/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "exrap",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/medium/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "medium",
+      "method": "flare",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/medium/E1_10/metrics.json"
     },
     {
       "type": "incomplete",
@@ -162,7 +2504,7 @@
       "method": "robostate",
       "sample_id": "M1_02",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/M1_02/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (24 steps without progress)"
     },
     {
       "type": "incomplete",
@@ -171,34 +2513,383 @@
       "method": "robostate",
       "sample_id": "M1_03",
       "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/M1_03/metrics.json",
-      "reason": "Agent stagnated (15 steps without progress)"
+      "reason": "Agent stagnated (24 steps without progress)"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "high",
       "method": "robostate",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "robostate",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "robostate",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
       "sample_id": "M1_04",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/M1_04/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_pillow']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/M1_04/metrics.json"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "high",
-      "method": "robostate",
+      "method": "saycan",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
       "sample_id": "E1_03",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/E1_03/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_book']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_03/metrics.json"
     },
     {
-      "type": "invalid",
+      "type": "missing",
       "axis": "dynamic_difficulty",
       "setting": "high",
-      "method": "robostate",
+      "method": "saycan",
       "sample_id": "E1_15",
-      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/robostate/dynamic/high/E1_15/metrics.json",
-      "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_folder']"
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "saycan",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/saycan/dynamic/high/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "llm_planner",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/llm_planner/dynamic/high/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "exrap",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/exrap/dynamic/high/E1_10/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "M1_01",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/M1_01/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "M1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/M1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "M1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/M1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "M1_04",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/M1_04/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "M1_05",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/M1_05/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_03",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_03/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_15",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_15/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_02",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_02/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_07",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_07/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_08",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_08/metrics.json"
+    },
+    {
+      "type": "missing",
+      "axis": "dynamic_difficulty",
+      "setting": "high",
+      "method": "flare",
+      "sample_id": "E1_10",
+      "metrics_path": "/Users/rushy/program/virtualhome/evaluation/results/table1/flare/dynamic/high/E1_10/metrics.json"
     }
   ]
 }

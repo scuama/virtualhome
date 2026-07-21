@@ -9,8 +9,8 @@
     "exrap",
     "flare"
   ],
-  "expected_config_count": 57,
-  "expected_episode_count": 285,
+  "expected_config_count": 81,
+  "expected_episode_count": 405,
   "aggregation": {
     "sr": "sum(final_satisfied_tasks) / sum(tasks)",
     "ps": "mean(first_satisfied_step for finally_satisfied_tasks)",
@@ -22,14 +22,14 @@
         "S7": 35
       },
       "instruction_type": {
-        "sentence_wise": 7,
-        "summarized": 7,
-        "vague": 7
+        "sentence_wise": 11,
+        "summarized": 11,
+        "vague": 11
       },
       "dynamic_difficulty": {
-        "low": 7,
-        "medium": 7,
-        "high": 7
+        "low": 11,
+        "medium": 11,
+        "high": 11
       }
     }
   },
@@ -359,6 +359,114 @@
       "max_steps": 45
     },
     {
+      "scenario_id": "T1_INST_G2_06_sentence_wise",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_06",
+      "setting": "sentence_wise",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_06_sentence_wise.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_06_summarized",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_06",
+      "setting": "summarized",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_06_summarized.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_06_vague",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_06",
+      "setting": "vague",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_06_vague.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_07_sentence_wise",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_07",
+      "setting": "sentence_wise",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_07_sentence_wise.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_07_summarized",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_07",
+      "setting": "summarized",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_07_summarized.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_07_vague",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_07",
+      "setting": "vague",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_07_vague.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_08_sentence_wise",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_08",
+      "setting": "sentence_wise",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_08_sentence_wise.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_08_summarized",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_08",
+      "setting": "summarized",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_08_summarized.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_08_vague",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_08",
+      "setting": "vague",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_08_vague.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_09_sentence_wise",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_09",
+      "setting": "sentence_wise",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_09_sentence_wise.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_09_summarized",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_09",
+      "setting": "summarized",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_09_summarized.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_INST_G2_09_vague",
+      "experiment_axis": "instruction_type",
+      "sample_id": "G2_09",
+      "setting": "vague",
+      "config_path": "configs/table1/instruction_type/T1_INST_G2_09_vague.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
       "scenario_id": "T1_DYN_M1_01_low",
       "experiment_axis": "dynamic_difficulty",
       "sample_id": "M1_01",
@@ -544,6 +652,114 @@
       "sample_id": "E1_15",
       "setting": "high",
       "config_path": "configs/table1/dynamic/T1_DYN_E1_15_high.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_02_low",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_02",
+      "setting": "low",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_02_low.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_02_medium",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_02",
+      "setting": "medium",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_02_medium.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_02_high",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_02",
+      "setting": "high",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_02_high.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_07_low",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_07",
+      "setting": "low",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_07_low.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_07_medium",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_07",
+      "setting": "medium",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_07_medium.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_07_high",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_07",
+      "setting": "high",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_07_high.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_08_low",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_08",
+      "setting": "low",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_08_low.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_08_medium",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_08",
+      "setting": "medium",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_08_medium.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_08_high",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_08",
+      "setting": "high",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_08_high.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_10_low",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_10",
+      "setting": "low",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_10_low.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_10_medium",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_10",
+      "setting": "medium",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_10_medium.json",
+      "task_count": 1,
+      "max_steps": 45
+    },
+    {
+      "scenario_id": "T1_DYN_E1_10_high",
+      "experiment_axis": "dynamic_difficulty",
+      "sample_id": "E1_10",
+      "setting": "high",
+      "config_path": "configs/table1/dynamic/T1_DYN_E1_10_high.json",
       "task_count": 1,
       "max_steps": 45
     }

@@ -1,0 +1,75 @@
+{
+    "task_total": 3,
+    "task_completed": 3,
+    "sr": 1.0,
+    "ps": 7.3333,
+    "ps_sum": 22,
+    "ps_count": 3,
+    "mean_completion_step": 7.3333,
+    "tasks": [
+        {
+            "task_id": "E1_19",
+            "instruction": "If your microwave is off, turn it on.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 2,
+            "completed": true,
+            "completion_step": 2
+        },
+        {
+            "task_id": "E1_02",
+            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "success_condition": {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 12,
+            "completed": true,
+            "completion_step": 12
+        }
+    ],
+    "scenario_id": "E_SEM_G05_S3_sentence_wise",
+    "table_id": "table2",
+    "experiment_axis": "instruction_type",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": "semantic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 12,
+    "execution_time_seconds": 54.69,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

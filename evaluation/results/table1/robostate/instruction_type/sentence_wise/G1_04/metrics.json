@@ -40,7 +40,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
     "steps_executed": 15,
-    "execution_time_seconds": 8.81,
+    "execution_time_seconds": 13.27,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

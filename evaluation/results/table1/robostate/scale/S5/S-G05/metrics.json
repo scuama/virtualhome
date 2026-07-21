@@ -1,11 +1,11 @@
 {
     "task_total": 5,
-    "task_completed": 2,
-    "sr": 0.4,
-    "ps": 4.0,
-    "ps_sum": 8,
-    "ps_count": 2,
-    "mean_completion_step": 4.0,
+    "task_completed": 4,
+    "sr": 0.8,
+    "ps": 15.25,
+    "ps_sum": 61,
+    "ps_count": 4,
+    "mean_completion_step": 15.25,
     "tasks": [
         {
             "task_id": "G1_05",
@@ -50,9 +50,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 2,
+            "first_satisfied_step": 3,
             "completed": true,
-            "completion_step": 2
+            "completion_step": 3
         },
         {
             "task_id": "E1_03",
@@ -67,9 +67,9 @@
             },
             "currently_satisfied": true,
             "ever_satisfied": true,
-            "first_satisfied_step": 6,
+            "first_satisfied_step": 20,
             "completed": true,
-            "completion_step": 6
+            "completion_step": 20
         },
         {
             "task_id": "E1_11",
@@ -82,11 +82,11 @@
                 "min_count": 1,
                 "target_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 22,
+            "completed": true,
+            "completion_step": 22
         },
         {
             "task_id": "E1_15",
@@ -99,11 +99,11 @@
                 "target_instance": 0,
                 "destination_instance": 0
             },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 16,
+            "completed": true,
+            "completion_step": 16
         }
     ],
     "scenario_id": "T1_SCALE_SG05_S5",
@@ -119,9 +119,9 @@
     "success": false,
     "run_status": "incomplete",
     "valid_for_aggregation": false,
-    "reason": "Agent generation crashed: [Errno 2] No such file or directory: 'evaluation/results/table1/_raw/robostate/run_T1_SCALE_SG05_S5.md'",
-    "steps_executed": 15,
-    "execution_time_seconds": 80.4,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 37,
+    "execution_time_seconds": 92.5,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

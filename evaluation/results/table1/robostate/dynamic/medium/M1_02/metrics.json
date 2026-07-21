@@ -44,9 +44,9 @@
     "success": false,
     "run_status": "incomplete",
     "valid_for_aggregation": false,
-    "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 15,
-    "execution_time_seconds": 8.39,
+    "reason": "Agent stagnated (21 steps without progress)",
+    "steps_executed": 21,
+    "execution_time_seconds": 10.82,
     "dynamic_event_counts": {
         "hide_waterglass": {
             "times_triggered": 0,

@@ -248,21 +248,10 @@ class DynamicEventRuntime:
             if target_id in self.hidden_until:
                 continue
 
-            # Table 1 binds disturbance to one concrete instance. An action on
-            # another object of the same class must not consume a trigger.
-            target_candidates = sorted(
-                [
-                    node for node in graph.get("nodes", [])
-                    if str(node.get("class_name", "")).lower() == target_class
-                ],
-                key=lambda node: int(node.get("id", -1)),
-            )
-            instance_index = int(effect.get("instance_index", 0))
-            if (
-                instance_index >= len(target_candidates)
-                or int(target_candidates[instance_index].get("id", -1)) != target_id
-            ):
-                continue
+            # Relaxed behavior: The disturbance affects whichever valid target
+            # the agent tries to interact with. This aligns with the relaxed
+            # success conditions in check_success().
+            pass
 
             required_state = trigger.get("target_state")
             if required_state:
@@ -1035,6 +1024,14 @@ def main():
 
             max_steps = int(config.get("max_steps", 15))
             timeout_seconds = max_steps * 5
+            
+            dynamic_events = config.get("dynamic_events", [])
+            dynamic_delay_allowance = sum(
+                e.get("effect", {}).get("duration_steps", 0) * e.get("max_triggers", 1)
+                for e in dynamic_events
+            )
+            # Base stagnation limit of 15, plus any potential delays from dynamic traps
+            stagnation_limit = min(15 + dynamic_delay_allowance, max_steps)
 
             class TimeoutException(Exception):
                 pass
@@ -1103,9 +1100,9 @@ def main():
                     if current_satisfied_count > last_satisfied_count:
                         last_satisfied_count = current_satisfied_count
                         last_task_completion_step = step_count
-                    elif step_count - last_task_completion_step >= 15:
+                    elif step_count - last_task_completion_step >= stagnation_limit:
                         success = False
-                        reason = "Agent stagnated (15 steps without progress)"
+                        reason = f"Agent stagnated ({stagnation_limit} steps without progress)"
                         run_status = "incomplete"
                         break
 

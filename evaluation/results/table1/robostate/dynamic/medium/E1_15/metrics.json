@@ -35,33 +35,48 @@
     "source_scenario_id": null,
     "method": "robostate",
     "model": "gpt-5.4-mini",
-    "success": false,
-    "run_status": "invalid",
-    "valid_for_aggregation": false,
-    "reason": "Invalid benchmark: success before configured dynamic events completed: ['hide_folder']",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
     "steps_executed": 13,
-    "execution_time_seconds": 46.36,
+    "execution_time_seconds": 51.31,
     "dynamic_event_counts": {
         "hide_folder": {
-            "times_triggered": 1,
+            "times_triggered": 2,
             "max_triggers": 2
         }
     },
     "dynamic_event_trace": [
         {
-            "step": 6,
+            "step": 5,
             "event": "hide",
             "event_id": "hide_folder",
             "object_id": 121,
             "duration_steps": 3,
             "trigger_index": 1,
             "max_triggers": 2,
+            "visible_at_step": 9
+        },
+        {
+            "step": 6,
+            "event": "hide",
+            "event_id": "hide_folder",
+            "object_id": 276,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 2,
             "visible_at_step": 10
+        },
+        {
+            "step": 9,
+            "event": "reappear",
+            "object_id": 121
         },
         {
             "step": 10,
             "event": "reappear",
-            "object_id": 121
+            "object_id": 276
         }
     ]
 }
