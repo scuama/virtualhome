@@ -1,6 +1,6 @@
 {
   "environment_id": 0,
-  "goal_instruction": "If the desk lamp is on, turn it off.",
+  "goal_instruction": "If the table lamp is on, turn it off.",
   "initial_relations_override": [
     {
       "subject": "character",

@@ -1,0 +1,64 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If there is a coffeepot on the table, pour two water glasses for me.",
+  "initial_relations_override": [
+    {
+      "subject": "coffeepot",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    },
+    {
+      "subject": "waterglass",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    },
+    {
+      "subject": "dishbowl",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "coffeepot",
+      "states": [
+        "FILLED_WATER"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "state",
+        "target_class": "waterglass",
+        "require_states": [
+          "FILLED_WATER"
+        ],
+        "min_count": 1
+      },
+      {
+        "check_type": "state",
+        "target_class": "dishbowl",
+        "require_states": [
+          "FILLED_WATER"
+        ],
+        "min_count": 1
+      }
+    ]
+  },
+  "execution_time_seconds": 60,
+  "scenario_id": "T3_without_state_alignment_P1_01",
+  "source_scenario_id": "P1_01",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_state_alignment",
+  "ablation_module": "memory",
+  "table3_source_subclass": "P1",
+  "source_config": "configs/source_tasks/p_class/P1_01.json",
+  "single_run": true,
+  "max_steps": 45
+}

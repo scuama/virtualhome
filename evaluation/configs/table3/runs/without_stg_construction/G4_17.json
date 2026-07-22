@@ -1,0 +1,50 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If there are apples on the table, rinse them under the tap and bring me one.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    },
+    {
+      "subject": "apple",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "apple"
+      ],
+      "remove_states": [
+        "CLEAN"
+      ],
+      "add_states": [
+        "DIRTY"
+      ]
+    }
+  ],
+  "hidden_broken_classes": [
+    "faucet"
+  ],
+  "success_condition": {
+    "target_class": "apple",
+    "states": [
+      "CLEAN"
+    ],
+    "min_count": 1
+  },
+  "scenario_id": "T3_without_stg_construction_G4_17",
+  "source_scenario_id": "G4_17",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_stg_construction",
+  "ablation_module": "stg",
+  "table3_source_subclass": "G4",
+  "source_config": "configs/source_tasks/g_class/G4_17.json",
+  "single_run": true,
+  "max_steps": 90
+}

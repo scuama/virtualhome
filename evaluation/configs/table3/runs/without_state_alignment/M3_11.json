@@ -1,0 +1,45 @@
+{
+  "scenario_id": "T3_without_state_alignment_M3_11",
+  "scenario_type": "M",
+  "goal_instruction": "If there is an apple in the fridge, take two and put them on the kitchen table.",
+  "environment_id": 0,
+  "max_steps": 25,
+  "initial_states_override": [],
+  "initial_relations_override": [
+    {
+      "subject": "apple",
+      "relation": "INSIDE",
+      "object": "fridge",
+      "count": 2
+    }
+  ],
+  "scheduled_rules": [
+    {
+      "start_step": 0,
+      "end_step": 5,
+      "rule_text": "The fridge is currently being cleaned. Do not approach or open the fridge."
+    }
+  ],
+  "failure_condition": {
+    "start_step": 0,
+    "end_step": 5,
+    "target_class": "fridge",
+    "states": [
+      "OPEN"
+    ]
+  },
+  "success_condition": {
+    "target_class": "apple",
+    "destination_class": "kitchentable",
+    "relation": "ON",
+    "min_count": 2
+  },
+  "source_scenario_id": "M3_11",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_state_alignment",
+  "ablation_module": "memory",
+  "table3_source_subclass": "M3",
+  "source_config": "configs/source_tasks/m_class/M3_11.json",
+  "single_run": true
+}

@@ -1,5 +1,5 @@
 scenario_id,category,subclass,success,completion_step,evidence_type,evidence_path,source_config,log_candidates
-G1_01,G,G1,True,6,goal_reached,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/g_class/G1_01.json,2
+G1_01,G,G1,True,7,goal_reached,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/g_class/G1_01.json,2
 G1_02,G,G1,True,1,goal_reached,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/g_class/G1_02.json,1
 G1_03,G,G1,True,1,goal_reached,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/g_class/G1_03.json,2
 G1_04,G,G1,True,2,goal_reached,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/g_class/G1_04.json,2

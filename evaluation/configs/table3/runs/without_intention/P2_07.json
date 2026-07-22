@@ -1,0 +1,53 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If there are apples in the fridge, take two out and put them on the kitchentable.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    },
+    {
+      "subject": "apple",
+      "relation": "INSIDE",
+      "object": "fridge",
+      "count": 2
+    },
+    {
+      "subject": "fridge",
+      "relation": "ON",
+      "object": "kitchencounter"
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "fridge",
+      "states": [
+        "CLOSED"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "relation",
+        "target_class": "apple",
+        "relation": "ON",
+        "destination_class": "kitchentable",
+        "min_count": 2
+      }
+    ]
+  },
+  "execution_time_seconds": 60,
+  "scenario_id": "T3_without_intention_P2_07",
+  "source_scenario_id": "P2_07",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_intention",
+  "ablation_module": "goal",
+  "table3_source_subclass": "P2",
+  "source_config": "configs/source_tasks/p_class/P2_07.json",
+  "single_run": true,
+  "max_steps": 45
+}

@@ -14,33 +14,22 @@ SOURCE_ROOT = ROOT / "configs" / "source_tasks"
 OUTPUT_ROOT = ROOT / "configs" / "table3"
 
 PROFILE_SPECS = {
-    "without_goal_reasoning": {
-        "module": "goal", "category": "G", "rerun": {"G1", "G2", "G3", "G4"},
-    },
-    "without_intention": {
-        "module": "goal", "category": "G", "rerun": {"G3", "G4"},
-    },
-    "without_parameter_binding": {
-        "module": "goal", "category": "G", "rerun": {"G2"},
-    },
-    "without_memory": {
-        "module": "memory", "category": "M", "rerun": {"M1", "M2", "M3", "M4"},
-    },
-    "without_memory_structure": {
-        "module": "memory", "category": "M", "rerun": {"M2"},
-    },
-    "without_state_alignment": {
-        "module": "memory", "category": "M", "rerun": {"M4"},
-    },
-    "without_stg_planning": {
-        "module": "planning", "category": "P", "rerun": {"P1", "P2", "P3"},
-    },
-    "without_stg_construction": {
-        "module": "planning", "category": "P", "rerun": {"P3"},
-    },
-    "without_path_merging": {
-        "module": "planning", "category": "P", "rerun": {"P1", "P2"},
-    },
+    "without_goal_reasoning": {"module": "goal", "category": "G", "rerun": ["G1", "G2", "G3", "G4"]},
+    "without_intention": {"module": "goal", "category": "G", "rerun": ["G3", "G4"]},
+    "without_parameter_binding": {"module": "goal", "category": "G", "rerun": ["G2"]},
+    "without_memory": {"module": "memory", "category": "M", "rerun": ["M1", "M2", "M3", "M4"]},
+    "without_memory_structure": {"module": "memory", "category": "M", "rerun": ["M2"]},
+    "without_state_alignment": {"module": "memory", "category": "M", "rerun": ["M3"]},
+    "without_stg_planning": {"module": "stg", "category": "P", "rerun": ["P1", "P2", "P3", "P4"]},
+    "without_stg_construction": {"module": "stg", "category": "P", "rerun": ["P1", "P2"]},
+    "without_path_merging": {"module": "stg", "category": "P", "rerun": ["P3", "P4"]},
+}
+
+# 5 randomly selected tasks per category (seed=42) for cross-category ablation testing
+CROSS_CATEGORY_SAMPLES = {
+    'G': ['G1_04', 'G1_01', 'G2_09', 'G2_08', 'G4_17'],
+    'M': ['M1_05', 'M1_04', 'M4_18', 'M1_03', 'M3_14'],
+    'P': ['P1_02', 'P1_01', 'P1_03', 'P2_07', 'P2_08'],
 }
 
 CATEGORY_DIR = {"G": "g_class", "M": "m_class", "P": "p_class"}
@@ -96,19 +85,31 @@ def generate_all() -> tuple[list[tuple[Path, dict]], dict]:
             })
 
     for profile, spec in PROFILE_SPECS.items():
-        for source_id, path, source in all_sources[spec["category"]]:
-            rerun = subclass_of(source_id) in spec["rerun"]
-            cells.append({
-                "profile": profile,
-                "module": spec["module"],
-                "category": spec["category"],
-                "scenario_id": source_id,
-                "subclass": subclass_of(source_id),
-                "result_source": "ablation" if rerun else "baseline",
-            })
-            if rerun:
-                relative = Path(profile) / f"{source_id}.json"
-                runs.append((relative, build_run_config(profile, source_id, path, source)))
+        for category, records in all_sources.items():
+            for source_id, path, source in records:
+                is_target_category = category == spec["category"]
+                
+                # Determine if this scenario should be re-run as an ablation
+                rerun = False
+                if is_target_category:
+                    rerun = subclass_of(source_id) in spec["rerun"]
+                else:
+                    # For cross-category testing, run if it is in the fixed sampling list
+                    rerun = source_id in CROSS_CATEGORY_SAMPLES[category]
+                
+                # The cells are populated for all 60 tasks for every profile
+                cells.append({
+                    "profile": profile,
+                    "module": spec["module"],
+                    "category": category,
+                    "scenario_id": source_id,
+                    "subclass": subclass_of(source_id),
+                    "result_source": "ablation" if rerun else "baseline",
+                })
+                
+                if rerun:
+                    relative = Path(profile) / f"{source_id}.json"
+                    runs.append((relative, build_run_config(profile, source_id, path, source)))
 
     manifest = {
         "table_id": "table3",
@@ -139,10 +140,12 @@ def generate_all() -> tuple[list[tuple[Path, dict]], dict]:
 
 
 def validate(runs: list[tuple[Path, dict]], manifest: dict) -> None:
-    if len(runs) != 105:
-        raise ValueError(f"Expected 105 runnable Table 3 configs, found {len(runs)}")
-    if len(manifest["cells"]) != 180:
-        raise ValueError("Table 3 must contain 9 profiles x 20 contributions")
+    # Original 105 runs + (9 profiles * 10 cross-category runs) = 195 runs
+    if len(runs) != 195:
+        raise ValueError(f"Expected 195 runnable Table 3 configs, found {len(runs)}")
+    # Now all profiles have all 60 tasks in the manifest
+    if len(manifest["cells"]) != 540:
+        raise ValueError(f"Table 3 must contain 9 profiles x 60 contributions, found {len(manifest['cells'])}")
     if len(manifest["baseline"]) != 60:
         raise ValueError("Table 3 baseline must contain exactly 60 source scenarios")
     counts = {}
@@ -152,18 +155,18 @@ def validate(runs: list[tuple[Path, dict]], manifest: dict) -> None:
         if config.get("table_id") != "table3" or not config.get("single_run"):
             raise ValueError(f"Invalid Table 3 metadata for {config['scenario_id']}")
     expected = {
-        "without_goal_reasoning": 20,
-        "without_intention": 10,
-        "without_parameter_binding": 5,
-        "without_memory": 20,
-        "without_memory_structure": 5,
-        "without_state_alignment": 5,
-        "without_stg_planning": 20,
-        "without_stg_construction": 10,
-        "without_path_merging": 10,
+        "without_goal_reasoning": 30,
+        "without_intention": 20,
+        "without_parameter_binding": 15,
+        "without_memory": 30,
+        "without_memory_structure": 15,
+        "without_state_alignment": 15,
+        "without_stg_planning": 30,
+        "without_stg_construction": 20,
+        "without_path_merging": 20,
     }
     if counts != expected:
-        raise ValueError(f"Unexpected Table 3 run counts: {counts}")
+        raise ValueError(f"Invalid profile distribution: {counts}")
 
 
 def write_generated(runs: list[tuple[Path, dict]], manifest: dict) -> None:

@@ -2,9 +2,9 @@
   "table_id": "table3",
   "complete": true,
   "baseline_samples": 60,
-  "expected_runnable_episodes": 105,
-  "recorded_runnable_episodes": 105,
-  "expected_cell_contributions": 180,
-  "materialized_cell_contributions": 180,
+  "expected_runnable_episodes": 195,
+  "recorded_runnable_episodes": 195,
+  "expected_cell_contributions": 540,
+  "materialized_cell_contributions": 540,
   "issues": []
 }

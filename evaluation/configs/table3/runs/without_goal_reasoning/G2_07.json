@@ -1,6 +1,6 @@
 {
   "environment_id": 0,
-  "goal_instruction": "If you see the cup on the table, put it where it belongs.",
+  "goal_instruction": "If you see the mug on the table, put it where it belongs.",
   "initial_relations_override": [
     {
       "subject": "character",

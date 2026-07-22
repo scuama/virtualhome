@@ -1,0 +1,44 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If the table lamp is on, turn it off.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "bedroom"
+    },
+    {
+      "subject": "tablelamp",
+      "relation": "INSIDE",
+      "object": "bedroom",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "tablelamp"
+      ],
+      "add_states": [
+        "ON"
+      ]
+    }
+  ],
+  "success_condition": {
+    "target_class": "tablelamp",
+    "states": [
+      "OFF"
+    ],
+    "min_count": 1
+  },
+  "scenario_id": "T3_without_path_merging_G1_04",
+  "source_scenario_id": "G1_04",
+  "table_id": "table3",
+  "experiment_axis": "ablation",
+  "ablation_profile": "without_path_merging",
+  "ablation_module": "stg",
+  "table3_source_subclass": "G1",
+  "source_config": "configs/source_tasks/g_class/G1_04.json",
+  "single_run": true,
+  "max_steps": 90
+}

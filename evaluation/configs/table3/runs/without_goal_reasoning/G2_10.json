@@ -1,6 +1,6 @@
 {
   "environment_id": 0,
-  "goal_instruction": "If there is no one in the kitchen, make sure the kitchen is safe.",
+  "goal_instruction": "If there is no one in the kitchen, make sure the stove is safe.",
   "initial_relations_override": [
     {
       "subject": "character",

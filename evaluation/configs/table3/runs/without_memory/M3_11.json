@@ -1,7 +1,7 @@
 {
   "scenario_id": "T3_without_memory_M3_11",
   "scenario_type": "M",
-  "goal_instruction": "If there is an apple in the fridge, take two and put them on the table.",
+  "goal_instruction": "If there is an apple in the fridge, take two and put them on the kitchen table.",
   "environment_id": 0,
   "max_steps": 25,
   "initial_states_override": [],

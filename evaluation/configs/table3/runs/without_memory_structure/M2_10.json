@@ -1,7 +1,7 @@
 {
   "scenario_id": "T3_without_memory_structure_M2_10",
   "scenario_type": "M",
-  "goal_instruction": "If there is a yellow cushion on the sofa, bring me one.",
+  "goal_instruction": "If there is a yellow pillow on the sofa, bring me one.",
   "environment_id": 3,
   "initial_states_override": [
     {
