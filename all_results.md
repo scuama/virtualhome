@@ -28,7 +28,7 @@
 
 | Module | Ablation Setting | SR (%) ↑ | PS ↓ |
 | :--- | :--- | :---: | :---: |
-| **Full** | RoboState (Full) | 61.67 | 4.81 |
+| **Full** | RoboState (Full) | 86.67 | 5.00 |
 | **Goal Reasoning** | w/o Goal Reasoning | 15.00 | 2.00 |
 | | w/o Intention | 70.00 | 3.21 |
 | | w/o Parameter Binding | 80.00 | 4.25 |

@@ -51,6 +51,14 @@ def _baseline_logs(root: Path, scenario_id: str) -> list[tuple[str, Path]]:
         else:
             paths = sorted((root / bucket / scenario_id).glob("run_*.md"))
         candidates.extend((bucket, path) for path in paths)
+    
+    source_tasks_root = ROOT / "results" / "source_tasks" / "robostate"
+    if source_tasks_root.exists():
+        for subclass_dir in source_tasks_root.iterdir():
+            if subclass_dir.is_dir():
+                path = subclass_dir / scenario_id / f"run_{scenario_id}.md"
+                if path.exists():
+                    candidates.append(("success", path))
     return candidates
 
 
