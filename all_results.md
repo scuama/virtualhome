@@ -26,17 +26,17 @@
 
 # Table 3: Ablation Study of RoboState Modules
 
-| Module | Ablation Setting | SR (%) ↑ | PS ↓ |
-| :--- | :--- | :---: | :---: |
-| **Full** | RoboState (Full) | 86.67 | 5.02 |
-| **Goal Reasoning** | w/o Goal Reasoning | 28.33 | 7.41 |
-| | w/o Intention | 26.67 | 6.62 |
-| | w/o Parameter Binding | 31.67 | 6.58 |
-| **Memory** | w/o Memory | 11.67 | 3.29 |
-| | w/o Memory Structure | 21.67 | 5.77 |
-| | w/o State Alignment | 43.33 | 4.50 |
-| **Planning** | w/o STG Planning | 33.33 | 5.40 |
-| | w/o STG Construction | 51.67 | 6.61 |
-| | w/o Path Merging | 38.33 | 5.52 |
+| Module | Ablation Setting | SR (%) ↑ | PS ↓ | GoalAlign (%) ↑ | SlotID (%) ↑ | Halluc. (%) ↓ |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: |
+| **Full** | RoboState (Full) | 86.67 | 5.02 | 87.50 (21/24) | 100.00 (14/14) | 0.00 (0/104) |
+| **Goal Reasoning** | w/o Goal Reasoning | 28.33 | 7.41 | 69.57 (16/23) | n/a | n/a |
+| | w/o Intention | 26.67 | 6.62 | 83.33 (20/24) | n/a | n/a |
+| | w/o Parameter Binding | 31.67 | 6.58 | 69.57 (16/23) | n/a | n/a |
+| **Memory** | w/o Memory | 11.67 | 3.29 | n/a | 20.00 (2/10) | n/a |
+| | w/o Memory Structure | 21.67 | 5.77 | n/a | 75.00 (9/12) | n/a |
+| | w/o State Alignment | 43.33 | 4.50 | n/a | 64.29 (9/14) | n/a |
+| **Planning** | w/o STG Planning | 33.33 | 5.40 | n/a | n/a | 23.58 (25/106) |
+| | w/o STG Construction | 51.67 | 6.61 | n/a | n/a | 13.39 (17/127) |
+| | w/o Path Merging | 38.33 | 5.52 | n/a | n/a | n/a |
 
-> *Note: Baseline SR represents the average across all 60 standard testing scenarios for direct comparison.*
+> *Note: SR/PS use the accepted denominator-60 weighted aggregate. Manual metrics are computed only from auditable items; Halluc. scenario coverage is Full 17/20, w/o STG Planning 16/20, and w/o STG Construction 17/20. Missing logs are excluded rather than treated as metric errors.*
