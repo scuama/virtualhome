@@ -10,3 +10,14 @@
 | **RoboState** | 80.0 / 8.2 | 76.0 / 11.1 | 80.0 / 15.8 | 71.4 / 3.8 | 100.0 / 5.0 | 85.7 / 7.7 | 71.4 / 13.6 | 71.4 / 13.6 | 71.4 / 18.0 |
 
 > *Note: Each cell reports SR ↑ / PS ↓*
+
+---
+
+# Table 2: Performance of RoboState over $D_{ex}$
+
+| | Scale (#inst.) | | | Instruction Type | | | Dynamic Difficulty | | |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Method** | **3** | **5** | **7** | **Sent.** | **Summ.** | **Vague** | **L** | **M** | **H** |
+| **RoboState** | 100.0 / 8.5 | 100.0 / 11.8 | 91.4 / 14.8 | 100.0 / 8.1 | 100.0 / 9.4 | 40.0 / 5.5 | 86.7 / 8.8 | 86.7 / 9.0 | 80.0 / 9.5 |
+
+> *Note: Each cell reports SR ↑ / PS ↓*

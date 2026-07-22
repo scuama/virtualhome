@@ -1,0 +1,282 @@
+{
+    "table_id": "table2",
+    "scenario_id": "E_MULTI_G04_S5",
+    "extension_type": "multi",
+    "experiment_axis": "scale",
+    "group_id": "G04",
+    "source_scenarios": [
+        "E1_11",
+        "E1_03",
+        "E1_07",
+        "E1_05",
+        "E1_06"
+    ],
+    "instruction_scale": 5,
+    "instruction_type": "sentence_wise",
+    "environment_id": 0,
+    "grounding_candidates": [
+        "apple",
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bellpepper",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "candybar",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "cereal",
+        "chair",
+        "chips",
+        "chocolatesyrup",
+        "clock",
+        "closet",
+        "closetdrawer",
+        "clothespants",
+        "clothespile",
+        "clothesshirt",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cpuscreen",
+        "crackers",
+        "creamybuns",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwashingliquid",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "hanger",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "lightswitch",
+        "lime",
+        "microwave",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "paper",
+        "peach",
+        "perfume",
+        "photoframe",
+        "pie",
+        "pillow",
+        "plate",
+        "plum",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "washingsponge",
+        "waterglass",
+        "whippedcream",
+        "window",
+        "wineglass"
+    ],
+    "goal_instruction": "1. If your computer stays off, turn it on.\n2. If you see a book somewhere unorganized, bring it to the sofa.\n3. The mug should always be on the coffeetable.\n4. It is good for maintenance if the microwave is always open.\n5. Always leave the stove open.",
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_05",
+            "instruction": "It is good for maintenance if the microwave is always open.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            }
+        },
+        {
+            "task_id": "E1_06",
+            "instruction": "Always leave the stove open.",
+            "success_condition": {
+                "target_class": "stove",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "microwave"
+            ],
+            "add_states": [
+                "CLOSED"
+            ],
+            "remove_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "stove"
+            ],
+            "add_states": [
+                "CLOSED"
+            ],
+            "remove_states": [
+                "OPEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "stove",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            }
+        ]
+    },
+    "max_steps": 75,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 71.02
+}

@@ -1,0 +1,106 @@
+{
+    "task_total": 5,
+    "task_completed": 5,
+    "sr": 1.0,
+    "ps": 12.6,
+    "ps_sum": 63,
+    "ps_count": 5,
+    "mean_completion_step": 12.6,
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 17,
+            "completed": true,
+            "completion_step": 17
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 5,
+            "completed": true,
+            "completion_step": 5
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        },
+        {
+            "task_id": "E1_09",
+            "instruction": "If you see towels, put them in the dishwasher.",
+            "success_condition": {
+                "target_class": "towel",
+                "relation": "INSIDE",
+                "destination_class": "dishwasher",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        },
+        {
+            "task_id": "E1_12",
+            "instruction": "If the cabinet is open, close it.",
+            "success_condition": {
+                "target_class": "cabinet",
+                "states": [
+                    "CLOSED"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 19,
+            "completed": true,
+            "completion_step": 19
+        }
+    ],
+    "scenario_id": "E_MULTI_G03_S5",
+    "table_id": "table2",
+    "experiment_axis": "scale",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": "multi",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 19,
+    "execution_time_seconds": 66.01,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

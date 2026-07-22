@@ -1,0 +1,137 @@
+{
+    "task_total": 7,
+    "task_completed": 7,
+    "sr": 1.0,
+    "ps": 13.8571,
+    "ps_sum": 97,
+    "ps_count": 7,
+    "mean_completion_step": 13.8571,
+    "tasks": [
+        {
+            "task_id": "E1_19",
+            "instruction": "If your microwave is off, turn it on.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        },
+        {
+            "task_id": "E1_02",
+            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "success_condition": {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 19,
+            "completed": true,
+            "completion_step": 19
+        },
+        {
+            "task_id": "E1_04",
+            "instruction": "The dishwasher must always be open to dry the dishwasher.",
+            "success_condition": {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 2,
+            "completed": true,
+            "completion_step": 2
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 23,
+            "completed": true,
+            "completion_step": 23
+        },
+        {
+            "task_id": "E1_12",
+            "instruction": "If the cabinet is open, close it.",
+            "success_condition": {
+                "target_class": "cabinet",
+                "states": [
+                    "CLOSED"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 25,
+            "completed": true,
+            "completion_step": 25
+        },
+        {
+            "task_id": "E1_18",
+            "instruction": "If someone uses a plate for washing dishes and leaves it somewhere, put it in the dishwasher.",
+            "success_condition": {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "dishwasher",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6
+        }
+    ],
+    "scenario_id": "E_MULTI_G05_S7",
+    "table_id": "table2",
+    "experiment_axis": "scale",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": "multi",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 25,
+    "execution_time_seconds": 86.07,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

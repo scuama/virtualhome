@@ -15,34 +15,34 @@
     },
     {
       "question": "Why is that important?",
-      "answer": "Because the appliance must be powered on to be usable for its intended function."
+      "answer": "Because the user wants the appliance to be available for use or actively operating."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It enables food-heating or food-preparation capability."
+      "answer": "It fulfills the need to activate a household appliance so it can perform its intended function."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants convenience and access to a functioning kitchen appliance for preparing food."
+      "answer": "The motivation is likely practical convenience or preparation for cooking/heating food."
     }
   ],
-  "deep_intent": "The user wants to enable food-heating functionality.",
+  "deep_intent": "The user wants to activate a household appliance.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other powered kitchen appliances that can heat food, such as an oven or toaster oven."
+      "description": "Other household appliances that can be turned on to perform a similar function, such as an oven, toaster oven, or kettle."
     },
     {
       "priority": 2,
-      "description": "Alternative food-heating devices, such as a hot plate or air fryer."
+      "description": "Other kitchen devices with an on/off operating state, such as a blender or coffee maker."
     },
     {
       "priority": 3,
-      "description": "Any household appliance that provides quick food warming capability."
+      "description": "Any indoor electrical device that can be powered on to provide useful function."
     },
     {
       "priority": 4,
-      "description": "A different way to obtain warm food, such as using a stovetop or preheated food from another source."
+      "description": "A different way to accomplish the same practical goal, such as using a stove or other heating appliance if the microwave is unavailable."
     }
   ]
 }
@@ -51,15 +51,15 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to turn a food-heating appliance on. The SDG specifies a heater that must be ON, so we keep the exact target appliance plus alternative heating appliances that can serve the same function as backups. We also retain the stove as an implied alternative heating source per the goal's acceptable alternatives.",
+  "reasoning": "The goal is to turn on a household appliance, and the SDG requires a heating/appliance object in the ON state. The exact target class is microwave, and I should retain close functional alternatives with similar on/off utility in case the microwave is unavailable, plus a basic power source if needed.",
   "selected_classes": [
-    "toaster",
     "character",
+    "door",
+    "stove",
+    "toaster",
     "microwave",
     "coffeemaker",
-    "air fryer",
-    "stove",
-    "plate"
+    "powersocket"
   ],
   "raw_class_count": 45
 }
@@ -68,7 +68,7 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to make the microwave ON. The microwave is present in the current kitchen graph as microwave(234), and it has HAS_SWITCH and HAS_PLUG, so it can be switched on directly after being near it. Since switching requires proximity and no prior walk has been done, the next atomic step is to walk to the microwave.",
+  "reasoning": "The active task is to satisfy N1 by turning the heater on. The best binding from the filtered graph is microwave(234), since it is a household appliance with HAS_SWITCH and currently OFF. Because switch actions require proximity, I should first walk to the microwave before switching it on. The microwave is not dirty, and it is already in the kitchen with the character, so no additional setup is needed.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -107,7 +107,7 @@ graph TD
     N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (16)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50), kitchen(126)...
+- **Observed Items (12)**: door(145) [OPEN], door(146) [OPEN], powersocket(156), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [OFF,CLOSED], character(1), bathroom(11), bedroom(50), kitchen(126), livingroom(261)
 
 
 ### [PerceptionFilter] Output
@@ -115,13 +115,13 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "toaster",
     "character",
+    "door",
+    "stove",
+    "toaster",
     "microwave",
     "coffeemaker",
-    "air fryer",
-    "stove",
-    "plate"
+    "powersocket"
   ],
   "raw_class_count": 45
 }
@@ -130,7 +130,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to make the microwave ON. We are already close to microwave(234) from the previous successful walk, and the microwave is currently CLOSED and OFF. To satisfy N1, the next required action is to turn it on. Because it has HAS_PLUG and there is no indication it is unplugged, the correct next step is switch on the microwave directly.",
+  "reasoning": "The active task is to turn the microwave ON. The filtered graph shows microwave(234) is already CLOSE to the character, so no additional walk is needed. It has HAS_SWITCH and is currently OFF, so the next direct action is to switch it on. Since the microwave is not listed as needing a plug-in check beyond HAS_PLUG, and no power constraint blocks it, this should satisfy the SDG node N1.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -169,7 +169,7 @@ graph TD
     N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (16)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50), kitchen(126)...
+- **Observed Items (12)**: door(145) [OPEN], door(146) [OPEN], powersocket(156), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [OFF,CLOSED], character(1), bathroom(11), bedroom(50), kitchen(126), livingroom(261)
 
 
 ### [GoalReasoner (Module A - Intent)] Output
@@ -182,38 +182,38 @@ graph TD
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have fruit transported to a specific place in the home."
+      "answer": "To have fruit moved to the kitchen counter."
     },
     {
       "question": "Why is that important?",
-      "answer": "So the fruit is available where the user wants it, likely for use, storage, or later eating."
+      "answer": "So the fruit is placed where the user expects it to be used or accessed."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to relocate food items to a desired location for convenience or access."
+      "answer": "It supports making food available and accessible in a specific household location."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants organized placement of available food, reducing effort needed to retrieve it later."
+      "answer": "The user may want convenience, organization, or to prepare for eating or food handling."
     }
   ],
-  "deep_intent": "The user wants food items moved to a desired location for convenient access or organization.",
+  "deep_intent": "The user wants food moved to an accessible kitchen location for convenience or preparation.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other fresh produce items that can be moved to the same place, such as vegetables or additional fruit."
+      "description": "Other pieces of fruit that can be placed on the kitchen counter."
     },
     {
       "priority": 2,
-      "description": "Other edible household food items that are typically stored or gathered in a kitchen area."
+      "description": "Other ready-to-handle produce items commonly stored in a kitchen, such as vegetables."
     },
     {
       "priority": 3,
-      "description": "Packaged snacks or ingredients that can be conveniently placed on the kitchen counter."
+      "description": "Other household food items suitable for countertop placement, such as packaged snacks or baked goods."
     },
     {
       "priority": 4,
-      "description": "Any portable food item suitable for later use or consumption if fruit is unavailable."
+      "description": "Other edible items that can be brought to the kitchen area for access or preparation."
     }
   ]
 }
@@ -222,11 +222,10 @@ graph TD
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to place fruit on the kitchen counter. I must keep the target class fruit and the specified location kitchencounter. Since fruit is a broad category and apple is the visible fruit item available as a practical alternative, it should be retained as a relevant food item for this task.",
+  "reasoning": "The goal is to place fruit on the kitchen counter, so I need the target food class and the destination location. No extra tools are required for a simple move/place action.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -236,12 +235,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place fruit on the kitchen counter. The filtered graph shows multiple apples inside the kitchen, which are valid fruit candidates. Since the counter is the destination and I am already in the kitchen, the next progress step is to go to a specific fruit first before grabbing it. I will target apple(249) as a valid fruit instance.",
+  "reasoning": "The active task is to place fruit on the kitchen counter. The graph shows multiple apples inside the kitchen, and apples are valid fruit substitutes. I am currently in the kitchen and there is no evidence I am already holding anything. To progress toward placing one fruit on the counter, I should first approach a specific fruit object before grabbing it. The best target is apple(249), a movable grabbable fruit candidate with no special constraints.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Destination": "kitchencounter(210)",
-    "?Fruit": "apple(249)"
+    "?Fruit": "apple(249)",
+    "?Counter": "kitchencounter(210)"
   },
   "action": "[walk] <apple> (249)"
 }
@@ -285,9 +284,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -297,13 +295,10 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG requires fruit to be ON the kitchencounter. The current graph shows multiple apples inside the kitchen, and apples are valid fruit/portable food substitutes. The previous walk to apple(249) failed because that object had no interaction positions, so I should pick a different reachable fruit object. Since I am not yet near the destination or holding anything, the next atomic step must be to walk to a selected apple first. I will use apple(250) because it is a grabbable fruit item inside the kitchen and has no conflicting special states.",
+  "reasoning": "The active goal is to place fruit on the kitchen counter. The current graph shows multiple apples in the kitchen, which are valid fruit substitutes. The previous [walk] to apple(249) failed because it had no interaction positions, so I should choose a different reachable fruit instance. Since placing requires first holding the object and then walking to the destination, the next atomic step must be to move near a reachable apple. Apple(250) is an unencumbered fruit candidate with no blocking relations, unlike some others stacked on apples.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Fruit": "apple(250)",
-    "?Destination": "kitchencounter(210)"
-  },
+  "mapped_variables": {},
   "action": "[walk] <apple> (250)"
 }
 ```
@@ -346,9 +341,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -358,21 +352,18 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place fruit on the kitchencounter. The current graph shows several apples close to the character, and apples are valid fruit substitutes. Since I just walked to apple(250), the next atomic step should be to grab a nearby fruit item. Apple(250) is grabbable and close, so this is the best next action toward eventually putting it on the kitchencounter.",
+  "reasoning": "The active goal is to place fruit on the kitchen counter. We are already close to several apples, so the next step is to pick one up before moving to the counter. Apple(249) is a valid fruit and is close to the character, making it a suitable choice. I will start by grabbing it; after that I can walk to the kitchen counter and place it there.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Fruit": "apple(250)",
-    "?Counter": "kitchencounter(210)"
-  },
-  "action": "[grab] <apple> (250)"
+  "mapped_variables": {},
+  "action": "[grab] <apple> (249)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <apple> (250)",
+  "action": "[grab] <apple> (249)",
   "active_task_id": "task_2",
   "task_context": {
     "active_task_id": "task_2",
@@ -387,7 +378,7 @@ graph TD
 }
 ```
 ## Step 4
-- **Action**: `[grab] <apple> (250)`
+- **Action**: `[grab] <apple> (249)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_2`
@@ -407,9 +398,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -419,12 +409,10 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place fruit on the kitchencounter. We already hold apple(250), which is a valid fruit instance and is currently close to the character. The kitchencounter exists in the kitchen, and the next required step toward satisfying N1 is to move to the counter before placing the apple onto it. Because putback requires being explicitly walked to the destination first, I should walk to the kitchencounter(210).",
+  "reasoning": "The active goal is to place fruit on the kitchen counter. I am already holding apple(249), which can serve as fruit. The counter object kitchencounter(210) is available and is a flat surface. To satisfy the SDG, the next step is to move to the counter before placing the apple there. I should not repeat the previous walk to the apple, and I cannot put it back onto the counter without first walking to the counter.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Container": "kitchencounter(210)"
-  },
+  "mapped_variables": {},
   "action": "[walk] <kitchencounter> (210)"
 }
 ```
@@ -467,9 +455,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -479,21 +466,21 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to have a fruit item on the kitchen counter. We are already close to kitchencounter(210), and the current graph shows the character holding apple(250) in the right hand. Since the counter is a flat surface and the apple is already held, the next necessary step is to place it on the counter. N1 will be satisfied by putting the held apple onto kitchencounter(210).",
+  "reasoning": "The active goal is to place fruit on the kitchen counter. I am already close to kitchencounter(210), but I am currently holding apple(249), which is a valid fruit item. The next required step is to place the held apple onto the counter surface. Since putback requires being near the destination and I am already close to the kitchencounter, I can proceed with placing the apple there.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Fruit": "apple(250)",
-    "?Destination": "kitchencounter(210)"
+    "?Fruit": "apple(249)",
+    "?Counter": "kitchencounter(210)"
   },
-  "action": "[putback] <apple> (250) <kitchencounter> (210)"
+  "action": "[putback] <apple> (249) <kitchencounter> (210)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <apple> (250) <kitchencounter> (210)",
+  "action": "[putback] <apple> (249) <kitchencounter> (210)",
   "active_task_id": "task_2",
   "task_context": {
     "active_task_id": "task_2",
@@ -508,7 +495,7 @@ graph TD
 }
 ```
 ## Step 6
-- **Action**: `[putback] <apple> (250) <kitchencounter> (210)`
+- **Action**: `[putback] <apple> (249) <kitchencounter> (210)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_2`
@@ -528,9 +515,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -540,15 +526,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place fruit on the kitchencounter. N1 is already satisfied because apple(250) is on kitchencounter(210) and close to the character. No further physical action is needed for the active task. Since the instruction says to work only on the active task and avoid repeating a walk if just done, the safest next step is to wait for the next task context rather than disturbing the completed state.",
+  "reasoning": "The active SDG requires fruit to be ON the kitchen counter. Apple(249) is already on kitchencounter(210), and apples count as fruit. Therefore the goal node is satisfied and no further action is needed for this task. Since the instruction asks for the single next action and there is no remaining gap for the active task, I will wait rather than risk unnecessary manipulation.",
   "satisfied_nodes": [
     "N1"
   ],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?TargetFruit": "apple(250)",
-    "?TargetSurface": "kitchencounter(210)"
-  },
+  "mapped_variables": {},
   "action": "[wait]"
 }
 ```
@@ -591,9 +574,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -603,14 +585,13 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG requires fruit to be ON the kitchencounter. That state is already satisfied because apple(250) is on kitchencounter(210), and apples are acceptable fruit instances. No further action is needed for the active task, and we must not manipulate satisfied-task objects unnecessarily.",
+  "reasoning": "The active task is to have fruit on the kitchen counter. This is already satisfied by apple(249) being ON kitchencounter(210). No further physical action is needed for the active task, and we should not manipulate it further. Since only a single next action is requested and the task goal node is satisfied, the safest action is to wait rather than disturb the completed state while preserving focus on the active task.",
   "satisfied_nodes": [
     "N1"
   ],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?TargetSurface": "kitchencounter(210)",
-    "?Fruit": "apple(250)"
+    "?Container": "kitchencounter(210)"
   },
   "action": "[wait]"
 }
@@ -654,9 +635,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -666,14 +646,14 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal N1 is already satisfied: apple(250) is currently ON kitchencounter(210), and the counter is close to the character. No further action is needed for this task.",
+  "reasoning": "The active SDG requires fruit on the kitchen counter. The current graph already shows apple(249) on kitchencounter(210), and the character is close to that counter. This satisfies the only SDG node, so no further physical action is needed for the active task.",
   "satisfied_nodes": [
     "N1"
   ],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?TargetObject": "apple(250)",
-    "?Destination": "kitchencounter(210)"
+    "?Fruit": "apple(249)",
+    "?Counter": "kitchencounter(210)"
   },
   "action": "[wait]"
 }
@@ -717,9 +697,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -729,15 +708,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to have fruit ON the kitchencounter. This is already satisfied by apple(250), which is on kitchencounter(210) and close to the character. No further action is needed for the active task. Since the instruction asks for a single next action and avoids repeating a walk just done, the best step is to wait rather than disturb the satisfied state.",
+  "reasoning": "The active SDG requires fruit to be ON the kitchen counter. This is already satisfied because apple(249) is on kitchencounter(210), and the character is close to both. No further action is needed for the active task.",
   "satisfied_nodes": [
     "N1"
   ],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Counter": "kitchencounter(210)",
-    "?Fruit": "apple(250)"
-  },
+  "mapped_variables": {},
   "action": "[wait]"
 }
 ```
@@ -780,9 +756,8 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "fruit",
-    "apple",
     "character",
+    "apple",
     "kitchencounter"
   ],
   "raw_class_count": 45
@@ -792,14 +767,14 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG node N1 requires fruit ON the kitchencounter. This is already satisfied because apple(250) is on kitchencounter(210), and apple is an acceptable fruit instance for the goal. No further action is needed for the active task.",
+  "reasoning": "The active SDG node N1 requires a fruit object to be ON the kitchen counter. This is already satisfied in the current graph because apple(249) is on kitchencounter(210), and that counter is the target location. No further action is needed for the active task.",
   "satisfied_nodes": [
     "N1"
   ],
   "current_node_focus": "N1",
   "mapped_variables": {
     "?Counter": "kitchencounter(210)",
-    "?Fruit": "apple(250)"
+    "?Fruit": "apple(249)"
   },
   "action": "[wait]"
 }

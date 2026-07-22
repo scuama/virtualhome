@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the microwave turned on if it is currently off."
+      "answer": "To change the microwave's power state from off to on."
     },
     {
       "question": "Why is that important?",
-      "answer": "Because the user likely wants the appliance available for use."
+      "answer": "Because the microwave needs to be on to operate and perform its function."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to enable appliance operation for heating or cooking food."
+      "answer": "It enables the user to use an appliance for heating or preparing food."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The motivation is practical convenience and preparation of the appliance for an intended task, such as warming food or using the microwave immediately."
+      "answer": "The underlying motivation is likely to make food preparation possible and more convenient, reducing effort and saving time."
     }
   ],
-  "deep_intent": "The user wants to enable an appliance for food heating or cooking use.",
+  "deep_intent": "The user wants an appliance to be powered on so it can be used for food preparation.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-use kitchen appliances that can heat food, such as a toaster oven or stovetop burner"
+      "description": "Other indoor appliances that can heat or prepare food and can be powered on, such as a toaster oven or countertop oven."
     },
     {
       "priority": 2,
-      "description": "Any household heating appliance suitable for warming food, such as an electric oven or air fryer"
+      "description": "Other kitchen heating appliances with a similar function, such as an electric kettle or air fryer."
     },
     {
       "priority": 3,
-      "description": "Alternative food-warming methods or devices that can serve the same purpose, such as a hot plate or kettle for applicable foods"
+      "description": "Any readily usable cooking device that can be switched on to prepare food, such as a stove or hot plate."
     },
     {
       "priority": 4,
-      "description": "A different way to make food warm and ready to eat, such as placing it in a conventional oven or reheating it by another indoor heating appliance"
+      "description": "A different food-preparation option that reduces the need for this appliance, such as ready-to-eat food or preheated food from another source."
     }
   ]
 }
@@ -51,17 +51,16 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to have a food-heating appliance turned on, so the target microwave must be kept. The SDG requires a heater device in the ON state, and the visible alternative heating appliances that could serve the same function should also be retained for backup: stove, toaster, coffeemaker, and fryingpan/cookingpot-related heating setup. No unrelated furniture or decor is needed.",
+  "reasoning": "The goal is to power on a food-heating appliance, so the target microwave must be kept. The SDG only requires a heater/appliance to be ON, and the acceptable alternatives include other food-heating appliances, so I retain the visible functional backups: coffeemaker, dishwasher, stove, and toaster as usable powered appliances. No extra furniture or decor is needed.",
   "selected_classes": [
-    "stove",
-    "coffeemaker",
-    "microwave",
-    "fryingpan",
-    "cookingpot",
+    "dishwasher",
     "character",
+    "door",
+    "stove",
     "toaster",
+    "microwave",
     "plate",
-    "door"
+    "coffeemaker"
   ],
   "raw_class_count": 45
 }
@@ -70,7 +69,7 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to satisfy N1 by turning the microwave ON. The microwave(234) is present, has HAS_SWITCH and HAS_PLUG, and is currently OFF. Since switching on an appliance requires being near it, the next atomic step is to walk to the microwave before any switch action.",
+  "reasoning": "The active task is to turn the microwave on. The microwave(234) is visible in the kitchen and currently OFF and CLOSED. Since switching it on requires being near the appliance, the first required step is to walk to it. The microwave has HAS_PLUG, but no plugging action is needed yet because the immediate next atomic action should establish proximity before any switch interaction.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -109,7 +108,7 @@ graph TD
     N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], fryingpan(161), cookingpot(162) [CLOSED], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [CLOSED,OFF]...
+- **Observed Items (19)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], dishwasher(228) [CLOSED,OFF], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [OFF,CLOSED], character(1)...
 
 
 ### [PerceptionFilter] Output
@@ -117,15 +116,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "coffeemaker",
-    "microwave",
-    "fryingpan",
-    "cookingpot",
+    "dishwasher",
     "character",
+    "door",
+    "stove",
     "toaster",
+    "microwave",
     "plate",
-    "door"
+    "coffeemaker"
   ],
   "raw_class_count": 45
 }
@@ -134,7 +132,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task requires the microwave (the bound ?Heater) to be ON. The current graph shows microwave(234) is close and currently OFF, so the next atomic step is to switch it on. No other preconditions are needed beyond proximity, which is already satisfied by the prior walk.",
+  "reasoning": "The active goal is to make the microwave ON. The current graph shows microwave(234) is closed and off, and the character is already CLOSE to microwave(234), so no additional walk is needed. To satisfy the state node N1, the next atomic action should turn the microwave on. Since microwave(234) has HAS_PLUG, if it were unplugged we would need plugin first, but no unplugged state is shown, so switching it on is the correct next step.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -173,7 +171,7 @@ graph TD
     N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], fryingpan(161), cookingpot(162) [CLOSED], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [CLOSED,OFF]...
+- **Observed Items (19)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], dishwasher(228) [CLOSED,OFF], coffeemaker(229) [OFF], toaster(231) [OFF], microwave(234) [OFF,CLOSED], character(1)...
 
 
 ### [GoalReasoner (Module A - Intent)] Output
@@ -182,149 +180,199 @@ graph TD
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
   "target_object": "apple",
-  "location_hint": "your desk",
+  "location_hint": "desk",
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the apple brought to their desk."
+      "answer": "To have the apple moved to their desk."
     },
     {
       "question": "Why is that important?",
-      "answer": "They likely want the apple available in the place where they are working or sitting."
+      "answer": "They want the apple available at the desk for use or access."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to obtain and access a desired food item conveniently in a specific location."
+      "answer": "It fulfills the need to obtain convenient access to a desired item."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The motivation is likely to eat the apple, keep it nearby for later, or simply have it within reach while at the desk."
+      "answer": "The motivation may be practical convenience, preparation to eat later, or simply keeping the item within reach."
     }
   ],
-  "deep_intent": "The user wants to obtain and have accessible a piece of fruit for use at their desk.",
+  "deep_intent": "The user wants convenient access to a desired item at their workspace.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other similar ready-to-eat fruits, such as a pear, orange, or banana"
+      "description": "Another comparable fruit that can be brought to the desk, such as a pear, orange, or banana."
     },
     {
       "priority": 2,
-      "description": "Other whole fruit items that can be eaten as a snack"
+      "description": "Other ready-to-eat snack foods that can be placed on the desk for later use."
     },
     {
       "priority": 3,
-      "description": "Portable snack foods that provide a similar convenient eating option"
+      "description": "Any small portable food item available indoors that serves the same practical purpose of being kept at the desk."
     },
     {
       "priority": 4,
-      "description": "Other easy-to-access light foods that can satisfy a snack need"
+      "description": "A different immediately usable item intended for desk-side convenience, if the apple is unavailable."
     }
   ]
 }
 ```
 
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_3"
-    ],
-    "satisfied_task_ids": [
-      "task_1"
-    ]
-  },
-  "source": "room_frontier"
-}
-```
-## Step 2
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `room_frontier`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (125)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (50)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_3"
-    ],
-    "satisfied_task_ids": [
-      "task_1"
-    ]
-  },
-  "source": "room_frontier"
-}
-```
-## Step 3
-- **Action**: `[walk] <bedroom> (50)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `room_frontier`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (163)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to obtain an apple and place it on the desk. The SDG requires the apple itself and the desk as the target location. No other tools or receptacles are necessary for this simple pickup-and-place task, and no alternative tools are implied.",
+  "reasoning": "The goal is to have the apple placed on a desk-like surface, so the target item and a valid surface are needed. From the visible classes, the closest desk-like surface is kitchentable. No extra tools or appliances are required for simply moving the apple.",
   "selected_classes": [
+    "kitchentable",
     "character",
-    "desk",
-    "apple"
+    "apple",
+    "door"
   ],
-  "raw_class_count": 82
+  "raw_class_count": 45
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place an apple on the desk. The current graph shows multiple apples in the kitchen, but the agent is currently in the bedroom and there is also apple(114) in the bedroom, which is the closest reachable apple and satisfies the required first SDG step (apple ON some surface, then HELD, then ON desk). Since we must first walk to the specific object before grabbing it, the best next atomic action is to walk to apple(114).",
-  "satisfied_nodes": [
-    "N1"
-  ],
+  "reasoning": "The active goal is to place an apple on the desk, but the current filtered graph only shows apples on the kitchen table and no desk object is visible. Since the SDG only requires apple ON some surface and the user intent specifies desk, the next step should be to move toward a likely target surface if available. However, no desk is currently present in the graph, so the immediate useful action is to approach the apple to prepare for grabbing it while continuing search/placement planning. The apple(113) is directly on the kitchen table and is a valid, accessible instance to use.",
+  "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[walk] <apple> (114)"
+  "mapped_variables": {
+    "?Surface": "kitchentable(199)"
+  },
+  "action": "[walk] <apple> (113)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <apple> (114)",
+  "action": "[walk] <apple> (113)",
+  "active_task_id": "task_2",
+  "task_context": {
+    "active_task_id": "task_2",
+    "pending_task_ids": [
+      "task_3"
+    ],
+    "satisfied_task_ids": [
+      "task_1"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 2
+- **Action**: `[walk] <apple> (113)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_2`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["apple<br>ON<br>?Surface"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], kitchentable(199), apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "kitchentable",
+    "character",
+    "apple",
+    "door"
+  ],
+  "raw_class_count": 45
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active task is to place an apple on the desk. The current graph shows apple(113) is the tracked apple from prior actions and is already close to the character, so the next step is to pick it up before moving it to a desk/surface. I will bind ?TargetApple to apple(113).",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?TargetApple": "apple(113)",
+    "?Surface": "desk"
+  },
+  "action": "[grab] <apple> (113)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <apple> (113)",
+  "active_task_id": "task_2",
+  "task_context": {
+    "active_task_id": "task_2",
+    "pending_task_ids": [
+      "task_3"
+    ],
+    "satisfied_task_ids": [
+      "task_1"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 3
+- **Action**: `[grab] <apple> (113)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_2`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["apple<br>ON<br>?Surface"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], kitchentable(199), apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "kitchentable",
+    "character",
+    "apple",
+    "door"
+  ],
+  "raw_class_count": 45
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to have an apple ON some surface, specifically the desk/workspace. The current graph shows I am already holding apple(113), and I am close to the kitchen table but there is no desk object visible in the filtered graph. Since the required final relation is apple ON a surface, the next correct step is to move toward the likely desk surface once identified. However, with no desk present in the current graph, I cannot place the apple yet. The best immediate action is to continue searching for the desk by walking to a plausible workspace surface if available; since none is visible, I must ask? No—this is not ambiguity, it is a missing target in the current observation, so I should autonomously search by moving to the most likely surface currently visible: the kitchentable is not the desk target, but it can be used only if it is the desk/workspace substitute. Because the user explicitly wants the apple moved to their desk and no desk is present, I cannot safely complete the placement now. The next step should be to walk to a candidate surface if available; but since the only nearby surface is the kitchen table and the instruction says desk, I need a desk object first. Given the constraints, the single best next action is to wait for updated scene information? No dynamic event is indicated. Therefore the correct autonomous move is to continue searching by walking to the kitchentable only if we are treating it as the workspace, but that would violate the desk target. Since no valid desk is visible, I must report inability? The task is not impossible, just incomplete. The immediate action that progresses is to walk to the kitchentable as the nearest flat surface to potentially place the apple if it is indeed the workspace; but because of the location_hint, this is not ideal. Still, among available actions, this is the only physical progress step.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Surface": "kitchentable(199)"
+  },
+  "action": "[walk] <kitchentable> (199)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <kitchentable> (199)",
   "active_task_id": "task_2",
   "task_context": {
     "active_task_id": "task_2",
@@ -339,7 +387,7 @@ graph TD
 }
 ```
 ## Step 4
-- **Action**: `[walk] <apple> (114)`
+- **Action**: `[walk] <kitchentable> (199)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_2`
@@ -350,12 +398,8 @@ graph TD
 graph TD
     N1["apple<br>ON<br>?Surface"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
 ```
-- **Observed Items (19)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
+- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], kitchentable(199), apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113)...
 
 
 ### [PerceptionFilter] Output
@@ -363,33 +407,32 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
+    "kitchentable",
     "character",
-    "desk",
-    "apple"
+    "apple",
+    "door"
   ],
-  "raw_class_count": 82
+  "raw_class_count": 45
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to get an apple onto the user's desk. The current graph shows the agent is close to apple(114) in the bedroom, so the next required step to satisfy N2 (apple HELD by agent) is to grab that apple. The desk is in the bedroom, so this is the best matching apple to continue with.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N2",
+  "reasoning": "The active goal is to have an apple ON a surface, specifically the desk per the location hint. The current graph shows I am already holding apple(113), so the remaining gap is to place it on an appropriate flat surface. The best available next step is to walk to the kitchentable(199) first, since putback requires being near the destination surface. I cannot complete the placement in this single step yet because proximity to the target surface is required before putback.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
   "mapped_variables": {
-    "?Surface": "bedroom floor/near apple(114)"
+    "?Surface": "kitchentable(199)"
   },
-  "action": "[grab] <apple> (114)"
+  "action": "[walk] <kitchentable> (199)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <apple> (114)",
+  "action": "[walk] <kitchentable> (199)",
   "active_task_id": "task_2",
   "task_context": {
     "active_task_id": "task_2",
@@ -404,7 +447,7 @@ graph TD
 }
 ```
 ## Step 5
-- **Action**: `[grab] <apple> (114)`
+- **Action**: `[walk] <kitchentable> (199)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_2`
@@ -414,14 +457,9 @@ graph TD
 ```mermaid
 graph TD
     N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (19)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
+- **Observed Items (20)**: door(145) [OPEN], door(146) [OPEN], kitchentable(199), apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113)...
 
 
 ### [PerceptionFilter] Output
@@ -429,156 +467,23 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
+    "kitchentable",
     "character",
-    "desk",
-    "apple"
+    "apple",
+    "door"
   ],
-  "raw_class_count": 82
+  "raw_class_count": 45
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current goal is to place apple(114) on the desk. The SDG shows N2 (apple HELD by agent) is already satisfied because the character is holding apple(114). To satisfy N3, the next required step is to go to the desk before placing the apple there. The desk is in the bedroom and is the correct target surface for the user's desk.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[walk] <desk> (80)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <desk> (80)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_3"
-    ],
-    "satisfied_task_ids": [
-      "task_1"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 6
-- **Action**: `[walk] <desk> (80)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (19)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 82
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have an apple on the desk. We are already close to the desk, and the currently held apple(114) satisfies N2 (apple held by agent). The next required step is to place that held apple onto the desk. Since putback requires being near the destination and we are already close to desk(80), the best next atomic action is to put the apple on the desk surface.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[putback] <apple> (114) <desk> (80)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <apple> (114) <desk> (80)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_3"
-    ],
-    "satisfied_task_ids": [
-      "task_1"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 7
-- **Action**: `[putback] <apple> (114) <desk> (80)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (19)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 82
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have the apple on the desk. The current graph shows apple(114) is already ON desk(80) and CLOSE to the character, so the goal state N3 is satisfied. Since the apple is already correctly placed, no further physical action is needed for this task.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
+  "reasoning": "The active goal is to have an apple ON a surface at the desk. We are already holding apple(113) in the right hand, and the current graph shows we are close to kitchentable(199), but no desk surface is visible in the filtered graph. Since the SDG only requires an apple on some surface and the user intent specifies desk, we need to locate and use the desk surface. The next atomic step must be to walk to the desk/surface before any putback action, per proximity rules.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
   "mapped_variables": {},
-  "action": "[wait]"
+  "action": "[walk] <desk> (UNKNOWN)"
 }
 ```
 
@@ -592,109 +497,116 @@ graph TD
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To relocate an unorganized book to the sofa."
+      "answer": "They want the book moved from an unorganized place to the sofa."
     },
     {
       "question": "Why is that important?",
-      "answer": "To place the book in a more organized or desired resting location."
+      "answer": "It likely helps organize the space or place the book where the user wants it."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "The need to tidy or organize the environment by moving misplaced items to a designated place."
+      "answer": "It fulfills the need to organize and reposition an item into a desired resting location."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may reduce clutter, improve room order, or make the book easier to access later."
+      "answer": "The user may want the area tidier, the book more accessible, or the room arranged according to their preference."
     }
   ],
-  "deep_intent": "The user wants to organize a misplaced item by moving it to a designated resting place.",
+  "deep_intent": "The user wants to organize and reposition an item into a desired location.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other small household items that are similarly misplaced and can be moved to the sofa, such as magazines, notebooks, or papers"
+      "description": "Other loose reading materials, such as magazines or notebooks, moved to the sofa."
     },
     {
       "priority": 2,
-      "description": "Other reading materials or loose documents that are out of place and can be tidied together"
+      "description": "Similar paper-based items or small handheld items that are out of place and can be tidied."
     },
     {
       "priority": 3,
-      "description": "Small portable clutter items in the same area that can be relocated to reduce disorganization"
+      "description": "Other clutter items that can be organized into a resting place in the room."
     },
     {
       "priority": 4,
-      "description": "Any nearby lightweight object that is clearly part of the same tidying task and can be moved to a resting surface"
+      "description": "Different portable objects that the user may want relocated to the sofa for convenience or tidiness."
     }
   ]
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to place the book on the sofa. The SDG explicitly requires the book and sofa, so only those classes are necessary; no tools or alternative receptacles are needed for this simple relocation task.",
-  "selected_classes": [
-    "sofa",
-    "book",
-    "character",
-    "paper"
-  ],
-  "raw_class_count": 82
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to place a book on the sofa (N1). In the current graph, the sofa is in the bedroom and there are multiple books, with book(104) already in the bedroom and not inside a container. The next necessary step is to move close to the intended book before grabbing it; I should not repeat the previous walk target, and I cannot put it on the sofa until I hold it and am near the sofa.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[walk] <book> (104)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <book> (104)",
+  "action": "[walk] <bathroom> (11)",
   "active_task_id": "task_3",
   "task_context": {
     "active_task_id": "task_3",
     "pending_task_ids": [
-      "task_1",
       "task_2"
     ],
-    "satisfied_task_ids": []
+    "satisfied_task_ids": [
+      "task_1"
+    ]
   },
-  "source": "llm_executor"
+  "source": "room_frontier"
 }
 ```
-## Step 8
-- **Action**: `[walk] <book> (104)`
+## Step 6
+- **Action**: `[walk] <bathroom> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_3`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=pending
+- **Decision Source**: `room_frontier`
+- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
 - **SDG Status**:
 ```mermaid
 graph TD
     N1["book<br>ON<br>sofa"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (10)**: book(163) [CLOSED], book(164) [CLOSED], character(1), bathroom(11), bedroom(50), kitchen(126), livingroom(261), sofa(85), book(104) [CLOSED], paper(109)
+- **Observed Items (125)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
+
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <bedroom> (50)",
+  "active_task_id": "task_3",
+  "task_context": {
+    "active_task_id": "task_3",
+    "pending_task_ids": [
+      "task_2"
+    ],
+    "satisfied_task_ids": [
+      "task_1"
+    ]
+  },
+  "source": "room_frontier"
+}
+```
+## Step 7
+- **Action**: `[walk] <bedroom> (50)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_3`
+- **Decision Source**: `room_frontier`
+- **Task Progress**: E1_19=done, E1_02=pending, E1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>sofa"]
+```
+- **Observed Items (163)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to move the target object 'book' onto the specified location 'sofa'. The SDG only requires the book and the sofa as the destination, so no other tools or receptacles are necessary.",
   "selected_classes": [
-    "sofa",
     "book",
+    "paper",
     "character",
-    "paper"
+    "sofa"
   ],
   "raw_class_count": 82
 }
@@ -703,7 +615,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG requires a book to be ON the sofa. The current graph shows book(104) is in the bedroom and the character is already CLOSE to it, so the next step is to pick it up. The book is grabbable and no cleanliness or opening actions are needed for this relocation task. I will target the nearby book(104), which is the most relevant instance for the active task.",
+  "reasoning": "The active goal is to place a book on the sofa. In the current graph, sofa(85) is in the bedroom, and book(104) is nearby the character in the bedroom. Since the next required step toward putting the book on the sofa is to get into position at the book before grabbing it, and I must not repeat a walk action if I just did it, the safest progress action is to grab the nearby book(104), which is already close to the character. The chosen book matches the target object better than the other books because it is the only one explicitly close to the character.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -727,7 +639,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 9
+## Step 8
 - **Action**: `[grab] <book> (104)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -748,10 +660,10 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "sofa",
     "book",
+    "paper",
     "character",
-    "paper"
+    "sofa"
   ],
   "raw_class_count": 82
 }
@@ -760,12 +672,10 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place the book on the sofa. The currently held object is book(104), and the sofa(85) is the correct destination surface in the bedroom. To satisfy the ON relation, the next step must be to move close to the sofa before putting the book down. I should not repeat a walk to the book because it is already held, and I cannot put it back from across the room.",
+  "reasoning": "The active SDG requires the book to end up ON the sofa. I am already holding book(104) in the bedroom, and the sofa(85) is the target surface. To place an object onto a surface, I must first walk to that surface. No other SDG node is satisfied yet because the book is not on the sofa. The next step is therefore to move to the sofa.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?TargetSurface": "sofa(85)"
-  },
+  "mapped_variables": {},
   "action": "[walk] <sofa> (85)"
 }
 ```
@@ -786,7 +696,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 10
+## Step 9
 - **Action**: `[walk] <sofa> (85)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -807,10 +717,10 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "sofa",
     "book",
+    "paper",
     "character",
-    "paper"
+    "sofa"
   ],
   "raw_class_count": 82
 }
@@ -819,10 +729,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place the book on the sofa. We are already close to the sofa, and the current graph shows book(104) is held by the character and the sofa is close. The next required atomic step to satisfy N1 is to put the held book onto the sofa. No other task objects should be touched.",
+  "reasoning": "The active goal is to place a book on the sofa. We are already close to sofa(85), but the current graph shows the character is holding book(104) in the left hand and is close to the sofa. The sofa is the target surface, so the next valid step is to place the held book onto it. No other SDG node is satisfied yet because the book is not yet on the sofa.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
+  "mapped_variables": {
+    "?TargetSurface": "sofa(85)"
+  },
   "action": "[putback] <book> (104) <sofa> (85)"
 }
 ```
@@ -843,7 +755,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 11
+## Step 10
 - **Action**: `[putback] <book> (104) <sofa> (85)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -862,11 +774,12 @@ graph TD
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to move the apple to the desk, so the essential classes are the target object and the destination surface. No extra tools or containers are required by the SDG.",
   "selected_classes": [
+    "door",
     "character",
-    "desk",
-    "apple"
+    "apple",
+    "desk"
   ],
   "raw_class_count": 82
 }
@@ -875,1597 +788,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place the apple on the user's desk. The SDG indicates the apple must be held before it can be on the desk. The current graph shows apple(114) is already on desk(80), which would satisfy N3 if this were the correct target. However, the task is still active and the past actions show we previously manipulated apple(114) and then later moved away. Since apple(114) is the only apple explicitly on the desk and matches the intended goal state, the most progress-preserving next step is to confirm/maintain the held-to-place chain only if needed. But because the apple is already on the desk in the current graph, N3 is already satisfied. The remaining missing relation for the active task is not obvious from the graph; nevertheless, no further manipulation is needed for this task state. However, since the system expects a single atomic action and we should avoid redundant moves, the safest next step is to do nothing and let the planner re-evaluate. Yet [wait] should only be used for dynamic events. Here, the graph already reflects success, so the active task appears complete.",
-  "satisfied_nodes": [
-    "N1",
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to turn on a heating appliance for food use. The SDG requires a heater in the ON state, so I must retain the microwave as the target and keep alternative food-heating appliances as backups, plus any obvious control/power elements needed to enable operation.",
-  "selected_classes": [
-    "airfryer",
-    "stove",
-    "plate",
-    "toasteroven",
-    "powersocket",
-    "hotplate",
-    "microwave",
-    "oven",
-    "character",
-    "toaster",
-    "lightswitch",
-    "door"
-  ],
-  "raw_class_count": 82
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to ensure the microwave is ON. The current filtered graph shows microwave(234) is already ON, so the SDG node N1 is satisfied. No further physical action is needed for the active task. Since the instruction says work only on the active task and avoid repeating a walk action, the correct next step is to do nothing for this task.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (261)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1",
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 12
-- **Action**: `[walk] <livingroom> (261)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (232)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to obtain an apple and place it on the desk. The SDG explicitly requires the apple and the desk, so both must be kept. No other tools or locations are necessary for this simple pick-and-place task.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have the apple on the user's desk. The original apple(114) is already ON desk(80), so N3 is satisfied for that apple, but the current state also shows the agent is now in livingroom(261) and the closest relevant desk object available in the current graph is desk(291) in the livingroom. Since the task only requires the apple to be on the desk at the destination and the apple is already placed on a desk in the bedroom, the remaining useful step for the active task is to move toward the target desk location in the current area before any further placement is attempted. However, because the last action was already [walk] <livingroom> (261), I should not repeat it. The next atomic action that advances toward interacting with the livingroom desk is to walk to that specific desk(291).",
-  "satisfied_nodes": [
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Surface": "desk(291)"
-  },
-  "action": "[walk] <desk> (291)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <desk> (291)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 13
-- **Action**: `[walk] <desk> (291)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have the apple on your desk. In the current graph, apple(114) is already on desk(80), which satisfies the SDG relation N3 (apple ON desk). However, the current filtered graph also shows the agent is close to desk(291), not desk(80), and apple(114) is on desk(80) inside the bedroom. To complete the active task in this branch, the relevant goal state is already achieved for the named apple and desk relation, so no further physical action is needed for this active task. Since the instruction says work only on the active task and the SDG is satisfied by apple(114) on desk(80), the next action should be to wait for the system to confirm task completion or reconcile task state.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to turn on the microwave, so the only strictly necessary class is the microwave itself to satisfy the heater state. No other tools or locations are required by the SDG or intent.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires the heater object to be ON. The filtered graph shows microwave(234) is already ON, and it is also the best match for ?Heater because it is a heating appliance with HAS_SWITCH and HAS_PLUG. Therefore the goal state is already satisfied and no physical action is needed. Since the instruction asks for the single next action, the most appropriate step is to avoid unnecessary manipulation and simply wait/hold position rather than toggling an already-on appliance.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (126)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1",
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 14
-- **Action**: `[walk] <kitchen> (126)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to get an apple onto the user's desk. The SDG shows the apple must first be held, then placed on the desk. In the current graph, apple(114) is already ON desk(80) and that task path appears completed earlier, but the active target is a desk in the living room: desk(291). We are currently inside the kitchen and already CLOSE to multiple apples, but not to desk(291). To progress toward the final goal, I should move to the destination desk(291) before attempting to place the apple there. Because the apple is currently not held, I must later re-grab an apple, but the immediate next atomic action should be walking to the correct desk destination.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[walk] <desk> (291)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <desk> (291)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 15
-- **Action**: `[walk] <desk> (291)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to place an apple on the user's desk. The current graph shows the agent is already CLOSE to desk(291), but the apple target instances are all in the kitchen and no apple is currently held. Because we need to obtain an apple before placing it on the desk, the next progress-making action is to move to an accessible apple in the kitchen. I will use apple(249) as a valid grabbable instance and walk to it first, since grabbing from across the room is not allowed.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[walk] <apple> (249)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <apple> (249)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 16
-- **Action**: `[walk] <apple> (249)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: PROCESS WALK: Can not select object: apple. REASON: No interaction positions\nEXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to place an apple on your desk. The current graph shows the intended apple(114) is already ON desk(80), which satisfies the active task's SDG root relation. Although the desk(80) is closed, the apple is already on it, so no further action is needed for the active task. The failed walk attempt to apple(249) is irrelevant because that apple is inside the kitchen and not the target object for this task.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to make the microwave ON. The filtered graph shows microwave(234) is OFF and CLOSED, and we are currently in the kitchen context. Since switching on requires being near the appliance, the next atomic step is to walk to the microwave. After that, the next step would be to open it if needed and then switch it on.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[walk] <microwave> (234)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <microwave> (234)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 17
-- **Action**: `[walk] <microwave> (234)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Heater<br>(ON)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to make the microwave ON. The filtered graph shows microwave(234) is already CLOSE to the character, but it is currently OFF and CLOSED. To turn it on, the microwave must be switched on; it also has HAS_SWITCH and HAS_PLUG, but there is no indication it is unplugged. Since I am already near it and the previous action was a walk to the microwave, the next atomic step is to switch it on.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[switchon] <microwave> (234)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[switchon] <microwave> (234)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 18
-- **Action**: `[switchon] <microwave> (234)`
-- **Action Success**: `True`
-- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Heater<br>(ON)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to get an apple onto the user's desk. The SDG requires first obtaining the apple (N1 -> N2) and then placing it on the desk (N3). The filtered graph shows apple(114) is already ON desk(80) in the bedroom, while desk(291) is just a different desk in the living room. Because the task explicitly targets 'your desk' and the only apple already placed on a desk is apple(114), the best next step is to grab that apple from the desk so it can later be moved to the target desk. I must first be near the apple before grabbing it, and the previous step was a walk to the microwave, not to the apple or desk(80). Therefore the next atomic action should be to walk to apple(114).",
+  "reasoning": "The active SDG requires the apple to be ON some surface. I am currently holding apple(113), and the target desk(80) is in the same room (bedroom(50)) and is a valid surface. Since I must explicitly walk to the destination surface before putting an object back, the next atomic action is to move to the desk. The desk being CLOSED does not prevent placing an item on top of it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
     "?Surface": "desk(80)"
   },
-  "action": "[walk] <apple> (114)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <apple> (114)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 19
-- **Action**: `[walk] <apple> (114)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["apple<br>HELD<br>agent"]
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to get an apple onto the user's desk. In the current graph, apple(114) is already ON desk(80) and CLOSE to the agent, so the SDG node N3 is satisfied. However, the task intent says the apple should be at the user's desk, and the agent is currently in bedroom(50) with a desk(80) that is closed and near the agent. The apple(114) is the best physical binding for the target apple because it is already accessible and located on a desk. The remaining gap is likely that the apple should be held first if we are to reposition it, but since the apple is already on the desk specified in the graph, no further placement action is needed from the current snapshot. The only unsatisfied relation in the SDG is N2 (HELD), but the graph already shows the apple is on the desk, which may be the intended final state for this task. To progress safely without assuming extra steps, the next atomic action should be to grab the apple(114), moving toward satisfying N2 before any further placement if needed.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N2",
-  "mapped_variables": {},
-  "action": "[grab] <apple> (114)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <apple> (114)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 20
-- **Action**: `[grab] <apple> (114)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have an apple on the desk. We already satisfy N2 conceptually because the agent is holding apple(114) in the right hand. The next required step is to place that held apple onto the desk. Since putback requires being near the destination and we are close to desk(80) per the graph, the appropriate next atomic action is to put the apple onto the desk surface. N1 is no longer the focus because the apple is already obtained, so the remaining gap is N3: apple ON desk.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[putback] <apple> (114) <desk> (80)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <apple> (114) <desk> (80)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 21
-- **Action**: `[putback] <apple> (114) <desk> (80)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current active task is to have the apple on the user's desk. The Filtered Graph shows apple(114) is already ON desk(80) and CLOSE to the character, so the SDG node N3 (apple ON desk) is satisfied. Since the apple is already placed correctly, no further physical action is needed for this task.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 22
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to get an apple onto your desk. SDG node N3 is already satisfied because apple(114) is on desk(80), and N2 is also satisfied because the apple is held? No, the current graph shows apple(114) on desk(80), not held, so only the placement goal is currently satisfied. The key gap is ensuring the apple is on the target desk for the active task. However, the task context says the user's desk is the desk in the bedroom, and apple(114) is already on desk(80) in the bedroom, while character is currently in the bathroom. The remaining relevant next step is to get back to the bedroom desk if any further verification or interaction were needed, but since the apple is already correctly placed on the desk, no physical change is needed. Because the system requires a single atomic action and the active goal state appears already achieved, the safest progression is to wait for graph confirmation rather than disturb the satisfied configuration.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (261)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 23
-- **Action**: `[walk] <livingroom> (261)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to place an apple on your desk. The SDG says the apple must first be held, then placed on the desk. The current graph shows apple(114) is already ON desk(80) and CLOSE to the character, but desk(80) is CLOSED and the apple is not marked as HELD. Since the apple is already at the target desk and the next necessary state toward satisfaction is to have the apple held before any further placement logic, the best immediate action is to grab the reachable apple(114).",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N2",
-  "mapped_variables": {},
-  "action": "[grab] <apple> (114)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <apple> (114)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 24
-- **Action**: `[grab] <apple> (114)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to get an apple onto the desk. The current graph shows apple(114) is already held by the agent (HOLDS_RH) and the agent is close to desk(80), so the remaining gap is to place the held apple onto the desk. Because putback requires being near the destination and we are already close to desk(80), the next atomic action should be to put the apple on that desk. Note: the desk is marked CLOSED but it is also a surface, so no opening is needed for placing an object on it.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[putback] <apple> (114) <desk> (80)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <apple> (114) <desk> (80)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 25
-- **Action**: `[putback] <apple> (114) <desk> (80)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to have the apple on the user's desk. The current graph shows apple(114) is already ON desk(80) and CLOSE to the character, so the SDG node N3 is satisfied. No further action is needed for the active task. I should not manipulate other apples or the desk again.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires the heater object to be ON. The current graph shows microwave(234) is already in state ON, so the target state for N1 is satisfied. No further physical action is needed for the active task. Since the instruction is to choose the single next action and not repeat unnecessary movement, the best next step is to do nothing while preserving the completed state.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (126)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1",
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 26
-- **Action**: `[walk] <kitchen> (126)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have the apple on the user's desk. In the current graph, apple(114) is already ON desk(80), so the SDG node N3 is satisfied and the task appears complete. The other apples in the kitchen are irrelevant because the task is about the apple already associated with the desk and the past actions show this exact apple was placed there successfully. No further physical action is needed.",
-  "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to make the microwave ON. The current graph shows microwave(234) is OFF and we are already in the kitchen, so we are adjacent enough to operate it. Since the previous switchon attempt was reported as a faked switch operation in the Python layer, the physical graph still lists the microwave as OFF, meaning the goal is not yet satisfied. The single next atomic action is to switch it on again.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[switchon] <microwave> (234)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <microwave> (234)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor_repaired"
-}
-```
-## Step 27
-- **Action**: `[walk] <microwave> (234)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Heater<br>(ON)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to make the heater ON. The microwave(234) is already CLOSE to the character and is currently OFF, so the next atomic step is to switch it on. The microwave has HAS_SWITCH and HAS_PLUG, and no rule indicates it is broken or impossible. The prior switch-on was reportedly successful in the Python layer, but the current filtered graph still shows OFF, so we should apply the intended physical action again to satisfy N1.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[switchon] <microwave> (234)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[switchon] <microwave> (234)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 28
-- **Action**: `[switchon] <microwave> (234)`
-- **Action Success**: `True`
-- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Heater<br>(ON)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires the apple to be ON the desk. The current graph shows apple(114) is already on desk(80), which is close to the character and inside the bedroom. Therefore the goal state for this task is already satisfied; no further physical action is needed for the active task.",
-  "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 29
-- **Action**: `[walk] <bathroom> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to get an apple onto your desk. The SDG requires first obtaining an apple (N2) and then placing it on the desk (N3). In the current graph, apple(114) is already ON desk(80) and CLOSE to the agent, so N2 is satisfied and the apple is already at the target desk for N3 as well. Since the only remaining uncertainty is whether the current desk already satisfies the requested destination placement (it is the named desk in the bedroom), no further physical action is needed for the active task state progression here.",
-  "satisfied_nodes": [
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (261)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 30
-- **Action**: `[walk] <livingroom> (261)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to place an apple on the user's desk. The required SDG is already effectively satisfied: apple(114) is on desk(80), and the apple is also close to the agent in the bedroom. Since the task's target state is already present in the graph, no physical action is needed. The alternative apples in the kitchen are unnecessary, and I must not manipulate objects from satisfied tasks beyond confirming the state.",
-  "satisfied_nodes": [
-    "N1",
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "desk(80)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (50)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_1",
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 31
-- **Action**: `[walk] <bedroom> (50)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=done, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to have an apple on your desk. The graph shows apple(114) already ON desk(80) and also INSIDE bedroom(50), which is inconsistent, but the relation ON desk(80) is sufficient for the SDG node N3 to be satisfied. Since the task is already achieved, no further physical action is needed. We should not manipulate any other apples because work is only on the active task and the required end state is already present.",
-  "satisfied_nodes": [
-    "N3"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[wait]"
-}
-```
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires ?Heater to be ON. The filtered graph already shows microwave(234) is ON, so the goal state for the active task is satisfied. No further action is needed for task_1. I will therefore avoid unnecessary manipulation and return a no-op only if required; however, since the requested output must be a single next action, and the task is already satisfied, the safest atomic action is to wait.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (126)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1",
-      "task_2"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 32
-- **Action**: `[walk] <kitchen> (126)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-No SDG active.
-- **Observed Items (291)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to have an apple on the user's desk. The SDG requires apple held before it can be placed on the desk. We are currently in the kitchen and there are multiple apples nearby, but the graph shows apple(113) is closest/most directly available and the desk is a movable surface in the bedroom. Since the apple is not yet held, the next step should be to walk to a reachable apple before grabbing it. I will choose the apple that is simply inside the kitchen and not stacked on another apple to avoid ambiguity; apple(113) is a clean reachable candidate, but because it is only marked INSIDE kitchen and not CLOSE, I need to walk to it first.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N2",
-  "mapped_variables": {},
-  "action": "[walk] <apple> (113)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <apple> (113)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 33
-- **Action**: `[walk] <apple> (113)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to bring an apple to your desk. The SDG requires first obtaining an apple (N2) and then placing it on the desk (N3). In the current graph, apple(114) is already ON desk(80), so that apple is a valid instance satisfying both the held-then-on-desk progression if we pick it up and place it back on the desk; however, the destination desk(80) is in the bedroom, and the current agent is in the kitchen, while apple(113) and others are also available nearby. The immediate prerequisite for N2 is to grab a reachable apple. Since apple(113) is close to the character in the kitchen and is a valid grabbable apple, the next atomic step is to grab it.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N2",
-  "mapped_variables": {},
-  "action": "[grab] <apple> (113)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <apple> (113)",
-  "active_task_id": "task_2",
-  "task_context": {
-    "active_task_id": "task_2",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_3"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 34
-- **Action**: `[grab] <apple> (113)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_2`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=pending, E1_02=pending, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["apple<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["apple<br>ON<br>desk"]
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "desk",
-    "apple"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to bring an apple to the user's desk. The SDG requires the apple to be held before it can be placed on the desk. The current graph shows character(1) is already holding apple(113), so N2 is satisfied. The target desk from the goal is desk(80) in the bedroom, but since we are already holding the apple, the next required step is to move to the desk before placing it there. Because placement actions require an explicit prior walk to the destination, the best next atomic action is to walk to desk(80).",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
   "action": "[walk] <desk> (80)"
 }
 ```
@@ -2487,7 +815,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 35
+## Step 11
 - **Action**: `[walk] <desk> (80)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -2498,14 +826,9 @@ graph TD
 ```mermaid
 graph TD
     N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
+- **Observed Items (22)**: door(145) [OPEN], door(146) [OPEN], apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1)...
 
 
 ### [PerceptionFilter] Output
@@ -2513,22 +836,21 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
+    "door",
     "character",
-    "desk",
-    "apple"
+    "apple",
+    "desk"
   ],
-  "raw_class_count": 86
+  "raw_class_count": 82
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to place an apple on the user's desk. The SDG requires the apple to be held before it can be put on the desk. The current graph shows the agent is already close to desk(80) and is holding apple(113) in the right hand. Since the desk is a flat surface and the agent is already near it, the next step is to place the held apple onto the desk. This advances from N2 toward N3.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
+  "reasoning": "The active goal is to have an apple ON the desk. I am already close to the desk, and I am holding apple(113) in my right hand. The desk(80) is the target surface, and it is currently CLOSED, but as a surface it can still serve as the placement destination. The next step should place the held apple onto the desk, satisfying N1.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
   "mapped_variables": {
     "?Surface": "desk(80)"
   },
@@ -2553,7 +875,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 36
+## Step 12
 - **Action**: `[putback] <apple> (113) <desk> (80)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -2564,110 +886,46 @@ graph TD
 ```mermaid
 graph TD
     N1["apple<br>ON<br>?Surface"]
-    N2["apple<br>HELD<br>agent"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["apple<br>ON<br>desk"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"The apple must be reachable and obtained before it can be held."| N2
-    N2 -->|"The apple must be held by the agent before it can be placed on the desk."| N3
-```
-- **Observed Items (20)**: apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1), bathroom(11), bedroom(50)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "microwave",
-    "character",
-    "toaster",
-    "plate",
-    "door"
-  ],
-  "raw_class_count": 86
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires the heater to be ON. The microwave(234) is the chosen heater and is currently OFF. I previously walked to it and switched it on; the remaining issue is that the microwave is still marked CLOSED, but closure does not affect the ON state goal. Since the task only requires ON and the microwave is already the correct object, no further interaction is needed to satisfy the current node based on the graph. However, because the environment still shows OFF in the filtered graph, the safest next atomic action is to switch it on again from the current vicinity rather than moving away. This directly targets N1.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(234)"
-  },
-  "action": "[switchon] <microwave> (234)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <microwave> (234)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": [
-      "task_2",
-      "task_3"
-    ]
-  },
-  "source": "llm_executor_repaired"
-}
-```
-## Step 37
-- **Action**: `[walk] <microwave> (234)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
-- **Task Progress**: E1_19=pending, E1_02=done, E1_03=done
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
+- **Observed Items (22)**: door(145) [OPEN], door(146) [OPEN], apple(249), apple(250), apple(251), apple(252), apple(253), apple(254), apple(255), apple(256), apple(257), apple(258), apple(259), apple(113), character(1)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to power on the microwave, so the target appliance must be kept. The SDG only requires an appliance in the ON state, and the user explicitly mentions microwave as the target. No additional tools or locations are necessary.",
   "selected_classes": [
-    "stove",
-    "microwave",
     "character",
+    "door",
+    "stove",
     "toaster",
-    "plate",
-    "door"
+    "microwave",
+    "plate"
   ],
-  "raw_class_count": 86
+  "raw_class_count": 82
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG requires the microwave to be ON. The current filtered graph shows microwave(234) is already CLOSE to the character and currently OFF, so the next atomic step is to switch it on. It is plugged in and has a switch, so no plugin action is needed. The previous switchon was reported successful, but the current graph still lists OFF, so we should reassert the switch-on state on the same microwave.",
-  "satisfied_nodes": [],
+  "reasoning": "The active goal is to make the heater ON. The filtered graph already shows microwave(234) has state ON, which satisfies the single SDG node N1. No further action is needed, and I should not repeat a walk action because the task is already achieved.",
+  "satisfied_nodes": [
+    "N1"
+  ],
   "current_node_focus": "N1",
   "mapped_variables": {
     "?Heater": "microwave(234)"
   },
-  "action": "[switchon] <microwave> (234)"
+  "action": "[wait]"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[switchon] <microwave> (234)",
+  "action": "[wait]",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -2680,18 +938,255 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 38
-- **Action**: `[switchon] <microwave> (234)`
+## Step 13
+- **Action**: `[wait]`
 - **Action Success**: `True`
-- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
+- **Action Message**: Time passes. You waited for a while.
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
-- **Task Progress**: E1_19=done, E1_02=done, E1_03=done
+- **Task Progress**: E1_19=pending, E1_02=done, E1_03=done
 - **SDG Status**:
 ```mermaid
 graph TD
     N1["?Heater<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,OFF], character(1), bathroom(11), bedroom(50)...
+- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,ON], character(1), bathroom(11), bedroom(50)...
 
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "door",
+    "stove",
+    "toaster",
+    "microwave",
+    "plate"
+  ],
+  "raw_class_count": 82
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to satisfy N1 by ensuring the heater is ON. The filtered graph already shows microwave(234) with state ON, so the goal state is already satisfied. No physical action is needed; to avoid unnecessary movement or interaction, I will wait/pass the step.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "microwave(234)"
+  },
+  "action": "[wait]"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[wait]",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": [
+      "task_2",
+      "task_3"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 14
+- **Action**: `[wait]`
+- **Action Success**: `True`
+- **Action Message**: Time passes. You waited for a while.
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_19=pending, E1_02=done, E1_03=done
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["?Heater<br>(ON)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,ON], character(1), bathroom(11), bedroom(50)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "door",
+    "stove",
+    "toaster",
+    "microwave",
+    "plate"
+  ],
+  "raw_class_count": 82
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to satisfy N1: the heater must be ON. The microwave(234) is already ON in the current filtered graph, so the SDG is satisfied without any further action. No interaction is needed, and we should not repeat a walk action.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "microwave(234)"
+  },
+  "action": "[wait]"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[wait]",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": [
+      "task_2",
+      "task_3"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 15
+- **Action**: `[wait]`
+- **Action Success**: `True`
+- **Action Message**: Time passes. You waited for a while.
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_19=pending, E1_02=done, E1_03=done
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["?Heater<br>(ON)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,ON], character(1), bathroom(11), bedroom(50)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "door",
+    "stove",
+    "toaster",
+    "microwave",
+    "plate"
+  ],
+  "raw_class_count": 82
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to satisfy N1 by making the heater ON. The filtered graph already shows microwave(234) with state ON, so the goal state is already satisfied. No physical action is needed; the safest next step is to do nothing and allow the system to advance/re-evaluate completion.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "microwave(234)"
+  },
+  "action": "[wait]"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[wait]",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": [
+      "task_2",
+      "task_3"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 16
+- **Action**: `[wait]`
+- **Action Success**: `True`
+- **Action Message**: Time passes. You waited for a while.
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_19=pending, E1_02=done, E1_03=done
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["?Heater<br>(ON)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (18)**: door(145) [OPEN], door(146) [OPEN], plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), stove(226) [OFF,CLOSED], toaster(231) [OFF], microwave(234) [CLOSED,ON], character(1), bathroom(11), bedroom(50)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "door",
+    "stove",
+    "toaster",
+    "microwave",
+    "plate"
+  ],
+  "raw_class_count": 82
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to satisfy N1: the heater must be ON. The filtered graph already shows microwave(234) with state ON, which matches the required state for ?Heater. Therefore the goal node is already satisfied and no physical action is needed. Because the task is complete, there is no next manipulation to perform.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "microwave(234)"
+  },
+  "action": "[wait]"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[wait]",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": [
+      "task_2",
+      "task_3"
+    ]
+  },
+  "source": "llm_executor"
+}
+```

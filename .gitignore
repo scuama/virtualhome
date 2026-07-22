@@ -203,3 +203,6 @@ evaluation/results/**/raw/
 
 # Old framework archive
 archive/
+
+# Scratch files
+scratch/

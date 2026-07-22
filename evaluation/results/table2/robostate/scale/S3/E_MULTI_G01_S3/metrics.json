@@ -1,0 +1,75 @@
+{
+    "task_total": 3,
+    "task_completed": 3,
+    "sr": 1.0,
+    "ps": 10.0,
+    "ps_sum": 30,
+    "ps_count": 3,
+    "mean_completion_step": 10.0,
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 10,
+            "completed": true,
+            "completion_step": 10
+        }
+    ],
+    "scenario_id": "E_MULTI_G01_S3",
+    "table_id": "table2",
+    "experiment_axis": "scale",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": "multi",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 14,
+    "execution_time_seconds": 42.32,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

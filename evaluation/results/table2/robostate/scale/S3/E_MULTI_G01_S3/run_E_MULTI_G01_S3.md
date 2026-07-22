@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To relocate an unorganized book to the sofa."
+      "answer": "To move an unorganized book to the sofa."
     },
     {
       "question": "Why is that important?",
-      "answer": "To place the book in the desired resting or storage area."
+      "answer": "To place the book in a more organized or intended resting location."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to organize or reposition reading material within the home."
+      "answer": "To organize and relocate a household item."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "Likely to tidy the space by moving misplaced items to a preferred spot for later use or access."
+      "answer": "The user likely wants the living space tidied or the book made readily accessible in the seating area."
     }
   ],
-  "deep_intent": "The user wants to organize or relocate a misplaced household item to a preferred seating area.",
+  "deep_intent": "The user wants to organize and relocate a household item to a seating area.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other loose reading materials or paper items that are similarly misplaced, such as magazines, notebooks, or documents."
+      "description": "Other small household reading materials or paper items, such as magazines or notebooks, that can be moved to the sofa for organization."
     },
     {
       "priority": 2,
-      "description": "Other small portable household items that belong on the sofa area, such as a remote control or cushion."
+      "description": "Similar loose household items that are commonly kept together in a living area, such as pamphlets or journals."
     },
     {
       "priority": 3,
-      "description": "General clutter items from the same room that can be tidied into an organized resting area."
+      "description": "Other portable personal items that help reduce clutter when placed in a designated living-room area."
     },
     {
       "priority": 4,
-      "description": "Items intended for casual use or temporary placement in the living area, even if they are not reading materials."
+      "description": "Any nearby lightweight object that can be tidied away to improve the order of the space."
     }
   ]
 }
@@ -113,11 +113,11 @@ graph TD
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to place the book on the sofa, so only the target object and the destination location are necessary. No extra tools or alternative receptacles are required for a simple relocation task.",
+  "reasoning": "The goal is to place the target object book onto the sofa. The SDG explicitly requires the book and sofa, and no additional tools or receptacles are needed for this simple relocation task.",
   "selected_classes": [
-    "sofa",
     "book",
-    "character"
+    "character",
+    "sofa"
   ],
   "raw_class_count": 66
 }
@@ -126,12 +126,12 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place a book on the sofa. We are already in the livingroom, and the sofa is present. Among the books, book(105) is the best candidate because it is explicitly close to the character, suggesting it is the most accessible to grab next. To move it onto the sofa, the next atomic step must be to walk to the book before any grab or placement action. This advances toward satisfying N1 by approaching the target item.",
+  "reasoning": "The active goal is to place a book on the sofa. We are already in the livingroom, and there are multiple candidate books. Book(105) is the best choice because it is explicitly close to the character, making it the most accessible target. To eventually place it on the sofa, the next required step is to move next to that book before grabbing it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?TargetBook": "book(105)",
-    "?Destination": "sofa(214)"
+    "?Book": "book(105)",
+    "?TargetSurface": "sofa(214)"
   },
   "action": "[walk] <book> (105)"
 }
@@ -174,9 +174,9 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "sofa",
     "book",
-    "character"
+    "character",
+    "sofa"
   ],
   "raw_class_count": 66
 }
@@ -185,10 +185,72 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place a book ON the sofa. The current graph shows book(105) is already close to the character in the living room, and the sofa(214) is also close. Since putback onto a surface requires being near the destination and the book must be held first, the next progress-making action is to grab the nearby book(105).",
+  "reasoning": "The goal is to place a book on the sofa. The current graph shows book(105) is already in the living room and close to the character, while the sofa(214) is also in the living room and close to the character. Since putting an object on a surface requires first walking to the destination surface, the next atomic step should be to approach the sofa before attempting to put the book back onto it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
+  "mapped_variables": {
+    "?Book": "book(105)",
+    "?TargetSurface": "sofa(214)"
+  },
+  "action": "[walk] <sofa> (214)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <sofa> (214)",
+  "active_task_id": "task_2",
+  "task_context": {
+    "active_task_id": "task_2",
+    "pending_task_ids": [
+      "task_1",
+      "task_3"
+    ],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 3
+- **Action**: `[walk] <sofa> (214)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_2`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_11=pending, E1_03=pending, E1_07=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>sofa"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (11)**: book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), sofa(214), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "character",
+    "sofa"
+  ],
+  "raw_class_count": 66
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to place a book on the sofa. We are already close to sofa(214), and book(105) is the best bound candidate because it is in the livingroom and explicitly close to the character, while the other books are in the bedroom or not currently nearby. To satisfy N1, the next required step is to pick up the book before placing it on the sofa.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?TargetBook": "book(105)",
+    "?Destination": "sofa(214)"
+  },
   "action": "[grab] <book> (105)"
 }
 ```
@@ -209,7 +271,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 3
+## Step 4
 - **Action**: `[grab] <book> (105)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -230,9 +292,9 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "sofa",
     "book",
-    "character"
+    "character",
+    "sofa"
   ],
   "raw_class_count": 66
 }
@@ -241,7 +303,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to place the held book onto the sofa. The character is already close to sofa(214) and is holding book(105) in the right hand, so the next required step is to place the book on the sofa surface. The sofa is a valid flat surface, so [putback] is the correct action.",
+  "reasoning": "The active goal is to place a book on the sofa. The robot is already close to both the held book(105) and the sofa(214), and the book is currently in-hand, so the remaining step is to place it onto the sofa surface. The sofa is a valid flat surface for putback, and no intermediate conditions are missing.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -265,7 +327,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 4
+## Step 5
 - **Action**: `[putback] <book> (105) <sofa> (214)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -291,38 +353,38 @@ graph TD
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "They want the mug kept in a specific place."
+      "answer": "To keep the mug in a consistent place on the coffee table."
     },
     {
       "question": "Why is that important?",
-      "answer": "To ensure the mug remains on the coffee table instead of elsewhere."
+      "answer": "So the mug remains available and is not left elsewhere."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need for organized placement and consistent object location."
+      "answer": "It supports organization and easy access to the mug."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may reflect a preference for tidiness, accessibility, or maintaining a stable home environment."
+      "answer": "The user may want tidiness, predictability, or reduced effort when finding or using the mug."
     }
   ],
-  "deep_intent": "The user wants an object kept in a specific designated location.",
+  "deep_intent": "The user wants to maintain organization and easy access to a household item.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other small household items that can be kept on the coffee table, such as a cup, bowl, or coaster"
+      "description": "Other drinkware such as a cup, glass, or tumbler kept in the same general spot"
     },
     {
       "priority": 2,
-      "description": "Other tabletop items that can remain in a fixed spot, such as a remote or book"
+      "description": "Other small tabletop personal items that are commonly kept on a coffee table for convenience"
     },
     {
       "priority": 3,
-      "description": "Any small indoor objects that can be organized and left in one place"
+      "description": "Nearby household storage or display items that help keep frequently used objects organized"
     },
     {
       "priority": 4,
-      "description": "Other household items whose main need is stable placement rather than movement"
+      "description": "Any similarly used everyday item that the user wants to keep readily accessible in a living area"
     }
   ]
 }
@@ -331,13 +393,11 @@ graph TD
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to keep the mug on the coffeetable, so the only strictly necessary classes are the target object and its required location. No additional tools or receptacles are implied.",
+  "reasoning": "The goal is to keep the target mug organized and accessible on the coffee table, so the essential classes are the mug and its required location, the coffeetable. No extra tools or storage items are needed for this simple placement task.",
   "selected_classes": [
-    "book",
     "character",
-    "coffeetable",
     "mug",
-    "door"
+    "coffeetable"
   ],
   "raw_class_count": 66
 }
@@ -346,69 +406,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to ensure the mug is ON the coffeetable. The current graph shows mug(384) is in the kitchen, while the coffeetable(215) is in the living room and the character is already close to the coffeetable. Since placing requires first being near the destination, the next atomic step should be to walk to the coffeetable before any putback action. This does not manipulate any satisfied-task objects.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Mug": "mug(384)",
-    "?Table": "coffeetable(215)"
-  },
-  "action": "[walk] <coffeetable> (215)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <coffeetable> (215)",
-  "active_task_id": "task_3",
-  "task_context": {
-    "active_task_id": "task_3",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_2"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 5
-- **Action**: `[walk] <coffeetable> (215)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_3`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_11=pending, E1_03=done, E1_07=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["mug<br>ON<br>coffeetable"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (14)**: door(254) [OPEN], book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], mug(384), coffeetable(215), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "book",
-    "character",
-    "coffeetable",
-    "mug",
-    "door"
-  ],
-  "raw_class_count": 66
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires mug(384) to be ON coffeetable(215). I am already close to the coffeetable, but the mug is currently in the kitchen, so the next step is to go to the mug before grabbing it. I should not attempt to grab across the room, and I should not manipulate any satisfied-task objects.",
+  "reasoning": "The active goal is to have the mug on the coffeetable. The mug is currently in the kitchen, while the coffeetable is already close to the character in the living room. To progress, I need to first move to the mug before I can grab it; then I can later bring it to the coffeetable and place it there. Since the instruction says not to repeat a walk action if I just did it, and the last movement was to the sofa/book area, the correct next step is to walk to the mug.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -446,7 +444,7 @@ graph TD
     N1["mug<br>ON<br>coffeetable"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (14)**: door(254) [OPEN], book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], mug(384), coffeetable(215), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
+- **Observed Items (8)**: character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), mug(384), coffeetable(215)
 
 
 ### [PerceptionFilter] Output
@@ -454,11 +452,9 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "book",
     "character",
-    "coffeetable",
     "mug",
-    "door"
+    "coffeetable"
   ],
   "raw_class_count": 66
 }
@@ -467,69 +463,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to have mug(384) on coffeetable(215). The current graph shows the mug is close to the character and the character is already close to the coffeetable, so the mug should be retrievable without another walk. Since the mug is grabbable and the target is a flat surface, the next progress-making step is to grab the mug before placing it on the coffee table.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?TargetObject": "mug(384)",
-    "?Surface": "coffeetable(215)"
-  },
-  "action": "[grab] <mug> (384)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <mug> (384)",
-  "active_task_id": "task_3",
-  "task_context": {
-    "active_task_id": "task_3",
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": [
-      "task_2"
-    ]
-  },
-  "source": "llm_executor"
-}
-```
-## Step 7
-- **Action**: `[grab] <mug> (384)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_3`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: E1_11=pending, E1_03=done, E1_07=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["mug<br>ON<br>coffeetable"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-```
-- **Observed Items (14)**: door(254) [OPEN], book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], mug(384), coffeetable(215), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "book",
-    "character",
-    "coffeetable",
-    "mug",
-    "door"
-  ],
-  "raw_class_count": 66
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active SDG requires mug(384) to be ON coffeetable(215). The mug is already held in the right hand and the coffee table is close to the character. Since putback requires being explicitly near the destination first, the next atomic step is to walk to the coffee table so the mug can be placed there on the following action.",
+  "reasoning": "The active goal is to have the mug on the coffeetable. I am currently close to the mug and holding nothing, but I am not yet at the destination surface. Since putting an object onto a surface requires being explicitly walked to that surface first, the next step must be to walk to the coffeetable. The mug is the correct target object for the SDG, and the coffeetable is the correct destination surface.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -554,7 +488,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 8
+## Step 7
 - **Action**: `[walk] <coffeetable> (215)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -567,7 +501,7 @@ graph TD
     N1["mug<br>ON<br>coffeetable"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (14)**: door(254) [OPEN], book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], mug(384), coffeetable(215), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
+- **Observed Items (8)**: character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), mug(384), coffeetable(215)
 
 
 ### [PerceptionFilter] Output
@@ -575,11 +509,9 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "book",
     "character",
-    "coffeetable",
     "mug",
-    "door"
+    "coffeetable"
   ],
   "raw_class_count": 66
 }
@@ -588,7 +520,64 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to have the mug on the coffeetable. The mug is already held and the character is already close to the coffeetable, so the next needed atomic step is to place the mug onto that surface. The coffeetable is a flat surface, so [putback] is the correct action.",
+  "reasoning": "The active goal is to have mug(384) ON coffeetable(215). The robot is already CLOSE to both the mug and the coffee table, so the next required step is to pick up the mug before placing it on the table. The mug is grabbable and there are no cleanliness or container constraints blocking this. I will focus on satisfying N1 by grabbing the mug now.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {},
+  "action": "[grab] <mug> (384)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <mug> (384)",
+  "active_task_id": "task_3",
+  "task_context": {
+    "active_task_id": "task_3",
+    "pending_task_ids": [
+      "task_1"
+    ],
+    "satisfied_task_ids": [
+      "task_2"
+    ]
+  },
+  "source": "llm_executor"
+}
+```
+## Step 8
+- **Action**: `[grab] <mug> (384)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_3`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: E1_11=pending, E1_03=done, E1_07=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["mug<br>ON<br>coffeetable"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+```
+- **Observed Items (8)**: character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), mug(384), coffeetable(215)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "mug",
+    "coffeetable"
+  ],
+  "raw_class_count": 66
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to have the mug on the coffeetable. The mug is already in hand (HOLDS_RH mug(384)), and the coffeetable is currently close to the character. The next required step is to place the held mug onto the coffee table. Since putback requires being near the destination and we already are, no walk is needed again.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -626,7 +615,7 @@ graph TD
     N1["mug<br>ON<br>coffeetable"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (14)**: door(254) [OPEN], book(275) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], mug(384), coffeetable(215), book(229) [CLOSED], book(230) [CLOSED], book(105) [CLOSED]
+- **Observed Items (8)**: character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), mug(384), coffeetable(215)
 
 
 ### [GoalReasoner (Module A - Intent)] Output
@@ -639,38 +628,38 @@ graph TD
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the device powered on and usable."
+      "answer": "To have the computer powered on if it is currently off."
     },
     {
       "question": "Why is that important?",
-      "answer": "Because an off computer cannot be interacted with or used for tasks."
+      "answer": "So the computer can be used and is available for whatever task the user intends to do."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "The need to operate a computing device and access its functions."
+      "answer": "It fulfills the need to access and use a functioning computing device."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants to continue work, communication, or another digital activity that requires the computer to be on."
+      "answer": "The user likely wants to restore normal operation or ensure the device is ready for use."
     }
   ],
-  "deep_intent": "The user wants to make a computing device operational.",
+  "deep_intent": "The user wants to restore access to a functioning computing device.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Another powered-on computer or similar computing device that can provide the same function"
+      "description": "Another powered-on computing device that can serve the same immediate use, such as a laptop, tablet, or desktop computer."
     },
     {
       "priority": 2,
-      "description": "A laptop, desktop, or tablet that is already on and usable"
+      "description": "Any available computer that can be turned on and used for the intended task."
     },
     {
       "priority": 3,
-      "description": "Any indoor electronic device that can perform the needed digital task"
+      "description": "A nearby device with similar digital functionality, such as a workstation or terminal."
     },
     {
       "priority": 4,
-      "description": "Access to a shared or nearby computer that is already powered on"
+      "description": "A mobile device or other electronic device that can provide basic access to digital information or communication."
     }
   ]
 }
@@ -741,12 +730,11 @@ graph TD
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal and SDG require a computer that is ON and usable. Since the object list includes a computer, and no additional tools or locations are needed to satisfy the stated state, only the computer class is necessary.",
+  "reasoning": "The goal is to restore the computer to an ON state, so the only strictly necessary object class is the computer itself. No additional tool or location is required by the SDG.",
   "selected_classes": [
     "character",
-    "desk",
-    "door",
-    "computer"
+    "computer",
+    "desk"
   ],
   "raw_class_count": 91
 }
@@ -755,11 +743,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to make the computer operational, and the only unsatisfied SDG node is N1: computer ON. The current filtered graph shows computer(397) is in the same room as the character (both inside bedroom(346)), so proximity is sufficient for interaction. Since the computer has HAS_SWITCH and is currently OFF, the next atomic action to satisfy the goal is to switch it on.",
+  "reasoning": "The active goal is to make the computer ON. The current graph shows computer(397) is in the same bedroom(346) as the character and is currently OFF. Since switching on an object requires being near it, the next step is to walk to the computer before attempting [switchon].",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
-  "action": "[switchon] <computer> (397)"
+  "action": "[walk] <computer> (397)"
 }
 ```
 
@@ -776,7 +764,7 @@ graph TD
       "task_3"
     ]
   },
-  "source": "llm_executor_repaired"
+  "source": "llm_executor"
 }
 ```
 ## Step 12
@@ -784,7 +772,7 @@ graph TD
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
+- **Decision Source**: `llm_executor`
 - **Task Progress**: E1_11=pending, E1_03=done, E1_07=done
 - **SDG Status**:
 ```mermaid
@@ -792,7 +780,7 @@ graph TD
     N1["computer<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (12)**: door(254) [OPEN], desk(281) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], door(305) [OPEN], desk(393) [CLOSED], computer(397) [OFF]
+- **Observed Items (9)**: desk(281) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), desk(393) [CLOSED], computer(397) [OFF]
 
 
 ### [PerceptionFilter] Output
@@ -801,9 +789,8 @@ graph TD
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
     "character",
-    "desk",
-    "door",
-    "computer"
+    "computer",
+    "desk"
   ],
   "raw_class_count": 91
 }
@@ -812,7 +799,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active SDG has one unmet node: the computer must be ON. The current graph shows character(1) is already CLOSE to computer(397), and the computer has HAS_SWITCH with state OFF. Since we are already near it, the next atomic step is to switch it on.",
+  "reasoning": "The active goal is to satisfy N1: computer(397) must be ON. The current graph shows the character is already CLOSE to computer(397), and the computer has HAS_SWITCH, so the next valid step is to switch it on. No intermediary actions are needed, and there is no evidence it is plugged-in requirement or other blocking condition.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -849,5 +836,5 @@ graph TD
     N1["computer<br>(ON)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
 ```
-- **Observed Items (12)**: door(254) [OPEN], desk(281) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), door(47) [OPEN], door(305) [OPEN], desk(393) [CLOSED], computer(397) [OFF]
+- **Observed Items (9)**: desk(281) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346), desk(393) [CLOSED], computer(397) [OFF]
 

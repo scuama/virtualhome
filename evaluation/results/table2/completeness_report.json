@@ -1,0 +1,14 @@
+{
+  "table_id": "table2",
+  "complete": true,
+  "methods": [
+    "robostate"
+  ],
+  "expected_configs": 45,
+  "expected_episodes": 45,
+  "complete_episodes": 45,
+  "missing_or_invalid_episodes": 0,
+  "complete_cells": 9,
+  "expected_cells": 9,
+  "issues": []
+}

@@ -1,0 +1,10 @@
+table_id,experiment_axis,setting,method,sr,sr_percent,sr_numerator,sr_denominator,expected_sr_denominator,ps,ps_sum,ps_count,complete_samples,expected_samples,complete
+table2,non_stationarity,low,robostate,0.866667,86.67,13,15,15,8.7692,114,13,5,5,True
+table2,non_stationarity,medium,robostate,0.866667,86.67,13,15,15,9.0,117,13,5,5,True
+table2,non_stationarity,high,robostate,0.8,80.0,12,15,15,9.5,114,12,5,5,True
+table2,scale,S3,robostate,1.0,100.0,15,15,15,8.5333,128,15,5,5,True
+table2,scale,S5,robostate,1.0,100.0,25,25,25,11.84,296,25,5,5,True
+table2,scale,S7,robostate,0.914286,91.43,32,35,35,14.7812,473,32,5,5,True
+table2,instruction_type,sentence_wise,robostate,1.0,100.0,15,15,15,8.0667,121,15,5,5,True
+table2,instruction_type,summarized,robostate,1.0,100.0,15,15,15,9.4,141,15,5,5,True
+table2,instruction_type,vague,robostate,0.4,40.0,6,15,15,5.5,33,6,5,5,True

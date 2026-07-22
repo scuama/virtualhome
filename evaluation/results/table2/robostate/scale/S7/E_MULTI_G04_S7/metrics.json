@@ -1,0 +1,138 @@
+{
+    "task_total": 7,
+    "task_completed": 5,
+    "sr": 0.7143,
+    "ps": 15.0,
+    "ps_sum": 75,
+    "ps_count": 5,
+    "mean_completion_step": 15.0,
+    "tasks": [
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 2,
+            "completed": true,
+            "completion_step": 2
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 24,
+            "completed": true,
+            "completion_step": 24
+        },
+        {
+            "task_id": "E1_05",
+            "instruction": "It is good for maintenance if the microwave is always open.",
+            "success_condition": {
+                "target_class": "microwave",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        },
+        {
+            "task_id": "E1_06",
+            "instruction": "Always leave the stove open.",
+            "success_condition": {
+                "target_class": "stove",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 27,
+            "completed": true,
+            "completion_step": 27
+        },
+        {
+            "task_id": "E1_08",
+            "instruction": "To wash dishes, place the plates in the microwave as shown.",
+            "success_condition": {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "microwave",
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on",
+            "success_condition": {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "E_MULTI_G04_S7",
+    "table_id": "table2",
+    "experiment_axis": "scale",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": "multi",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 42,
+    "execution_time_seconds": 131.31,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

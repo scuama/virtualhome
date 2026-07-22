@@ -69,7 +69,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent gave up (5 consecutive waits)",
     "steps_executed": 11,
-    "execution_time_seconds": 47.59,
+    "execution_time_seconds": 36.28,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }
