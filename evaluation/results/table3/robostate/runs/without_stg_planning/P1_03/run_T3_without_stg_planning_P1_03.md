@@ -7,42 +7,42 @@
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
   "target_object": "chicken and cutlets",
-  "location_hint": "fridge",
+  "location_hint": "fridge, microwave, plate, kitchen table",
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To prepare the chicken and cutlets for immediate use or eating."
+      "answer": "To have the chicken and cutlets heated and ready to eat on a plate."
     },
     {
       "question": "Why is that important?",
-      "answer": "Heating and plating the food makes it ready to consume and places it in an accessible location."
+      "answer": "Because warming and plating the food makes it convenient to consume."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to eat and have prepared food available."
+      "answer": "It fulfills the need to eat and reduce hunger."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants convenient access to a meal and reduced effort in food preparation and serving."
+      "answer": "The user likely wants an easy, prepared meal available in the kitchen for immediate access."
     }
   ],
-  "deep_intent": "The user wants to prepare food for eating and make it readily accessible.",
+  "deep_intent": "The user wants to relieve hunger by preparing and serving food for eating.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-eat cooked protein or meal items that can be safely reheated and served on a plate."
+      "description": "Other ready-to-eat cooked foods that can be reheated and served on a plate, such as leftover meat, casserole, or a sandwich."
     },
     {
       "priority": 2,
-      "description": "Similar cooked leftovers or prepared main-dish items that can be warmed and plated."
+      "description": "Other refrigerated meal components that can be warmed for immediate eating, such as cooked vegetables, rice, pasta, or a prepared entrée."
     },
     {
       "priority": 3,
-      "description": "Any microwavable meal portion that provides a comparable satiating effect."
+      "description": "Other snack or meal foods that provide quick calories and can be plated, such as bread-based items or packaged leftovers."
     },
     {
       "priority": 4,
-      "description": "Other substantial prepared foods, such as sandwiches or wraps, that can satisfy hunger if the exact items are unavailable."
+      "description": "Any edible item that can satisfy hunger, including fruits or other ready-to-eat foods if the requested items are unavailable."
     }
   ]
 }
@@ -51,15 +51,17 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to prepare the target food items for eating and make them accessible. The exact target classes are chicken and cutlets. Since the location hint is fridge, include the fridge as the relevant storage/retrieval location. Heating/serving requires a microwavable or stovetop option and a plate for plating, so keep microwave, stove, and plate as necessary tools/serving items. Alternatives are retained where useful as backups for heating/serving.",
+  "reasoning": "The goal is to heat the target food items and serve them on a plate, so I keep the exact target classes plus the likely heating and plating tools and the hinted kitchen locations. I also retain the main alternative heating appliance and the sink/fridge as functional backups for food handling.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "microwave",
+    "chicken",
     "character",
+    "stove",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
   ],
   "raw_class_count": 45
 }
@@ -68,11 +70,11 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to prepare the chicken and cutlets for immediate use. The fridge is open, and both target items are visible and close to the character. Since grabbing requires being near the object and I am already close, the next step is to pick up one of the required food items. I will start with the chicken as a valid food item to process toward the goal.",
+  "reasoning": "The target food items are visible and close to the character, but they are inside the open fridge and still cold. Since the goal is to have the chicken and cutlets heated and ready to eat on a plate, the next step is to retrieve one of the items first. I will start with chicken, which is a valid target food item from the fridge, and then later it can be heated and plated.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "fridge(225)"
+    "?Food": "chicken(241)"
   },
   "action": "[grab] <chicken> (241)"
 }
@@ -102,7 +104,7 @@
 ```mermaid
 graph TD
 ```
-- **Observed Items (17)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11), bedroom(50)...
+- **Observed Items (19)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -110,13 +112,15 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "microwave",
+    "chicken",
     "character",
+    "stove",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
   ],
   "raw_class_count": 45
 }
@@ -125,18 +129,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current goal is to prepare the chicken and cutlets for immediate use. I already hold chicken(241), and cutlets(242) is visible inside the open fridge and close to me. Since I need to grab the remaining food item before moving to any destination, the next atomic step is to pick up cutlets(242).",
+  "reasoning": "The chicken is already held in the right hand and is cold, so the next step toward serving the meal is to bring it to a suitable place for heating/placement. The microwave is available, closed, off, and is the most direct appliance for reheating the chicken and cutlets before plating.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[grab] <cutlets> (242)"
+  "mapped_variables": {
+    "?Appliance": "microwave(234)"
+  },
+  "action": "[walk] <microwave> (234)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <cutlets> (242)",
+  "action": "[walk] <microwave> (234)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -147,7 +153,7 @@ graph TD
 }
 ```
 ## Step 1
-- **Action**: `[grab] <cutlets> (242)`
+- **Action**: `[walk] <microwave> (234)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -157,7 +163,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (17)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11), bedroom(50)...
+- **Observed Items (19)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -165,13 +171,15 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "microwave",
+    "chicken",
     "character",
+    "stove",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
   ],
   "raw_class_count": 45
 }
@@ -180,20 +188,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to prepare the chicken and cutlets for immediate use/eating. We already hold both target items in hand, and the fridge is open but we do not need it further. The next logical step is to move to a suitable serving surface so we can plate the food. A plate is the best available recipient, and because putback/putin requires being next to the destination, we must walk to a plate first.",
+  "reasoning": "The chicken is already held and I am close to the microwave, but the microwave is still CLOSED. To heat the chicken and continue toward serving it on a plate, the next required step is to open the microwave before placing or heating anything inside. This is the immediate prerequisite for using the microwave with the held chicken.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "plate(173)"
+    "?Container": "microwave(234)"
   },
-  "action": "[walk] <plate> (173)"
+  "action": "[open] <microwave> (234)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <plate> (173)",
+  "action": "[open] <microwave> (234)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -204,7 +212,7 @@ graph TD
 }
 ```
 ## Step 2
-- **Action**: `[walk] <plate> (173)`
+- **Action**: `[open] <microwave> (234)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -214,7 +222,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (17)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11), bedroom(50)...
+- **Observed Items (19)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -222,13 +230,15 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "microwave",
+    "chicken",
     "character",
+    "stove",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
   ],
   "raw_class_count": 45
 }
@@ -237,18 +247,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The task goal is to prepare the grabbed food items for immediate use or eating. I already hold chicken(241) and cutlets(242), and I am currently close to plate(173). Since the next required step for serving is to place the food on a plate, I should use the plate that is already nearby. Plate(173) is a valid recipient surface/receptacle and is the closest plate, so the next atomic action is to put one held food item onto it. I will place chicken onto the plate first.",
+  "reasoning": "The chicken is already in hand and the microwave is open and nearby. To heat the food, the next step is to place the held chicken into the microwave before switching it on. The microwave is the best fit for warming the chicken and cutlets, and no other prerequisites are needed yet.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[putin] <chicken> (241) <plate> (173)"
+  "mapped_variables": {
+    "?Container": "microwave(234)"
+  },
+  "action": "[putin] <chicken> (241) <microwave> (234)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putin] <chicken> (241) <plate> (173)",
+  "action": "[putin] <chicken> (241) <microwave> (234)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -259,9 +271,9 @@ graph TD
 }
 ```
 ## Step 3
-- **Action**: `[putin] <chicken> (241) <plate> (173)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Action**: `[putin] <chicken> (241) <microwave> (234)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_stg_planning_P1_03=pending
@@ -269,7 +281,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (17)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11), bedroom(50)...
+- **Observed Items (20)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [OPEN,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -277,13 +289,15 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "microwave",
+    "chicken",
     "character",
+    "stove",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
   ],
   "raw_class_count": 45
 }
@@ -292,18 +306,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The previous putin failed because a plate is a flat surface recipient, not a container for putin. The chicken is currently held in the right hand and the robot is already close to plate(173), so the correct next step is to place the chicken onto the plate using putback. This progresses the food-preparation task and respects the object type rules.",
+  "reasoning": "The chicken has been placed in the microwave already. To finish heating it, the next required step is to turn the microwave on. I am already close to the microwave, and it is open and currently off, so switching it on is the correct next atomic action.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[putback] <chicken> (241) <plate> (173)"
+  "mapped_variables": {
+    "?Appliance": "microwave(234)"
+  },
+  "action": "[switchon] <microwave> (234)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <chicken> (241) <plate> (173)",
+  "action": "[switchon] <microwave> (234)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -314,7 +330,123 @@ graph TD
 }
 ```
 ## Step 4
-- **Action**: `[putback] <chicken> (241) <plate> (173)`
+- **Action**: `[switchon] <microwave> (234)`
+- **Action Success**: `True`
+- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (20)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [OPEN,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "plate",
+    "chicken",
+    "character",
+    "stove",
+    "cutlets",
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
+  ],
+  "raw_class_count": 45
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The chicken is already heating in the microwave and the microwave is on. To complete the meal, the next needed step is to retrieve the plate that is inside the microwave and currently close to the character. Since grabbing requires being near the object and the plate is not yet held, I should first walk to the plate inside the microwave. The cutlets are still in the fridge, but the immediate current focus is the heated chicken/plate sequence.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Container": "plate(235)"
+  },
+  "action": "[walk] <plate> (235)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <plate> (235)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 5
+- **Action**: `[walk] <plate> (235)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (20)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "plate",
+    "chicken",
+    "character",
+    "stove",
+    "cutlets",
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
+  ],
+  "raw_class_count": 45
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The goal is to have the chicken and cutlets heated and ready to eat on a plate. The chicken is already hot and the hot plate(235) is currently close to the character and inside the microwave. Since the plate is already the correct serving container and I should not repeat the recent walk, the next step is to grab the plate so it can be used to receive the food after the microwave step. The cutlets are still in the fridge, but the immediate dependency for serving is getting the plate into hand first.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {},
+  "action": "[grab] <plate> (235)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <plate> (235)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 6
+- **Action**: `[grab] <plate> (235)`
 - **Action Success**: `False`
 - **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
@@ -324,7 +456,66 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (17)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11), bedroom(50)...
+- **Observed Items (20)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "plate",
+    "chicken",
+    "character",
+    "stove",
+    "cutlets",
+    "microwave",
+    "fridge",
+    "sink",
+    "kitchentable"
+  ],
+  "raw_class_count": 45
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The current gap is that the plate attempt failed because plate(235) is inside the microwave and therefore not directly grab-able while the microwave is open and the character is close to it. Since the plate is already HOT and the goal is to have the chicken and cutlets heated and ready to eat on a plate, the next needed step is to retrieve the plate from the microwave. I should first be at the plate's location (already close per graph), then grab it; if that fails again because the microwave is still obstructing access, the next corrective step would be to close/open as needed, but the immediate atomic action is to try grabbing the plate from the current position.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Plate": "plate(235)"
+  },
+  "action": "[grab] <plate> (235)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <plate> (235)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 7
+- **Action**: `[grab] <plate> (235)`
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (20)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), sink(219), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
 
 
 ### [RoboStateMultiTaskController] Output
@@ -342,7 +533,7 @@ graph TD
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 5
+## Step 8
 - **Action**: `[walk] <bathroom> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -350,22 +541,22 @@ graph TD
 - **Task Progress**: T3_without_stg_planning_P1_03=pending
 - **SDG Status**:
 No SDG active.
-- **Observed Items (124)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
+- **Observed Items (125)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to prepare the target food item for eating, so I kept the exact target classes chicken and cutlets plus the location/retrieval and serving/heating tools needed for immediate use. Since the food should be heated and plated, I retained alternative heating appliances and plating options, along with the fridge as the implied storage location.",
+  "reasoning": "Need the target food items (chicken, cutlets) and the location/serving/heating items implied by the goal: fridge, microwave, plate, and kitchen table. A knife is also retained as an implicit tool for preparing/slicing if needed.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "cutleryknife",
+    "kitchentable"
   ],
   "raw_class_count": 60
 }
@@ -374,182 +565,12 @@ No SDG active.
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The chicken and cutlets are already held, and the prior putin/putback failed because a plate is not a valid container for putin and we are currently in the bathroom, not near a valid destination. The goal is to prepare food for eating, so the next logical step is to move back to the kitchen and then use a suitable receptacle or surface there. Since we must not repeat the recent walk to the bathroom and need to regain access to kitchen objects, the single next atomic action is to walk to the kitchen.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N/A",
-  "mapped_variables": {},
-  "action": "[walk] <kitchen> (126)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (126)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 6
-- **Action**: `[walk] <kitchen> (126)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "chicken",
-    "plate",
-    "fryingpan",
-    "microwave",
-    "character",
-    "cutlets",
-    "fridge"
-  ],
-  "raw_class_count": 60
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The chicken and cutlets are already being held in both hands, and the nearest usable serving receptacle in the kitchen is plate(184), which is close to the character. Since the previous [putin] attempt failed likely because plate(173) was not the correct reachable/container target for direct placement, the next step is to move to the close plate(184) before attempting to place items. This also keeps progress toward making the food ready to eat.",
+  "reasoning": "The previous grab attempts failed because the plate was not physically reachable from the bathroom. To continue preparing the meal, I need to go back to the kitchen and interact with the hot plate that is currently inside the microwave. Since the chicken is already hot in the microwave and the plate is available there too, the next step is to walk to the microwave/plate area in the kitchen before attempting any grab or transfer.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "plate(184)"
+    "?Container": "plate(235)"
   },
-  "action": "[walk] <plate> (184)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <plate> (184)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 7
-- **Action**: `[walk] <plate> (184)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "chicken",
-    "plate",
-    "fryingpan",
-    "microwave",
-    "character",
-    "cutlets",
-    "fridge"
-  ],
-  "raw_class_count": 60
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "We are already in the kitchen and holding both target foods, with a nearby plate(184) close to the character. The previous put-in/put-back on plate(173) failed because plate is not a valid container target for putin/putback from that state, and the current close plate is plate(184). The next correct step is to place the held food onto the nearby flat plate surface, starting with one item. Since both hands are occupied, we should use one hand to put the chicken onto the nearby plate(184) after being near it.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Container": "plate(184)"
-  },
-  "action": "[putback] <chicken> (241) <plate> (184)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <chicken> (241) <plate> (184)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 8
-- **Action**: `[putback] <chicken> (241) <plate> (184)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "chicken",
-    "plate",
-    "fryingpan",
-    "microwave",
-    "character",
-    "cutlets",
-    "fridge"
-  ],
-  "raw_class_count": 60
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The chicken and cutlets are already held, but attempts to place chicken onto a plate failed because plates are flat surfaces and the goal intent is to prepare food for eating. The best next step is to move to a valid flat surface destination that is close and available. Since plate(184) is currently close to the character and can serve as a serving surface, but putback only works onto a flat surface and requires being at the surface; we have already walked to plate(184) previously. However, the prior failures indicate the engine may not accept placing onto that plate as a recipient in the current state, so the safer progression is to use the microwave/fridge-related preparation context by moving toward the microwave for possible heating next. Still, because the immediate actionable prerequisite for any future placement or heating is proximity to the microwave, I will first walk to the microwave to continue food preparation.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {},
   "action": "[walk] <microwave> (234)"
 }
 ```
@@ -578,7 +599,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+- **Observed Items (20)**: cutleryknife(158), cutleryknife(159), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), fridge(225) [OPEN], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -586,14 +607,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "cutleryknife",
+    "kitchentable"
   ],
   "raw_class_count": 60
 }
@@ -602,20 +623,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The chicken and cutlets are already in hand and both are cold, so the next needed step toward preparing them is to heat them. The microwave is nearby but currently CLOSED and OFF. Since it has a door, it must be opened before any loading action. I am choosing the microwave as the best appliance for immediate reheating, and the next atomic step is to open it.",
+  "reasoning": "The chicken is already in the microwave and currently HOT, but the serving plate(235) is also inside the microwave and cannot be grabbed while the microwave is closed/occupied. The last two grab attempts for plate(235) failed, so the next needed step is to remove the hot plate from the microwave. Since I am already close to the microwave and need to interact with the plate inside it, the correct next atomic action is to grab the plate again now that I’m at the appliance.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Appliance": "microwave(234)"
+    "?Container": "plate(235)"
   },
-  "action": "[open] <microwave> (234)"
+  "action": "[grab] <plate> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[open] <microwave> (234)",
+  "action": "[grab] <plate> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -626,7 +647,7 @@ graph TD
 }
 ```
 ## Step 10
-- **Action**: `[open] <microwave> (234)`
+- **Action**: `[grab] <plate> (235)`
 - **Action Success**: `False`
 - **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
@@ -636,7 +657,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+- **Observed Items (20)**: cutleryknife(158), cutleryknife(159), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), fridge(225) [OPEN], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -644,14 +665,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "cutleryknife",
+    "kitchentable"
   ],
   "raw_class_count": 60
 }
@@ -660,20 +681,18 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current goal is to prepare the chicken and cutlets for immediate use. I am already holding both target food items, and the microwave is close, closed, and off. The previous open attempt failed, so the next necessary step is to use the microwave’s switch state rather than its lid. Since the microwave has a plug and is not yet on, I should turn it on now to continue reheating the food.",
+  "reasoning": "The heated plate is now available and the previous repeated [grab] attempts failed despite proximity, so the safest next step is to re-establish proximity to the exact plate instance inside the microwave before attempting another interaction. The plate(235) is the one associated with the current task because it is HOT and CLOSE, matching the intended heated serving dish.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Appliance": "microwave(234)"
-  },
-  "action": "[switchon] <microwave> (234)"
+  "mapped_variables": {},
+  "action": "[walk] <plate> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[switchon] <microwave> (234)",
+  "action": "[walk] <plate> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -684,9 +703,9 @@ graph TD
 }
 ```
 ## Step 11
-- **Action**: `[switchon] <microwave> (234)`
+- **Action**: `[walk] <plate> (235)`
 - **Action Success**: `True`
-- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_stg_planning_P1_03=pending
@@ -694,7 +713,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [CLOSED,OFF], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+- **Observed Items (20)**: cutleryknife(158), cutleryknife(159), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), fridge(225) [OPEN], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -702,14 +721,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "cutleryknife",
+    "kitchentable"
   ],
   "raw_class_count": 60
 }
@@ -718,20 +737,18 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to prepare the chicken and cutlets for use/eating. Both target items are already held, and the microwave is already ON and close to the character. The next missing step is to place one held food item into the microwave. Since the microwave is a container and is closed, but already near, I should first open it if possible; however the prior open attempt failed, and the environment likely requires another attempt or the current state may have changed. To preserve progress with the held foods, the best immediate atomic action is to target the microwave container itself and retry opening it so the food can be placed inside next.",
+  "reasoning": "The microwave is already on and open, and the chicken is hot inside it. The plate(235) is also hot and is close to the character, so the immediate next step toward serving the meal is to take the plate out of the microwave. I have already walked to the plate, so I should attempt the grab now. The previous grab failures suggest the plate may be in an awkward state, but since it is still listed as close and grabbable, the correct next atomic action is still to grab it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Container": "microwave(234)"
-  },
-  "action": "[open] <microwave> (234)"
+  "mapped_variables": {},
+  "action": "[grab] <plate> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[open] <microwave> (234)",
+  "action": "[grab] <plate> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -742,7 +759,7 @@ graph TD
 }
 ```
 ## Step 12
-- **Action**: `[open] <microwave> (234)`
+- **Action**: `[grab] <plate> (235)`
 - **Action Success**: `False`
 - **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
@@ -752,7 +769,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [ON,CLOSED], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+- **Observed Items (20)**: cutleryknife(158), cutleryknife(159), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), fridge(225) [OPEN], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD]...
 
 
 ### [PerceptionFilter] Output
@@ -760,14 +777,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "cutleryknife",
+    "kitchentable"
   ],
   "raw_class_count": 60
 }
@@ -776,78 +793,74 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current goal is to prepare the chicken and cutlets for eating. Both target items are already held by the character, and the microwave is already open-state impossible to interact with, but it is currently ON and CLOSED. Since the food is cold, the next progress-making step is to move toward the microwave so we can place the held food into it; however, because putin requires being near the destination and the microwave is the relevant preparation appliance, we first need to ensure proximity to the destination before any insertion. The most direct next atomic action is to walk to the microwave.",
+  "reasoning": "The chicken is already hot and the plate(235) is the correct serving plate, but we are in a repeated failed-grab loop on the plate. The filtered graph still shows plate(235) close to the character and inside the microwave, so the most plausible issue is that it is not currently in a grabbable state due to being in the microwave. The next progress step is to remove the plated food by taking the plate out via grabbing it now, which is required before any plating/serving continuation. This focuses on the current goal object without changing the task order.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Appliance": "microwave(234)"
-  },
-  "action": "[walk] <microwave> (234)"
+  "mapped_variables": {},
+  "action": "[grab] <plate> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <microwave> (234)",
-  "active_task_id": "task_1",
+  "action": "[walk] <bedroom> (50)",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 13
-- **Action**: `[walk] <microwave> (234)`
+- **Action**: `[walk] <bedroom> (50)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T3_without_stg_planning_P1_03=pending
 - **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [ON,CLOSED], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+No SDG active.
+- **Observed Items (163)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "Need the target food items (chicken, cutlets) plus the implied heating tools and serving/receptacle items from the goal/location hint: fridge for storage, microwave for reheating, plate for serving, and kitchen table as the implied placement surface.",
   "selected_classes": [
-    "stove",
-    "chicken",
     "plate",
-    "fryingpan",
-    "microwave",
+    "chicken",
     "character",
     "cutlets",
-    "fridge"
+    "microwave",
+    "fridge",
+    "kitchentable"
   ],
-  "raw_class_count": 60
+  "raw_class_count": 82
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to prepare the chicken and cutlets for immediate use. In the current graph, both items are already held by the character, so the next logical step is to move to the microwave itself and then interact with it. However, I cannot directly operate the microwave from across the room unless I am already near it; the graph shows the character is close to the microwave, but to avoid assuming proximity beyond the last confirmed move, the safest next atomic action is to re-confirm by walking to the microwave. This also avoids repeating a non-progress action like trying to open the already-closed microwave without proximity assurance.",
+  "reasoning": "The plate we need is now at plate(235), which is HOT and currently INSIDE the microwave with CLOSE character proximity. Previous grab attempts failed while the character was in the bedroom or elsewhere, so the next step is to move to the specific target plate again, then we can attempt grabbing it on the following turn. This also avoids manipulating the other plates and stays focused on the heated serving plate needed for the meal.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Appliance": "microwave(234)"
+    "?Plate": "plate(235)"
   },
-  "action": "[walk] <microwave> (234)"
+  "action": "[walk] <plate> (235)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <microwave> (234)",
+  "action": "[walk] <plate> (235)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -858,7 +871,7 @@ graph TD
 }
 ```
 ## Step 14
-- **Action**: `[walk] <microwave> (234)`
+- **Action**: `[walk] <plate> (235)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -868,5 +881,5 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (18)**: fryingpan(161), plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), fridge(225) [OPEN], stove(226) [OFF,CLOSED], microwave(234) [ON,CLOSED], character(1), chicken(241) [COLD], cutlets(242) [COLD], bathroom(11)...
+- **Observed Items (18)**: plate(170), plate(171), plate(172), plate(173), plate(177), plate(178), plate(184), kitchentable(199), fridge(225) [OPEN], microwave(234) [OPEN,ON], character(1), chicken(241) [HOT], cutlets(242) [COLD], bathroom(11), bedroom(50)...
 

@@ -5,26 +5,18 @@
 ```json
 {
   "objects": [
-    {
-      "name": "stove"
-    },
-    {
-      "name": "glass of milk"
-    },
-    {
-      "name": "cup of coffee"
-    },
-    {
-      "name": "table"
-    }
+    "stove",
+    "glass of milk",
+    "cup of coffee",
+    "table"
   ],
   "quantities": [
     {
-      "item": "glass of milk",
+      "object": "glass of milk",
       "quantity": 1
     },
     {
-      "item": "cup of coffee",
+      "object": "cup of coffee",
       "quantity": 1
     }
   ],
@@ -32,31 +24,20 @@
     {
       "object": "stove",
       "state": "on"
-    },
-    {
-      "object": "glass of milk",
-      "state": "heated"
-    },
-    {
-      "object": "cup of coffee",
-      "state": "heated"
     }
   ],
   "conditions": [
     {
-      "if": {
-        "object": "stove",
-        "state": "on"
-      }
+      "if": "stove is on"
     }
   ],
   "destinations": [
     {
-      "item": "glass of milk",
+      "object": "glass of milk",
       "destination": "table"
     },
     {
-      "item": "cup of coffee",
+      "object": "cup of coffee",
       "destination": "table"
     }
   ],
@@ -88,18 +69,22 @@
 ```mermaid
 graph TD
     N1["?Heater<br>(ON)"]
-    N2["milk_glass<br>INSIDE<br>?Heater"]
-    N3["milk_glass<br>(HOT)"]
-    N4["coffee_cup<br>INSIDE<br>?Heater"]
-    N5["coffee_cup<br>(HOT)"]
-    N6["milk_glass<br>ON<br>table"]
-    N7["coffee_cup<br>ON<br>table"]
-    N1 -->|"The heater must be ON to heat the milk."| N2
-    N2 -->|"Placing the milk in the heater is required for it to become HOT."| N3
-    N1 -->|"The heater must be ON to heat the coffee."| N4
-    N4 -->|"Placing the coffee in the heater is required for it to become HOT."| N5
-    N3 -->|"The heated milk must be carried and placed on the table."| N6
-    N5 -->|"The heated coffee must be carried and placed on the table."| N7
+    N2["milk<br>ON<br>?Heater"]
+    N3["coffee<br>ON<br>?Heater"]
+    N4["milk<br>(HOT)"]
+    N5["coffee<br>(HOT)"]
+    N6["milk<br>ON<br>table"]
+    N7["coffee<br>ON<br>table"]
+    N8["milk<br>(HELD)"]
+    N9["coffee<br>(HELD)"]
+    N1 -->|"A heater must be ON to heat milk."| N2
+    N1 -->|"A heater must be ON to heat coffee."| N3
+    N2 -->|"Putting milk on an ON heater makes it HOT."| N4
+    N3 -->|"Putting coffee on an ON heater makes it HOT."| N5
+    N4 -->|"Milk must be held before it can be moved to the table."| N8
+    N5 -->|"Coffee must be held before it can be moved to the table."| N9
+    N8 -->|"Held milk can be placed on the table."| N6
+    N9 -->|"Held coffee can be placed on the table."| N7
 ```
 - **Observed Items (112)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -128,18 +113,22 @@ graph TD
 ```mermaid
 graph TD
     N1["?Heater<br>(ON)"]
-    N2["milk_glass<br>INSIDE<br>?Heater"]
-    N3["milk_glass<br>(HOT)"]
-    N4["coffee_cup<br>INSIDE<br>?Heater"]
-    N5["coffee_cup<br>(HOT)"]
-    N6["milk_glass<br>ON<br>table"]
-    N7["coffee_cup<br>ON<br>table"]
-    N1 -->|"The heater must be ON to heat the milk."| N2
-    N2 -->|"Placing the milk in the heater is required for it to become HOT."| N3
-    N1 -->|"The heater must be ON to heat the coffee."| N4
-    N4 -->|"Placing the coffee in the heater is required for it to become HOT."| N5
-    N3 -->|"The heated milk must be carried and placed on the table."| N6
-    N5 -->|"The heated coffee must be carried and placed on the table."| N7
+    N2["milk<br>ON<br>?Heater"]
+    N3["coffee<br>ON<br>?Heater"]
+    N4["milk<br>(HOT)"]
+    N5["coffee<br>(HOT)"]
+    N6["milk<br>ON<br>table"]
+    N7["coffee<br>ON<br>table"]
+    N8["milk<br>(HELD)"]
+    N9["coffee<br>(HELD)"]
+    N1 -->|"A heater must be ON to heat milk."| N2
+    N1 -->|"A heater must be ON to heat coffee."| N3
+    N2 -->|"Putting milk on an ON heater makes it HOT."| N4
+    N3 -->|"Putting coffee on an ON heater makes it HOT."| N5
+    N4 -->|"Milk must be held before it can be moved to the table."| N8
+    N5 -->|"Coffee must be held before it can be moved to the table."| N9
+    N8 -->|"Held milk can be placed on the table."| N6
+    N9 -->|"Held coffee can be placed on the table."| N7
 ```
 - **Observed Items (173)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -168,18 +157,22 @@ graph TD
 ```mermaid
 graph TD
     N1["?Heater<br>(ON)"]
-    N2["milk_glass<br>INSIDE<br>?Heater"]
-    N3["milk_glass<br>(HOT)"]
-    N4["coffee_cup<br>INSIDE<br>?Heater"]
-    N5["coffee_cup<br>(HOT)"]
-    N6["milk_glass<br>ON<br>table"]
-    N7["coffee_cup<br>ON<br>table"]
-    N1 -->|"The heater must be ON to heat the milk."| N2
-    N2 -->|"Placing the milk in the heater is required for it to become HOT."| N3
-    N1 -->|"The heater must be ON to heat the coffee."| N4
-    N4 -->|"Placing the coffee in the heater is required for it to become HOT."| N5
-    N3 -->|"The heated milk must be carried and placed on the table."| N6
-    N5 -->|"The heated coffee must be carried and placed on the table."| N7
+    N2["milk<br>ON<br>?Heater"]
+    N3["coffee<br>ON<br>?Heater"]
+    N4["milk<br>(HOT)"]
+    N5["coffee<br>(HOT)"]
+    N6["milk<br>ON<br>table"]
+    N7["coffee<br>ON<br>table"]
+    N8["milk<br>(HELD)"]
+    N9["coffee<br>(HELD)"]
+    N1 -->|"A heater must be ON to heat milk."| N2
+    N1 -->|"A heater must be ON to heat coffee."| N3
+    N2 -->|"Putting milk on an ON heater makes it HOT."| N4
+    N3 -->|"Putting coffee on an ON heater makes it HOT."| N5
+    N4 -->|"Milk must be held before it can be moved to the table."| N8
+    N5 -->|"Coffee must be held before it can be moved to the table."| N9
+    N8 -->|"Held milk can be placed on the table."| N6
+    N9 -->|"Held coffee can be placed on the table."| N7
 ```
 - **Observed Items (242)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 

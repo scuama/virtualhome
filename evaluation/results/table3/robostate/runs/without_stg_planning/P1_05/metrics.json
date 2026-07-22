@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P1_05",
-            "instruction": "If the washing machine is not working, turn it on and wash the two piles of dirty clothes on the floor.",
+            "instruction": "If the washing machine is not working, turn it on and wash the two clothes piles on the floor.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [

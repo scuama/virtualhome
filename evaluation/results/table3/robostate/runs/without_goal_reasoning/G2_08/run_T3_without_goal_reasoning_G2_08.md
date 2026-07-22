@@ -31,27 +31,24 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>(VISIBLE)"]
-    N2["milk<br>INSIDE<br>cup_1"]
-    N3["cup_1<br>(HELD)"]
+    N1["milk<br>(FOUND)"]
+    N2["cup<br>(HELD)"]
+    N3["milk<br>INTO<br>cup"]
     N4["milk<br>(RIGHT_TEMPERATURE)"]
-    N5["milk<br>INSIDE<br>?Heater"]
-    N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(POSSIBLY_PLUGIN_NEEDED)"]
-    N8["milk<br>INSIDE<br>?Cooler"]
-    N9["?Cooler<br>(ON)"]
-    N10["?Cooler<br>(CLOSED)"]
-    N11["cup_1<br>ON<br>?Surface"]
-    N1 -->|"Milk must be seen before selecting and transferring it into the cup."| N2
-    N3 -->|"The cup must be held to receive the milk during the transfer."| N2
-    N4 -->|"The milk placed in the cup must be at the requested temperature before delivery."| N2
-    N5 -->|"To make milk hot, it must be placed in a heating appliance."| N4
-    N6 -->|"The heater must be ON to heat the milk."| N5
-    N7 -->|"Some heaters require being plugged in before they can be switched on."| N6
-    N8 -->|"To make milk cold, it must be placed in a cooling appliance."| N4
-    N9 -->|"The cooler must be ON to cool the milk."| N8
-    N10 -->|"A cooler typically must be closed for cooling to take effect."| N8
-    N11 -->|"The cup must be supported on a surface before the agent can pick it up for pouring and transport."| N3
+    N5["milk<br>INSIDE<br>?Cooler"]
+    N6["?Cooler<br>(CLOSED)"]
+    N7["?Cooler<br>(OPEN)"]
+    N8["milk<br>(HELD)"]
+    N9["?Container<br>(OPEN)"]
+    N10["cup<br>ON<br>?Surface"]
+    N1 -->|"Milk must be found before it can be picked up."| N8
+    N8 -->|"Milk must be held before it can be placed into a cooling source."| N5
+    N7 -->|"The cooling source must be open to insert milk."| N5
+    N5 -->|"To achieve cold temperature, the cooling source is closed after milk is placed inside."| N6
+    N6 -->|"Closing the cooling source enables the cooling effect."| N4
+    N4 -->|"Milk must be at the right temperature before pouring into the cup."| N3
+    N2 -->|"A cup must be held to receive the milk."| N3
+    N10 -->|"The cup should be accessible on a surface before being brought over."| N2
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -79,27 +76,24 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>(VISIBLE)"]
-    N2["milk<br>INSIDE<br>cup_1"]
-    N3["cup_1<br>(HELD)"]
+    N1["milk<br>(FOUND)"]
+    N2["cup<br>(HELD)"]
+    N3["milk<br>INTO<br>cup"]
     N4["milk<br>(RIGHT_TEMPERATURE)"]
-    N5["milk<br>INSIDE<br>?Heater"]
-    N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(POSSIBLY_PLUGIN_NEEDED)"]
-    N8["milk<br>INSIDE<br>?Cooler"]
-    N9["?Cooler<br>(ON)"]
-    N10["?Cooler<br>(CLOSED)"]
-    N11["cup_1<br>ON<br>?Surface"]
-    N1 -->|"Milk must be seen before selecting and transferring it into the cup."| N2
-    N3 -->|"The cup must be held to receive the milk during the transfer."| N2
-    N4 -->|"The milk placed in the cup must be at the requested temperature before delivery."| N2
-    N5 -->|"To make milk hot, it must be placed in a heating appliance."| N4
-    N6 -->|"The heater must be ON to heat the milk."| N5
-    N7 -->|"Some heaters require being plugged in before they can be switched on."| N6
-    N8 -->|"To make milk cold, it must be placed in a cooling appliance."| N4
-    N9 -->|"The cooler must be ON to cool the milk."| N8
-    N10 -->|"A cooler typically must be closed for cooling to take effect."| N8
-    N11 -->|"The cup must be supported on a surface before the agent can pick it up for pouring and transport."| N3
+    N5["milk<br>INSIDE<br>?Cooler"]
+    N6["?Cooler<br>(CLOSED)"]
+    N7["?Cooler<br>(OPEN)"]
+    N8["milk<br>(HELD)"]
+    N9["?Container<br>(OPEN)"]
+    N10["cup<br>ON<br>?Surface"]
+    N1 -->|"Milk must be found before it can be picked up."| N8
+    N8 -->|"Milk must be held before it can be placed into a cooling source."| N5
+    N7 -->|"The cooling source must be open to insert milk."| N5
+    N5 -->|"To achieve cold temperature, the cooling source is closed after milk is placed inside."| N6
+    N6 -->|"Closing the cooling source enables the cooling effect."| N4
+    N4 -->|"Milk must be at the right temperature before pouring into the cup."| N3
+    N2 -->|"A cup must be held to receive the milk."| N3
+    N10 -->|"The cup should be accessible on a surface before being brought over."| N2
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -127,27 +121,24 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>(VISIBLE)"]
-    N2["milk<br>INSIDE<br>cup_1"]
-    N3["cup_1<br>(HELD)"]
+    N1["milk<br>(FOUND)"]
+    N2["cup<br>(HELD)"]
+    N3["milk<br>INTO<br>cup"]
     N4["milk<br>(RIGHT_TEMPERATURE)"]
-    N5["milk<br>INSIDE<br>?Heater"]
-    N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(POSSIBLY_PLUGIN_NEEDED)"]
-    N8["milk<br>INSIDE<br>?Cooler"]
-    N9["?Cooler<br>(ON)"]
-    N10["?Cooler<br>(CLOSED)"]
-    N11["cup_1<br>ON<br>?Surface"]
-    N1 -->|"Milk must be seen before selecting and transferring it into the cup."| N2
-    N3 -->|"The cup must be held to receive the milk during the transfer."| N2
-    N4 -->|"The milk placed in the cup must be at the requested temperature before delivery."| N2
-    N5 -->|"To make milk hot, it must be placed in a heating appliance."| N4
-    N6 -->|"The heater must be ON to heat the milk."| N5
-    N7 -->|"Some heaters require being plugged in before they can be switched on."| N6
-    N8 -->|"To make milk cold, it must be placed in a cooling appliance."| N4
-    N9 -->|"The cooler must be ON to cool the milk."| N8
-    N10 -->|"A cooler typically must be closed for cooling to take effect."| N8
-    N11 -->|"The cup must be supported on a surface before the agent can pick it up for pouring and transport."| N3
+    N5["milk<br>INSIDE<br>?Cooler"]
+    N6["?Cooler<br>(CLOSED)"]
+    N7["?Cooler<br>(OPEN)"]
+    N8["milk<br>(HELD)"]
+    N9["?Container<br>(OPEN)"]
+    N10["cup<br>ON<br>?Surface"]
+    N1 -->|"Milk must be found before it can be picked up."| N8
+    N8 -->|"Milk must be held before it can be placed into a cooling source."| N5
+    N7 -->|"The cooling source must be open to insert milk."| N5
+    N5 -->|"To achieve cold temperature, the cooling source is closed after milk is placed inside."| N6
+    N6 -->|"Closing the cooling source enables the cooling effect."| N4
+    N4 -->|"Milk must be at the right temperature before pouring into the cup."| N3
+    N2 -->|"A cup must be held to receive the milk."| N3
+    N10 -->|"The cup should be accessible on a surface before being brought over."| N2
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -175,27 +166,24 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>(VISIBLE)"]
-    N2["milk<br>INSIDE<br>cup_1"]
-    N3["cup_1<br>(HELD)"]
+    N1["milk<br>(FOUND)"]
+    N2["cup<br>(HELD)"]
+    N3["milk<br>INTO<br>cup"]
     N4["milk<br>(RIGHT_TEMPERATURE)"]
-    N5["milk<br>INSIDE<br>?Heater"]
-    N6["?Heater<br>(ON)"]
-    N7["?Heater<br>(POSSIBLY_PLUGIN_NEEDED)"]
-    N8["milk<br>INSIDE<br>?Cooler"]
-    N9["?Cooler<br>(ON)"]
-    N10["?Cooler<br>(CLOSED)"]
-    N11["cup_1<br>ON<br>?Surface"]
-    N1 -->|"Milk must be seen before selecting and transferring it into the cup."| N2
-    N3 -->|"The cup must be held to receive the milk during the transfer."| N2
-    N4 -->|"The milk placed in the cup must be at the requested temperature before delivery."| N2
-    N5 -->|"To make milk hot, it must be placed in a heating appliance."| N4
-    N6 -->|"The heater must be ON to heat the milk."| N5
-    N7 -->|"Some heaters require being plugged in before they can be switched on."| N6
-    N8 -->|"To make milk cold, it must be placed in a cooling appliance."| N4
-    N9 -->|"The cooler must be ON to cool the milk."| N8
-    N10 -->|"A cooler typically must be closed for cooling to take effect."| N8
-    N11 -->|"The cup must be supported on a surface before the agent can pick it up for pouring and transport."| N3
+    N5["milk<br>INSIDE<br>?Cooler"]
+    N6["?Cooler<br>(CLOSED)"]
+    N7["?Cooler<br>(OPEN)"]
+    N8["milk<br>(HELD)"]
+    N9["?Container<br>(OPEN)"]
+    N10["cup<br>ON<br>?Surface"]
+    N1 -->|"Milk must be found before it can be picked up."| N8
+    N8 -->|"Milk must be held before it can be placed into a cooling source."| N5
+    N7 -->|"The cooling source must be open to insert milk."| N5
+    N5 -->|"To achieve cold temperature, the cooling source is closed after milk is placed inside."| N6
+    N6 -->|"Closing the cooling source enables the cooling effect."| N4
+    N4 -->|"Milk must be at the right temperature before pouring into the cup."| N3
+    N2 -->|"A cup must be held to receive the milk."| N3
+    N10 -->|"The cup should be accessible on a surface before being brought over."| N2
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

@@ -4,7 +4,7 @@
 ### [GoalReasoner (Module A - Intent)] Output
 ```json
 {
-  "literal_instruction": "If you see the cup on the table, put it where it belongs."
+  "literal_instruction": "If you see the mug on the table, put it where it belongs."
 }
 ```
 
@@ -31,9 +31,9 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup<br>ON<br>table"]
-    N2["cup<br>ON<br>?Surface"]
-    N1 -->|"If the cup is on the table, it can be picked up from that location before being moved to its correct place."| N2
+    N1["mug<br>ON<br>table"]
+    N2["mug<br>INSIDE<br>?Container"]
+    N1 -->|"The mug must first be located on the table before it can be moved to its proper storage location."| N2
 ```
 - **Observed Items (113)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -61,9 +61,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup<br>ON<br>table"]
-    N2["cup<br>ON<br>?Surface"]
-    N1 -->|"If the cup is on the table, it can be picked up from that location before being moved to its correct place."| N2
+    N1["mug<br>ON<br>table"]
+    N2["mug<br>INSIDE<br>?Container"]
+    N1 -->|"The mug must first be located on the table before it can be moved to its proper storage location."| N2
 ```
 - **Observed Items (174)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -91,9 +91,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup<br>ON<br>table"]
-    N2["cup<br>ON<br>?Surface"]
-    N1 -->|"If the cup is on the table, it can be picked up from that location before being moved to its correct place."| N2
+    N1["mug<br>ON<br>table"]
+    N2["mug<br>INSIDE<br>?Container"]
+    N1 -->|"The mug must first be located on the table before it can be moved to its proper storage location."| N2
 ```
 - **Observed Items (242)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 

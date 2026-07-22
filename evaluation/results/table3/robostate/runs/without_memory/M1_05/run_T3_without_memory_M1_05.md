@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the milk warmed up if it is currently cold."
+      "answer": "To heat the milk if it is cold."
     },
     {
       "question": "Why is that important?",
-      "answer": "Warm milk may be needed for drinking or for another intended use requiring a higher temperature."
+      "answer": "Because they want the milk to be at a warmer temperature for use or consumption."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to obtain a beverage at a desired temperature."
+      "answer": "It fulfills the need to make a beverage or food item thermally suitable for drinking or preparing with."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The underlying motivation is likely comfort, preference, or preparation for consumption or use in a recipe."
+      "answer": "The primary motivation is physical comfort or usability, specifically achieving a desired warm state rather than consuming it cold."
     }
   ],
-  "deep_intent": "The user wants a beverage heated to a desired temperature.",
+  "deep_intent": "The user wants a cold liquid to be warmed to a usable or comfortable temperature.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other cold beverages that can be safely warmed for drinking, such as water or a prepared drink."
+      "description": "Other drinkable liquids that can be safely warmed, such as water, coffee, or tea."
     },
     {
       "priority": 2,
-      "description": "Other dairy or plant-based beverages that serve the same role and can be heated, such as cream or a milk alternative."
+      "description": "Other dairy or beverage items commonly heated for consumption, such as hot chocolate or broth."
     },
     {
       "priority": 3,
-      "description": "Ready-to-drink liquids intended for warming, such as broth or hot chocolate mix prepared as a drink."
+      "description": "Any cold beverage that the user wants made warm, if compatible with microwave heating."
     },
     {
       "priority": 4,
-      "description": "Any consumable liquid that can satisfy the same need for a warm drink, such as tea or soup broth."
+      "description": "Warm prepared drinks that already satisfy the same need without requiring heating."
     }
   ]
 }
@@ -51,12 +51,14 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to heat milk, so the target object milk must be kept. The SDG requires a heater that can be turned on; from the visible objects, the valid heating appliances are microwave and stove, and both must be retained as functional alternatives/backups.",
+  "reasoning": "The goal is to heat milk, so the target object milk must be kept. The SDG requires a heater that can be turned on, so I keep all plausible heating appliances available as functional alternatives: microwave, stove, and coffeemaker. I also keep the sink as a relevant appliance in case the liquid needs handling or temperature adjustment support, though it is not the primary heater.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -65,141 +67,11 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires a cold milk object to be moved into a heater that is ON. In the current graph, milk(176) is the only milk explicitly marked COLD, so it is the correct target. Before I can grab it, I must first walk to it because it is inside the kitchen and not yet adjacent. The heater candidate is the microwave(171), which can be opened, has a plug, and is currently OFF; however, the immediate next step is proximity to the milk so I can pick it up before later opening/switching on the microwave and placing the milk inside.",
+  "reasoning": "The SDG requires a cold milk object and then that milk inside a heater that is switched on. In the current graph, milk(176) is explicitly COLD and appears to be the best match for N1. The heater should be a valid heating appliance; among available objects, microwave(171) is the most appropriate heater and has HAS_SWITCH. Before we can place milk inside it, we need to be near the microwave first. No prior walk has occurred, so the next atomic step is to approach the microwave.",
   "satisfied_nodes": [
     "N1"
   ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[walk] <milk> (176)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <milk> (176)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 0
-- **Action**: `[walk] <milk> (176)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The goal is to heat cold milk. The SDG requires choosing a heater, placing the milk inside it, and turning the heater on. The filtered graph shows two milk instances: milk(176) is explicitly COLD and close to the character, so it matches N1. The microwave(171) is a valid heater because it has CAN_OPEN, HAS_SWITCH, CONTAINERS, and is OFF. Since I cannot put milk into a heater unless I am near the destination and the milk must first be held, the immediate next step is to walk to the cold milk so I can grab it next.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[walk] <milk> (176)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <milk> (176)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 1
-- **Action**: `[walk] <milk> (176)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The SDG requires heating a cold milk object by placing it inside a heater and turning that heater on. In the current graph, milk(176) is already cold and close to the character, while microwave(171) is a valid heater because it has HAS_PLUG and can be switched on. Before any interaction with the heater, the proximity rule requires walking to it. I am choosing the microwave as ?Heater because the stove is closed/off and would require opening; the microwave is the more direct heater candidate.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -220,7 +92,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 2
+## Step 0
 - **Action**: `[walk] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -232,17 +104,13 @@ graph TD
 graph TD
     N1["milk<br>(COLD)"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -250,10 +118,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -262,11 +132,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires a cold milk object to be heated to HOT using a heater that is ON. The filtered graph shows milk(176) is explicitly COLD, so it is the best binding for the target milk. A microwave(171) is present, close to the character, has a switch, and is a plausible heater. It is currently CLOSED and OFF, so the next step toward heating is to turn it on. Because proximity is already indicated as CLOSE, the next atomic action can be switching it on.",
+  "reasoning": "The SDG requires a COLD milk object to be placed INSIDE a heater, and the heater must be ON. In the current graph, milk(176) is explicitly COLD, while milk(177) is only close and not cold, so milk(176) is the correct binding for the milk node. The most suitable heater is microwave(171) because it has HAS_SWITCH and is a valid heater. Since I am already close to the microwave, the next step is to turn it on to satisfy the heater-on prerequisite before putting the milk inside.",
   "satisfied_nodes": [
     "N1"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N3",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -287,7 +157,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 3
+## Step 1
 - **Action**: `[switchon] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
@@ -299,17 +169,13 @@ graph TD
 graph TD
     N1["milk<br>(COLD)"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [CLOSED,OFF], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -317,10 +183,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -329,11 +197,78 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to heat cold milk. The SDG requires the milk to be inside a heater and the heater to be ON. In the filtered graph, microwave(171) is already ON and closed, and milk(177) is the only milk currently close to the character. Since milk is pourable and can be placed inside the microwave, the next needed step is to first move to the microwave before any putin action can be attempted. This advances toward satisfying N3 and then N2.",
+  "reasoning": "The SDG requires the milk to be COLD and then INSIDE a heater that is ON. In the current graph, milk(176) is the only milk explicitly marked COLD, and microwave(171) is already ON and close to the character. To progress toward N2, I should first ensure I am at the milk itself before grabbing it. Since the milk is close and not yet held, the next atomic step is to walk to milk(176).",
   "satisfied_nodes": [
-    "N4"
+    "N1",
+    "N3"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[walk] <milk> (176)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <milk> (176)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 2
+- **Action**: `[walk] <milk> (176)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The goal is to warm the cold milk by putting it inside a heater that is on. The graph contains two milk instances, but only milk(176) is explicitly COLD, so it is the correct target. To satisfy the INSIDE relation, I need to be near the destination heater before any putin action. The microwave(171) is already ON and functions as a heater, so the next step is to walk to it.",
+  "satisfied_nodes": [
+    "N3"
+  ],
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -354,7 +289,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 4
+## Step 3
 - **Action**: `[walk] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -365,18 +300,14 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -384,10 +315,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -396,11 +329,79 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires the milk object to end up HOT and inside an ON heater. The filtered graph contains two milk instances: milk(176) is explicitly COLD, while milk(177) is only CLOSED and close to the character but not marked cold. Since the task is specifically to heat cold milk and we must use current graph states only, the best current focus is to prepare the heater path by confirming the heater is accessible and usable. The microwave(171) is ON and has HAS_PLUG, and it is a valid heater/container. The next atomic step should therefore be to move near the microwave before any grab/putin action can be done later.",
+  "reasoning": "The SDG requires the milk to be COLD, then INSIDE a heater, and the heater ON. Among the available milk instances, milk(176) already has the required COLD state, while milk(177) does not. The microwave(171) is the best heater candidate because it is a heater-like appliance, is CLOSE to the character, and is already ON. To progress toward putting the cold milk inside the heater, I must first move to the milk before I can grab it.",
   "satisfied_nodes": [
-    "N4"
+    "N1",
+    "N3"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[walk] <milk> (176)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <milk> (176)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 4
+- **Action**: `[walk] <milk> (176)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The goal requires a milk object that is COLD, inside a heater, and the heater ON. In the current graph, milk(176) is explicitly COLD and near the character, and microwave(171) is ON but not open. Since the milk must be inside the heater and we must be near the destination before putting it in, the next step is to move to the microwave. I choose microwave(171) as the heater because it satisfies the ON requirement already and is a valid heater/container for warming milk.",
+  "satisfied_nodes": [
+    "N1",
+    "N3"
+  ],
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -432,18 +433,15 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -451,10 +449,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -463,11 +463,275 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires a COLD milk object to become HOT by being inside an ON heater. In the current graph, milk(176) is the only milk explicitly marked COLD, and microwave(171) is already ON and has CONTAINERS, making it a valid heater. However, the proximity rule says I must first walk to the destination receptacle before putting an object into it. I am not yet holding milk(176), so the correct next step is to walk to the microwave first, then I can grab the cold milk and place it inside. This action advances toward the final heating condition without assuming any hidden proximity.",
+  "reasoning": "The SDG requires a milk object that is COLD and then inside a heater that is ON. There are two milk instances: milk(177) is only CLOSED and does not show COLD, while milk(176) is explicitly COLD and CLOSED, so milk(176) best matches N1. The microwave(171) is already ON and CLOSED, and it is the most plausible heater in the graph. I am already close to the microwave and milk, but to satisfy the proximity rule before interacting with the heater/container destination, the next step should be to walk to the microwave so I can then open/use it and place the milk inside on subsequent actions.",
   "satisfied_nodes": [
-    "N4"
+    "N1",
+    "N3"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[walk] <microwave> (171)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <microwave> (171)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 6
+- **Action**: `[walk] <microwave> (171)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The SDG requires the milk to be COLD, then INSIDE a heater, with the heater ON. The current graph shows two milk instances: milk(176) is explicitly COLD and CLOSED, so it best matches N1. The microwave(171) is already ON and CLOSE to the character, so it is the best candidate for ?Heater. To satisfy the INSIDE relation, I must first get the milk object and then put it into the microwave; however, the next atomic step should be to walk to the milk object before grabbing it, since I cannot grab across the room and must approach the specific milk instance first.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[walk] <milk> (176)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <milk> (176)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 7
+- **Action**: `[walk] <milk> (176)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["milk<br>INSIDE<br>?Heater"]
+    N3["?Heater<br>(ON)"]
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The SDG requires a cold milk object and a heater that is ON with the milk INSIDE it. Two milk instances exist; milk(176) is explicitly COLD and is the best binding for N1. The microwave(171) is already ON and is a valid heater, and unlike the stove it is a container that can hold milk. I still need to ensure I can place the milk into it, which requires being near the destination first. Since no prior walk has been done, the next step is to walk to the microwave so I can later open it and insert the milk.",
+  "satisfied_nodes": [
+    "N1",
+    "N3"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[walk] <microwave> (171)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <microwave> (171)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 8
+- **Action**: `[walk] <microwave> (171)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The SDG requires a milk instance that is COLD and then INSIDE a heater that is ON. In the current graph, milk(176) is explicitly COLD and both milk(176) and microwave(171) are close to the character. The microwave is already ON, so the remaining first step toward satisfying the INSIDE relation is to interact with the milk directly. Since the milk is not yet held, the correct next atomic action is to grab the cold milk instance before moving it into the heater.",
+  "satisfied_nodes": [
+    "N1",
+    "N3"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Heater": "microwave(171)"
+  },
+  "action": "[grab] <milk> (176)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <milk> (176)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor_repaired"
+}
+```
+## Step 9
+- **Action**: `[walk] <milk> (176)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor_repaired`
+- **Task Progress**: T3_without_memory_M1_05=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["milk<br>(COLD)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
+```
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "coffeemaker",
+    "sink"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The SDG requires a cold milk object to be inside a heater, and that heater must be on. The current graph shows milk(176) is the best bind for the target milk because it is explicitly COLD. The microwave(171) is the best heater bind because it is a heater-like appliance already ON and CLOSED, so it satisfies the heater-on requirement. To put milk inside it, I must first be near the microwave before any putin action. No prior action has been taken yet, so the correct next step is to walk to the microwave.",
+  "satisfied_nodes": [
+    "N1",
+    "N3"
+  ],
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -490,7 +754,7 @@ graph TD
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 6
+## Step 10
 - **Action**: `[walk] <livingroom> (183)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -514,7 +778,7 @@ No SDG active.
   "source": "room_frontier"
 }
 ```
-## Step 7
+## Step 11
 - **Action**: `[walk] <bedroom> (241)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -525,14 +789,10 @@ No SDG active.
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    N3["?Heater<br>(ON)"]
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
 - **Observed Items (58)**: floor(184), floor(185), floor(186), floor(187), floor(188), floor(189), wall(190), wall(191), wall(192), wall(193), wall(194), wall(195), ceiling(196), ceiling(197), ceiling(198)...
 
@@ -550,7 +810,7 @@ graph TD
   "source": "room_frontier"
 }
 ```
-## Step 8
+## Step 12
 - **Action**: `[walk] <bathroom> (285)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -561,14 +821,10 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    N3["?Heater<br>(ON)"]
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
 - **Observed Items (38)**: floor(242), floor(243), floor(244), floor(245), ceiling(246), ceiling(247), ceiling(248), ceiling(249), wall(250), wall(251), wall(252), wall(253), door(254) [OPEN], ceilinglamp(255), tablelamp(256) [ON]...
 
@@ -586,7 +842,7 @@ graph TD
   "source": "room_frontier"
 }
 ```
-## Step 9
+## Step 13
 - **Action**: `[walk] <bedroom> (346)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -597,14 +853,10 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    N3["?Heater<br>(ON)"]
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
 - **Observed Items (66)**: wall(286), wall(287), wall(288), wall(289), wall(290), wall(291), floor(292), floor(293), floor(294), floor(295), floor(296), floor(297), ceiling(298), ceiling(299), ceiling(300)...
 
@@ -624,7 +876,7 @@ graph TD
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 10
+## Step 14
 - **Action**: `[walk] <kitchen> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -640,10 +892,12 @@ No SDG active.
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -652,281 +906,12 @@ No SDG active.
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires a COLD milk instance and then heating it to HOT inside an ON heater. The current graph contains two milk objects: milk(176) is explicitly COLD, while milk(177) is not. No prior actions have been taken, so the next step is to move to the correct milk instance before grabbing it. Since grabbing requires proximity, the immediate action is to walk to milk(176).",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[walk] <milk> (176)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <milk> (176)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 11
-- **Action**: `[walk] <milk> (176)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The SDG requires the cold milk object to be heated by placing it inside an ON heater. In the current graph, milk(176) is explicitly COLD and already CLOSE to the character, so it is the correct target milk instance. The microwave(171) is ON and is a valid heater. To place milk into it, I must first be near the destination heater, so the next atomic step is to walk to the microwave.",
+  "reasoning": "The SDG requires the milk to be COLD, inside a heater, and the heater ON. In the current graph, milk(176) is explicitly COLD and CLOSED, and microwave(171) is already ON and CLOSED. The only remaining gap is to satisfy the INSIDE relation by placing the milk into the heater. Since putin requires being near the destination and the microwave is the most appropriate heater with ON already satisfied, the next atomic step is to walk to the microwave before attempting to open it or insert the milk.",
   "satisfied_nodes": [
     "N1",
-    "N4"
+    "N3"
   ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[walk] <microwave> (171)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <microwave> (171)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 12
-- **Action**: `[walk] <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The SDG requires cold milk to become hot by being inside a heater that is ON. The best heater available is microwave(171), which is already ON and CLOSED and also close to the character, so the next necessary step is to open it before placing milk inside. I will focus on the specific cold milk instance milk(176) because it matches the required COLD state; milk(177) is not cold and is not the target for this task state progression.",
-  "satisfied_nodes": [
-    "N1",
-    "N4"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[open] <microwave> (171)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[open] <microwave> (171)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 13
-- **Action**: `[open] <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The SDG requires a cold milk object to be heated by placing it inside an ON heater. The current graph shows two milk instances: milk(176) is explicitly COLD, while milk(177) is close but not cold. The microwave(171) is already ON and open, so the remaining gap is to move the correct cold milk into the heater. Since the robot is not currently holding milk(176), the next atomic step must be to walk to the cold milk before grabbing it.",
-  "satisfied_nodes": [
-    "N1",
-    "N4"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Heater": "microwave(171)"
-  },
-  "action": "[walk] <milk> (176)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <milk> (176)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 14
-- **Action**: `[walk] <milk> (176)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_M1_05=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
-```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "milk",
-    "microwave",
-    "character"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The goal is to heat the cold milk. The current graph already shows a valid target milk instance, milk(176), which is COLD and CLOSE to the character. To satisfy the prerequisite for heating, I need to place this milk into a heater. The microwave(171) is ON and already OPEN, so it is the best heater candidate. However, I cannot put the milk in from across the room; I must first walk to the microwave before I can use putin. This action advances toward N3 and supports N2.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
@@ -959,17 +944,14 @@ graph TD
 graph TD
     N1["milk<br>(COLD)"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Heater<br>(ON)"]
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -977,10 +959,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -989,22 +973,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires a cold milk object to be heated by placing it inside a heater that is ON. In the current graph, microwave(171) is already ON and OPEN, so it is the best heater candidate. The relevant milk object that is closest and likely intended for manipulation is milk(177), which is CLOSE to the character; however, it is currently not held. Because I cannot put an object into the microwave without first grabbing it, the next atomic step is to walk to the milk so it can be picked up next. This also avoids assuming I am already at the milk's exact interaction point.",
+  "reasoning": "The SDG requires milk to be cold and then inside a heater, with the heater on. There are two milk instances, and only milk(176) is explicitly COLD, so it best matches N1. The microwave(171) is already ON and CLOSE to the character, so the remaining gap is to move the cold milk into the microwave. Because I must be near the destination before putting something inside it, the next atomic step is to walk to the microwave. This also prepares for the required sequence before putting the milk inside.",
   "satisfied_nodes": [
-    "N4"
+    "N1",
+    "N3"
   ],
-  "current_node_focus": "N1",
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
-  "action": "[walk] <milk> (177)"
+  "action": "[walk] <microwave> (171)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <milk> (177)",
+  "action": "[walk] <microwave> (171)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -1015,7 +1000,7 @@ graph TD
 }
 ```
 ## Step 16
-- **Action**: `[walk] <milk> (177)`
+- **Action**: `[walk] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -1025,18 +1010,15 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -1044,10 +1026,12 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
+    "character",
     "milk",
+    "stove",
     "microwave",
-    "character"
+    "coffeemaker",
+    "sink"
   ],
   "raw_class_count": 50
 }
@@ -1056,22 +1040,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The SDG requires the milk to become HOT by being inside a heater that is ON. In the current graph, microwave(171) is already ON and OPEN, and milk(177) is the closest milk object and is currently CLOSE to the character. Since milk(177) is the only milk with no COLD state shown, but the task explicitly concerns heating milk and the SDG requires the milk object to be moved into the heater, the next necessary step is to first get near the milk and then grab it. Because I have not yet walked to the milk in this action sequence, the single next atomic action should be to walk to the milk(177) before attempting any grab or placement.",
+  "reasoning": "The SDG requires a cold milk object to be placed inside a heater that is ON. In the current graph, milk(176) is the only milk explicitly marked COLD, and microwave(171) is already ON and CLOSE to the character. To satisfy the containment prerequisite, I should first get near the milk before grabbing it. Since no previous walk was performed, the next atomic step is to walk to milk(176).",
   "satisfied_nodes": [
-    "N4"
+    "N1",
+    "N3"
   ],
-  "current_node_focus": "N1",
+  "current_node_focus": "N2",
   "mapped_variables": {
     "?Heater": "microwave(171)"
   },
-  "action": "[walk] <milk> (177)"
+  "action": "[walk] <milk> (176)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <milk> (177)",
+  "action": "[walk] <milk> (176)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -1082,7 +1067,7 @@ graph TD
 }
 ```
 ## Step 17
-- **Action**: `[walk] <milk> (177)`
+- **Action**: `[walk] <milk> (176)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -1092,16 +1077,13 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>(COLD)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["milk<br>(HOT)"]
-    N3["milk<br>INSIDE<br>?Heater"]
-    N4["?Heater<br>(ON)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N1 -->|"If the milk is cold, it must be heated up."| N2
-    N3 -->|"Milk must be placed inside a heating appliance to become hot."| N2
-    N4 -->|"The heating appliance must be switched on for heating to occur."| N2
-    N1 -->|"The milk must exist as the object to be moved into the heater."| N3
-    N1 -->|"The task concerns heating cold milk, which requires an operational heater."| N4
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["milk<br>INSIDE<br>?Heater"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["?Heater<br>(ON)"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Milk must be cold before it is put into the heater to be heated up."| N2
+    N3 -->|"The heater must be switched on for the milk to become hot."| N2
 ```
-- **Observed Items (10)**: stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(177) [CLOSED], milk(176) [CLOSED,COLD], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: sink(155), stove(163) [OFF,CLOSED], coffeemaker(169) [OFF], microwave(171) [ON,CLOSED], milk(177) [CLOSED], milk(176) [COLD,CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 

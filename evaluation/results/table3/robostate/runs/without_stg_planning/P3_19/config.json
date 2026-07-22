@@ -45,12 +45,12 @@
     "table_id": "table3",
     "experiment_axis": "ablation",
     "ablation_profile": "without_stg_planning",
-    "ablation_module": "planning",
+    "ablation_module": "stg",
     "table3_source_subclass": "P3",
     "source_config": "configs/source_tasks/p_class/P3_19.json",
     "single_run": true,
     "max_steps": 90,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 49.1
+    "execution_time_seconds": 51.01
 }

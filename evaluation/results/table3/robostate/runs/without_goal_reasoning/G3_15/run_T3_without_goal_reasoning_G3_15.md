@@ -36,14 +36,18 @@ graph TD
     N3["milk<br>(HOT)"]
     N4["coffee<br>ON<br>?Heater"]
     N5["coffee<br>(HOT)"]
-    N6["milk<br>ON<br>table"]
-    N7["coffee<br>ON<br>table"]
-    N1 -->|"The heater must be on to heat the milk."| N3
-    N2 -->|"The milk must be placed on the heater to become hot."| N3
-    N1 -->|"The heater must be on to heat the coffee."| N5
-    N4 -->|"The coffee must be placed on the heater to become hot."| N5
-    N3 -->|"The heated milk must be brought to the table."| N6
-    N5 -->|"The heated coffee must be brought to the table."| N7
+    N6["milk<br>HELD<br>"]
+    N7["coffee<br>HELD<br>"]
+    N8["milk<br>ON<br>table"]
+    N9["coffee<br>ON<br>table"]
+    N1 -->|"Heating requires the stove/heater to be on."| N2
+    N2 -->|"An object becomes hot when placed on an active heat source."| N3
+    N1 -->|"Heating requires the stove/heater to be on."| N4
+    N4 -->|"An object becomes hot when placed on an active heat source."| N5
+    N3 -->|"The heated milk must be held in order to carry it."| N6
+    N5 -->|"The heated coffee must be held in order to carry it."| N7
+    N6 -->|"Held milk can be placed on the table."| N8
+    N7 -->|"Held coffee can be placed on the table."| N9
 ```
 - **Observed Items (112)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -76,14 +80,18 @@ graph TD
     N3["milk<br>(HOT)"]
     N4["coffee<br>ON<br>?Heater"]
     N5["coffee<br>(HOT)"]
-    N6["milk<br>ON<br>table"]
-    N7["coffee<br>ON<br>table"]
-    N1 -->|"The heater must be on to heat the milk."| N3
-    N2 -->|"The milk must be placed on the heater to become hot."| N3
-    N1 -->|"The heater must be on to heat the coffee."| N5
-    N4 -->|"The coffee must be placed on the heater to become hot."| N5
-    N3 -->|"The heated milk must be brought to the table."| N6
-    N5 -->|"The heated coffee must be brought to the table."| N7
+    N6["milk<br>HELD<br>"]
+    N7["coffee<br>HELD<br>"]
+    N8["milk<br>ON<br>table"]
+    N9["coffee<br>ON<br>table"]
+    N1 -->|"Heating requires the stove/heater to be on."| N2
+    N2 -->|"An object becomes hot when placed on an active heat source."| N3
+    N1 -->|"Heating requires the stove/heater to be on."| N4
+    N4 -->|"An object becomes hot when placed on an active heat source."| N5
+    N3 -->|"The heated milk must be held in order to carry it."| N6
+    N5 -->|"The heated coffee must be held in order to carry it."| N7
+    N6 -->|"Held milk can be placed on the table."| N8
+    N7 -->|"Held coffee can be placed on the table."| N9
 ```
 - **Observed Items (173)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -116,14 +124,18 @@ graph TD
     N3["milk<br>(HOT)"]
     N4["coffee<br>ON<br>?Heater"]
     N5["coffee<br>(HOT)"]
-    N6["milk<br>ON<br>table"]
-    N7["coffee<br>ON<br>table"]
-    N1 -->|"The heater must be on to heat the milk."| N3
-    N2 -->|"The milk must be placed on the heater to become hot."| N3
-    N1 -->|"The heater must be on to heat the coffee."| N5
-    N4 -->|"The coffee must be placed on the heater to become hot."| N5
-    N3 -->|"The heated milk must be brought to the table."| N6
-    N5 -->|"The heated coffee must be brought to the table."| N7
+    N6["milk<br>HELD<br>"]
+    N7["coffee<br>HELD<br>"]
+    N8["milk<br>ON<br>table"]
+    N9["coffee<br>ON<br>table"]
+    N1 -->|"Heating requires the stove/heater to be on."| N2
+    N2 -->|"An object becomes hot when placed on an active heat source."| N3
+    N1 -->|"Heating requires the stove/heater to be on."| N4
+    N4 -->|"An object becomes hot when placed on an active heat source."| N5
+    N3 -->|"The heated milk must be held in order to carry it."| N6
+    N5 -->|"The heated coffee must be held in order to carry it."| N7
+    N6 -->|"Held milk can be placed on the table."| N8
+    N7 -->|"Held coffee can be placed on the table."| N9
 ```
 - **Observed Items (242)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 

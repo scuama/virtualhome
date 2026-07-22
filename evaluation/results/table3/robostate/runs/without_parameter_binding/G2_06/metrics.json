@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_parameter_binding_G2_06",
-            "instruction": "If the TV is on, adjust the desk lamp to an appropriate setting.",
+            "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
             "success_condition": {
                 "target_class": "tablelamp",
                 "states": [

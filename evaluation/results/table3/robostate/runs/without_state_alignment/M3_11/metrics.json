@@ -1,0 +1,44 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T3_without_state_alignment_M3_11",
+            "instruction": "If there is an apple in the fridge, take two and put them on the kitchen table.",
+            "success_condition": {
+                "target_class": "apple",
+                "destination_class": "kitchentable",
+                "relation": "ON",
+                "min_count": 2
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T3_without_state_alignment_M3_11",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_state_alignment",
+    "source_scenario_id": "M3_11",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Failure condition met (Constraint Violated)",
+    "steps_executed": 0,
+    "execution_time_seconds": 0.0,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

@@ -6,43 +6,43 @@
 {
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
-  "target_object": "bottles of milk",
-  "location_hint": "the table",
+  "target_object": "milk bottles",
+  "location_hint": "table",
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To heat the milk contained in the bottles."
+      "answer": "To have the milk warmed up."
     },
     {
       "question": "Why is that important?",
-      "answer": "So the milk is warm and ready for use or consumption."
+      "answer": "Warm milk is easier or more pleasant to consume."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "The need to warm a beverage or food item."
+      "answer": "It fulfills the need to have a ready-to-consume beverage at a desired temperature."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may be for comfort, preference for warm milk, or preparation for a drink or recipe."
+      "answer": "The user may want comfort, convenience, or to prepare a drink for immediate use."
     }
   ],
-  "deep_intent": "The user wants to warm a drink or food item for comfort or preparation.",
+  "deep_intent": "The user wants to warm a beverage for consumption.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other similar liquid dairy drinks or ready-to-heat beverages in containers that can be safely warmed."
+      "description": "Other drink containers with milk or similar ready-to-heat beverages, such as a carton, cup, or mug of milk."
     },
     {
       "priority": 2,
-      "description": "Other heatable drink items such as prepared hot chocolate, broth, or similar warm beverages."
+      "description": "Other dairy-based or ready-to-drink beverages that can be safely warmed, such as hot chocolate, a latte, or similar milk-based drinks."
     },
     {
       "priority": 3,
-      "description": "Other microwave-safe beverages or liquid foods that can be heated for serving."
+      "description": "Comparable beverages that serve as a warm drink for comfort, such as tea or broth, if the original milk is unavailable."
     },
     {
       "priority": 4,
-      "description": "Warm consumables in general, such as soup or tea, that satisfy the need for something heated."
+      "description": "Any warm beverage that satisfies the user's desire for a heated drink, such as coffee or warm water."
     }
   ]
 }
@@ -51,13 +51,13 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to warm bottles of milk on the table. The minimum needed objects are the target item itself plus alternative heating appliances and the implied safe heating tool/setting options. Since heating can be done by microwave or stove, both are retained as backups. The table location is explicitly mentioned, so it is retained. Milk is the exact target substance, and waterglass is a reasonable heatable liquid container alternative present in view, but not necessary for the primary target, so it is omitted to keep the set minimal.",
+  "reasoning": "The goal is to warm milk for consumption. The minimum needed objects are the milk itself, a heat source with a backup (microwave and stove), and the implied place to find/prepare it on the table. Since the goal explicitly mentions milk bottles and table, those exact classes must be retained if present; the table class available is kitchentable.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -66,11 +66,11 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to heat the milk bottles on the table. The two milk bottles are visible on kitchentable(131), and no intermediate preparation is required before moving them toward a heating appliance. To proceed efficiently and satisfy the proximity rule for grabbing, the next atomic step is to walk to one of the target bottles. I choose milk(176) as the first bottle to bind the task object; both bottles are equivalent and available for later handling.",
+  "reasoning": "The task is to warm the milk bottles currently on the kitchen table. Before any warming or moving action, I need to get close to a specific bottle. There are two identical milk bottles; either can satisfy the beverage goal, and both are visible on kitchentable(131). The next atomic step is to walk to one of them so I can grab it in the following step.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?TargetBottle": "milk(176)"
+    "?TargetDrink": "milk(176)"
   },
   "action": "[walk] <milk> (176)"
 }
@@ -108,11 +108,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -121,7 +121,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to heat the milk bottles. There are two milk bottles on the kitchen table, and the character is already close to them. Since the task concerns the bottles themselves, the next step is to pick one up before any heating-related actions can be planned. I will start with milk(176) because it is already available and matches the target object class.",
+  "reasoning": "The active goal is to warm milk bottles. We have two milk bottles on the kitchen table, both close to the character, and the last action was a walk to milk(176), so the next logical atomic step is to grab one target bottle. Since the instruction is about milk bottles and there are two identical candidates, both are valid; I will start with milk(176).",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {},
@@ -161,11 +161,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -174,7 +174,168 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "We already hold milk(176) in the right hand, and the task is to warm the milk. The likely next step is to move to the heating appliance. Since the microwave is present, can contain the milk, and does not require opening before approaching, the best immediate action is to walk to the microwave so we can then open/switch it on and place the milk inside in subsequent steps.",
+  "reasoning": "The task is to warm the milk bottles. I am already holding milk(176) in my right hand, and milk(177) is also nearby on the kitchen table. To proceed toward warming the beverage, the next needed step is to get the other milk bottle so both can be handled together if needed. Since I am already close to milk(177), I can grab it now without walking.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {},
+  "action": "[grab] <milk> (177)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <milk> (177)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 2
+- **Action**: `[grab] <milk> (177)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "Both milk bottles are already in hand, and the user's goal is to warm the milk. The next necessary step is to move to a heating appliance. The stove is present, but it is closed and off; since it is the most direct heating option and has a switch, the immediate next atomic action is to walk to it so I can interact with it next. No other prerequisite is currently blocking navigation.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {},
+  "action": "[walk] <stove> (163)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <stove> (163)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 3
+- **Action**: `[walk] <stove> (163)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "I am already holding both milk bottles (176, 177) and am positioned close to the stove (163). The stove is currently OFF and CLOSED, so the next required step to warm the milk is to open the stove before any further heating-related interaction. I cannot heat or place the milk until the stove is accessible.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Heater": "stove(163)"
+  },
+  "action": "[open] <stove> (163)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[open] <stove> (163)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 4
+- **Action**: `[open] <stove> (163)`
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_stg_planning_P2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The previous attempt to open the stove failed because the stove is already CLOSED and, unlike a container with an openable lid workflow for access to its interior, the task is to warm milk bottles. The most direct next step is to use the microwave, which is a proper heating appliance and is available in the current graph. I am already holding both milk bottles, so the next required step is to move to the microwave before any interaction. Opening the microwave is not yet possible from across the room; proximity must be established first.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -197,7 +358,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 2
+## Step 5
 - **Action**: `[walk] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -216,11 +377,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -229,11 +390,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to heat the milk. I already hold milk(176) in my right hand and I am close to the microwave(171), which is the appropriate heating appliance. The microwave is currently CLOSED and OFF, so the next required step is to open it before placing the milk inside. I should not grab the other milk bottle or move to the table yet because the current held milk is the active object and the microwave must be accessed first.",
+  "reasoning": "We already hold both milk bottles and are currently close to the microwave. The stove open attempt failed because it is impossible to open, so the correct heating route is the microwave. Since the microwave is closed and has a plug, the next step toward warming the milk is to open the microwave before placing the milk inside.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Heater": "microwave(171)"
+    "?Container": "microwave(171)"
   },
   "action": "[open] <microwave> (171)"
 }
@@ -252,10 +413,10 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 3
+## Step 6
 - **Action**: `[open] <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_stg_planning_P2_09=pending
@@ -271,11 +432,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -284,62 +445,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target milk bottle currently held in the right hand is already at the microwave, and the microwave has been opened successfully. To warm the milk, the next required step is to place the held milk inside the microwave. Because putin requires being near the destination and the container is already open, the correct next atomic action is to put the held milk into the microwave.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Container": "microwave(171)"
-  },
-  "action": "[putin] <milk> (176) <microwave> (171)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putin] <milk> (176) <microwave> (171)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 4
-- **Action**: `[putin] <milk> (176) <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
-    "character",
-    "milk"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The target milk bottle (176) has been placed inside the microwave and the microwave is already open. To continue warming it, the next required step is to turn the microwave on. The microwave has HAS_PLUG and is currently OFF, so it can be switched on directly from the current close proximity.",
+  "reasoning": "The two milk bottles are already in hand, and the previous attempts to open the stove and microwave failed because they are not the correct next step for heating milk in this environment. Since the microwave is a plausible appliance for warming drink containers and we are already close to it, the next required step is to turn it on. It has HAS_PLUG, but the graph does not indicate it is unplugged, so no plugin action is currently necessary.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
@@ -362,7 +468,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 5
+## Step 7
 - **Action**: `[switchon] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
@@ -373,7 +479,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [CLOSED,OFF], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -381,11 +487,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -394,128 +500,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The heated milk bottle is already inside the microwave and the microwave is on, so the remaining gap is to finish heating by waiting for the appliance cycle rather than taking a new navigation or manipulation action. Repeating walk/open/put actions is unnecessary and would risk disrupting the ongoing heating process.",
+  "reasoning": "The goal is to warm the milk bottles. I already hold both milk bottles, and the microwave is currently on and closed. Since the microwave is a closed container and I am already close to it, the next step is to open it before placing the milk inside. This also preserves progress toward heating the beverages.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Appliance": "microwave(171)"
+    "?Container": "microwave(171)"
   },
-  "action": "[wait]"
+  "action": "[open] <microwave> (171)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[wait]",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 6
-- **Action**: `[wait]`
-- **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
-    "character",
-    "milk"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The warmed milk in milk(176) is already HOT and remains inside the open microwave, which is currently ON. The next required step toward completing the heating task is to turn the microwave off before handling or retrieving the milk. I am already close to the microwave, so no walking is needed.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Appliance": "microwave(171)"
-  },
-  "action": "[switchoff] <microwave> (171)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[switchoff] <microwave> (171)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 7
-- **Action**: `[switchoff] <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OPEN,ON], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
-    "character",
-    "milk"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The heated milk bottle is already successfully inside the microwave and has been turned HOT. The microwave is currently open and the milk is CLOSE to the character, so the next step toward finishing the task is to retrieve the heated milk from the microwave. Since grabbing requires being near the object and it is already close, I should grab the heated milk bottle now.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {},
-  "action": "[grab] <milk> (176)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <milk> (176)",
+  "action": "[open] <microwave> (171)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -526,9 +524,9 @@ graph TD
 }
 ```
 ## Step 8
-- **Action**: `[grab] <milk> (176)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action**: `[open] <microwave> (171)`
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_stg_planning_P2_09=pending
@@ -536,7 +534,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -544,11 +542,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "kitchentable"
   ],
   "raw_class_count": 50
 }
@@ -557,133 +555,20 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active target is bottles of milk to be heated. In the current graph, milk(176) is already HOT, so the heating goal for the currently held milk is satisfied. However, there is another bottle milk(177) on the kitchentable that is not hot yet. Since the task is plural ('bottles of milk'), the next logical step is to retrieve the other milk bottle so it can also be heated. I am already holding milk(176), so to manipulate milk(177) I should first move to its location on the table before grabbing it.",
-  "satisfied_nodes": [
-    "N/A"
-  ],
-  "current_node_focus": "N/A",
-  "mapped_variables": {
-    "?Container": "kitchentable(131)"
-  },
-  "action": "[walk] <kitchentable> (131)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchentable> (131)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 9
-- **Action**: `[walk] <kitchentable> (131)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
-    "character",
-    "milk"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to heat the milk. One milk bottle (milk 176) is already HOT, but the other bottle (milk 177) on the kitchen table is not yet heated. Since the task is specifically about bottles of milk, the remaining unmet item is the table bottle. I am already close to the kitchen table, so the next step is to pick up milk 177 before moving it to the microwave for heating.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Container": "microwave(171)",
-    "?Milk": "milk(177)"
-  },
-  "action": "[grab] <milk> (177)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[grab] <milk> (177)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 10
-- **Action**: `[grab] <milk> (177)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_stg_planning_P2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
-    "character",
-    "milk"
-  ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active goal is to warm the milk bottles. One milk bottle is already HOT (milk 176) and the other milk bottle is currently being held (milk 177) and appears unopened/cold. Since the user asked for bottles of milk, the remaining gap is to warm the second bottle. Because I am already holding milk 177 and am close to the table, the next step should be to place it into the microwave. The microwave is already open, so after putting the bottle in, the next logical step would be to switch it on again, but that is not this atomic action.",
+  "reasoning": "The milk bottles are already in hand, and the microwave is currently ON and closed. The previous attempt to open it failed, but since the goal is to warm the milk, the next logical step is to try placing a milk bottle into the microwave. Because the microwave is already close to the character and we are not required to open it for this engine path, the next atomic action is to put one held milk bottle inside it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
     "?Container": "microwave(171)"
   },
-  "action": "[putin] <milk> (177) <microwave> (171)"
+  "action": "[putin] <milk> (176) <microwave> (171)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <microwave> (171)",
+  "action": "[open] <microwave> (171)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -693,10 +578,10 @@ graph TD
   "source": "llm_executor_repaired"
 }
 ```
-## Step 11
-- **Action**: `[walk] <microwave> (171)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+## Step 9
+- **Action**: `[open] <microwave> (171)`
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor_repaired`
 - **Task Progress**: T3_without_stg_planning_P2_09=pending
@@ -704,89 +589,115 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <livingroom> (183)",
+  "active_task_id": null,
+  "task_context": {
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
+    "satisfied_task_ids": []
+  },
+  "source": "loop_recovery_room_revisit"
+}
+```
+## Step 10
+- **Action**: `[walk] <livingroom> (183)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Decision Source**: `loop_recovery_room_revisit`
+- **Task Progress**: T3_without_stg_planning_P2_09=pending
+- **SDG Status**:
+No SDG active.
+- **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to warm a beverage for consumption. The key target is milk, and the visible classes that can heat it while retaining backups are microwave and stove; a cup-like container is not explicitly necessary because milk bottles are already the target, but a receptacle for warming/drinking is relevant if needed. The location hint mentions table, so the relevant table class is kitchentable/coffeetable if the milk is on a table, but only the exact hinted furniture needed should be kept.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "microwave",
+    "coffeetable",
+    "waterglass",
+    "kitchentable"
   ],
-  "raw_class_count": 50
+  "raw_class_count": 59
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to heat bottles of milk. One milk bottle is already HOT (milk 176), so the goal state is effectively satisfied for a heated milk item. However, the current object is still held and the microwave is open/off. Since the task does not require any further heating action on the already-hot bottle, the safest next step is to place the hot milk back on the kitchen table so it is no longer held and the environment is tidy. I am already at the microwave area, so I should first target the table for placement.",
-  "satisfied_nodes": [
-    "N0"
-  ],
+  "reasoning": "The active task is to warm the milk bottles. I am already holding both milk containers (176, 177), and the microwave is nearby and switched on, but it is still closed. Since the next required physical step toward heating is to access the microwave chamber, I should open the microwave now. The stove is irrelevant because the microwave is the suitable heater already selected, and the previous open failures suggest the earlier attempt may have been from an invalid state, but the microwave is currently the correct current focus.",
+  "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "kitchentable(131)"
+    "?Heater": "microwave(171)"
   },
-  "action": "[walk] <kitchentable> (131)"
+  "action": "[open] <microwave> (171)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <kitchentable> (131)",
-  "active_task_id": "task_1",
+  "action": "[walk] <bedroom> (241)",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor"
+  "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 12
-- **Action**: `[walk] <kitchentable> (131)`
+## Step 11
+- **Action**: `[walk] <bedroom> (241)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T3_without_stg_planning_P2_09=pending
 - **SDG Status**:
-```mermaid
-graph TD
-```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+No SDG active.
+- **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "To warm the target beverage, we need the milk itself and a plausible heating appliance. Since the user mentioned a table location, the table is retained as the relevant surface. Because alternatives retention applies, both microwave and stove are kept as functional heating options, and the fridge is kept as a likely storage/retrieval location for the milk.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "table",
+    "microwave",
+    "fridge"
   ],
-  "raw_class_count": 50
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to warm the bottles of milk. One bottle, milk(176), is already HOT, while milk(177) is still CLOSED and not yet heated. I am already holding both bottles and am close to the kitchen table, which can serve as a place to set one down if needed. Since the microwave is open and the previous heating cycle for milk(176) has already occurred, the next step should be to heat the remaining unheated bottle by placing it into the microwave. However, I must first be near the microwave before putting anything into it, and the previous state shows I just walked away from it to the table. So the immediate atomic action is to walk back to the microwave.",
+  "reasoning": "Both milk bottles are already in hand, and the microwave is the active heating appliance. It is closed and already on, so the remaining required step toward warming the beverage is to place the milk inside the microwave. Since putting into a receptacle requires being at the destination, the next atomic action should be to walk to the microwave before any put-in action.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Target": "microwave(171)"
+    "?Container": "microwave(171)"
   },
   "action": "[walk] <microwave> (171)"
 }
@@ -805,7 +716,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 13
+## Step 12
 - **Action**: `[walk] <microwave> (171)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -816,7 +727,7 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (11)**: fridge(162) [CLOSED], stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 
 
 ### [PerceptionFilter] Output
@@ -824,33 +735,35 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "stove",
-    "kitchentable",
-    "microwave",
     "character",
-    "milk"
+    "milk",
+    "stove",
+    "table",
+    "microwave",
+    "fridge"
   ],
-  "raw_class_count": 50
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to warm bottles of milk. We already hold two milk bottles: milk(176) is marked HOT and milk(177) is held but not yet hot. The microwave is open and we are close to it, so the remaining gap is to place the second milk bottle into the microwave for heating. Because putin requires being near the destination and holding the object, the next atomic step should be to ensure proximity to the microwave before any placement. However, since the current graph already shows the character close to the microwave and there was a recent walk to it, the most progress-making next action is to put the held milk(177) into the microwave.",
+  "reasoning": "I am already holding both milk bottles and am close to the microwave. The previous open attempts failed because the microwave is closed, but for heating milk I do not need to open it first to proceed with a switch-based heating action. Since the goal is to warm the milk, the next logical step is to ensure the appliance is on; this also avoids any unnecessary navigation.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Container": "microwave(171)"
+    "?Washer": "sink(unknown)",
+    "?Cooler": "microwave(171)"
   },
-  "action": "[putin] <milk> (177) <microwave> (171)"
+  "action": "[switchon] <microwave> (171)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putin] <milk> (177) <microwave> (171)",
+  "action": "[switchon] <microwave> (171)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -860,10 +773,10 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 14
-- **Action**: `[putin] <milk> (177) <microwave> (171)`
+## Step 13
+- **Action**: `[switchon] <microwave> (171)`
 - **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Message**: Faked switch operation in Python layer (bypassed Unity failure)
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_stg_planning_P2_09=pending
@@ -871,5 +784,61 @@ graph TD
 ```mermaid
 graph TD
 ```
-- **Observed Items (12)**: kitchentable(131), kitchentable(135), stove(163) [OFF,CLOSED], microwave(171) [OFF,OPEN], milk(176) [HOT,CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+- **Observed Items (11)**: fridge(162) [CLOSED], stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "milk",
+    "stove",
+    "table",
+    "microwave",
+    "fridge"
+  ],
+  "raw_class_count": 65
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The goal is to warm the milk bottles. I already hold both milk bottles, and the microwave is close and turned ON. Since the microwave is a closed container and cannot be opened in this environment, the next step toward heating is to place the held milk into the microwave. I must first be near the microwave, which I am, so the next atomic action is to put one held milk bottle inside it.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Container": "microwave(171)"
+  },
+  "action": "[putin] <milk> (176) <microwave> (171)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[open] <microwave> (171)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor_repaired"
+}
+```
+## Step 14
+- **Action**: `[open] <microwave> (171)`
+- **Action Success**: `False`
+- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor_repaired`
+- **Task Progress**: T3_without_stg_planning_P2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+```
+- **Observed Items (11)**: fridge(162) [CLOSED], stove(163) [OFF,CLOSED], microwave(171) [ON,CLOSED], milk(176) [CLOSED], milk(177) [CLOSED], character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285), bedroom(346)
 

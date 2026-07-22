@@ -391,7 +391,7 @@ graph TD
   "raw_item_count": 156
 }
 ```
-## Step 6
+## Step 7
 - **Action**: `FINISH (Goal Reached)`
 - **SDG Status**:
 ```mermaid

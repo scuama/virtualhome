@@ -22,7 +22,7 @@
             "currently_satisfied": true,
             "ever_satisfied": true,
             "first_satisfied_step": 12,
-            "completed": true,
+            "completed": false,
             "completion_step": 12
         }
     ],
@@ -36,7 +36,7 @@
     "source_scenario_id": "P3_13",
     "method": "robostate",
     "model": "gpt-5.4-mini",
-    "success": true,
+    "success": false,
     "run_status": "complete",
     "valid_for_aggregation": true,
     "reason": "Goal Reached",

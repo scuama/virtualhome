@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_parameter_binding_G2_07",
-            "instruction": "If you see the cup on the table, put it where it belongs.",
+            "instruction": "If you see the mug on the table, put it where it belongs.",
             "success_condition": {
                 "target_class": "mug",
                 "destination_class": "kitchencabinet",
@@ -38,7 +38,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
     "steps_executed": 15,
-    "execution_time_seconds": 7.76,
+    "execution_time_seconds": 9.09,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

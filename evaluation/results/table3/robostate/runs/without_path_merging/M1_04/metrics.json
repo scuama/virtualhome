@@ -1,0 +1,49 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T3_without_path_merging_M1_04",
+            "instruction": "If there is a pillow on the sofa, please bring me one.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "pillow",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T3_without_path_merging_M1_04",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_path_merging",
+    "source_scenario_id": "M1_04",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 4,
+    "execution_time_seconds": 18.03,
+    "dynamic_event_counts": {
+        "event_1": {
+            "times_triggered": 0,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": []
+}

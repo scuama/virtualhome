@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To obtain a cup of milk for use or consumption."
+      "answer": "To obtain a cup of milk."
     },
     {
       "question": "Why is that important?",
-      "answer": "They likely want milk in a usable state, specifically at a certain temperature."
+      "answer": "Because they want the milk delivered in a usable state."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills a need for a drink or ingredient at the desired temperature."
+      "answer": "It fulfills the need to consume or use a beverage."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The motivation is likely comfort, preference, or suitability for drinking or preparing another item."
+      "answer": "The user may be thirsty, want a drink with a meal, or prefer milk prepared to a specific temperature."
     }
   ],
-  "deep_intent": "The user wants a drink in a suitable temperature state.",
+  "deep_intent": "The user wants a drink provided at a suitable temperature.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-drink beverages that can be served at the requested temperature, such as water, juice, or tea."
+      "description": "A similar dairy or ready-to-drink beverage served at the requested temperature, such as another milk-based drink or a chilled beverage."
     },
     {
       "priority": 2,
-      "description": "Dairy or non-dairy drinks that can be consumed similarly, such as chocolate milk or plant-based milk."
+      "description": "Other drinkable household liquids that can be served warm or cold as needed."
     },
     {
       "priority": 3,
-      "description": "Cold or warm beverages that match the desired temperature state, including packaged drinks or brewed drinks."
+      "description": "Packaged beverages or prepared drinks that satisfy a thirst-related request."
     },
     {
       "priority": 4,
-      "description": "Hydrating or comforting beverages in general, such as soup broth or flavored drinks, if the exact beverage is unavailable."
+      "description": "Any safe beverage that matches the needed temperature and can be consumed immediately."
     }
   ]
 }
@@ -71,25 +71,27 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>HELD<br>agent"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(VISIBLE)"]
-    N4["cup<br>HELD<br>agent"]
-    N5["cup<br>ON<br>?Surface"]
-    N6["cup<br>FILLED_MILK<br>cup"]
-    N7["milk<br>INSIDE<br>?Heater"]
-    N8["?Heater<br>(ON)"]
-    N9["milk<br>INSIDE<br>?Cooler"]
-    N10["?Cooler<br>(CLOSED)"]
-    N2 -->|"To pick up the milk, it must first be accessible on a surface."| N1
-    N3 -->|"The task starts only if milk is seen/visible."| N1
-    N5 -->|"To bring over a cup, the cup must first be accessible on a surface."| N4
-    N1 -->|"The agent must hold the milk before pouring/filling the cup."| N6
-    N4 -->|"A cup must be held/available before it can be filled with milk."| N6
-    N8 -->|"Milk can be heated only if the heater is on."| N7
-    N7 -->|"If the required temperature is hot, milk must be heated before being brought over."| N1
-    N10 -->|"Milk can be cooled only if the cooler is closed to take effect."| N9
-    N9 -->|"If the required temperature is cold, milk must be cooled before being brought over."| N1
+    N1["milk<br>(VISIBLE)"]
+    N2["cup<br>HELD<br>agent"]
+    N3["milk<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>ON<br>?Surface"]
+    N6["milk<br>INSIDE<br>?Cooler"]
+    N7["?Cooler<br>(CLOSED)"]
+    N8["?Cooler<br>(ON)"]
+    N9["milk<br>(COLD)"]
+    N10["milk<br>POURED_INTO<br>cup"]
+    N11["cup<br>(FILLED_MILK)"]
+    N1 -->|"Milk must be seen before it can be brought over."| N3
+    N4 -->|"The cup must be reachable on a surface before the agent can pick it up."| N2
+    N5 -->|"Milk must be accessible on a surface before the agent can pick it up."| N3
+    N7 -->|"The cooling source must be closed for cooling to take effect."| N6
+    N8 -->|"The cooling source must be powered on before closing can matter for cooling."| N7
+    N6 -->|"Putting milk inside a cooling source makes it cold."| N9
+    N3 -->|"The agent must hold the milk to pour it."| N10
+    N2 -->|"The cup must be held to receive the poured milk."| N10
+    N10 -->|"Pouring milk into the cup fills the cup with milk."| N11
+    N9 -->|"Milk should be at the right temperature before being poured into the cup."| N10
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -117,25 +119,27 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>HELD<br>agent"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(VISIBLE)"]
-    N4["cup<br>HELD<br>agent"]
-    N5["cup<br>ON<br>?Surface"]
-    N6["cup<br>FILLED_MILK<br>cup"]
-    N7["milk<br>INSIDE<br>?Heater"]
-    N8["?Heater<br>(ON)"]
-    N9["milk<br>INSIDE<br>?Cooler"]
-    N10["?Cooler<br>(CLOSED)"]
-    N2 -->|"To pick up the milk, it must first be accessible on a surface."| N1
-    N3 -->|"The task starts only if milk is seen/visible."| N1
-    N5 -->|"To bring over a cup, the cup must first be accessible on a surface."| N4
-    N1 -->|"The agent must hold the milk before pouring/filling the cup."| N6
-    N4 -->|"A cup must be held/available before it can be filled with milk."| N6
-    N8 -->|"Milk can be heated only if the heater is on."| N7
-    N7 -->|"If the required temperature is hot, milk must be heated before being brought over."| N1
-    N10 -->|"Milk can be cooled only if the cooler is closed to take effect."| N9
-    N9 -->|"If the required temperature is cold, milk must be cooled before being brought over."| N1
+    N1["milk<br>(VISIBLE)"]
+    N2["cup<br>HELD<br>agent"]
+    N3["milk<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>ON<br>?Surface"]
+    N6["milk<br>INSIDE<br>?Cooler"]
+    N7["?Cooler<br>(CLOSED)"]
+    N8["?Cooler<br>(ON)"]
+    N9["milk<br>(COLD)"]
+    N10["milk<br>POURED_INTO<br>cup"]
+    N11["cup<br>(FILLED_MILK)"]
+    N1 -->|"Milk must be seen before it can be brought over."| N3
+    N4 -->|"The cup must be reachable on a surface before the agent can pick it up."| N2
+    N5 -->|"Milk must be accessible on a surface before the agent can pick it up."| N3
+    N7 -->|"The cooling source must be closed for cooling to take effect."| N6
+    N8 -->|"The cooling source must be powered on before closing can matter for cooling."| N7
+    N6 -->|"Putting milk inside a cooling source makes it cold."| N9
+    N3 -->|"The agent must hold the milk to pour it."| N10
+    N2 -->|"The cup must be held to receive the poured milk."| N10
+    N10 -->|"Pouring milk into the cup fills the cup with milk."| N11
+    N9 -->|"Milk should be at the right temperature before being poured into the cup."| N10
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -163,25 +167,27 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>HELD<br>agent"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(VISIBLE)"]
-    N4["cup<br>HELD<br>agent"]
-    N5["cup<br>ON<br>?Surface"]
-    N6["cup<br>FILLED_MILK<br>cup"]
-    N7["milk<br>INSIDE<br>?Heater"]
-    N8["?Heater<br>(ON)"]
-    N9["milk<br>INSIDE<br>?Cooler"]
-    N10["?Cooler<br>(CLOSED)"]
-    N2 -->|"To pick up the milk, it must first be accessible on a surface."| N1
-    N3 -->|"The task starts only if milk is seen/visible."| N1
-    N5 -->|"To bring over a cup, the cup must first be accessible on a surface."| N4
-    N1 -->|"The agent must hold the milk before pouring/filling the cup."| N6
-    N4 -->|"A cup must be held/available before it can be filled with milk."| N6
-    N8 -->|"Milk can be heated only if the heater is on."| N7
-    N7 -->|"If the required temperature is hot, milk must be heated before being brought over."| N1
-    N10 -->|"Milk can be cooled only if the cooler is closed to take effect."| N9
-    N9 -->|"If the required temperature is cold, milk must be cooled before being brought over."| N1
+    N1["milk<br>(VISIBLE)"]
+    N2["cup<br>HELD<br>agent"]
+    N3["milk<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>ON<br>?Surface"]
+    N6["milk<br>INSIDE<br>?Cooler"]
+    N7["?Cooler<br>(CLOSED)"]
+    N8["?Cooler<br>(ON)"]
+    N9["milk<br>(COLD)"]
+    N10["milk<br>POURED_INTO<br>cup"]
+    N11["cup<br>(FILLED_MILK)"]
+    N1 -->|"Milk must be seen before it can be brought over."| N3
+    N4 -->|"The cup must be reachable on a surface before the agent can pick it up."| N2
+    N5 -->|"Milk must be accessible on a surface before the agent can pick it up."| N3
+    N7 -->|"The cooling source must be closed for cooling to take effect."| N6
+    N8 -->|"The cooling source must be powered on before closing can matter for cooling."| N7
+    N6 -->|"Putting milk inside a cooling source makes it cold."| N9
+    N3 -->|"The agent must hold the milk to pour it."| N10
+    N2 -->|"The cup must be held to receive the poured milk."| N10
+    N10 -->|"Pouring milk into the cup fills the cup with milk."| N11
+    N9 -->|"Milk should be at the right temperature before being poured into the cup."| N10
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -209,25 +215,27 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>HELD<br>agent"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(VISIBLE)"]
-    N4["cup<br>HELD<br>agent"]
-    N5["cup<br>ON<br>?Surface"]
-    N6["cup<br>FILLED_MILK<br>cup"]
-    N7["milk<br>INSIDE<br>?Heater"]
-    N8["?Heater<br>(ON)"]
-    N9["milk<br>INSIDE<br>?Cooler"]
-    N10["?Cooler<br>(CLOSED)"]
-    N2 -->|"To pick up the milk, it must first be accessible on a surface."| N1
-    N3 -->|"The task starts only if milk is seen/visible."| N1
-    N5 -->|"To bring over a cup, the cup must first be accessible on a surface."| N4
-    N1 -->|"The agent must hold the milk before pouring/filling the cup."| N6
-    N4 -->|"A cup must be held/available before it can be filled with milk."| N6
-    N8 -->|"Milk can be heated only if the heater is on."| N7
-    N7 -->|"If the required temperature is hot, milk must be heated before being brought over."| N1
-    N10 -->|"Milk can be cooled only if the cooler is closed to take effect."| N9
-    N9 -->|"If the required temperature is cold, milk must be cooled before being brought over."| N1
+    N1["milk<br>(VISIBLE)"]
+    N2["cup<br>HELD<br>agent"]
+    N3["milk<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>ON<br>?Surface"]
+    N6["milk<br>INSIDE<br>?Cooler"]
+    N7["?Cooler<br>(CLOSED)"]
+    N8["?Cooler<br>(ON)"]
+    N9["milk<br>(COLD)"]
+    N10["milk<br>POURED_INTO<br>cup"]
+    N11["cup<br>(FILLED_MILK)"]
+    N1 -->|"Milk must be seen before it can be brought over."| N3
+    N4 -->|"The cup must be reachable on a surface before the agent can pick it up."| N2
+    N5 -->|"Milk must be accessible on a surface before the agent can pick it up."| N3
+    N7 -->|"The cooling source must be closed for cooling to take effect."| N6
+    N8 -->|"The cooling source must be powered on before closing can matter for cooling."| N7
+    N6 -->|"Putting milk inside a cooling source makes it cold."| N9
+    N3 -->|"The agent must hold the milk to pour it."| N10
+    N2 -->|"The cup must be held to receive the poured milk."| N10
+    N10 -->|"Pouring milk into the cup fills the cup with milk."| N11
+    N9 -->|"Milk should be at the right temperature before being poured into the cup."| N10
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

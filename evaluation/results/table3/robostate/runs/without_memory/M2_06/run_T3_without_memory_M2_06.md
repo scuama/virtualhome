@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To have the dirty water glass moved away from the table and placed in the sink."
+      "answer": "To move the dirty glass away from the table and into the sink."
     },
     {
       "question": "Why is that important?",
-      "answer": "Likely to keep the table clear and move the dirty item to the appropriate place for washing or handling."
+      "answer": "To clear the table and place the dirty glass where it can be washed or dealt with properly."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It helps organize the environment and manage dirty dishware."
+      "answer": "Maintaining cleanliness and order in the living space."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may support cleanliness, tidiness, and convenience by relocating a used item to a place where it can be cleaned."
+      "answer": "The user likely wants to reduce clutter, support hygiene, and keep the area ready for use."
     }
   ],
-  "deep_intent": "The user wants to organize and clean up used dishware.",
+  "deep_intent": "The user wants to remove a dirty item from the table and place it in a washing area to support cleanliness and organization.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other dirty drinkware or small used dishes that can be moved to the sink, such as a cup, mug, or bowl."
+      "description": "Other dirty drinkware or used dishes that can be placed in the sink for washing."
     },
     {
       "priority": 2,
-      "description": "Other used kitchenware items that belong in the sink for washing, such as plates or utensils."
+      "description": "Other small used kitchen items from the table that belong in the sink or dish area."
     },
     {
       "priority": 3,
-      "description": "Any dirty tableware that should be collected for cleanup."
+      "description": "Any dirty tableware that can be collected and moved to a cleaning location."
     },
     {
       "priority": 4,
-      "description": "Other household items needing tidying or relocation to a cleaning area, if the exact glass is unavailable."
+      "description": "Other items contributing to table clutter that can be removed to restore order."
     }
   ]
 }
@@ -71,17 +71,9 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["water_glass<br>ON<br>table"]
-    N2["water_glass<br>INSIDE<br>?Sink"]
-    N3["water_glass<br>(HELD)"]
-    N4["?Agent<br>(AT_table)"]
-    N5["?Agent<br>(AT_?Sink)"]
-    N6["?Sink<br>(OPEN)"]
-    N1 -->|"The water glass must be reachable on the table before it can be grabbed."| N3
-    N3 -->|"The agent must hold the water glass before placing it into the sink."| N2
-    N4 -->|"The agent must be at the table to grab the water glass."| N3
-    N5 -->|"The agent must be at the sink to place the water glass inside."| N2
-    N6 -->|"The sink must be open before putting the water glass inside."| N2
+    N1["water glass<br>ON<br>table"]
+    N2["dirty water glass<br>INSIDE<br>?Container"]
+    N1 -->|"If the water glass is on the table, then it can be picked up and moved to the sink; the final placement goal is to put the dirty water glass into the sink."| N2
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -109,17 +101,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["water_glass<br>ON<br>table"]
-    N2["water_glass<br>INSIDE<br>?Sink"]
-    N3["water_glass<br>(HELD)"]
-    N4["?Agent<br>(AT_table)"]
-    N5["?Agent<br>(AT_?Sink)"]
-    N6["?Sink<br>(OPEN)"]
-    N1 -->|"The water glass must be reachable on the table before it can be grabbed."| N3
-    N3 -->|"The agent must hold the water glass before placing it into the sink."| N2
-    N4 -->|"The agent must be at the table to grab the water glass."| N3
-    N5 -->|"The agent must be at the sink to place the water glass inside."| N2
-    N6 -->|"The sink must be open before putting the water glass inside."| N2
+    N1["water glass<br>ON<br>table"]
+    N2["dirty water glass<br>INSIDE<br>?Container"]
+    N1 -->|"If the water glass is on the table, then it can be picked up and moved to the sink; the final placement goal is to put the dirty water glass into the sink."| N2
 ```
 - **Observed Items (58)**: floor(184), floor(185), floor(186), floor(187), floor(188), floor(189), wall(190), wall(191), wall(192), wall(193), wall(194), wall(195), ceiling(196), ceiling(197), ceiling(198)...
 
@@ -147,17 +131,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["water_glass<br>ON<br>table"]
-    N2["water_glass<br>INSIDE<br>?Sink"]
-    N3["water_glass<br>(HELD)"]
-    N4["?Agent<br>(AT_table)"]
-    N5["?Agent<br>(AT_?Sink)"]
-    N6["?Sink<br>(OPEN)"]
-    N1 -->|"The water glass must be reachable on the table before it can be grabbed."| N3
-    N3 -->|"The agent must hold the water glass before placing it into the sink."| N2
-    N4 -->|"The agent must be at the table to grab the water glass."| N3
-    N5 -->|"The agent must be at the sink to place the water glass inside."| N2
-    N6 -->|"The sink must be open before putting the water glass inside."| N2
+    N1["water glass<br>ON<br>table"]
+    N2["dirty water glass<br>INSIDE<br>?Container"]
+    N1 -->|"If the water glass is on the table, then it can be picked up and moved to the sink; the final placement goal is to put the dirty water glass into the sink."| N2
 ```
 - **Observed Items (38)**: floor(242), floor(243), floor(244), floor(245), ceiling(246), ceiling(247), ceiling(248), ceiling(249), wall(250), wall(251), wall(252), wall(253), door(254) [OPEN], ceilinglamp(255), tablelamp(256) [ON]...
 
@@ -185,17 +161,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["water_glass<br>ON<br>table"]
-    N2["water_glass<br>INSIDE<br>?Sink"]
-    N3["water_glass<br>(HELD)"]
-    N4["?Agent<br>(AT_table)"]
-    N5["?Agent<br>(AT_?Sink)"]
-    N6["?Sink<br>(OPEN)"]
-    N1 -->|"The water glass must be reachable on the table before it can be grabbed."| N3
-    N3 -->|"The agent must hold the water glass before placing it into the sink."| N2
-    N4 -->|"The agent must be at the table to grab the water glass."| N3
-    N5 -->|"The agent must be at the sink to place the water glass inside."| N2
-    N6 -->|"The sink must be open before putting the water glass inside."| N2
+    N1["water glass<br>ON<br>table"]
+    N2["dirty water glass<br>INSIDE<br>?Container"]
+    N1 -->|"If the water glass is on the table, then it can be picked up and moved to the sink; the final placement goal is to put the dirty water glass into the sink."| N2
 ```
 - **Observed Items (66)**: wall(286), wall(287), wall(288), wall(289), wall(290), wall(291), floor(292), floor(293), floor(294), floor(295), floor(296), floor(297), ceiling(298), ceiling(299), ceiling(300)...
 

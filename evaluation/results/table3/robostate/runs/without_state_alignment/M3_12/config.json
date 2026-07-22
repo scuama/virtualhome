@@ -1,0 +1,54 @@
+{
+    "scenario_id": "T3_without_state_alignment_M3_12",
+    "scenario_type": "M",
+    "goal_instruction": "If the TV is off, turn it on.",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF"
+            ]
+        }
+    ],
+    "initial_relations_override": [],
+    "scheduled_rules": [
+        {
+            "start_step": 0,
+            "end_step": 5,
+            "rule_text": "The master is sleeping. Do not turn on the TV during this time."
+        }
+    ],
+    "failure_condition": {
+        "start_step": 0,
+        "end_step": 5,
+        "target_class": "tv",
+        "states": [
+            "ON"
+        ]
+    },
+    "success_condition": {
+        "target_class": "tv",
+        "states": [
+            "ON"
+        ],
+        "min_count": 1
+    },
+    "source_scenario_id": "M3_12",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_state_alignment",
+    "ablation_module": "memory",
+    "table3_source_subclass": "M3",
+    "source_config": "configs/source_tasks/m_class/M3_12.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 19.14
+}

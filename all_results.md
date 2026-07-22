@@ -28,15 +28,15 @@
 
 | Module | Ablation Setting | SR (%) ↑ | PS ↓ |
 | :--- | :--- | :---: | :---: |
-| **Full** | RoboState (Full) | 86.67 | 5.00 |
-| **Goal Reasoning** | w/o Goal Reasoning | 15.00 | 2.00 |
-| | w/o Intention | 70.00 | 3.21 |
-| | w/o Parameter Binding | 80.00 | 4.25 |
-| **Memory** | w/o Memory | 15.00 | 5.00 |
-| | w/o Memory Structure | 40.00 | 6.63 |
-| | w/o State Alignment | 75.00 | 4.93 |
-| **Planning** | w/o STG Planning | 25.00 | 7.00 |
-| | w/o STG Construction | 20.00 | 6.50 |
-| | w/o Path Merging | 25.00 | 6.80 |
+| **Full** | RoboState (Full) | 86.67 | 5.02 |
+| **Goal Reasoning** | w/o Goal Reasoning | 28.33 | 7.41 |
+| | w/o Intention | 26.67 | 6.62 |
+| | w/o Parameter Binding | 31.67 | 6.58 |
+| **Memory** | w/o Memory | 11.67 | 3.29 |
+| | w/o Memory Structure | 21.67 | 5.77 |
+| | w/o State Alignment | 43.33 | 4.50 |
+| **Planning** | w/o STG Planning | 33.33 | 5.40 |
+| | w/o STG Construction | 51.67 | 6.61 |
+| | w/o Path Merging | 38.33 | 5.52 |
 
 > *Note: Baseline SR represents the average across all 60 standard testing scenarios for direct comparison.*

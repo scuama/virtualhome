@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "If the desk lamp is on, turn it off.",
+    "goal_instruction": "If the table lamp is on, turn it off.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -46,5 +46,5 @@
     "max_steps": 45,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 5.67
+    "execution_time_seconds": 11.46
 }

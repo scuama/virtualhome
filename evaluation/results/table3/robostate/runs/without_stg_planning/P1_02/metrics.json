@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P1_02",
-            "instruction": "If the microwave is usable, heat the bread and milk for me.",
+            "instruction": "If the microwave is usable, heat the bread slice and milk for me.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [

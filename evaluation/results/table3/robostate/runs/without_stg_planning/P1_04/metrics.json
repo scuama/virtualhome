@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P1_04",
-            "instruction": "If the stove is on, heat a cup of milk and a cutlet and bring them to the table.",
+            "instruction": "If the stove is on, heat a cup of milk and cutlets and bring them to the kitchen table.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [

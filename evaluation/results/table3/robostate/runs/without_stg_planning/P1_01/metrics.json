@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P1_01",
-            "instruction": "If there is a coffeepot on the table, pour two cups of water for me.",
+            "instruction": "If there is a coffeepot on the table, pour two water glasses for me.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [

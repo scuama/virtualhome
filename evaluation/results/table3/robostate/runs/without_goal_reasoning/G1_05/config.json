@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+    "goal_instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -65,5 +65,5 @@
     "max_steps": 45,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 5.88
+    "execution_time_seconds": 7.58
 }

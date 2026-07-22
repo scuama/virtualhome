@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_memory_M1_03",
-            "instruction": "If you see dirty cups, put them in the sink right away.",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
             "success_condition": {
                 "target_class": "waterglass",
                 "destination_class": "sink",
@@ -41,12 +41,28 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (18 steps without progress)",
     "steps_executed": 18,
-    "execution_time_seconds": 10.14,
+    "execution_time_seconds": 44.55,
     "dynamic_event_counts": {
         "event_1": {
-            "times_triggered": 0,
+            "times_triggered": 1,
             "max_triggers": null
         }
     },
-    "dynamic_event_trace": []
+    "dynamic_event_trace": [
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "event_1",
+            "object_id": 64,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 6
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 64
+        }
+    ]
 }

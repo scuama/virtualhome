@@ -15,34 +15,34 @@
     },
     {
       "question": "Why is that important?",
-      "answer": "Having the control device lets the user change settings or operate the TV without needing to get up."
+      "answer": "So the user can operate the TV without needing to get up or manually interact with it."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to conveniently operate or manage an active entertainment device."
+      "answer": "It fulfills the need to conveniently control an electronic device from a distance."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants convenience, reduced effort, and immediate access to TV controls."
+      "answer": "It may be for comfort, convenience, or to regain control over the viewing experience."
     }
   ],
-  "deep_intent": "The user wants convenient control over an active entertainment device.",
+  "deep_intent": "The user wants convenient remote control over a television that is currently on.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other devices that can control the TV, such as a universal remote or a compatible phone app controller if available indoors."
+      "description": "Other devices or controllers that can operate the television from a distance, such as a universal remote or a compatible TV remote."
     },
     {
       "priority": 2,
-      "description": "Any handheld device that provides the same TV control functions, such as another remote for the same TV or set-top box."
+      "description": "Alternative input devices that can control the TV if supported, such as a smartphone app or smart home controller."
     },
     {
       "priority": 3,
-      "description": "Alternative control interfaces for the same entertainment system, such as a game controller or smart home control panel if they can operate the TV."
+      "description": "Any nearby control method for the TV, such as onboard buttons on the television or a connected media device controller."
     },
     {
       "priority": 4,
-      "description": "Indirect ways to manage the TV state, such as accessing the power or input controls on the TV itself if a remote is unavailable."
+      "description": "A substitute that still helps manage viewing from a distance, such as a smart speaker or other integrated home control device if it can operate the TV."
     }
   ]
 }
@@ -72,8 +72,8 @@
 ```mermaid
 graph TD
     N1["TV<br>(ON)"]
-    N2["remote control<br>HELD<br>agent"]
-    N1 -->|"Conditional task: only if the TV is on should the remote control be brought to the user."| N2
+    N2["remote control<br>(HELD)"]
+    N1 -->|"Conditional task: only if the TV is on, the remote control should be brought"| N2
 ```
 - **Observed Items (63)**: wall(262), wall(263), wall(264), wall(265), wall(266), wall(267), wall(268), wall(269), ceiling(270), ceiling(271), ceiling(272), ceiling(273), ceiling(274), ceiling(275), ceiling(276)...
 
@@ -102,8 +102,8 @@ graph TD
 ```mermaid
 graph TD
     N1["TV<br>(ON)"]
-    N2["remote control<br>HELD<br>agent"]
-    N1 -->|"Conditional task: only if the TV is on should the remote control be brought to the user."| N2
+    N2["remote control<br>(HELD)"]
+    N1 -->|"Conditional task: only if the TV is on, the remote control should be brought"| N2
 ```
 - **Observed Items (43)**: wall(12), wall(13), wall(14), wall(15), ceiling(16), ceiling(17), ceiling(18), ceiling(19), floor(20), floor(21), floor(22), floor(23), toilet(24) [CLOSED], stall(25), bathroomcabinet(26) [CLOSED]...
 
@@ -132,8 +132,8 @@ graph TD
 ```mermaid
 graph TD
     N1["TV<br>(ON)"]
-    N2["remote control<br>HELD<br>agent"]
-    N1 -->|"Conditional task: only if the TV is on should the remote control be brought to the user."| N2
+    N2["remote control<br>(HELD)"]
+    N1 -->|"Conditional task: only if the TV is on, the remote control should be brought"| N2
 ```
 - **Observed Items (76)**: floor(51), floor(52), floor(53), floor(54), floor(55), floor(56), floor(57), floor(58), floor(59), wall(60), wall(61), wall(62), wall(63), wall(64), wall(65)...
 

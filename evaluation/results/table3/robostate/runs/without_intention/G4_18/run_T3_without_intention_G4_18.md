@@ -18,14 +18,15 @@
   "conditions": [
     "If the TV is on"
   ],
+  "destinations": [],
   "actions": [
     {
       "verb": "turn off",
       "object": "TV",
-      "instrument": "remote"
+      "instrument": "remote",
+      "condition": "If the TV is on"
     }
   ],
-  "destinations": [],
   "clarification_question": null
 }
 ```
@@ -53,13 +54,9 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["tv<br>(OFF)"]
+    N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["agent<br>(AT_remote)"]
-    N4["remote<br>ON<br>?Surface"]
-    N2 -->|"Need to hold the remote to turn off the TV"| N1
-    N3 -->|"Need to be at the remote to pick it up"| N2
-    N4 -->|"The remote must be accessible by being placed on a surface"| N2
+    N2 -->|"Must hold the remote to turn off the TV with it."| N1
 ```
 - **Observed Items (79)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 
@@ -87,13 +84,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["tv<br>(OFF)"]
+    N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["agent<br>(AT_remote)"]
-    N4["remote<br>ON<br>?Surface"]
-    N2 -->|"Need to hold the remote to turn off the TV"| N1
-    N3 -->|"Need to be at the remote to pick it up"| N2
-    N4 -->|"The remote must be accessible by being placed on a surface"| N2
+    N2 -->|"Must hold the remote to turn off the TV with it."| N1
 ```
 - **Observed Items (140)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 
@@ -121,13 +114,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["tv<br>(OFF)"]
+    N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["agent<br>(AT_remote)"]
-    N4["remote<br>ON<br>?Surface"]
-    N2 -->|"Need to hold the remote to turn off the TV"| N1
-    N3 -->|"Need to be at the remote to pick it up"| N2
-    N4 -->|"The remote must be accessible by being placed on a surface"| N2
+    N2 -->|"Must hold the remote to turn off the TV with it."| N1
 ```
 - **Observed Items (209)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 

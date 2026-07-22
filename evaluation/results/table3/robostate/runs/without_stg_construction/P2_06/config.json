@@ -1,0 +1,56 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If you see dirty water glasses on the table, put them in the sink.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "waterglass",
+            "states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "subject": "mug",
+            "states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "target_class": "waterglass",
+                "relation": "INSIDE",
+                "destination_class": "sink",
+                "min_count": 2
+            }
+        ]
+    },
+    "execution_time_seconds": 60.23,
+    "scenario_id": "T3_without_stg_construction_P2_06",
+    "source_scenario_id": "P2_06",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_stg_construction",
+    "ablation_module": "stg",
+    "table3_source_subclass": "P2",
+    "source_config": "configs/source_tasks/p_class/P2_06.json",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini"
+}

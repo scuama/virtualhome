@@ -64,5 +64,5 @@
     "single_run": true,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 4.14
+    "execution_time_seconds": 5.67
 }

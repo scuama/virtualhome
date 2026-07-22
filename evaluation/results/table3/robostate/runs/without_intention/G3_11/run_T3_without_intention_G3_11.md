@@ -27,10 +27,16 @@
     }
   ],
   "conditions": [
-    "If there is milk in the fridge"
+    {
+      "if": "there is milk in the fridge",
+      "then": "heat a cup of it in the microwave"
+    }
   ],
   "destinations": [
-    "microwave"
+    {
+      "object": "milk",
+      "destination": "microwave"
+    }
   ],
   "clarification_question": null
 }
@@ -59,28 +65,24 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup_of_milk<br>ON<br>?Surface"]
-    N2["cup_of_milk<br>INSIDE<br>?Heater"]
+    N1["milk_cup<br>(HOT)"]
+    N2["milk_cup<br>INSIDE<br>?Heater"]
     N3["?Heater<br>(ON)"]
-    N4["cup_of_milk<br>(HEATED)"]
+    N4["milk<br>(HELD)"]
     N5["milk<br>INSIDE<br>?Container"]
     N6["?Container<br>(OPEN)"]
-    N7["?Container<br>ON<br>?Surface"]
-    N8["milk<br>HELD<br>"]
-    N9["cup<br>ON<br>?Surface"]
-    N10["cup<br>INSIDE<br>?Container"]
-    N11["?Container<br>(CLOSED)"]
-    N12["milk<br>(HEATED)"]
-    N2 -->|"Heating requires the milk to be inside a heater while it is on."| N4
-    N3 -->|"The heater must be on for heating to occur."| N2
-    N5 -->|"To access milk from the fridge container, the milk must be held after taking it out."| N8
-    N6 -->|"A container must be open before taking milk out."| N5
-    N7 -->|"The fridge-like container must be positioned on a surface to be accessible in the environment."| N6
-    N11 -->|"Milk is inside the container only when the container is closed."| N5
-    N10 -->|"The cup must first be inside the container before it can be closed around the milk source situation."| N11
-    N9 -->|"The cup must exist and be placed in the container before it can be used to hold milk."| N10
-    N8 -->|"The milk must be held so it can be put into the cup and then heated as a cup of milk."| N1
-    N4 -->|"The task goal is satisfied when the milk has been heated."| N12
+    N7["?Container<br>(CLOSED)"]
+    N8["?Container<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(CLOSED)"]
+    N10["?Cooler<br>(ON)"]
+    N2 -->|"To make the milk cup hot, it must be placed inside a heater while the heater is on."| N1
+    N3 -->|"The heating appliance must be switched on before the milk cup can be heated."| N2
+    N5 -->|"Milk must be held before it can be transferred into the cup."| N4
+    N6 -->|"The cup/container must be open before milk can be put inside it."| N5
+    N9 -->|"If the milk is in a cooling source, the cooler must be closed for cooling to take effect."| N8
+    N10 -->|"A cooling appliance typically needs to be active before it can keep contents cold."| N9
+    N7 -->|"The source container holding milk must be closed if it is being kept in a cooling source."| N5
+    N8 -->|"The source container must be inside a cooler if the milk is stored in the fridge."| N7
 ```
 - **Observed Items (112)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -108,28 +110,24 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup_of_milk<br>ON<br>?Surface"]
-    N2["cup_of_milk<br>INSIDE<br>?Heater"]
+    N1["milk_cup<br>(HOT)"]
+    N2["milk_cup<br>INSIDE<br>?Heater"]
     N3["?Heater<br>(ON)"]
-    N4["cup_of_milk<br>(HEATED)"]
+    N4["milk<br>(HELD)"]
     N5["milk<br>INSIDE<br>?Container"]
     N6["?Container<br>(OPEN)"]
-    N7["?Container<br>ON<br>?Surface"]
-    N8["milk<br>HELD<br>"]
-    N9["cup<br>ON<br>?Surface"]
-    N10["cup<br>INSIDE<br>?Container"]
-    N11["?Container<br>(CLOSED)"]
-    N12["milk<br>(HEATED)"]
-    N2 -->|"Heating requires the milk to be inside a heater while it is on."| N4
-    N3 -->|"The heater must be on for heating to occur."| N2
-    N5 -->|"To access milk from the fridge container, the milk must be held after taking it out."| N8
-    N6 -->|"A container must be open before taking milk out."| N5
-    N7 -->|"The fridge-like container must be positioned on a surface to be accessible in the environment."| N6
-    N11 -->|"Milk is inside the container only when the container is closed."| N5
-    N10 -->|"The cup must first be inside the container before it can be closed around the milk source situation."| N11
-    N9 -->|"The cup must exist and be placed in the container before it can be used to hold milk."| N10
-    N8 -->|"The milk must be held so it can be put into the cup and then heated as a cup of milk."| N1
-    N4 -->|"The task goal is satisfied when the milk has been heated."| N12
+    N7["?Container<br>(CLOSED)"]
+    N8["?Container<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(CLOSED)"]
+    N10["?Cooler<br>(ON)"]
+    N2 -->|"To make the milk cup hot, it must be placed inside a heater while the heater is on."| N1
+    N3 -->|"The heating appliance must be switched on before the milk cup can be heated."| N2
+    N5 -->|"Milk must be held before it can be transferred into the cup."| N4
+    N6 -->|"The cup/container must be open before milk can be put inside it."| N5
+    N9 -->|"If the milk is in a cooling source, the cooler must be closed for cooling to take effect."| N8
+    N10 -->|"A cooling appliance typically needs to be active before it can keep contents cold."| N9
+    N7 -->|"The source container holding milk must be closed if it is being kept in a cooling source."| N5
+    N8 -->|"The source container must be inside a cooler if the milk is stored in the fridge."| N7
 ```
 - **Observed Items (173)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 
@@ -157,28 +155,24 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["cup_of_milk<br>ON<br>?Surface"]
-    N2["cup_of_milk<br>INSIDE<br>?Heater"]
+    N1["milk_cup<br>(HOT)"]
+    N2["milk_cup<br>INSIDE<br>?Heater"]
     N3["?Heater<br>(ON)"]
-    N4["cup_of_milk<br>(HEATED)"]
+    N4["milk<br>(HELD)"]
     N5["milk<br>INSIDE<br>?Container"]
     N6["?Container<br>(OPEN)"]
-    N7["?Container<br>ON<br>?Surface"]
-    N8["milk<br>HELD<br>"]
-    N9["cup<br>ON<br>?Surface"]
-    N10["cup<br>INSIDE<br>?Container"]
-    N11["?Container<br>(CLOSED)"]
-    N12["milk<br>(HEATED)"]
-    N2 -->|"Heating requires the milk to be inside a heater while it is on."| N4
-    N3 -->|"The heater must be on for heating to occur."| N2
-    N5 -->|"To access milk from the fridge container, the milk must be held after taking it out."| N8
-    N6 -->|"A container must be open before taking milk out."| N5
-    N7 -->|"The fridge-like container must be positioned on a surface to be accessible in the environment."| N6
-    N11 -->|"Milk is inside the container only when the container is closed."| N5
-    N10 -->|"The cup must first be inside the container before it can be closed around the milk source situation."| N11
-    N9 -->|"The cup must exist and be placed in the container before it can be used to hold milk."| N10
-    N8 -->|"The milk must be held so it can be put into the cup and then heated as a cup of milk."| N1
-    N4 -->|"The task goal is satisfied when the milk has been heated."| N12
+    N7["?Container<br>(CLOSED)"]
+    N8["?Container<br>INSIDE<br>?Cooler"]
+    N9["?Cooler<br>(CLOSED)"]
+    N10["?Cooler<br>(ON)"]
+    N2 -->|"To make the milk cup hot, it must be placed inside a heater while the heater is on."| N1
+    N3 -->|"The heating appliance must be switched on before the milk cup can be heated."| N2
+    N5 -->|"Milk must be held before it can be transferred into the cup."| N4
+    N6 -->|"The cup/container must be open before milk can be put inside it."| N5
+    N9 -->|"If the milk is in a cooling source, the cooler must be closed for cooling to take effect."| N8
+    N10 -->|"A cooling appliance typically needs to be active before it can keep contents cold."| N9
+    N7 -->|"The source container holding milk must be closed if it is being kept in a cooling source."| N5
+    N8 -->|"The source container must be inside a cooler if the milk is stored in the fridge."| N7
 ```
 - **Observed Items (242)**: floor(206), floor(207), floor(208), floor(209), floor(210), floor(211), wall(212), wall(213), wall(214), wall(215), wall(216), wall(217), ceiling(218), ceiling(219), ceiling(220)...
 

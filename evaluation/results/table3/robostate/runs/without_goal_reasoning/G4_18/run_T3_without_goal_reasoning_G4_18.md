@@ -33,9 +33,7 @@
 graph TD
     N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["remote<br>ON<br>?Surface"]
-    N2 -->|"Must hold the remote to turn off the TV."| N1
-    N3 -->|"The remote must be accessible on a surface before it can be held."| N2
+    N2 -->|"The remote must be held to operate it and turn the TV off."| N1
 ```
 - **Observed Items (79)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 
@@ -65,9 +63,7 @@ graph TD
 graph TD
     N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["remote<br>ON<br>?Surface"]
-    N2 -->|"Must hold the remote to turn off the TV."| N1
-    N3 -->|"The remote must be accessible on a surface before it can be held."| N2
+    N2 -->|"The remote must be held to operate it and turn the TV off."| N1
 ```
 - **Observed Items (140)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 
@@ -97,9 +93,7 @@ graph TD
 graph TD
     N1["TV<br>(OFF)"]
     N2["remote<br>(HELD)"]
-    N3["remote<br>ON<br>?Surface"]
-    N2 -->|"Must hold the remote to turn off the TV."| N1
-    N3 -->|"The remote must be accessible on a surface before it can be held."| N2
+    N2 -->|"The remote must be held to operate it and turn the TV off."| N1
 ```
 - **Observed Items (209)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
 

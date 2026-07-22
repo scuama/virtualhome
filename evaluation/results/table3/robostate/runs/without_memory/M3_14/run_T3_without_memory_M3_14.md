@@ -7,42 +7,42 @@
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
   "target_object": "waterglass",
-  "location_hint": "table",
+  "location_hint": "the table",
   "reasoning_chain": [
     {
-      "question": "Why does the user want this object?",
-      "answer": "To remove the dirty glass from the table and place it where dirty dishes belong."
+      "question": "Why does the user want this object moved?",
+      "answer": "To remove the dirty waterglass from the table and place it in the sink."
     },
     {
       "question": "Why is that important?",
-      "answer": "It helps keep the table clear and moves the item to a suitable location for cleaning or later washing."
+      "answer": "To clear the table and put the used item where it can be washed or handled later."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to tidy the space and manage used dishware."
+      "answer": "It supports tidying up the living space and managing dirty dishes."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It likely supports cleanliness, organization, and preventing clutter in the room."
+      "answer": "It may help maintain cleanliness, reduce clutter, and keep the area ready for use."
     }
   ],
-  "deep_intent": "The user wants to tidy a living space by relocating a used item to a proper place for cleaning.",
+  "deep_intent": "The user wants to tidy the table by moving a dirty dish to the sink for cleaning or storage.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other dirty drinkware or used dishes on the table that should also be moved to the sink"
+      "description": "Other dirty drinkware or small used dishes on the table, such as cups, mugs, or glasses, that can be placed in the sink."
     },
     {
       "priority": 2,
-      "description": "Other used kitchen items in the same area that belong with dirty dishes, such as cups, plates, or utensils"
+      "description": "Other used tableware items in the same area, such as plates or bowls, if they are clearly dirty and intended to be washed."
     },
     {
       "priority": 3,
-      "description": "Any small clutter items on the table that should be cleared away to restore order"
+      "description": "A broader set of dirty dishes from the table that can be gathered for washing."
     },
     {
       "priority": 4,
-      "description": "Other household items that are out of place and need to be relocated to their appropriate area"
+      "description": "Other clutter on the table that should be removed to tidy the surface, if the drinkware is unavailable or not identifiable."
     }
   ]
 }
@@ -72,12 +72,10 @@
 ```mermaid
 graph TD
     N1["waterglass<br>ON<br>table"]
-    N2["waterglass<br>(DIRTY)"]
-    N3["waterglass<br>ON<br>?Surface"]
-    N4["waterglass<br>INSIDE<br>sink"]
-    N1 -->|"The glass must be present on the table and dirty for the conditional task to apply."| N2
-    N2 -->|"Only a dirty waterglass should be moved into the sink."| N4
-    N3 -->|"To place an object into the sink, the agent must first have it in hand, which is represented as a prior non-container placement dependency."| N4
+    N2["waterglass<br>IN<br>sink"]
+    N3["waterglass<br>(DIRTY)"]
+    N1 -->|"Need the waterglass to be on the table so it can be picked up and moved to the sink."| N2
+    N3 -->|"The task specifies that the waterglass must be dirty for the action to apply."| N2
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -106,12 +104,10 @@ graph TD
 ```mermaid
 graph TD
     N1["waterglass<br>ON<br>table"]
-    N2["waterglass<br>(DIRTY)"]
-    N3["waterglass<br>ON<br>?Surface"]
-    N4["waterglass<br>INSIDE<br>sink"]
-    N1 -->|"The glass must be present on the table and dirty for the conditional task to apply."| N2
-    N2 -->|"Only a dirty waterglass should be moved into the sink."| N4
-    N3 -->|"To place an object into the sink, the agent must first have it in hand, which is represented as a prior non-container placement dependency."| N4
+    N2["waterglass<br>IN<br>sink"]
+    N3["waterglass<br>(DIRTY)"]
+    N1 -->|"Need the waterglass to be on the table so it can be picked up and moved to the sink."| N2
+    N3 -->|"The task specifies that the waterglass must be dirty for the action to apply."| N2
 ```
 - **Observed Items (58)**: floor(184), floor(185), floor(186), floor(187), floor(188), floor(189), wall(190), wall(191), wall(192), wall(193), wall(194), wall(195), ceiling(196), ceiling(197), ceiling(198)...
 
@@ -140,12 +136,10 @@ graph TD
 ```mermaid
 graph TD
     N1["waterglass<br>ON<br>table"]
-    N2["waterglass<br>(DIRTY)"]
-    N3["waterglass<br>ON<br>?Surface"]
-    N4["waterglass<br>INSIDE<br>sink"]
-    N1 -->|"The glass must be present on the table and dirty for the conditional task to apply."| N2
-    N2 -->|"Only a dirty waterglass should be moved into the sink."| N4
-    N3 -->|"To place an object into the sink, the agent must first have it in hand, which is represented as a prior non-container placement dependency."| N4
+    N2["waterglass<br>IN<br>sink"]
+    N3["waterglass<br>(DIRTY)"]
+    N1 -->|"Need the waterglass to be on the table so it can be picked up and moved to the sink."| N2
+    N3 -->|"The task specifies that the waterglass must be dirty for the action to apply."| N2
 ```
 - **Observed Items (38)**: floor(242), floor(243), floor(244), floor(245), ceiling(246), ceiling(247), ceiling(248), ceiling(249), wall(250), wall(251), wall(252), wall(253), door(254) [OPEN], ceilinglamp(255), tablelamp(256) [ON]...
 
@@ -174,12 +168,10 @@ graph TD
 ```mermaid
 graph TD
     N1["waterglass<br>ON<br>table"]
-    N2["waterglass<br>(DIRTY)"]
-    N3["waterglass<br>ON<br>?Surface"]
-    N4["waterglass<br>INSIDE<br>sink"]
-    N1 -->|"The glass must be present on the table and dirty for the conditional task to apply."| N2
-    N2 -->|"Only a dirty waterglass should be moved into the sink."| N4
-    N3 -->|"To place an object into the sink, the agent must first have it in hand, which is represented as a prior non-container placement dependency."| N4
+    N2["waterglass<br>IN<br>sink"]
+    N3["waterglass<br>(DIRTY)"]
+    N1 -->|"Need the waterglass to be on the table so it can be picked up and moved to the sink."| N2
+    N3 -->|"The task specifies that the waterglass must be dirty for the action to apply."| N2
 ```
 - **Observed Items (66)**: wall(286), wall(287), wall(288), wall(289), wall(290), wall(291), floor(292), floor(293), floor(294), floor(295), floor(296), floor(297), ceiling(298), ceiling(299), ceiling(300)...
 

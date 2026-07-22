@@ -1,0 +1,64 @@
+{
+    "scenario_id": "T3_without_parameter_binding_M1_05",
+    "scenario_type": "M",
+    "goal_instruction": "If the milk is cold, put it in the microwave to heat it up.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "add_states": [
+                "COLD"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "milk"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "milk",
+                "duration_steps": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1
+    },
+    "source_scenario_id": "M1_05",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_parameter_binding",
+    "ablation_module": "goal",
+    "table3_source_subclass": "M1",
+    "source_config": "configs/source_tasks/m_class/M1_05.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 67.44
+}

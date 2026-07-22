@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P2_06",
-            "instruction": "If you see dirty cups on the table, put them in the sink.",
+            "instruction": "If you see dirty water glasses on the table, put them in the sink.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [
@@ -44,7 +44,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
     "steps_executed": 15,
-    "execution_time_seconds": 50.74,
+    "execution_time_seconds": 49.32,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

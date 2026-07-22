@@ -1,6 +1,6 @@
 {
     "environment_id": 2,
-    "goal_instruction": "If the stove is on, heat a cup of milk and a cutlet and bring them to the table.",
+    "goal_instruction": "If the stove is on, heat a cup of milk and cutlets and bring them to the kitchen table.",
     "initial_relations_override": [
         {
             "subject": "milk",
@@ -83,7 +83,7 @@
     "table_id": "table3",
     "experiment_axis": "ablation",
     "ablation_profile": "without_stg_planning",
-    "ablation_module": "planning",
+    "ablation_module": "stg",
     "table3_source_subclass": "P1",
     "source_config": "configs/source_tasks/p_class/P1_04.json",
     "single_run": true,

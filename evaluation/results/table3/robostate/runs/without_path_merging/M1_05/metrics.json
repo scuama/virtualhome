@@ -1,0 +1,66 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 13.0,
+    "ps_sum": 13,
+    "ps_count": 1,
+    "mean_completion_step": 13.0,
+    "tasks": [
+        {
+            "task_id": "T3_without_path_merging_M1_05",
+            "instruction": "If the milk is cold, put it in the microwave to heat it up.",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 13,
+            "completed": true,
+            "completion_step": 13
+        }
+    ],
+    "scenario_id": "T3_without_path_merging_M1_05",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_path_merging",
+    "source_scenario_id": "M1_05",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 13,
+    "execution_time_seconds": 43.22,
+    "dynamic_event_counts": {
+        "event_1": {
+            "times_triggered": 1,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 8,
+            "event": "hide",
+            "event_id": "event_1",
+            "object_id": 176,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 12
+        },
+        {
+            "step": 12,
+            "event": "reappear",
+            "object_id": 176
+        }
+    ]
+}

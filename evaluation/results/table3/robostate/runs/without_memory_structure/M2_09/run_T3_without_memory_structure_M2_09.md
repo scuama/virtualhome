@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To pour it into a clean water glass for drinking."
+      "answer": "To pour some of it into a clean water glass."
     },
     {
       "question": "Why is that important?",
-      "answer": "So the user can have a beverage available in a suitable container."
+      "answer": "To have the juice available in a glass for drinking."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to consume a drink and likely stay refreshed or hydrated."
+      "answer": "It fulfills the need to consume a beverage and likely relieve thirst."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The primary motivation is likely physical refreshment or hydration, with the condition that the beverage be served in a clean, usable glass."
+      "answer": "The primary motivation is physical hydration and beverage satisfaction; there may also be a preference for drinking juice specifically."
     }
   ],
-  "deep_intent": "The user wants a drink for refreshment or hydration.",
+  "deep_intent": "The user wants to drink a beverage to relieve thirst or enjoy a drink.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ready-to-drink beverages stored in the fridge, such as water, milk, or soda, poured into a clean glass"
+      "description": "Other ready-to-drink beverages stored in the fridge, such as water, milk, or iced tea"
     },
     {
       "priority": 2,
-      "description": "Cold beverages or drinkable liquids in household containers that can be served in a glass"
+      "description": "Other fruit-based or sweet beverages in containers, such as nectar or flavored drinks"
     },
     {
       "priority": 3,
-      "description": "Any safe, palatable beverage that can satisfy thirst or refreshment needs"
+      "description": "Any safe, cold drinkable liquid available indoors that can be poured into a glass"
     },
     {
       "priority": 4,
-      "description": "Plain water or other hydrating drinks as a fallback if the preferred beverage is unavailable"
+      "description": "A glass of water or another hydrating drink if juice is unavailable"
     }
   ]
 }
@@ -51,12 +51,13 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Need the target beverage juice, the fridge/cooler that stores it, and the clean water glass required for pouring. The SDG implies the juice must be held before pouring, but since the user can directly retrieve the juice source, no separate tool is strictly necessary from the visible classes.",
+  "reasoning": "Needed objects are the target drink juice, the fridge that stores it, and the water glass that must be clean and filled. Since the goal implies pouring and the juice must be accessible, the fridge and glass are essential; no extra tools are explicitly required beyond these classes.",
   "selected_classes": [
-    "milk",
     "character",
+    "milk",
     "juice",
     "fridge",
+    "door",
     "waterglass"
   ],
   "raw_class_count": 50
@@ -66,11 +67,11 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to get juice from the fridge and pour it into a clean water glass. No current actions have been taken yet, and the fridge is the likely cooler containing the juice. To begin the required sequence, I need to move next to the fridge before I can open it or interact with its contents. The water glass cleanliness is not yet confirmed, but the immediate prerequisite in the SDG is accessing the cooler and then locating the juice inside.",
+  "reasoning": "The SDG requires the fridge to be open before taking juice out. The filtered graph shows fridge(162) and juice(173/174), but no fridge OPEN state yet. The most appropriate next step is to approach the fridge so it can be opened in the following action.",
   "satisfied_nodes": [],
   "current_node_focus": "N2",
   "mapped_variables": {
-    "?Cooler": "fridge(162)"
+    "?Fridge": "fridge(162)"
   },
   "action": "[walk] <fridge> (162)"
 }
@@ -99,19 +100,22 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(CLOSED)"]
+    N1["juice<br>INSIDE<br>?Fridge"]
+    N2["?Fridge<br>(OPEN)"]
     style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
+    N3["?Agent<br>(HOLDING_juice)"]
+    N4["juice<br>ON<br>?Surface"]
+    N5["water glass<br>ON<br>?Surface"]
+    N6["water glass<br>(CLEAN)"]
+    N7["water glass<br>FILLED_JUICE<br>?None"]
+    N2 -->|"The fridge must be open before taking juice out of it."| N1
+    N1 -->|"Juice must be accessible inside the fridge before the agent can hold it."| N3
+    N3 -->|"The agent must hold the juice directly to pour it into the glass."| N7
+    N6 -->|"The target glass must be clean before being filled."| N7
+    N5 -->|"The glass must be present and available on a surface for pouring."| N7
+    N4 -->|"After taking the juice, it may need to be placed on a surface unless directly held for pouring; this is a supporting relation for the task context."| N3
 ```
-- **Observed Items (19)**: waterglass(64), waterglass(71), waterglass(72), waterglass(79), waterglass(80), waterglass(87), waterglass(88), waterglass(100), fridge(162), juice(174), milk(177), character(1), juice(173), milk(176), kitchen(11)...
+- **Observed Items (20)**: door(47), waterglass(64), waterglass(71), waterglass(72), waterglass(79), waterglass(80), waterglass(87), waterglass(88), waterglass(100), fridge(162), juice(174), milk(177), character(1), juice(173), milk(176)...
 
 
 ### [PerceptionFilter] Output
@@ -119,10 +123,11 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "milk",
     "character",
+    "milk",
     "juice",
     "fridge",
+    "door",
     "waterglass"
   ],
   "raw_class_count": 50
@@ -132,11 +137,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "We are already at the fridge, so the next step is to open it to access the juice inside. The SDG requires the juice to be inside the cooler, and the current graph shows the fridge is closed and juice objects are present in/near it. Opening the fridge is the necessary prerequisite before we can walk to and grab the juice.",
+  "reasoning": "We are at the fridge already, and the next required prerequisite is to open it so the juice inside becomes accessible. The filtered graph shows two juice candidates (173, 174), but the SDG only requires getting juice from the fridge; opening the fridge is the correct immediate step before selecting the juice object.",
   "satisfied_nodes": [],
   "current_node_focus": "N2",
   "mapped_variables": {
-    "?Cooler": "fridge(162)"
+    "?Fridge": "fridge(162)"
   },
   "action": "[open] <fridge> (162)"
 }
@@ -191,16 +196,19 @@ No SDG active.
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(CLOSED)"]
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
+    N1["juice<br>INSIDE<br>?Fridge"]
+    N2["?Fridge<br>(OPEN)"]
+    N3["?Agent<br>(HOLDING_juice)"]
+    N4["juice<br>ON<br>?Surface"]
+    N5["water glass<br>ON<br>?Surface"]
+    N6["water glass<br>(CLEAN)"]
+    N7["water glass<br>FILLED_JUICE<br>?None"]
+    N2 -->|"The fridge must be open before taking juice out of it."| N1
+    N1 -->|"Juice must be accessible inside the fridge before the agent can hold it."| N3
+    N3 -->|"The agent must hold the juice directly to pour it into the glass."| N7
+    N6 -->|"The target glass must be clean before being filled."| N7
+    N5 -->|"The glass must be present and available on a surface for pouring."| N7
+    N4 -->|"After taking the juice, it may need to be placed on a surface unless directly held for pouring; this is a supporting relation for the task context."| N3
 ```
 - **Observed Items (58)**: floor(184), floor(185), floor(186), floor(187), floor(188), floor(189), wall(190), wall(191), wall(192), wall(193), wall(194), wall(195), ceiling(196), ceiling(197), ceiling(198)...
 
@@ -228,16 +236,19 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(CLOSED)"]
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
+    N1["juice<br>INSIDE<br>?Fridge"]
+    N2["?Fridge<br>(OPEN)"]
+    N3["?Agent<br>(HOLDING_juice)"]
+    N4["juice<br>ON<br>?Surface"]
+    N5["water glass<br>ON<br>?Surface"]
+    N6["water glass<br>(CLEAN)"]
+    N7["water glass<br>FILLED_JUICE<br>?None"]
+    N2 -->|"The fridge must be open before taking juice out of it."| N1
+    N1 -->|"Juice must be accessible inside the fridge before the agent can hold it."| N3
+    N3 -->|"The agent must hold the juice directly to pour it into the glass."| N7
+    N6 -->|"The target glass must be clean before being filled."| N7
+    N5 -->|"The glass must be present and available on a surface for pouring."| N7
+    N4 -->|"After taking the juice, it may need to be placed on a surface unless directly held for pouring; this is a supporting relation for the task context."| N3
 ```
 - **Observed Items (38)**: floor(242), floor(243), floor(244), floor(245), ceiling(246), ceiling(247), ceiling(248), ceiling(249), wall(250), wall(251), wall(252), wall(253), door(254), ceilinglamp(255), tablelamp(256)...
 
@@ -265,16 +276,19 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(CLOSED)"]
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
+    N1["juice<br>INSIDE<br>?Fridge"]
+    N2["?Fridge<br>(OPEN)"]
+    N3["?Agent<br>(HOLDING_juice)"]
+    N4["juice<br>ON<br>?Surface"]
+    N5["water glass<br>ON<br>?Surface"]
+    N6["water glass<br>(CLEAN)"]
+    N7["water glass<br>FILLED_JUICE<br>?None"]
+    N2 -->|"The fridge must be open before taking juice out of it."| N1
+    N1 -->|"Juice must be accessible inside the fridge before the agent can hold it."| N3
+    N3 -->|"The agent must hold the juice directly to pour it into the glass."| N7
+    N6 -->|"The target glass must be clean before being filled."| N7
+    N5 -->|"The glass must be present and available on a surface for pouring."| N7
+    N4 -->|"After taking the juice, it may need to be placed on a surface unless directly held for pouring; this is a supporting relation for the task context."| N3
 ```
 - **Observed Items (66)**: wall(286), wall(287), wall(288), wall(289), wall(290), wall(291), floor(292), floor(293), floor(294), floor(295), floor(296), floor(297), ceiling(298), ceiling(299), ceiling(300)...
 
@@ -310,10 +324,11 @@ No SDG active.
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "milk",
     "character",
+    "milk",
     "juice",
     "fridge",
+    "door",
     "waterglass"
   ],
   "raw_class_count": 50
@@ -323,77 +338,14 @@ No SDG active.
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The juice goal is not yet satisfied, and the fridge is the required cooler. We are already at the kitchen, but not yet at the fridge specifically for interaction. The next step toward N1/N2 is to move to the fridge so it can be opened and the juice can later be accessed.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N2",
-  "mapped_variables": {
-    "?Cooler": "fridge(162)"
-  },
-  "action": "[walk] <fridge> (162)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <fridge> (162)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 6
-- **Action**: `[walk] <fridge> (162)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_structure_M2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    N2["?Cooler<br>(CLOSED)"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
-```
-- **Observed Items (19)**: waterglass(64), waterglass(71), waterglass(72), waterglass(79), waterglass(80), waterglass(87), waterglass(88), waterglass(100), fridge(162), juice(174), milk(177), character(1), juice(173), milk(176), kitchen(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "milk",
-    "character",
-    "juice",
-    "fridge",
-    "waterglass"
+  "reasoning": "The fridge is already the likely correct container for the juice target, but it is currently not marked OPEN in the graph. To satisfy the next prerequisite in the SDG, I should open the fridge before trying to access or grab either juice instance. I am already at the kitchen, so no additional walk is needed before interacting with the fridge.",
+  "satisfied_nodes": [
+    "N5",
+    "N6"
   ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The fridge is the likely cooler and it is already selected by context. The next unmet prerequisite in the SDG is to open the fridge so the juice can later be accessed and held. No object is currently held, and the water glass cleanliness can be addressed after obtaining the juice if needed, but first we must access the fridge contents.",
-  "satisfied_nodes": [],
   "current_node_focus": "N2",
   "mapped_variables": {
-    "?Cooler": "fridge(162)"
+    "?Fridge": "fridge(162)"
   },
   "action": "[open] <fridge> (162)"
 }
@@ -414,7 +366,7 @@ graph TD
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 7
+## Step 6
 - **Action**: `[walk] <livingroom> (183)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -440,7 +392,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 8
+## Step 7
 - **Action**: `[walk] <bedroom> (241)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -466,7 +418,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 9
+## Step 8
 - **Action**: `[walk] <bathroom> (285)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -492,7 +444,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 10
+## Step 9
 - **Action**: `[walk] <bedroom> (346)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -518,7 +470,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 11
+## Step 10
 - **Action**: `[walk] <kitchen> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -534,10 +486,11 @@ No SDG active.
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "milk",
     "character",
+    "milk",
     "juice",
     "fridge",
+    "door",
     "waterglass"
   ],
   "raw_class_count": 50
@@ -547,77 +500,15 @@ No SDG active.
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The task requires getting juice from the fridge and eventually pouring it into a clean water glass. The filtered graph shows the fridge(162) and two juice instances (173, 174), but no current state indicates which juice is inside the fridge or whether the fridge is open. Since the goal SDG begins with juice inside the cooler and then held, the next necessary step is to move to the fridge so we can inspect/open it and access the juice. I am not repeating the same walk action consecutively because the prior walks were to rooms, not explicitly to the fridge as an interaction target in the current step sequence.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Cooler": "fridge(162)"
-  },
-  "action": "[walk] <fridge> (162)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <fridge> (162)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 12
-- **Action**: `[walk] <fridge> (162)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_memory_structure_M2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["juice<br>INSIDE<br>?Cooler"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["?Cooler<br>(CLOSED)"]
-    N3["water glass<br>(CLEAN)"]
-    N4["juice<br>HELD<br>"]
-    N5["juice<br>INSIDE<br>water glass"]
-    N2 -->|"Cooling container should be closed for juice to be present in the cooler."| N1
-    N1 -->|"Juice must be held directly before it can be poured."| N4
-    N3 -->|"The target glass must be clean before pouring juice into it."| N5
-    N4 -->|"Holding the juice source is required to pour it into the glass."| N5
-    N5 -->|"Only perform the pour if juice is available in the fridge/cooler."| N1
-```
-- **Observed Items (19)**: waterglass(64), waterglass(71), waterglass(72), waterglass(79), waterglass(80), waterglass(87), waterglass(88), waterglass(100), fridge(162), juice(174), milk(177), character(1), juice(173), milk(176), kitchen(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "milk",
-    "character",
-    "juice",
-    "fridge",
-    "waterglass"
+  "reasoning": "The active goal is to get juice from the fridge and eventually pour it into a clean water glass. The current graph shows a fridge and juice objects present in the kitchen, but no evidence yet that the fridge is open. Since the SDG requires the fridge to be OPEN before accessing juice, the next step should satisfy N2 first. I am already in the kitchen from the recent walk, so I can interact with the fridge now.",
+  "satisfied_nodes": [
+    "N5",
+    "N6"
   ],
-  "raw_class_count": 50
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The fridge is already the chosen cooler and is currently accessible from the last successful walk. The next required step in the SDG is to open the cooler so the juice can later be accessed. Since the fridge is the only valid cooler-like container in the graph and no object is currently being held, opening it is the correct progression before walking to a juice item and grabbing it.",
-  "satisfied_nodes": [],
   "current_node_focus": "N2",
   "mapped_variables": {
-    "?Cooler": "fridge(162)"
+    "?Fridge": "fridge(162)",
+    "?Surface": "kitchen surface / counter (implicit)"
   },
   "action": "[open] <fridge> (162)"
 }
@@ -638,7 +529,7 @@ graph TD
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 13
+## Step 11
 - **Action**: `[walk] <livingroom> (183)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -664,7 +555,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 14
+## Step 12
 - **Action**: `[walk] <bedroom> (241)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -673,4 +564,56 @@ No SDG active.
 - **SDG Status**:
 No SDG active.
 - **Observed Items (58)**: floor(184), floor(185), floor(186), floor(187), floor(188), floor(189), wall(190), wall(191), wall(192), wall(193), wall(194), wall(195), ceiling(196), ceiling(197), ceiling(198)...
+
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <bathroom> (285)",
+  "active_task_id": null,
+  "task_context": {
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
+    "satisfied_task_ids": []
+  },
+  "source": "loop_recovery_room_revisit"
+}
+```
+## Step 13
+- **Action**: `[walk] <bathroom> (285)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Decision Source**: `loop_recovery_room_revisit`
+- **Task Progress**: T3_without_memory_structure_M2_09=pending
+- **SDG Status**:
+No SDG active.
+- **Observed Items (38)**: floor(242), floor(243), floor(244), floor(245), ceiling(246), ceiling(247), ceiling(248), ceiling(249), wall(250), wall(251), wall(252), wall(253), door(254), ceilinglamp(255), tablelamp(256)...
+
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <bedroom> (346)",
+  "active_task_id": null,
+  "task_context": {
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
+    "satisfied_task_ids": []
+  },
+  "source": "loop_recovery_room_revisit"
+}
+```
+## Step 14
+- **Action**: `[walk] <bedroom> (346)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Decision Source**: `loop_recovery_room_revisit`
+- **Task Progress**: T3_without_memory_structure_M2_09=pending
+- **SDG Status**:
+No SDG active.
+- **Observed Items (66)**: wall(286), wall(287), wall(288), wall(289), wall(290), wall(291), floor(292), floor(293), floor(294), floor(295), floor(296), floor(297), ceiling(298), ceiling(299), ceiling(300)...
 

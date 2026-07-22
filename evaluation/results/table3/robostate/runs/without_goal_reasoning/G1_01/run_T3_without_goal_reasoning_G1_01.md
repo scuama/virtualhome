@@ -32,25 +32,18 @@
 ```mermaid
 graph TD
     N1["milk<br>INSIDE<br>?Cooler"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(HELD)"]
-    N4["cup<br>INSIDE<br>?Container"]
-    N5["cup<br>(HELD)"]
-    N6["cup<br>INSIDE<br>?Heater"]
-    N7["?Heater<br>(ON)"]
-    N8["?Heater<br>(PLUGIN)"]
-    N9["milk<br>(HOT)"]
-    N10["cup_of_milk<br>INSIDE<br>?Heater"]
-    N2 -->|"To take milk out of the cooler, the milk must first be accessible on a surface inside the cooler after opening."| N1
-    N3 -->|"Milk must be held before it can be placed on a surface or transferred."| N2
-    N1 -->|"If milk is in the cooler, the agent must retrieve it."| N3
-    N5 -->|"The cup must be held before it can be used to contain the milk."| N4
-    N4 -->|"The cup must exist as the vessel to be placed into the heater."| N6
-    N8 -->|"Some heaters require power before they can be switched on."| N7
-    N6 -->|"Milk becomes hot when the cup containing it is placed in a heater that is on."| N9
-    N5 -->|"The cup of milk must be held before it can be placed into the heater."| N10
-    N7 -->|"The heater must be on for heating to occur."| N10
-    N6 -->|"The cup containing milk must be placed into the heater for heating to occur."| N10
+    N2["?Cooler<br>(OPEN)"]
+    N3["milk<br>HELD<br>"]
+    N4["milk<br>ON<br>cup"]
+    N5["cup<br>INSIDE<br>?Heater"]
+    N6["?Heater<br>(ON)"]
+    N7["milk<br>(HOT)"]
+    N2 -->|"The cooler must be open to take milk out of it."| N1
+    N1 -->|"Milk must be inside the cooler before it can be taken out and held."| N3
+    N3 -->|"Milk must be held in order to pour it into the cup."| N4
+    N6 -->|"The heater must be on to heat the cup and its contents."| N5
+    N5 -->|"Milk becomes hot when the cup containing it is placed in the heater and the heater is on."| N7
+    N4 -->|"Milk must first be in the cup before it can be heated as a cup of milk."| N7
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -79,25 +72,18 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>INSIDE<br>?Cooler"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(HELD)"]
-    N4["cup<br>INSIDE<br>?Container"]
-    N5["cup<br>(HELD)"]
-    N6["cup<br>INSIDE<br>?Heater"]
-    N7["?Heater<br>(ON)"]
-    N8["?Heater<br>(PLUGIN)"]
-    N9["milk<br>(HOT)"]
-    N10["cup_of_milk<br>INSIDE<br>?Heater"]
-    N2 -->|"To take milk out of the cooler, the milk must first be accessible on a surface inside the cooler after opening."| N1
-    N3 -->|"Milk must be held before it can be placed on a surface or transferred."| N2
-    N1 -->|"If milk is in the cooler, the agent must retrieve it."| N3
-    N5 -->|"The cup must be held before it can be used to contain the milk."| N4
-    N4 -->|"The cup must exist as the vessel to be placed into the heater."| N6
-    N8 -->|"Some heaters require power before they can be switched on."| N7
-    N6 -->|"Milk becomes hot when the cup containing it is placed in a heater that is on."| N9
-    N5 -->|"The cup of milk must be held before it can be placed into the heater."| N10
-    N7 -->|"The heater must be on for heating to occur."| N10
-    N6 -->|"The cup containing milk must be placed into the heater for heating to occur."| N10
+    N2["?Cooler<br>(OPEN)"]
+    N3["milk<br>HELD<br>"]
+    N4["milk<br>ON<br>cup"]
+    N5["cup<br>INSIDE<br>?Heater"]
+    N6["?Heater<br>(ON)"]
+    N7["milk<br>(HOT)"]
+    N2 -->|"The cooler must be open to take milk out of it."| N1
+    N1 -->|"Milk must be inside the cooler before it can be taken out and held."| N3
+    N3 -->|"Milk must be held in order to pour it into the cup."| N4
+    N6 -->|"The heater must be on to heat the cup and its contents."| N5
+    N5 -->|"Milk becomes hot when the cup containing it is placed in the heater and the heater is on."| N7
+    N4 -->|"Milk must first be in the cup before it can be heated as a cup of milk."| N7
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -126,25 +112,18 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>INSIDE<br>?Cooler"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(HELD)"]
-    N4["cup<br>INSIDE<br>?Container"]
-    N5["cup<br>(HELD)"]
-    N6["cup<br>INSIDE<br>?Heater"]
-    N7["?Heater<br>(ON)"]
-    N8["?Heater<br>(PLUGIN)"]
-    N9["milk<br>(HOT)"]
-    N10["cup_of_milk<br>INSIDE<br>?Heater"]
-    N2 -->|"To take milk out of the cooler, the milk must first be accessible on a surface inside the cooler after opening."| N1
-    N3 -->|"Milk must be held before it can be placed on a surface or transferred."| N2
-    N1 -->|"If milk is in the cooler, the agent must retrieve it."| N3
-    N5 -->|"The cup must be held before it can be used to contain the milk."| N4
-    N4 -->|"The cup must exist as the vessel to be placed into the heater."| N6
-    N8 -->|"Some heaters require power before they can be switched on."| N7
-    N6 -->|"Milk becomes hot when the cup containing it is placed in a heater that is on."| N9
-    N5 -->|"The cup of milk must be held before it can be placed into the heater."| N10
-    N7 -->|"The heater must be on for heating to occur."| N10
-    N6 -->|"The cup containing milk must be placed into the heater for heating to occur."| N10
+    N2["?Cooler<br>(OPEN)"]
+    N3["milk<br>HELD<br>"]
+    N4["milk<br>ON<br>cup"]
+    N5["cup<br>INSIDE<br>?Heater"]
+    N6["?Heater<br>(ON)"]
+    N7["milk<br>(HOT)"]
+    N2 -->|"The cooler must be open to take milk out of it."| N1
+    N1 -->|"Milk must be inside the cooler before it can be taken out and held."| N3
+    N3 -->|"Milk must be held in order to pour it into the cup."| N4
+    N6 -->|"The heater must be on to heat the cup and its contents."| N5
+    N5 -->|"Milk becomes hot when the cup containing it is placed in the heater and the heater is on."| N7
+    N4 -->|"Milk must first be in the cup before it can be heated as a cup of milk."| N7
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -173,25 +152,18 @@ graph TD
 ```mermaid
 graph TD
     N1["milk<br>INSIDE<br>?Cooler"]
-    N2["milk<br>ON<br>?Surface"]
-    N3["milk<br>(HELD)"]
-    N4["cup<br>INSIDE<br>?Container"]
-    N5["cup<br>(HELD)"]
-    N6["cup<br>INSIDE<br>?Heater"]
-    N7["?Heater<br>(ON)"]
-    N8["?Heater<br>(PLUGIN)"]
-    N9["milk<br>(HOT)"]
-    N10["cup_of_milk<br>INSIDE<br>?Heater"]
-    N2 -->|"To take milk out of the cooler, the milk must first be accessible on a surface inside the cooler after opening."| N1
-    N3 -->|"Milk must be held before it can be placed on a surface or transferred."| N2
-    N1 -->|"If milk is in the cooler, the agent must retrieve it."| N3
-    N5 -->|"The cup must be held before it can be used to contain the milk."| N4
-    N4 -->|"The cup must exist as the vessel to be placed into the heater."| N6
-    N8 -->|"Some heaters require power before they can be switched on."| N7
-    N6 -->|"Milk becomes hot when the cup containing it is placed in a heater that is on."| N9
-    N5 -->|"The cup of milk must be held before it can be placed into the heater."| N10
-    N7 -->|"The heater must be on for heating to occur."| N10
-    N6 -->|"The cup containing milk must be placed into the heater for heating to occur."| N10
+    N2["?Cooler<br>(OPEN)"]
+    N3["milk<br>HELD<br>"]
+    N4["milk<br>ON<br>cup"]
+    N5["cup<br>INSIDE<br>?Heater"]
+    N6["?Heater<br>(ON)"]
+    N7["milk<br>(HOT)"]
+    N2 -->|"The cooler must be open to take milk out of it."| N1
+    N1 -->|"Milk must be inside the cooler before it can be taken out and held."| N3
+    N3 -->|"Milk must be held in order to pour it into the cup."| N4
+    N6 -->|"The heater must be on to heat the cup and its contents."| N5
+    N5 -->|"Milk becomes hot when the cup containing it is placed in the heater and the heater is on."| N7
+    N4 -->|"Milk must first be in the cup before it can be heated as a cup of milk."| N7
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

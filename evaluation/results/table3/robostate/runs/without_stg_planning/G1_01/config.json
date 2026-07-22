@@ -1,0 +1,37 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_stg_planning_G1_01",
+    "source_scenario_id": "G1_01",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_stg_planning",
+    "ablation_module": "stg",
+    "table3_source_subclass": "G1",
+    "source_config": "configs/source_tasks/g_class/G1_01.json",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 22.74
+}

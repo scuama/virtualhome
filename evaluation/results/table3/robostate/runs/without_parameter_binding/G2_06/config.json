@@ -1,6 +1,6 @@
 {
     "environment_id": 0,
-    "goal_instruction": "If the TV is on, adjust the desk lamp to an appropriate setting.",
+    "goal_instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
     "initial_relations_override": [
         {
             "subject": "character",
@@ -32,7 +32,8 @@
             ],
             "add_states": [
                 "OFF"
-            ]
+            ],
+            "instance_filter": {}
         }
     ],
     "user_clarification_reply": "Just open it.",

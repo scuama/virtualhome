@@ -23,9 +23,7 @@
   ],
   "conditions": [
     {
-      "type": "presence",
-      "object": "juice",
-      "condition": "if there is juice on the table"
+      "if": "there is juice on the table"
     }
   ],
   "destinations": [
@@ -34,7 +32,7 @@
       "destination": "glass"
     }
   ],
-  "clarification_question": null
+  "clarification_question": "Should the glass be filled only if juice is present on the table?"
 }
 ```
 
@@ -61,11 +59,11 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>(HELD)"]
-    N2["juice<br>ON<br>table"]
-    N3["glass<br>(FILLED_JUICE)"]
-    N2 -->|"Juice must be accessible to be picked up before pouring."| N1
-    N1 -->|"The juice must be held directly to pour it into the glass."| N3
+    N1["juice<br>ON<br>table"]
+    N2["juice<br>(HELD)"]
+    N3["glass<br>FILLED_JUICE<br>glass"]
+    N1 -->|"Juice must be reachable and acquired before it can be poured"| N2
+    N2 -->|"The agent must hold the juice source directly to pour it into the glass"| N3
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -93,11 +91,11 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>(HELD)"]
-    N2["juice<br>ON<br>table"]
-    N3["glass<br>(FILLED_JUICE)"]
-    N2 -->|"Juice must be accessible to be picked up before pouring."| N1
-    N1 -->|"The juice must be held directly to pour it into the glass."| N3
+    N1["juice<br>ON<br>table"]
+    N2["juice<br>(HELD)"]
+    N3["glass<br>FILLED_JUICE<br>glass"]
+    N1 -->|"Juice must be reachable and acquired before it can be poured"| N2
+    N2 -->|"The agent must hold the juice source directly to pour it into the glass"| N3
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -125,11 +123,11 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>(HELD)"]
-    N2["juice<br>ON<br>table"]
-    N3["glass<br>(FILLED_JUICE)"]
-    N2 -->|"Juice must be accessible to be picked up before pouring."| N1
-    N1 -->|"The juice must be held directly to pour it into the glass."| N3
+    N1["juice<br>ON<br>table"]
+    N2["juice<br>(HELD)"]
+    N3["glass<br>FILLED_JUICE<br>glass"]
+    N1 -->|"Juice must be reachable and acquired before it can be poured"| N2
+    N2 -->|"The agent must hold the juice source directly to pour it into the glass"| N3
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -157,11 +155,11 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["juice<br>(HELD)"]
-    N2["juice<br>ON<br>table"]
-    N3["glass<br>(FILLED_JUICE)"]
-    N2 -->|"Juice must be accessible to be picked up before pouring."| N1
-    N1 -->|"The juice must be held directly to pour it into the glass."| N3
+    N1["juice<br>ON<br>table"]
+    N2["juice<br>(HELD)"]
+    N3["glass<br>FILLED_JUICE<br>glass"]
+    N1 -->|"Juice must be reachable and acquired before it can be poured"| N2
+    N2 -->|"The agent must hold the juice source directly to pour it into the glass"| N3
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

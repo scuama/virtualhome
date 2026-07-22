@@ -1,0 +1,68 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T3_without_stg_planning_M1_03",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
+            "success_condition": {
+                "target_class": "waterglass",
+                "destination_class": "sink",
+                "relation": "ON",
+                "min_count": 1,
+                "states": [
+                    "DIRTY"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T3_without_stg_planning_M1_03",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_stg_planning",
+    "source_scenario_id": "M1_03",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (18 steps without progress)",
+    "steps_executed": 18,
+    "execution_time_seconds": 63.92,
+    "dynamic_event_counts": {
+        "event_1": {
+            "times_triggered": 1,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "event_1",
+            "object_id": 64,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 6
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 64
+        }
+    ]
+}

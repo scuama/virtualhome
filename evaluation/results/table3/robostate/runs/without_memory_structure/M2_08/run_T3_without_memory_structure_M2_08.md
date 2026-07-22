@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To obtain a ripe apple from the table."
+      "answer": "They want one apple from the table brought over to them."
     },
     {
       "question": "Why is that important?",
-      "answer": "A ripe apple is likely desired because it is ready to be used or eaten."
+      "answer": "They likely want to have a suitable apple available for use or consumption."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "It fulfills the need to get ready-to-use food."
+      "answer": "It supports obtaining a ripe piece of fruit that is ready to eat."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The deeper motivation is likely to relieve hunger or access a preferred snack."
+      "answer": "The underlying need is likely to satisfy hunger, snack preference, or a desire for convenient access to ripe fruit."
     }
   ],
-  "deep_intent": "The user wants to obtain ready-to-eat food.",
+  "deep_intent": "The user wants to obtain a ripe fruit to eat.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ripe fruits on the table, such as pears, peaches, or bananas"
+      "description": "Other ripe fruits that are ready to eat, such as a banana, pear, or orange"
     },
     {
       "priority": 2,
-      "description": "Other fresh fruit items in the same indoor setting"
+      "description": "Any edible fruit on the table that is ripe and suitable for immediate consumption"
     },
     {
       "priority": 3,
-      "description": "Other ready-to-eat snack foods that can serve as a quick edible option"
+      "description": "Prepared fruit snacks or cut fruit available indoors"
     },
     {
       "priority": 4,
-      "description": "Any nearby food item that is ready to eat and can satisfy hunger or a snack craving"
+      "description": "Other ready-to-eat foods that can satisfy a snack or hunger need, such as a sandwich or crackers"
     }
   ]
 }
@@ -71,11 +71,15 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>(HELD)"]
-    N2["apple_1<br>ON<br>table"]
-    N3["apple_1<br>(RIPE)"]
-    N2 -->|"An apple must be on the table before it can be picked up/held."| N1
-    N3 -->|"The selected apple must be ripe to satisfy the task condition."| N1
+    N1["apple_1<br>ON<br>table"]
+    N2["apple_1<br>(RIPE)"]
+    N3["apple_1<br>(HELD)"]
+    N4["apple_1<br>ON<br>table"]
+    N5["apple_1<br>(AT_GOAL)"]
+    N1 -->|"A ripe apple must exist on the table to satisfy the conditional task."| N2
+    N2 -->|"To bring over the ripe apple, the agent must first grasp it."| N3
+    N3 -->|"The apple must be picked up from the table before it can be brought over."| N4
+    N4 -->|"After being held and moved, the apple reaches the goal state."| N5
 ```
 - **Observed Items (126)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
 
@@ -103,11 +107,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>(HELD)"]
-    N2["apple_1<br>ON<br>table"]
-    N3["apple_1<br>(RIPE)"]
-    N2 -->|"An apple must be on the table before it can be picked up/held."| N1
-    N3 -->|"The selected apple must be ripe to satisfy the task condition."| N1
+    N1["apple_1<br>ON<br>table"]
+    N2["apple_1<br>(RIPE)"]
+    N3["apple_1<br>(HELD)"]
+    N4["apple_1<br>ON<br>table"]
+    N5["apple_1<br>(AT_GOAL)"]
+    N1 -->|"A ripe apple must exist on the table to satisfy the conditional task."| N2
+    N2 -->|"To bring over the ripe apple, the agent must first grasp it."| N3
+    N3 -->|"The apple must be picked up from the table before it can be brought over."| N4
+    N4 -->|"After being held and moved, the apple reaches the goal state."| N5
 ```
 - **Observed Items (43)**: wall(12), wall(13), wall(14), wall(15), ceiling(16), ceiling(17), ceiling(18), ceiling(19), floor(20), floor(21), floor(22), floor(23), toilet(24), stall(25), bathroomcabinet(26)...
 
@@ -135,11 +143,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>(HELD)"]
-    N2["apple_1<br>ON<br>table"]
-    N3["apple_1<br>(RIPE)"]
-    N2 -->|"An apple must be on the table before it can be picked up/held."| N1
-    N3 -->|"The selected apple must be ripe to satisfy the task condition."| N1
+    N1["apple_1<br>ON<br>table"]
+    N2["apple_1<br>(RIPE)"]
+    N3["apple_1<br>(HELD)"]
+    N4["apple_1<br>ON<br>table"]
+    N5["apple_1<br>(AT_GOAL)"]
+    N1 -->|"A ripe apple must exist on the table to satisfy the conditional task."| N2
+    N2 -->|"To bring over the ripe apple, the agent must first grasp it."| N3
+    N3 -->|"The apple must be picked up from the table before it can be brought over."| N4
+    N4 -->|"After being held and moved, the apple reaches the goal state."| N5
 ```
 - **Observed Items (73)**: floor(51), floor(52), floor(53), floor(54), floor(55), floor(56), floor(57), floor(58), floor(59), wall(60), wall(61), wall(62), wall(63), wall(64), wall(65)...
 

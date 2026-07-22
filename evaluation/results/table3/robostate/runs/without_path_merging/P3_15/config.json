@@ -1,0 +1,40 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "Put the waterglass in the fridge and ensure the fridge is turned on to cool it.",
+    "initial_relations_override": [
+        {
+            "subject": "waterglass",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "fridge",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": [
+            "COLD"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_path_merging_P3_15",
+    "source_scenario_id": "P3_15",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_path_merging",
+    "ablation_module": "stg",
+    "table3_source_subclass": "P3",
+    "source_config": "configs/source_tasks/p_class/P3_15.json",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 24.06
+}

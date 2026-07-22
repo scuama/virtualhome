@@ -52,7 +52,7 @@
     "valid_for_aggregation": false,
     "reason": "Invalid benchmark: task(s) already satisfied at step 0: ['T3_without_stg_planning_P3_18']",
     "steps_executed": 0,
-    "execution_time_seconds": 0.0,
+    "execution_time_seconds": 0.01,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

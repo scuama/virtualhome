@@ -1,7 +1,7 @@
 {
     "scenario_id": "T3_without_memory_M1_03",
     "scenario_type": "M",
-    "goal_instruction": "If you see dirty cups, put them in the sink right away.",
+    "goal_instruction": "If you see dirty water glasses, put them in the sink right away.",
     "environment_id": 2,
     "initial_states_override": [
         {
@@ -68,5 +68,5 @@
     "max_steps": 45,
     "evaluation_method": "robostate",
     "evaluation_model": "gpt-5.4-mini",
-    "execution_time_seconds": 10.14
+    "execution_time_seconds": 44.55
 }

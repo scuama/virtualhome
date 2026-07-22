@@ -13,8 +13,7 @@
   "quantities": [
     {
       "object": "cup",
-      "amount": 1,
-      "unit": "cup"
+      "quantity": 1
     }
   ],
   "states": [
@@ -28,10 +27,17 @@
     }
   ],
   "conditions": [
-    "If there is milk in the fridge"
+    {
+      "type": "availability",
+      "object": "milk",
+      "condition": "if there is milk in the fridge"
+    }
   ],
   "destinations": [
-    "microwave"
+    {
+      "object": "milk",
+      "destination": "microwave"
+    }
   ],
   "clarification_question": null
 }
@@ -60,25 +66,25 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Fridge"]
-    N2["?Fridge<br>(OPEN)"]
-    N3["milk<br>HELD<br>"]
-    N4["milk<br>ON<br>?Surface"]
-    N5["cup<br>ON<br>?Surface"]
+    N1["milk<br>INSIDE<br>?Cooler"]
+    N2["?Cooler<br>(OPEN)"]
+    N3["cup<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>HELD<br>agent"]
     N6["milk<br>INSIDE<br>cup"]
-    N7["cup<br>INSIDE<br>?Microwave"]
-    N8["?Microwave<br>(ON)"]
-    N9["?Microwave<br>(PLUGGED_IN)"]
-    N10["milk<br>(HOT)"]
-    N2 -->|"The fridge must be open to access milk inside it."| N1
-    N1 -->|"Milk must be retrieved from the fridge to be held."| N3
-    N3 -->|"Milk must be held to pour it into the cup."| N6
-    N5 -->|"The cup must be available on a surface before it can receive milk."| N6
-    N6 -->|"After pouring, the milk source can be set down on a surface."| N4
-    N6 -->|"The cup must contain milk before heating in the microwave."| N7
-    N9 -->|"The microwave may need to be plugged in before it can be switched on."| N8
-    N7 -->|"The cup with milk must be inside the microwave before heating."| N8
-    N8 -->|"The microwave must be on to heat the milk."| N10
+    N7["?Heater<br>(ON)"]
+    N8["cup<br>INSIDE<br>?Heater"]
+    N9["milk<br>(HOT)"]
+    N10["?Heater<br>(POTENTIALLY_PLUGIN_NEEDED)"]
+    N2 -->|"To access milk stored in the cooler, the cooler must be open."| N1
+    N4 -->|"The cup must be available to the agent before it can be used for transferring milk."| N3
+    N1 -->|"Milk can only be taken if it is present in the cooler."| N5
+    N3 -->|"The cup must be held before pouring milk into it."| N6
+    N5 -->|"The milk must be held by the agent to pour it into the cup."| N6
+    N10 -->|"Some heaters may need to be plugged in before they can be switched on; this is left for executor resolution."| N7
+    N6 -->|"The cup must contain the milk before being placed in the heater."| N8
+    N7 -->|"The heater must be on to heat the milk in the cup."| N8
+    N8 -->|"Milk becomes hot when the cup is inside an active heater."| N9
 ```
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -106,25 +112,25 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Fridge"]
-    N2["?Fridge<br>(OPEN)"]
-    N3["milk<br>HELD<br>"]
-    N4["milk<br>ON<br>?Surface"]
-    N5["cup<br>ON<br>?Surface"]
+    N1["milk<br>INSIDE<br>?Cooler"]
+    N2["?Cooler<br>(OPEN)"]
+    N3["cup<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>HELD<br>agent"]
     N6["milk<br>INSIDE<br>cup"]
-    N7["cup<br>INSIDE<br>?Microwave"]
-    N8["?Microwave<br>(ON)"]
-    N9["?Microwave<br>(PLUGGED_IN)"]
-    N10["milk<br>(HOT)"]
-    N2 -->|"The fridge must be open to access milk inside it."| N1
-    N1 -->|"Milk must be retrieved from the fridge to be held."| N3
-    N3 -->|"Milk must be held to pour it into the cup."| N6
-    N5 -->|"The cup must be available on a surface before it can receive milk."| N6
-    N6 -->|"After pouring, the milk source can be set down on a surface."| N4
-    N6 -->|"The cup must contain milk before heating in the microwave."| N7
-    N9 -->|"The microwave may need to be plugged in before it can be switched on."| N8
-    N7 -->|"The cup with milk must be inside the microwave before heating."| N8
-    N8 -->|"The microwave must be on to heat the milk."| N10
+    N7["?Heater<br>(ON)"]
+    N8["cup<br>INSIDE<br>?Heater"]
+    N9["milk<br>(HOT)"]
+    N10["?Heater<br>(POTENTIALLY_PLUGIN_NEEDED)"]
+    N2 -->|"To access milk stored in the cooler, the cooler must be open."| N1
+    N4 -->|"The cup must be available to the agent before it can be used for transferring milk."| N3
+    N1 -->|"Milk can only be taken if it is present in the cooler."| N5
+    N3 -->|"The cup must be held before pouring milk into it."| N6
+    N5 -->|"The milk must be held by the agent to pour it into the cup."| N6
+    N10 -->|"Some heaters may need to be plugged in before they can be switched on; this is left for executor resolution."| N7
+    N6 -->|"The cup must contain the milk before being placed in the heater."| N8
+    N7 -->|"The heater must be on to heat the milk in the cup."| N8
+    N8 -->|"Milk becomes hot when the cup is inside an active heater."| N9
 ```
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -152,25 +158,25 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Fridge"]
-    N2["?Fridge<br>(OPEN)"]
-    N3["milk<br>HELD<br>"]
-    N4["milk<br>ON<br>?Surface"]
-    N5["cup<br>ON<br>?Surface"]
+    N1["milk<br>INSIDE<br>?Cooler"]
+    N2["?Cooler<br>(OPEN)"]
+    N3["cup<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>HELD<br>agent"]
     N6["milk<br>INSIDE<br>cup"]
-    N7["cup<br>INSIDE<br>?Microwave"]
-    N8["?Microwave<br>(ON)"]
-    N9["?Microwave<br>(PLUGGED_IN)"]
-    N10["milk<br>(HOT)"]
-    N2 -->|"The fridge must be open to access milk inside it."| N1
-    N1 -->|"Milk must be retrieved from the fridge to be held."| N3
-    N3 -->|"Milk must be held to pour it into the cup."| N6
-    N5 -->|"The cup must be available on a surface before it can receive milk."| N6
-    N6 -->|"After pouring, the milk source can be set down on a surface."| N4
-    N6 -->|"The cup must contain milk before heating in the microwave."| N7
-    N9 -->|"The microwave may need to be plugged in before it can be switched on."| N8
-    N7 -->|"The cup with milk must be inside the microwave before heating."| N8
-    N8 -->|"The microwave must be on to heat the milk."| N10
+    N7["?Heater<br>(ON)"]
+    N8["cup<br>INSIDE<br>?Heater"]
+    N9["milk<br>(HOT)"]
+    N10["?Heater<br>(POTENTIALLY_PLUGIN_NEEDED)"]
+    N2 -->|"To access milk stored in the cooler, the cooler must be open."| N1
+    N4 -->|"The cup must be available to the agent before it can be used for transferring milk."| N3
+    N1 -->|"Milk can only be taken if it is present in the cooler."| N5
+    N3 -->|"The cup must be held before pouring milk into it."| N6
+    N5 -->|"The milk must be held by the agent to pour it into the cup."| N6
+    N10 -->|"Some heaters may need to be plugged in before they can be switched on; this is left for executor resolution."| N7
+    N6 -->|"The cup must contain the milk before being placed in the heater."| N8
+    N7 -->|"The heater must be on to heat the milk in the cup."| N8
+    N8 -->|"Milk becomes hot when the cup is inside an active heater."| N9
 ```
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
@@ -198,25 +204,25 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["milk<br>INSIDE<br>?Fridge"]
-    N2["?Fridge<br>(OPEN)"]
-    N3["milk<br>HELD<br>"]
-    N4["milk<br>ON<br>?Surface"]
-    N5["cup<br>ON<br>?Surface"]
+    N1["milk<br>INSIDE<br>?Cooler"]
+    N2["?Cooler<br>(OPEN)"]
+    N3["cup<br>HELD<br>agent"]
+    N4["cup<br>ON<br>?Surface"]
+    N5["milk<br>HELD<br>agent"]
     N6["milk<br>INSIDE<br>cup"]
-    N7["cup<br>INSIDE<br>?Microwave"]
-    N8["?Microwave<br>(ON)"]
-    N9["?Microwave<br>(PLUGGED_IN)"]
-    N10["milk<br>(HOT)"]
-    N2 -->|"The fridge must be open to access milk inside it."| N1
-    N1 -->|"Milk must be retrieved from the fridge to be held."| N3
-    N3 -->|"Milk must be held to pour it into the cup."| N6
-    N5 -->|"The cup must be available on a surface before it can receive milk."| N6
-    N6 -->|"After pouring, the milk source can be set down on a surface."| N4
-    N6 -->|"The cup must contain milk before heating in the microwave."| N7
-    N9 -->|"The microwave may need to be plugged in before it can be switched on."| N8
-    N7 -->|"The cup with milk must be inside the microwave before heating."| N8
-    N8 -->|"The microwave must be on to heat the milk."| N10
+    N7["?Heater<br>(ON)"]
+    N8["cup<br>INSIDE<br>?Heater"]
+    N9["milk<br>(HOT)"]
+    N10["?Heater<br>(POTENTIALLY_PLUGIN_NEEDED)"]
+    N2 -->|"To access milk stored in the cooler, the cooler must be open."| N1
+    N4 -->|"The cup must be available to the agent before it can be used for transferring milk."| N3
+    N1 -->|"Milk can only be taken if it is present in the cooler."| N5
+    N3 -->|"The cup must be held before pouring milk into it."| N6
+    N5 -->|"The milk must be held by the agent to pour it into the cup."| N6
+    N10 -->|"Some heaters may need to be plugged in before they can be switched on; this is left for executor resolution."| N7
+    N6 -->|"The cup must contain the milk before being placed in the heater."| N8
+    N7 -->|"The heater must be on to heat the milk in the cup."| N8
+    N8 -->|"Milk becomes hot when the cup is inside an active heater."| N9
 ```
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 

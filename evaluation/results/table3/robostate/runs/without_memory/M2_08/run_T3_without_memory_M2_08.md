@@ -7,42 +7,42 @@
   "is_instruction_obviously_vague": false,
   "clarification_question": null,
   "target_object": "apple",
-  "location_hint": "table",
+  "location_hint": "the table",
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To obtain one item from the apples on the table."
+      "answer": "To obtain one item from the apples present on the table."
     },
     {
       "question": "Why is that important?",
-      "answer": "Because the user specifically wants a ripe one among the available apples."
+      "answer": "The user specifically wants a ripe apple selected and brought over."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "To access a suitable fruit for immediate use or consumption."
+      "answer": "It fulfills the need to have a ripe piece of fruit available nearby."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants to satisfy hunger, preference, or convenience by selecting a ripe fruit."
+      "answer": "The user may want a ready-to-eat fruit item for consumption or convenience."
     }
   ],
-  "deep_intent": "The user wants to obtain a ripe fruit suitable for immediate use or consumption.",
+  "deep_intent": "The user wants a ripe piece of fruit brought to them.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other ripe fruits available indoors, such as pears, bananas, or peaches."
+      "description": "Another ripe apple if a specific apple is unavailable"
     },
     {
       "priority": 2,
-      "description": "Any ripe, ready-to-eat fruit that can serve the same immediate purpose."
+      "description": "Other ripe fresh fruits found indoors, such as a pear or banana"
     },
     {
       "priority": 3,
-      "description": "Prepared fruit items or fruit snacks that provide similar convenience and eatability."
+      "description": "Any ready-to-eat fruit item that can serve the same purpose"
     },
     {
       "priority": 4,
-      "description": "Other ready-to-eat sweet snack foods if no fruit is available."
+      "description": "Other ready-to-eat snack foods that satisfy a need for a convenient edible item"
     }
   ]
 }
@@ -71,13 +71,13 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>ON<br>table"]
-    N2["apple_1<br>(HELD)"]
-    N3["apple_1<br>ON<br>table"]
-    N4["apple_1<br>(RIPE)"]
-    N1 -->|"To bring over the apple, it must first be held."| N2
-    N2 -->|"To pick up the apple, it must be on the table."| N3
-    N3 -->|"The requested apple must be ripe before bringing it over."| N4
+    N1["apple_1<br>(HELD)"]
+    N2["apple_1<br>ON<br>table"]
+    N3["apple_1<br>(RIPE)"]
+    N4["apple_1<br>ON<br>?Surface"]
+    N2 -->|"Must be able to grasp the apple from the table before bringing it over."| N1
+    N3 -->|"The apple must be ripe to satisfy the task requirement."| N1
+    N4 -->|"The apple must be on a support surface before it can be on the table; this keeps the graph grounded in a valid placement state."| N2
 ```
 - **Observed Items (126)**: floor(127), floor(128), floor(129), floor(130), floor(131), floor(132), floor(133), floor(134), floor(135), ceiling(136), ceiling(137), ceiling(138), ceiling(139), ceiling(140), ceiling(141)...
 
@@ -105,13 +105,13 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>ON<br>table"]
-    N2["apple_1<br>(HELD)"]
-    N3["apple_1<br>ON<br>table"]
-    N4["apple_1<br>(RIPE)"]
-    N1 -->|"To bring over the apple, it must first be held."| N2
-    N2 -->|"To pick up the apple, it must be on the table."| N3
-    N3 -->|"The requested apple must be ripe before bringing it over."| N4
+    N1["apple_1<br>(HELD)"]
+    N2["apple_1<br>ON<br>table"]
+    N3["apple_1<br>(RIPE)"]
+    N4["apple_1<br>ON<br>?Surface"]
+    N2 -->|"Must be able to grasp the apple from the table before bringing it over."| N1
+    N3 -->|"The apple must be ripe to satisfy the task requirement."| N1
+    N4 -->|"The apple must be on a support surface before it can be on the table; this keeps the graph grounded in a valid placement state."| N2
 ```
 - **Observed Items (43)**: wall(12), wall(13), wall(14), wall(15), ceiling(16), ceiling(17), ceiling(18), ceiling(19), floor(20), floor(21), floor(22), floor(23), toilet(24) [CLOSED], stall(25), bathroomcabinet(26) [CLOSED]...
 
@@ -139,13 +139,13 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["apple_1<br>ON<br>table"]
-    N2["apple_1<br>(HELD)"]
-    N3["apple_1<br>ON<br>table"]
-    N4["apple_1<br>(RIPE)"]
-    N1 -->|"To bring over the apple, it must first be held."| N2
-    N2 -->|"To pick up the apple, it must be on the table."| N3
-    N3 -->|"The requested apple must be ripe before bringing it over."| N4
+    N1["apple_1<br>(HELD)"]
+    N2["apple_1<br>ON<br>table"]
+    N3["apple_1<br>(RIPE)"]
+    N4["apple_1<br>ON<br>?Surface"]
+    N2 -->|"Must be able to grasp the apple from the table before bringing it over."| N1
+    N3 -->|"The apple must be ripe to satisfy the task requirement."| N1
+    N4 -->|"The apple must be on a support surface before it can be on the table; this keeps the graph grounded in a valid placement state."| N2
 ```
 - **Observed Items (73)**: floor(51), floor(52), floor(53), floor(54), floor(55), floor(56), floor(57), floor(58), floor(59), wall(60), wall(61), wall(62), wall(63), wall(64), wall(65)...
 

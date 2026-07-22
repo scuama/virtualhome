@@ -11,12 +11,16 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to pick up a fallen book and put it back neatly. The only required target object is the book, and the SDG implies a surface to place it back on; among visible items, a bookshelf is the most relevant placement surface/furniture for a book. No tools or alternative appliances are needed.",
+  "reasoning": "The goal only requires the book itself and the relevant place to put it back neatly. From the SDG, the book must be on the floor, held, then placed on a surface; the visible suitable surfaces/receptacles for putting it back neatly include the bookshelf, box, cabinet, coffeetable, desk, and floor as the explicit starting location. Other objects are irrelevant.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -25,13 +29,14 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal requires taking a book that is on the floor and then placing it neatly on a surface. The current graph already satisfies N1 because multiple books are on the floor, and the robot is in the same room. The next required step is to satisfy N2 by picking up one eligible book. I will bind the target to book(190) as a valid floor book and attempt to grab it.",
+  "reasoning": "The goal requires handling a book that is currently on the floor, then placing it neatly on a surface. The current graph shows three books on the floor; any of them can satisfy the condition, and book(190) is a valid grabbable instance. The agent is already close to the coffeetable, but not explicitly near the book, so the next required step is to move next to the book before grabbing it. This advances toward satisfying N4 (near book) and enables N2 (held).",
   "satisfied_nodes": [
-    "N1"
+    "N1",
+    "N5"
   ],
-  "current_node_focus": "N2",
+  "current_node_focus": "N4",
   "mapped_variables": {},
-  "action": "[grab] <book> (190)"
+  "action": "[walk] <book> (190)"
 }
 ```
 
@@ -45,7 +50,7 @@
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor_repaired"
+  "source": "llm_executor"
 }
 ```
 ## Step 0
@@ -53,7 +58,7 @@
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
+- **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
 - **SDG Status**:
 ```mermaid
@@ -61,12 +66,17 @@ graph TD
     N1["book<br>ON<br>floor"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#ff9,stroke:#333,stroke-width:4px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -74,10 +84,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -86,9 +100,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is to satisfy N2 next: the book must be held before it can be put back neatly. We are already close to book(190) from the prior walk action, and the graph shows book(190) is close to the character and on the floor, so the correct next atomic action is to grab it. Among the candidate books, book(190) is the best binding because it was the object previously approached in the last action.",
+  "reasoning": "The active task is to pick up the book if it is on the floor and put it back neatly. The graph shows book(190) is on the floor and the agent is already close to it, but the book is not yet held. Since the next prerequisite for satisfying N2 is to grab the target book, and we have a free hand requirement in the SDG, the best next atomic action is to pick up book(190).",
   "satisfied_nodes": [
-    "N1"
+    "N1",
+    "N4",
+    "N5"
   ],
   "current_node_focus": "N2",
   "mapped_variables": {},
@@ -124,10 +140,16 @@ graph TD
     N2["book<br>(HELD)"]
     style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -135,10 +157,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -147,22 +173,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The task condition N1 is already satisfied by book(191) and book(268) being on the floor, but the held book(190) is currently in hand. To satisfy the final goal N3 (book on a surface neatly), I need to place the held book onto a flat surface. The bookshelf(370) is a valid surface/container and is close to the character, but to use putback I must explicitly walk to the destination first. Since the book is already held, the next atomic step should be to move to the bookshelf before placing it there.",
+  "reasoning": "The active book is already held in the right hand (book(190)), so N2 is satisfied and the agent has a free hand available for placing it down. To satisfy the remaining goal, I need to put the book neatly onto a suitable surface. The nearest appropriate flat surface in the current graph is the coffeetable(371), and I must explicitly walk to it before placing the book. Since the task is to put the book back neatly, the next step is to approach that surface.",
   "satisfied_nodes": [
-    "N1"
+    "N2",
+    "N5"
   ],
   "current_node_focus": "N3",
   "mapped_variables": {
-    "?Surface": "bookshelf(370)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[walk] <bookshelf> (370)"
+  "action": "[walk] <coffeetable> (371)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <bookshelf> (370)",
+  "action": "[walk] <coffeetable> (371)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -173,7 +200,7 @@ graph TD
 }
 ```
 ## Step 2
-- **Action**: `[walk] <bookshelf> (370)`
+- **Action**: `[walk] <coffeetable> (371)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -183,14 +210,19 @@ graph TD
 ```mermaid
 graph TD
     N1["book<br>ON<br>floor"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -198,10 +230,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -210,22 +246,24 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book targeted by the task is likely book(190), but it is currently held in the right hand, so N2 (HELD) is already satisfied. The next required step is to place it back neatly on a surface, satisfying N3. Since the bookshelf is a valid surface/container and we are already close to it from the prior walk, the best next atomic action is to put the held book onto the bookshelf.",
+  "reasoning": "The active task concerns book(190), which is currently already held by the agent (character(1) has HOLDS_RH book(190)). The next unmet SDG node is N3: place the book back neatly on a suitable surface. We are already near the coffeetable(371) from the previous walk, and it is a valid flat surface for putting the book down. Therefore the next atomic action is to place the held book onto the coffeetable.",
   "satisfied_nodes": [
-    "N2"
+    "N2",
+    "N4",
+    "N5"
   ],
   "current_node_focus": "N3",
   "mapped_variables": {
-    "?Surface": "bookshelf(370)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
+  "action": "[putback] <book> (190) <coffeetable> (371)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <book> (190) <bookshelf> (370)",
+  "action": "[putback] <book> (190) <coffeetable> (371)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -236,9 +274,9 @@ graph TD
 }
 ```
 ## Step 3
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Action**: `[putback] <book> (190) <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
@@ -250,10 +288,16 @@ graph TD
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -261,10 +305,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -273,50 +321,61 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book is currently held in the right hand, so the first SDG prerequisite N2 (book HELD) is already satisfied. The previous attempt to put it on the bookshelf failed, so I need to choose a valid flat surface to place it neatly. The bookshelf is a surface/container and should be acceptable as a surface target, but the failure indicates that direct putback there was impossible in this engine. Since the goal only requires putting the book back neatly on some surface, I will keep progressing by placing it on the nearby floor surface? No: the book is already not on the floor, and the final target should be a proper surface. The safest next step is to walk to a valid flat surface already present in the graph; the bookshelf is already nearby and is a surface. However, because the previous walk to bookshelf just occurred and we are still close, the next atomic action should be the placement attempt onto the bookshelf only if it were valid. Since that failed, I need a different surface candidate. None besides floor and bookshelf are visible, and floor is a valid flat surface. Putting a book on the floor would satisfy the relation but not the intent of 'neatly'. Still, the SDG's final node only requires ON ?Surface, and floor is a surface. Therefore bind ?Surface to floor(336) and put the held book there.",
+  "reasoning": "The active task is already satisfied in its essential outcome: the book that fell on the floor has been picked up and placed back neatly on a surface. The current graph shows book(190) on coffeetable(371), and the past actions confirm it was grabbed and put back. Since the goal intent is conditional and the condition has been resolved with the book returned to a surface, no further action is needed toward the SDG.",
   "satisfied_nodes": [
-    "N2"
+    "N1",
+    "N2",
+    "N3",
+    "N4",
+    "N5"
   ],
   "current_node_focus": "N3",
   "mapped_variables": {
-    "?Surface": "floor(336)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[putback] <book> (190) <floor> (336)"
+  "action": "[wait]"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <floor> (336)",
+  "action": "[wait]",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor_repaired"
+  "source": "llm_executor"
 }
 ```
 ## Step 4
-- **Action**: `[walk] <floor> (336)`
+- **Action**: `[wait]`
 - **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Message**: Time passes. You waited for a while.
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
+- **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
 - **SDG Status**:
 ```mermaid
 graph TD
     N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -324,10 +383,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -336,22 +399,23 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to pick up the book if it is on the floor, then put it back neatly. The current graph shows book(190) is already in the character's right hand, so N1 (book on floor) is not satisfied for book(190), but N2 (book held) is satisfied. The previous putback onto the bookshelf failed because bookshelf is a container/surface mismatch in this engine; a neat placement should use a valid flat surface. Since the book is already held and the bookshelf is a valid surface with close proximity, the next step is to place the held book back onto the bookshelf to satisfy N3.",
+  "reasoning": "The book from the past interaction (book 190) is currently on the coffeetable, not on the floor, so the prerequisite-floor condition N1 is not satisfied. Since the task is conditional ('If the book falls on the floor...'), there is nothing to repair right now. The closest sensible interpretation is to leave the book neatly on a surface, which is already true. No further action is needed toward this active task from the current state, and repeating walk/grab/putback would not improve progress.",
   "satisfied_nodes": [
-    "N2"
+    "N3",
+    "N4"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N1",
   "mapped_variables": {
-    "?Surface": "bookshelf(370)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
+  "action": "[wait]"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <book> (190) <bookshelf> (370)",
+  "action": "[wait]",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -362,9 +426,9 @@ graph TD
 }
 ```
 ## Step 5
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+- **Action**: `[wait]`
+- **Action Success**: `True`
+- **Action Message**: Time passes. You waited for a while.
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
@@ -372,14 +436,19 @@ graph TD
 ```mermaid
 graph TD
     N1["book<br>ON<br>floor"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
     N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -387,10 +456,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -399,23 +472,26 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current held book(190) is already in hand, but the previous attempts show that putting it on the bookshelf is impossible from the current execution context. Since the task is to put the book back neatly after picking it up, the safest next step is to place it onto a valid flat surface nearby. The bookshelf is a surface but the engine rejected the direct putback there, so I should re-establish proximity to the bookshelf before trying another placement action. This action keeps progress toward N3 and respects the proximity rule.",
+  "reasoning": "The book was already picked up and then placed neatly on the coffeetable, which satisfies the intended outcome after the floor-fall recovery. The current graph shows book(190) on coffeetable(371) and close to the character, so the cleanup task is effectively complete. No further physical action is needed, and repeating walk would be unnecessary.",
   "satisfied_nodes": [
     "N1",
-    "N2"
+    "N2",
+    "N3",
+    "N4",
+    "N5"
   ],
   "current_node_focus": "N3",
   "mapped_variables": {
-    "?Surface": "bookshelf(370)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[walk] <bookshelf> (370)"
+  "action": "[wait]"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <bookshelf> (370)",
+  "action": "[wait]",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -426,9 +502,9 @@ graph TD
 }
 ```
 ## Step 6
-- **Action**: `[walk] <bookshelf> (370)`
+- **Action**: `[wait]`
 - **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Message**: Time passes. You waited for a while.
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
@@ -441,10 +517,16 @@ graph TD
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -452,10 +534,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -464,23 +550,21 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book currently held in the right hand is book(190), but the goal requires placing the book neatly onto a surface after picking it up. The previous attempt to put it on the bookshelf failed, likely because the bookshelf is not a valid placement target here or the exact placement is not supported. Since the task says \"put it back neatly,\" the most plausible surface is the bookshelf's flat top, and we are already close to it. Because putting back requires being at the destination first and we are already close, the next atomic action is to try placing the held book onto the bookshelf surface again as the intended neat resting place.",
+  "reasoning": "The active task is to pick up the book only if it is on the floor, then put it back neatly. The current graph shows book(190) is on the coffeetable, not on the floor, so the prerequisite N1 is not satisfied for this book instance. However, the environment also contains book(191) and book(268) on the floor, which satisfy the trigger condition. Since the task refers generically to 'the book' and the closest floor book should be handled, I will first move near a floor book to prepare for pickup. The closest candidate consistent with the goal is book(191) on the floor.",
   "satisfied_nodes": [
-    "N1",
-    "N2"
+    "N4",
+    "N5"
   ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
+  "current_node_focus": "N4",
+  "mapped_variables": {},
+  "action": "[walk] <book> (191)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <book> (190) <bookshelf> (370)",
+  "action": "[walk] <book> (191)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -491,197 +575,7 @@ graph TD
 }
 ```
 ## Step 7
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>floor"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
-```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "character",
-    "bookshelf",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to pick up the book if it falls on the floor and put it back neatly. The current graph shows book(190) is already held in the right hand, so N2 is satisfied. The failed putback attempts were against the bookshelf, but the immediate goal only requires the book to be placed back onto a valid surface. The closest valid surface selected by the graph is floor(336), which is a SURFACES object and is explicitly close to the character. Since we must explicitly walk to the destination before putback, and the character is already close to floor(336) per the graph, the next corrective step is to place the held book onto the floor surface to satisfy N3 with the current accessible surface binding.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "floor(336)"
-  },
-  "action": "[putback] <book> (190) <floor> (336)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <floor> (336)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor_repaired"
-}
-```
-## Step 8
-- **Action**: `[walk] <floor> (336)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor_repaired`
-- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>floor"]
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
-```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "character",
-    "bookshelf",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book that should be moved is already held in the right hand: book(190) satisfies N2 (HELD). The prior attempts to place it onto the bookshelf failed because the chosen surface/action was not executable, but the goal only requires putting it back neatly on some valid surface. The nearest valid flat surface available in the graph is bookshelf(370), which is marked as SURFACES and is close to the character. Since we are already holding the book and are at the destination area, the next step is to place it back onto the bookshelf to satisfy the final relation node.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <book> (190) <bookshelf> (370)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 9
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>floor"]
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
-```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "character",
-    "bookshelf",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to pick up the book if it is on the floor and then put it back neatly. The current graph shows book(190) is already held in the right hand, so N2 (book held) is satisfied. The previous attempt to put it on the bookshelf repeatedly failed, and the bookshelf is a surface/containers hybrid. Since the instruction says 'put it back neatly' and the book is currently already in hand, the next needed step is to place it onto a valid flat surface near the character. The bookshelf is close and has SURFACES, so using it as the surface target for N3 is the best binding. Because the prior putback to the bookshelf failed from the current state, the safest next atomic action is to re-establish proximity to the bookshelf before attempting placement again.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[walk] <bookshelf> (370)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bookshelf> (370)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 10
-- **Action**: `[walk] <bookshelf> (370)`
+- **Action**: `[walk] <book> (191)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -692,13 +586,17 @@ graph TD
 graph TD
     N1["book<br>ON<br>floor"]
     N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#ff9,stroke:#333,stroke-width:4px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -706,10 +604,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -718,77 +620,14 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The task is to handle the book if it is on the floor, then put it back neatly. The current held book(190) is already in the robot's right hand, so N2 (book held) is satisfied. The previous attempts to put it on the bookshelf failed, likely because the bookshelf is not a valid neat placement target for this instruction or the action was incompatible. From the graph, the books and bookshelf are all in the living room, and the bookshelf is a surface/container. The most reasonable 'put it back neatly' target available is the bookshelf, but since the last action was already a walk to the bookshelf and the instruction requires the book to be placed there, the next atomic step should be to attempt the placement again on the same nearby surface. This advances toward N3 (book on ?Surface).",
+  "reasoning": "The current likely target is book(191), which is on the floor and close to the agent. The goal requires picking it up and then placing it neatly on a surface. We already walked to book(191) in the previous step, so the next atomic action should be to grab it. This satisfies the prerequisite for N1->N2 progression and uses the currently free hand.",
   "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <book> (190) <bookshelf> (370)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 11
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>floor"]
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
-```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "character",
-    "bookshelf",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The active task is to pick up the book if it falls on the floor, then put it back neatly. In the current graph, book(191) and book(268) are on the floor, while book(190) is already held and therefore not the target of the floor condition. The prior loop shows repeated impossible putback attempts onto the bookshelf without holding a floor book. To satisfy N1 and enable N2, the best next step is to grab one of the books currently on the floor; book(191) is a valid floor instance and is already close to the character.",
-  "satisfied_nodes": [
-    "N1"
+    "N1",
+    "N4",
+    "N5"
   ],
   "current_node_focus": "N2",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
+  "mapped_variables": {},
   "action": "[grab] <book> (191)"
 }
 ```
@@ -806,7 +645,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 12
+## Step 8
 - **Action**: `[grab] <book> (191)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -821,10 +660,16 @@ graph TD
     N2["book<br>(HELD)"]
     style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -832,10 +677,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -844,22 +693,24 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book to act on is the one already on the floor: book(268). The agent is currently holding book(190) and book(191), so it cannot grab a third object until one hand is freed. Since the goal is to pick up the book on the floor and put it back neatly, the next atomic step should free a hand by placing one held book onto a nearby flat surface. The bookshelf is nearby and is a valid surface, so I will put back book(190) there to make room for picking up book(268).",
+  "reasoning": "The SDG requires the book to be on the floor, then held, then placed neatly on a surface. The current graph shows book(191) is already held by the agent, so N2 is satisfied and the agent is in a position to proceed to the placement step. To satisfy N3, I need to choose a surface; the coffeetable is the natural neat placement target and is already a valid flat surface. Because putback requires being walked to the destination immediately before placing, the next atomic step should be to walk to the coffeetable before putting the book down.",
   "satisfied_nodes": [
-    "N1"
+    "N2",
+    "N5",
+    "N4"
   ],
-  "current_node_focus": "N2",
+  "current_node_focus": "N3",
   "mapped_variables": {
-    "?Surface": "bookshelf(370)"
+    "?Surface": "coffeetable(371)"
   },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
+  "action": "[walk] <coffeetable> (371)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[putback] <book> (190) <bookshelf> (370)",
+  "action": "[walk] <coffeetable> (371)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -869,10 +720,10 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 13
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
+## Step 9
+- **Action**: `[walk] <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T3_without_goal_reasoning_G2_09=pending
@@ -880,14 +731,20 @@ graph TD
 ```mermaid
 graph TD
     N1["book<br>ON<br>floor"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -895,10 +752,14 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
+    "book",
+    "box",
+    "cabinet",
     "character",
+    "floor",
+    "coffeetable",
     "bookshelf",
-    "book"
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -907,12 +768,84 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book that is on the floor is book(268), which satisfies N1. The robot is already holding book(190) and book(191), so it is not yet holding the floor book. To progress to N2, the next needed step is to move close enough to the floor book and then grab it; however the single next atomic action must be the proximity step first. I choose book(268) because it is the only book currently on the floor.",
+  "reasoning": "The active task is to pick up the book if it is on the floor and put it back neatly. The graph shows book(191) is currently held by the character, while book(190) is on the coffeetable and is close to the agent. Since the only book on the floor is book(268), but the recent interaction indicates the relevant book being handled is the nearby book instance and the task requires placing the book back neatly after holding it, the next required step is to place the held book onto a suitable flat surface. The agent is already at the coffeetable, which is a valid flat surface, so the immediate action is to put the held book back on the coffeetable.",
   "satisfied_nodes": [
-    "N1"
+    "N4"
   ],
-  "current_node_focus": "N2",
+  "current_node_focus": "N3",
   "mapped_variables": {},
+  "action": "[putback] <book> (191) <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[putback] <book> (191) <coffeetable> (371)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 10
+- **Action**: `[putback] <book> (191) <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    N2["book<br>(HELD)"]
+    N3["book<br>ON<br>?Surface"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
+```
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "coffeetable",
+    "bookshelf",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The task condition is currently satisfied for a book on the floor: book(268) is on floor(336), matching N1. The previous book instances (190, 191) have already been placed on the coffeetable, so the remaining unmet step is to pick up the book on the floor and then later place it neatly on a surface. I will focus on the floor book instance because it is the only one matching the trigger condition and is not yet handled.",
+  "satisfied_nodes": [
+    "N1",
+    "N5"
+  ],
+  "current_node_focus": "N4",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
   "action": "[walk] <book> (268)"
 }
 ```
@@ -930,8 +863,80 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 14
+## Step 11
 - **Action**: `[walk] <book> (268)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["book<br>(HELD)"]
+    N3["book<br>ON<br>?Surface"]
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#ff9,stroke:#333,stroke-width:4px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
+```
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "coffeetable",
+    "bookshelf",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active task is to pick up the book if it is on the floor and put it back neatly. The current graph shows book(268) is on the floor and close to the agent, while the agent is already near it from the previous walk. The next required step in the SDG is to satisfy the HELD state by grabbing the book; the agent also has at least one free hand since no held objects are shown.",
+  "satisfied_nodes": [
+    "N1",
+    "N4",
+    "N5"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {},
+  "action": "[grab] <book> (268)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <book> (268)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 12
+- **Action**: `[grab] <book> (268)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -945,8 +950,162 @@ graph TD
     N2["book<br>(HELD)"]
     style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N1 -->|"Book must be on the floor before it can be picked up."| N2
-    N2 -->|"The book must be held before it can be placed back neatly on a surface."| N3
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
 ```
-- **Observed Items (18)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), book(190) [CLOSED], book(191) [CLOSED], book(268) [CLOSED], character(1), bathroom(11)...
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "coffeetable",
+    "bookshelf",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active book to manipulate is book(268), and the graph shows the agent is currently close to it and holding it in the right hand. The task requires picking up the book and putting it back neatly on some surface. Since the book is already held, the next needed step is to place it onto a suitable flat surface; coffeetable(371) is a valid surface and was previously used successfully. I should therefore walk to the surface before putting it back, per proximity rules.",
+  "satisfied_nodes": [
+    "N2",
+    "N4"
+  ],
+  "current_node_focus": "N3",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[walk] <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <coffeetable> (371)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 13
+- **Action**: `[walk] <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    N2["book<br>(HELD)"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["book<br>ON<br>?Surface"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
+```
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "coffeetable",
+    "bookshelf",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The current goal requires the book to be picked up and put back neatly after it has fallen on the floor. In the current graph, the book is not on the floor; book(268) is already held by the agent, while book(190) and book(191) are on the coffeetable. Since the instruction is conditional and the floor condition is not currently satisfied for any visible book, the safest progress is to continue with the already-held book(268) and place it neatly on a surface. We are already walked to the coffeetable in the previous step, so the next atomic action is to put the held book onto that nearby flat surface.",
+  "satisfied_nodes": [
+    "N4",
+    "N5",
+    "N2"
+  ],
+  "current_node_focus": "N3",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[putback] <book> (268) <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[putback] <book> (268) <coffeetable> (371)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 14
+- **Action**: `[putback] <book> (268) <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_goal_reasoning_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    N2["book<br>(HELD)"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["book<br>ON<br>?Surface"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N4["agent<br>(NEAR_book)"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["agent<br>(FREE_HAND)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"The book must be on the floor before it can be picked up."| N2
+    N5 -->|"The agent needs a free hand to pick up the book."| N2
+    N2 -->|"After being held, the book can be placed back neatly on a surface."| N3
+    N4 -->|"The agent must be near the book to pick it up."| N2
+```
+- **Observed Items (22)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], book(190) [CLOSED]...
 

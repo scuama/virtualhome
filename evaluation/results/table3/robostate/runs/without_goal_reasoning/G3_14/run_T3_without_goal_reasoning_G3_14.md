@@ -31,9 +31,9 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["light<br>(ON)"]
-    N2["light<br>(OFF)"]
-    N1 -->|"To achieve the requested conditional action, the light must first be on before it can be turned off."| N2
+    N1["light<br>(OFF)"]
+    N2["light<br>(ON)"]
+    N2 -->|"If the light is on, it must be switched off to satisfy the task."| N1
 ```
 - **Observed Items (74)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
 
@@ -61,9 +61,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["light<br>(ON)"]
-    N2["light<br>(OFF)"]
-    N1 -->|"To achieve the requested conditional action, the light must first be on before it can be turned off."| N2
+    N1["light<br>(OFF)"]
+    N2["light<br>(ON)"]
+    N2 -->|"If the light is on, it must be switched off to satisfy the task."| N1
 ```
 - **Observed Items (135)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
 
@@ -91,9 +91,9 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["light<br>(ON)"]
-    N2["light<br>(OFF)"]
-    N1 -->|"To achieve the requested conditional action, the light must first be on before it can be turned off."| N2
+    N1["light<br>(OFF)"]
+    N2["light<br>(ON)"]
+    N2 -->|"If the light is on, it must be switched off to satisfy the task."| N1
 ```
 - **Observed Items (242)**: floor(74), floor(75), floor(76), floor(77), floor(78), floor(79), floor(80), floor(81), floor(82), wall(83), wall(84), wall(85), wall(86), wall(87), wall(88)...
 

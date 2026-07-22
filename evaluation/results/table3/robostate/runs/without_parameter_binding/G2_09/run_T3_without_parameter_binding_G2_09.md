@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "To restore it from the floor to its proper place."
+      "answer": "To restore the book to its proper place after it falls."
     },
     {
       "question": "Why is that important?",
-      "answer": "To keep the area orderly and prevent the item from being left out of place."
+      "answer": "So the area remains tidy and the book is not left on the floor."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "Maintaining an organized, tidy environment."
+      "answer": "Maintaining order and organization in the environment."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "It may reduce clutter, make the space look neat, and prevent the item from being damaged or causing a tripping hazard."
+      "answer": "It may prevent clutter, reduce the chance of the book being damaged or stepped on, and satisfy a preference for neatness."
     }
   ],
-  "deep_intent": "The user wants to maintain an orderly and tidy indoor environment.",
+  "deep_intent": "The user wants to restore order by returning a misplaced item to its proper place.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other loose reading materials or similarly handled household items that can be returned to a shelf or table"
+      "description": "Other fallen household items that can be picked up and returned to their place, such as a notebook, magazine, or folder."
     },
     {
       "priority": 2,
-      "description": "Paper-based items or lightweight objects that are meant to be kept neatly stored"
+      "description": "Similar paper-based or reading-related items that may need to be tidied up, such as documents, pamphlets, or papers."
     },
     {
       "priority": 3,
-      "description": "Small household items that can be picked up and placed back in an organized location"
+      "description": "Other lightweight personal items that can be repositioned to reduce clutter, such as a remote control or glasses."
     },
     {
       "priority": 4,
-      "description": "Other clutter items on the floor that can be cleared to improve tidiness"
+      "description": "Any small indoor object that has fallen and can be put back in an orderly location."
     }
   ]
 }
@@ -51,17 +51,19 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to pick up and neatly put back the book. So the target object book is required, and a likely placement surface/receptacle must be kept for returning it neatly. The visible storage/surface options that fit this task are bookshelf, coffeetable, desk, cabinet, and box.",
+  "reasoning": "The goal is to pick up the fallen book from the floor and return it to a proper surface. I only need the target object, the floor relation for its current location, and likely candidate placement surfaces/furniture for putting it back neatly. To preserve alternatives, I keep all plausible surfaces/receptacles where a book could be placed.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -70,10 +72,14 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target object is a book on the floor, and the SDG begins by making it held. Multiple book instances are available on the floor; any one can satisfy the task since the goal is to restore a book to a neat surface. Before we can grab it, we must be near it, so the next atomic step is to walk to one of the books. Book(190) is a valid grabbable floor instance.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
-  "mapped_variables": {},
+  "reasoning": "The SDG is currently at N1: the book must be on the floor. Multiple books satisfy this, and any of them can be treated as the target because the goal is to pick up a fallen book and restore order. I will start by moving to the nearest matching book on the floor so I can grab it next.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
   "action": "[walk] <book> (190)"
 }
 ```
@@ -101,16 +107,15 @@
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -118,15 +123,17 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -135,7 +142,7 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book target is already identified and the robot is close to it. According to the SDG, the next unmet requirement is to make the book HELD (N2) before it can be placed back neatly. The book is grabbable and no cleanliness or opening constraints apply. Since I already walked to book(190) in the previous step, the single next atomic action is to grab that specific book.",
+  "reasoning": "The target book is already on the floor and is close to the character, so the next step in the SDG is to satisfy N2 by grabbing the book. The most likely intended binding is book(190) since it is the book explicitly approached in the prior action and is on the floor, matching N1.",
   "satisfied_nodes": [
     "N1"
   ],
@@ -168,17 +175,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
     style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -186,15 +191,17 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -203,146 +210,9 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The required grasp step is already completed: the current graph shows the character holds book(190), satisfying N2. The next SDG step is to place the book onto a surface to begin restoring it neatly. Among nearby candidate surfaces, the bookshelf is a fitting organized storage location and is close to the character. Since putback requires being walked to the destination first, the next atomic action should be to walk to the bookshelf before placing the book there.",
+  "reasoning": "The book target for the active task is already being held in the right hand, so N1 (book on floor) and N2 (book held) are satisfied. The next required step toward the final goal N3 is to place the book onto a suitable surface. A nearby flat surface that supports putting objects down is the coffeetable, which is present in the living room. To satisfy the proximity rule for putback, I must first walk to that surface.",
   "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {},
-  "action": "[walk] <bookshelf> (370)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bookshelf> (370)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 2
-- **Action**: `[walk] <bookshelf> (370)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_parameter_binding_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>?Surface"]
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
-```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
-    "cabinet",
-    "paper",
-    "coffeetable",
-    "character",
-    "box",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book is already held in the right hand (N2 satisfied). The next SDG step is to place it onto a surface so it can later be neatly positioned. The current target focus is N3, and the nearest suitable surface is the bookshelf, which is already close to the character. I should not repeat the previous walk; I can now put the held book onto the bookshelf surface.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[putback] <book> (190) <bookshelf> (370)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[putback] <book> (190) <bookshelf> (370)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 3
-- **Action**: `[putback] <book> (190) <bookshelf> (370)`
-- **Action Success**: `False`
-- **Action Message**: {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\n\n'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_parameter_binding_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>?Surface"]
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
-```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
-    "cabinet",
-    "paper",
-    "coffeetable",
-    "character",
-    "box",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book is already held in the right hand, so N2 is satisfied. The prior attempt to place it on the bookshelf failed as impossible, so I should choose a valid flat surface instead. The coffeetable is a suitable neat placement surface and is available in the living room. I need to walk to it before putting the held book down.",
-  "satisfied_nodes": [
+    "N1",
     "N2"
   ],
   "current_node_focus": "N3",
@@ -366,7 +236,7 @@ graph TD
   "source": "llm_executor"
 }
 ```
-## Step 4
+## Step 2
 - **Action**: `[walk] <coffeetable> (371)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -376,17 +246,16 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -394,15 +263,17 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -411,7 +282,147 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The original book(190) is already held, and the attempted placement on bookshelf(370) failed because that action is impossible in this environment. The current graph shows coffeetable(371) is close to the character and is a valid flat surface. To satisfy the SDG, the next step is to place the held book onto a nearby surface; this should satisfy the ON relation and move toward NEATLY_PLACED.",
+  "reasoning": "The target book is currently already held in the right hand according to the graph (HOLDS_RH book(190)), so N2 is satisfied. The next unmet SDG node is to place the book onto a suitable surface. We are already close to the coffeetable from the previous walk action, and coffeetable(371) is a valid flat surface for putting the book back neatly. Since putback requires being near the destination and the previous step established proximity, the correct next atomic action is to place the held book on the coffee table.",
+  "satisfied_nodes": [
+    "N1",
+    "N2"
+  ],
+  "current_node_focus": "N3",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[putback] <book> (190) <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[putback] <book> (190) <coffeetable> (371)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 3
+- **Action**: `[putback] <book> (190) <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_parameter_binding_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["book<br>(HELD)"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["book<br>ON<br>?Surface"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
+```
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "paper",
+    "coffeetable",
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "N1 (book on floor) is satisfied for book(191) or book(268), but the active task most likely refers to a book to be restored to a proper place. We already completed the book(190) pickup and placed it on the coffeetable(371), so N2 (book held) is no longer satisfied for book(190). To progress toward the final goal, we need to pick up the book again from the coffeetable before placing it elsewhere. The character is already close to the coffeetable, so the next atomic action should be grabbing the same book.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N2",
+  "mapped_variables": {},
+  "action": "[grab] <book> (190)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <book> (190)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 4
+- **Action**: `[grab] <book> (190)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_parameter_binding_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["book<br>(HELD)"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    N3["book<br>ON<br>?Surface"]
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
+```
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "box",
+    "cabinet",
+    "character",
+    "floor",
+    "paper",
+    "coffeetable",
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
+  ],
+  "raw_class_count": 41
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to move the book from the floor to a proper surface. The current graph shows book(190) is already held by the character, so N2 (HELD) is satisfied. The next unmet node is placing the book on some surface, and the closest valid surface is the coffeetable(371), which was already used successfully before and is close to the character. Since putback requires being at the destination surface first, and we are already close to the coffeetable, the next action should be to place the held book back onto it.",
   "satisfied_nodes": [
     "N2"
   ],
@@ -446,17 +457,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
     N2["book<br>(HELD)"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -464,15 +473,17 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -481,235 +492,11 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The book has already been picked up and placed on a surface (coffeetable), which satisfies the holding-to-place progression. The remaining unmet SDG node is the final neat placement state. Since the previous attempt to put it on the bookshelf failed as impossible, and the book is now on the coffee table near the character, the best next step is to keep it neatly placed there by not moving it again; however, there is no explicit action for marking neatness. The only safe progression-oriented action is to leave it in place, but since a single atomic action is required and no further physical adjustment is necessary, the most appropriate next step is to wait for state update verification of the neat placement outcome.",
+  "reasoning": "The goal requires the book to end up on some surface after being held. Book(190) is already on the coffeetable and close to the character, so the current gap is that it is not yet in the final neatly placed state required by N3. Since the task is to restore a fallen book to its proper place and the only nearby suitable surface in the current graph is the coffeetable, the best next step is to place the held book onto that surface, which should satisfy the final relation node.",
   "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
+    "N2"
   ],
-  "current_node_focus": "N4",
-  "mapped_variables": {
-    "?Surface": "coffeetable(371)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[wait]",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 6
-- **Action**: `[wait]`
-- **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_parameter_binding_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["book<br>(NEATLY_PLACED)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
-```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
-    "cabinet",
-    "paper",
-    "coffeetable",
-    "character",
-    "box",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book has already been lifted from the floor and is currently being held, so N1 and N2 are satisfied. The previous attempt to place it on the bookshelf failed, but placing it on the nearby coffeetable succeeded, which satisfies the required ON relation for the final placement. The remaining goal is to make it neatly placed, so the next action should be to interact with the book's current placement context; however, since only atomic actions are allowed and no direct 'neatly place' action exists, the best next step is to verify/continue by ensuring the book remains on the surface already chosen. No further movement is needed because the book is already on the coffeetable and the last successful placement likely completes the final state.",
-  "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N4",
-  "mapped_variables": {
-    "?Surface": "coffeetable(371)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[wait]",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 7
-- **Action**: `[wait]`
-- **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_parameter_binding_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["book<br>(NEATLY_PLACED)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
-```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
-    "cabinet",
-    "paper",
-    "coffeetable",
-    "character",
-    "box",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book has already been picked up and placed onto a surface. The previous attempt to place it on the bookshelf failed, but putting it on the coffeetable succeeded. The remaining SDG progress is to ensure the book is neatly placed on a suitable surface; since the book is already on the coffeetable and the task is about restoring tidiness, the next step should be to verify/update placement with the current accessible surface. However, because no further placement action is needed unless moving it again, and repeating a walk is disallowed, the safest next atomic action is to wait for the graph to reflect the settled placement state if needed.",
-  "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N4",
-  "mapped_variables": {
-    "?Surface": "coffeetable(371)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[wait]",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 8
-- **Action**: `[wait]`
-- **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T3_without_parameter_binding_G2_09=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["book<br>ON<br>?Surface"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["book<br>(NEATLY_PLACED)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
-```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
-    "cabinet",
-    "paper",
-    "coffeetable",
-    "character",
-    "box",
-    "book"
-  ],
-  "raw_class_count": 41
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The book has already been picked up and placed onto a surface, satisfying holding and placement prerequisites. The last failed attempt was to put it on the bookshelf, which was impossible; the book is currently on the coffeetable and needs to be neatly placed as the final SDG state. Since the coffee table is a valid flat surface and the book is already close to the character, no additional walk is needed before the next placement-related step. The most plausible next step toward NEATLY_PLACED is to keep the book on the coffee table as the organized resting place.",
-  "satisfied_nodes": [
-    "N1",
-    "N2",
-    "N3"
-  ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N3",
   "mapped_variables": {
     "?Surface": "coffeetable(371)"
   },
@@ -730,7 +517,7 @@ graph TD
   "source": "llm_executor_repaired"
 }
 ```
-## Step 9
+## Step 6
 - **Action**: `[grab] <book> (190)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -740,19 +527,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N1["book<br>ON<br>floor"]
     N2["book<br>(HELD)"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["book<br>(NEATLY_PLACED)"]
-    style N4 fill:#ff9,stroke:#333,stroke-width:4px
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (25)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), sofa(368), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -760,15 +543,17 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
+    "box",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "sofa",
+    "folder",
+    "desk"
   ],
   "raw_class_count": 41
 }
@@ -777,7 +562,208 @@ graph TD
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to neatly place the book back onto a surface from the floor. The book is currently held in the right hand, and the previous attempt to place it on the bookshelf failed, likely because the bookshelf is not a valid immediate placement target in the current context or the object was not in an acceptable placement state. The filtered graph shows the coffeetable is close to the character and is a valid flat surface. The book is not yet neatly placed, so the next step is to place it on the nearby coffeetable to progress toward the final goal.",
+  "reasoning": "The active task is to return a book to a proper place. N1 (book on floor) is not satisfied for the currently relevant book, but the graph shows book(190) is already in hand, so N2 is satisfied. To complete N3, I need to place the held book onto a suitable surface. The nearest valid surface already close to the character is the coffeetable(371), which is a flat surface and can accept putback. I must first be near the destination before putting it down, and I am already close to the coffeetable per the graph, so the next step is to place the book there.",
+  "satisfied_nodes": [
+    "N2"
+  ],
+  "current_node_focus": "N3",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[putback] <book> (190) <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <bathroom> (11)",
+  "active_task_id": null,
+  "task_context": {
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
+    "satisfied_task_ids": []
+  },
+  "source": "loop_recovery_room_revisit"
+}
+```
+## Step 7
+- **Action**: `[walk] <bathroom> (11)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Decision Source**: `loop_recovery_room_revisit`
+- **Task Progress**: T3_without_parameter_binding_G2_09=pending
+- **SDG Status**:
+No SDG active.
+- **Observed Items (82)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), wall(345), wall(346), wall(347), wall(348), wall(349), wall(350)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "The goal is to pick up a book from the floor and place it back on a suitable surface. The SDG explicitly requires the book, the floor, and some target surface to put it on; the visible storage/surface options that fit this task are bookshelf, desk, coffeetable, cabinet, and shelves. Since we must keep all plausible placement alternatives, I include the book, floor, and all visible surfaces/receptacles that could serve as the book’s proper place.",
+  "selected_classes": [
+    "book",
+    "cabinet",
+    "character",
+    "floor",
+    "paper",
+    "coffeetable",
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
+  ],
+  "raw_class_count": 63
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active task is to restore a book that is on the floor. The current graph shows two candidate floor books in the living room: book(191) and book(268). Book(190) is already being held by the character in the bathroom, so it is not the floor target. Since we are currently in the bathroom and need to interact with a floor book in the living room, the next step must be to walk to one of the valid floor-book candidates before grabbing. I will bind the target book to the closest/most direct valid floor candidate from the graph, book(191), and move toward it.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[walk] <book> (191)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <book> (191)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 8
+- **Action**: `[walk] <book> (191)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T3_without_parameter_binding_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["book<br>(HELD)"]
+    N3["book<br>ON<br>?Surface"]
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
+```
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "cabinet",
+    "character",
+    "floor",
+    "paper",
+    "coffeetable",
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
+  ],
+  "raw_class_count": 63
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active goal is to restore the book from the floor to a proper surface. The current graph shows book(191) and book(268) are on the floor, while book(190) is already held by the character, so the next useful step is to place the held book onto a valid surface. Since the previous step was a walk to book(191) and no grab has occurred yet, the held book(190) should be put down on the nearby coffee table to progress toward the final state N3. The coffee table is a flat surface and is available in the living room.",
+  "satisfied_nodes": [
+    "N1",
+    "N2"
+  ],
+  "current_node_focus": "N3",
+  "mapped_variables": {
+    "?Surface": "coffeetable(371)"
+  },
+  "action": "[putback] <book> (190) <coffeetable> (371)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <coffeetable> (371)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor_repaired"
+}
+```
+## Step 9
+- **Action**: `[walk] <coffeetable> (371)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor_repaired`
+- **Task Progress**: T3_without_parameter_binding_G2_09=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["book<br>(HELD)"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["book<br>ON<br>?Surface"]
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
+```
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "book",
+    "cabinet",
+    "character",
+    "floor",
+    "paper",
+    "coffeetable",
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
+  ],
+  "raw_class_count": 63
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The active task is to restore a book from the floor to a proper surface. In the current graph, book(190) is already held by the character, so N2 is satisfied. The remaining unmet goal is to place the book onto a surface; the coffee table is a valid flat surface and is already close to the character. Since we are already adjacent to coffeetable(371), the next step is to put the held book back onto it to satisfy N3.",
   "satisfied_nodes": [
     "N2"
   ],
@@ -812,17 +798,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
     N2["book<br>(HELD)"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -830,31 +814,30 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
   ],
-  "raw_class_count": 41
+  "raw_class_count": 63
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The target book task is not yet satisfied because the book is currently on the coffeetable, not explicitly NEATLY_PLACED on a final resting surface. The previous failed bookshelf placement suggests that surface was not a valid placement target. Since the book is already near the character and a suitable flat surface is available, the next step should be to place the held book onto the coffee table again only if it is currently held; however the filtered graph shows book(190) on the coffeetable and not held, so the current state gap is actually that the book is already placed on a surface. The remaining SDG progress is likely toward the final neatly placed state, but no additional action can be inferred from the graph without re-grabbing and repositioning. Given the task intent of restoring the book tidily and the graph showing another book on the floor, the best immediate actionable focus is to move the floor book toward a proper surface. Since the last successful action placed book(190) on the coffeetable and the robot is close to the coffeetable, the next likely valid progression is to ensure the book is on the table by interacting with the book only if held; but the current graph does not show it held. Therefore the most sensible next atomic action is to walk to the floor book instance to prepare for a grab, because the task specifically targets a book on the floor and book(191) matches that condition.",
-  "satisfied_nodes": [
-    "N1",
-    "N2"
-  ],
+  "reasoning": "The active task is to restore a book from the floor to a proper surface. The SDG final goal is N3: book ON ?Surface, but the current graph shows book(190) is already on coffeetable(371), not on the floor. However, book(191) and book(268) are on the floor and match the target object class. To satisfy the first unsatisfied prerequisite N1, the best binding is book(191) because it is explicitly on the floor in the living room and is a valid instance of the target class. The next atomic step must be to move near it before grabbing, since grab requires proximity.",
+  "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Surface": "floor(336)"
+    "?Surface": "coffeetable(371)"
   },
   "action": "[walk] <book> (191)"
 }
@@ -883,17 +866,14 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
     N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -901,28 +881,32 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
   ],
-  "raw_class_count": 41
+  "raw_class_count": 63
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to restore a book from the floor to a proper place. The current graph shows book(191) is on the floor and close to the character, while book(190) is already on the coffeetable and likely not the target unless needed as a substitute. Since the last action was walking to book(191), the next required step in the SDG is to grasp that nearby book so it can be moved and placed neatly afterward.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N1",
+  "reasoning": "The active goal is to restore a book from the floor to a surface. In the current graph, book(191) and book(268) are on the floor, and character(1) is already close to both. Since the previous action was [walk] to book(191), the next atomic step should be to grab the nearby floor book. I choose book(191) as the best binding for the target book because it is explicitly on the floor and close to the character, satisfying N1 and progressing toward N2.",
+  "satisfied_nodes": [
+    "N1"
+  ],
+  "current_node_focus": "N2",
   "mapped_variables": {
-    "?Surface": "floor(336)"
+    "?Surface": "coffeetable(371)"
   },
   "action": "[grab] <book> (191)"
 }
@@ -951,16 +935,15 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -968,35 +951,40 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
   ],
-  "raw_class_count": 41
+  "raw_class_count": 63
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active goal is to restore a book from the floor to a neat stored position. The current graph shows book(268) is on floor(336) and close to the character, making it the best match for the target loose book on the floor. Since the SDG requires the book to be HELD before it can be placed neatly, the next atomic step is to grab it. I should not repeat the prior walk because I already moved to book(191) and successfully grabbed it, and the book(191) is already held; however, the task still needs the floor book to be handled, so the best action is to acquire the floor book if possible. The most relevant physical binding for the target book-on-floor is book(268).",
-  "satisfied_nodes": [],
-  "current_node_focus": "N2",
+  "reasoning": "The active goal is to restore the book to a proper place. The current SDG focus is N2: the book must be HELD. In the graph, book(191) is the only book currently CLOSE to the character and is already held in the right hand, but the goal object in the SDG is simply 'book' and book(268) is also on the floor, matching N1. Since the next prerequisite to satisfy the final placement is having the target book held, and the currently tracked book(191) is already held, the most progress toward the SDG is to bind the task to the floor book candidate only after confirming possession; however, because the state shows a held book already and the system requires atomic actions, no further acquisition is needed before proceeding to placement in the next step. The immediate next action should therefore move toward the placement target once chosen. However, the task is not yet at N3, so the correct single next action is to walk to the intended placement surface after holding the book. The best available surface consistent with tidying is the coffeetable.",
+  "satisfied_nodes": [
+    "N1",
+    "N2"
+  ],
+  "current_node_focus": "N3",
   "mapped_variables": {},
-  "action": "[grab] <book> (268)"
+  "action": "[walk] <coffeetable> (371)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <book> (268)",
+  "action": "[walk] <coffeetable> (371)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -1007,7 +995,7 @@ graph TD
 }
 ```
 ## Step 13
-- **Action**: `[grab] <book> (268)`
+- **Action**: `[walk] <coffeetable> (371)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -1016,16 +1004,16 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
     N3["book<br>ON<br>?Surface"]
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    style N3 fill:#ff9,stroke:#333,stroke-width:4px
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
 
 
 ### [PerceptionFilter] Output
@@ -1033,67 +1021,65 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "floor",
-    "desk",
-    "bookshelf",
+    "book",
     "cabinet",
+    "character",
+    "floor",
     "paper",
     "coffeetable",
-    "character",
-    "box",
-    "book"
+    "bookshelf",
+    "wallshelf",
+    "door",
+    "folder",
+    "desk"
   ],
-  "raw_class_count": 41
+  "raw_class_count": 63
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The active task is to restore a book from the floor to a proper place. In the current graph, book(191) and book(268) are already held, and book(190) is on the coffeetable. The held books are the best candidates for continuing the tidying task, and the next required SDG progression after holding is to place the book onto a surface. Since I am already holding book(191) and it is close, the most direct next step is to walk to a suitable flat surface for neat placement. The bookshelf is a natural storage surface and is close to the character, so I will move toward it before putting the book back.",
+  "reasoning": "The active task is to restore the book from the floor to a proper surface. In the current graph, book(268) is the only book explicitly on the floor, so it best matches the SDG prerequisite N1. We are already close to book(268), and the previous action was a walk to the coffeetable, so the next atomic step should be to grab the floor book before placing it elsewhere.",
   "satisfied_nodes": [
-    "N2"
+    "N1"
   ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Surface": "bookshelf(370)"
-  },
-  "action": "[walk] <bookshelf> (370)"
+  "current_node_focus": "N2",
+  "mapped_variables": {},
+  "action": "[grab] <book> (268)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <bookshelf> (370)",
+  "action": "[walk] <book> (268)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor"
+  "source": "llm_executor_repaired"
 }
 ```
 ## Step 14
-- **Action**: `[walk] <bookshelf> (370)`
+- **Action**: `[walk] <book> (268)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
+- **Decision Source**: `llm_executor_repaired`
 - **Task Progress**: T3_without_parameter_binding_G2_09=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["book<br>ON<br>?Surface"]
+    N1["book<br>ON<br>floor"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
     N2["book<br>(HELD)"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    style N2 fill:#ff9,stroke:#333,stroke-width:4px
     N3["book<br>ON<br>?Surface"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["book<br>(NEATLY_PLACED)"]
-    N1 -->|"Must first grasp the book to move it from the floor/surface."| N2
-    N2 -->|"After holding the book, place it back onto a surface."| N3
-    N3 -->|"Final task requires the book to be put back neatly."| N4
+    N1 -->|"To pick up the book, it must first be on the floor."| N2
+    N2 -->|"After holding the book, it can be placed back neatly on a surface."| N3
 ```
-- **Observed Items (23)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], box(435) [CLOSED], paper(451)...
+- **Observed Items (31)**: floor(336), floor(337), floor(338), floor(339), floor(340), floor(341), floor(342), floor(343), floor(344), bookshelf(370), coffeetable(371), desk(373) [CLOSED], cabinet(415) [CLOSED], paper(451), folder(453) [CLOSED]...
 

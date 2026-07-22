@@ -9,7 +9,7 @@
     "tasks": [
         {
             "task_id": "T3_without_stg_planning_P1_03",
-            "instruction": "If there is chicken in the fridge, heat the chicken and cutlets in the microwave, put them on a plate, and place the plate on the table.",
+            "instruction": "If there is chicken in the fridge, heat the chicken and cutlets in the microwave, put them on a plate, and place the plate on the kitchen table.",
             "success_condition": {
                 "mode": "AND",
                 "conditions": [
@@ -69,7 +69,7 @@
     "valid_for_aggregation": false,
     "reason": "Agent stagnated (15 steps without progress)",
     "steps_executed": 15,
-    "execution_time_seconds": 45.94,
+    "execution_time_seconds": 49.21,
     "dynamic_event_counts": {},
     "dynamic_event_trace": []
 }

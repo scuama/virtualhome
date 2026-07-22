@@ -160,33 +160,54 @@ def aggregate(
     for cell in manifest["cells"]:
         grouped[cell["profile"]].append(cell)
 
-    def make_row(profile: str, module: str, values: list[dict], expected: int) -> dict:
-        successes = [value for value in values if value["success"]]
-        ps_values = [
-            float(value["completion_step"])
-            for value in successes
-            if value.get("completion_step") is not None
-        ]
-        complete = len(values) == expected
+    def make_row(profile: str, module: str, target_category: str, values: list[dict], expected_rows: int) -> dict:
+        success_weight = 0
+        total_weight = 0
+        weighted_ps_sum = 0.0
+        weighted_ps_count = 0
+        
+        # Filter values: we only want the target category tasks, and the cross-category sampled tasks
+        if target_category != "ALL":
+            filtered_values = [v for v in values if v["scenario_id"][0] == target_category or v.get("result_source") == "ablation"]
+        else:
+            filtered_values = values
+            
+        for value in filtered_values:
+            cat = value["scenario_id"][0]
+            # Baseline (target_category="ALL") or full target category gets weight 1
+            # Sampled cross-category tasks get weight 4
+            weight = 1 if (target_category == "ALL" or cat == target_category) else 4
+            total_weight += weight
+            
+            if value["success"]:
+                success_weight += weight
+                if value.get("completion_step") is not None:
+                    weighted_ps_sum += float(value["completion_step"]) * weight
+                    weighted_ps_count += weight
+                    
+        complete = len(filtered_values) == expected_rows
+        # expected_weight is always 60 (since 20 + 5*4 + 5*4 = 60)
+        expected_weight = 60
+        
         return {
             "table_id": "table3",
             "profile": profile,
             "module": module,
             "method": method,
-            "sr": round(len(successes) / expected, 6) if complete else "",
-            "sr_percent": round(100 * len(successes) / expected, 2) if complete else "",
-            "sr_numerator": len(successes),
-            "sr_denominator": expected,
-            "ps": round(sum(ps_values) / len(ps_values), 4) if complete and ps_values else "",
-            "ps_sum": round(sum(ps_values), 4),
-            "ps_count": len(ps_values),
+            "sr": round(success_weight / expected_weight, 6) if complete else "",
+            "sr_percent": round(100 * success_weight / expected_weight, 2) if complete else "",
+            "sr_numerator": success_weight,
+            "sr_denominator": expected_weight,
+            "ps": round(weighted_ps_sum / weighted_ps_count, 4) if complete and weighted_ps_count else "",
+            "ps_sum": round(weighted_ps_sum, 4),
+            "ps_count": weighted_ps_count,
             "GoalAlign": "",
             "SlotID": "",
             "Halluc": "",
             "complete": complete,
         }
 
-    rows.append(make_row("full", "full", full_values, 60))
+    rows.append(make_row("full", "full", "ALL", full_values, 60))
     for value in full_values:
         run_rows.append({"profile": "full", "module": "full", "result_source": "baseline", **value})
 
@@ -201,14 +222,19 @@ def aggregate(
                 if issue:
                     issues.append(issue)
                     continue
-            values.append(value)
+            values.append({"result_source": cell["result_source"], **value})
             run_rows.append({
                 "profile": profile,
                 "module": cell["module"],
                 "result_source": cell["result_source"],
                 **value,
             })
-        rows.append(make_row(profile, manifest["profiles"][profile]["module"], values, 20))
+        if issues:
+            for issue in issues:
+                print(f"Warning: {issue}")
+            
+        target_category = manifest["profiles"][profile]["category"]
+        rows.append(make_row(profile, manifest["profiles"][profile]["module"], target_category, values, 30))
 
     rows.sort(key=lambda row: ROW_ORDER.index(row["profile"]))
     report = {
