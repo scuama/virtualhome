@@ -1,601 +1,221 @@
-profile,module,scenario_id,result_source,success,completion_step,log_path,GoalAlign,SlotID,Halluc,review_note,reviewed
-full,full,G1_01,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,,,,,False
-full,full,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-full,full,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-full,full,G1_04,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,,,,,False
-full,full,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-full,full,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-full,full,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-full,full,G2_08,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G2_08.md,,,,,False
-full,full,G2_09,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_09/run_G2_09.md,,,,,False
-full,full,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-full,full,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-full,full,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-full,full,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-full,full,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-full,full,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-full,full,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-full,full,G4_17,baseline,True,14,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_17/run_G4_17.md,,,,,False
-full,full,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-full,full,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-full,full,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-full,full,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-full,full,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-full,full,M1_03,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,,,,,False
-full,full,M1_04,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,,,,,False
-full,full,M1_05,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,,,,,False
-full,full,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-full,full,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-full,full,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-full,full,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-full,full,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-full,full,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-full,full,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-full,full,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-full,full,M3_14,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_14/run_M3_14.md,,,,,False
-full,full,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-full,full,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-full,full,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-full,full,M4_18,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,,,,,False
-full,full,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-full,full,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-full,full,P1_01,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_01/run_P1_01.md,,,,,False
-full,full,P1_02,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_02/run_P1_02.md,,,,,False
-full,full,P1_03,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_03.json,,,,,False
-full,full,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-full,full,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-full,full,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-full,full,P2_07,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_07/run_P2_07.md,,,,,False
-full,full,P2_08,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_08/run_P2_08.md,,,,,False
-full,full,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-full,full,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-full,full,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-full,full,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-full,full,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-full,full,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-full,full,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-full,full,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-full,full,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-full,full,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-full,full,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-full,full,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_goal_reasoning,goal,G1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_01/metrics.json,,,,,False
-without_goal_reasoning,goal,G1_02,ablation,True,4.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_02/metrics.json,,,,,False
-without_goal_reasoning,goal,G1_03,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_03/metrics.json,,,,,False
-without_goal_reasoning,goal,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_04/metrics.json,,,,,False
-without_goal_reasoning,goal,G1_05,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_05/metrics.json,,,,,False
-without_goal_reasoning,goal,G2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_06/metrics.json,,,,,False
-without_goal_reasoning,goal,G2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_07/metrics.json,,,,,False
-without_goal_reasoning,goal,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_08/metrics.json,,,,,False
-without_goal_reasoning,goal,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_09/metrics.json,,,,,False
-without_goal_reasoning,goal,G2_10,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_10/metrics.json,,,,,False
-without_goal_reasoning,goal,G3_11,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_11/metrics.json,,,,,False
-without_goal_reasoning,goal,G3_12,ablation,True,0.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_12/metrics.json,,,,,False
-without_goal_reasoning,goal,G3_13,ablation,True,0.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_13/metrics.json,,,,,False
-without_goal_reasoning,goal,G3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_14/metrics.json,,,,,False
-without_goal_reasoning,goal,G3_15,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_15/metrics.json,,,,,False
-without_goal_reasoning,goal,G4_16,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_16/metrics.json,,,,,False
-without_goal_reasoning,goal,G4_17,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_17/metrics.json,,,,,False
-without_goal_reasoning,goal,G4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_18/metrics.json,,,,,False
-without_goal_reasoning,goal,G4_19,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_19/metrics.json,,,,,False
-without_goal_reasoning,goal,G4_20,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_20/metrics.json,,,,,False
-without_goal_reasoning,goal,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_goal_reasoning,goal,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_goal_reasoning,goal,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/M1_03/metrics.json,,,,,False
-without_goal_reasoning,goal,M1_04,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/M1_04/metrics.json,,,,,False
-without_goal_reasoning,goal,M1_05,ablation,True,18.0,evaluation/results/table3/robostate/runs/without_goal_reasoning/M1_05/metrics.json,,,,,False
-without_goal_reasoning,goal,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_goal_reasoning,goal,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_goal_reasoning,goal,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_goal_reasoning,goal,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_goal_reasoning,goal,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_goal_reasoning,goal,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_goal_reasoning,goal,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_goal_reasoning,goal,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_goal_reasoning,goal,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/M3_14/metrics.json,,,,,False
-without_goal_reasoning,goal,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_goal_reasoning,goal,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_goal_reasoning,goal,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_goal_reasoning,goal,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/M4_18/metrics.json,,,,,False
-without_goal_reasoning,goal,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_goal_reasoning,goal,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_goal_reasoning,goal,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/P1_01/metrics.json,,,,,False
-without_goal_reasoning,goal,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/P1_02/metrics.json,,,,,False
-without_goal_reasoning,goal,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/P1_03/metrics.json,,,,,False
-without_goal_reasoning,goal,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_goal_reasoning,goal,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_goal_reasoning,goal,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_goal_reasoning,goal,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/P2_07/metrics.json,,,,,False
-without_goal_reasoning,goal,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_goal_reasoning/P2_08/metrics.json,,,,,False
-without_goal_reasoning,goal,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_goal_reasoning,goal,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_goal_reasoning,goal,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_goal_reasoning,goal,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_goal_reasoning,goal,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_goal_reasoning,goal,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_goal_reasoning,goal,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_goal_reasoning,goal,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_goal_reasoning,goal,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_goal_reasoning,goal,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_goal_reasoning,goal,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_goal_reasoning,goal,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_intention,goal,G1_01,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,,,,,False
-without_intention,goal,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_intention,goal,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_intention,goal,G1_04,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,,,,,False
-without_intention,goal,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_intention,goal,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_intention,goal,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_intention,goal,G2_08,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G2_08.md,,,,,False
-without_intention,goal,G2_09,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_09/run_G2_09.md,,,,,False
-without_intention,goal,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_intention,goal,G3_11,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G3_11/metrics.json,,,,,False
-without_intention,goal,G3_12,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G3_12/metrics.json,,,,,False
-without_intention,goal,G3_13,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G3_13/metrics.json,,,,,False
-without_intention,goal,G3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G3_14/metrics.json,,,,,False
-without_intention,goal,G3_15,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G3_15/metrics.json,,,,,False
-without_intention,goal,G4_16,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G4_16/metrics.json,,,,,False
-without_intention,goal,G4_17,ablation,True,5.0,evaluation/results/table3/robostate/runs/without_intention/G4_17/metrics.json,,,,,False
-without_intention,goal,G4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G4_18/metrics.json,,,,,False
-without_intention,goal,G4_19,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_intention/G4_19/metrics.json,,,,,False
-without_intention,goal,G4_20,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/G4_20/metrics.json,,,,,False
-without_intention,goal,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_intention,goal,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_intention,goal,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/M1_03/metrics.json,,,,,False
-without_intention,goal,M1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/M1_04/metrics.json,,,,,False
-without_intention,goal,M1_05,ablation,True,15.0,evaluation/results/table3/robostate/runs/without_intention/M1_05/metrics.json,,,,,False
-without_intention,goal,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_intention,goal,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_intention,goal,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_intention,goal,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_intention,goal,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_intention,goal,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_intention,goal,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_intention,goal,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_intention,goal,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/M3_14/metrics.json,,,,,False
-without_intention,goal,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_intention,goal,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_intention,goal,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_intention,goal,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/M4_18/metrics.json,,,,,False
-without_intention,goal,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_intention,goal,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_intention,goal,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/P1_01/metrics.json,,,,,False
-without_intention,goal,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/P1_02/metrics.json,,,,,False
-without_intention,goal,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/P1_03/metrics.json,,,,,False
-without_intention,goal,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_intention,goal,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_intention,goal,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_intention,goal,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/P2_07/metrics.json,,,,,False
-without_intention,goal,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_intention/P2_08/metrics.json,,,,,False
-without_intention,goal,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_intention,goal,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_intention,goal,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_intention,goal,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_intention,goal,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_intention,goal,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_intention,goal,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_intention,goal,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_intention,goal,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_intention,goal,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_intention,goal,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_intention,goal,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_parameter_binding,goal,G1_01,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,,,,,False
-without_parameter_binding,goal,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_parameter_binding,goal,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_parameter_binding,goal,G1_04,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,,,,,False
-without_parameter_binding,goal,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_parameter_binding,goal,G2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_06/metrics.json,,,,,False
-without_parameter_binding,goal,G2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_07/metrics.json,,,,,False
-without_parameter_binding,goal,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_08/metrics.json,,,,,False
-without_parameter_binding,goal,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_09/metrics.json,,,,,False
-without_parameter_binding,goal,G2_10,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_10/metrics.json,,,,,False
-without_parameter_binding,goal,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_parameter_binding,goal,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_parameter_binding,goal,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_parameter_binding,goal,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_parameter_binding,goal,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_parameter_binding,goal,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_parameter_binding,goal,G4_17,baseline,True,14,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_17/run_G4_17.md,,,,,False
-without_parameter_binding,goal,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_parameter_binding,goal,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_parameter_binding,goal,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_parameter_binding,goal,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_parameter_binding,goal,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_parameter_binding,goal,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/M1_03/metrics.json,,,,,False
-without_parameter_binding,goal,M1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/M1_04/metrics.json,,,,,False
-without_parameter_binding,goal,M1_05,ablation,True,13.0,evaluation/results/table3/robostate/runs/without_parameter_binding/M1_05/metrics.json,,,,,False
-without_parameter_binding,goal,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_parameter_binding,goal,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_parameter_binding,goal,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_parameter_binding,goal,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_parameter_binding,goal,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_parameter_binding,goal,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_parameter_binding,goal,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_parameter_binding,goal,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_parameter_binding,goal,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/M3_14/metrics.json,,,,,False
-without_parameter_binding,goal,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_parameter_binding,goal,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_parameter_binding,goal,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_parameter_binding,goal,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/M4_18/metrics.json,,,,,False
-without_parameter_binding,goal,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_parameter_binding,goal,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_parameter_binding,goal,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/P1_01/metrics.json,,,,,False
-without_parameter_binding,goal,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/P1_02/metrics.json,,,,,False
-without_parameter_binding,goal,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/P1_03/metrics.json,,,,,False
-without_parameter_binding,goal,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_parameter_binding,goal,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_parameter_binding,goal,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_parameter_binding,goal,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/P2_07/metrics.json,,,,,False
-without_parameter_binding,goal,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_parameter_binding/P2_08/metrics.json,,,,,False
-without_parameter_binding,goal,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_parameter_binding,goal,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_parameter_binding,goal,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_parameter_binding,goal,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_parameter_binding,goal,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_parameter_binding,goal,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_parameter_binding,goal,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_parameter_binding,goal,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_parameter_binding,goal,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_parameter_binding,goal,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_parameter_binding,goal,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_parameter_binding,goal,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_memory,memory,G1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/G1_01/metrics.json,,,,,False
-without_memory,memory,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_memory,memory,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_memory,memory,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_memory/G1_04/metrics.json,,,,,False
-without_memory,memory,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_memory,memory,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_memory,memory,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_memory,memory,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/G2_08/metrics.json,,,,,False
-without_memory,memory,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/G2_09/metrics.json,,,,,False
-without_memory,memory,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_memory,memory,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_memory,memory,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_memory,memory,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_memory,memory,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_memory,memory,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_memory,memory,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_memory,memory,G4_17,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/G4_17/metrics.json,,,,,False
-without_memory,memory,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_memory,memory,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_memory,memory,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_memory,memory,M1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M1_01/metrics.json,,,,,False
-without_memory,memory,M1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M1_02/metrics.json,,,,,False
-without_memory,memory,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M1_03/metrics.json,,,,,False
-without_memory,memory,M1_04,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_memory/M1_04/metrics.json,,,,,False
-without_memory,memory,M1_05,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M1_05/metrics.json,,,,,False
-without_memory,memory,M2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M2_06/metrics.json,,,,,False
-without_memory,memory,M2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M2_07/metrics.json,,,,,False
-without_memory,memory,M2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M2_08/metrics.json,,,,,False
-without_memory,memory,M2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M2_09/metrics.json,,,,,False
-without_memory,memory,M2_10,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M2_10/metrics.json,,,,,False
-without_memory,memory,M3_11,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M3_11/metrics.json,,,,,False
-without_memory,memory,M3_12,ablation,True,8.0,evaluation/results/table3/robostate/runs/without_memory/M3_12/metrics.json,,,,,False
-without_memory,memory,M3_13,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M3_13/metrics.json,,,,,False
-without_memory,memory,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M3_14/metrics.json,,,,,False
-without_memory,memory,M3_15,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M3_15/metrics.json,,,,,False
-without_memory,memory,M4_16,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M4_16/metrics.json,,,,,False
-without_memory,memory,M4_17,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M4_17/metrics.json,,,,,False
-without_memory,memory,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M4_18/metrics.json,,,,,False
-without_memory,memory,M4_19,ablation,True,1.0,evaluation/results/table3/robostate/runs/without_memory/M4_19/metrics.json,,,,,False
-without_memory,memory,M4_20,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/M4_20/metrics.json,,,,,False
-without_memory,memory,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/P1_01/metrics.json,,,,,False
-without_memory,memory,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/P1_02/metrics.json,,,,,False
-without_memory,memory,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/P1_03/metrics.json,,,,,False
-without_memory,memory,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_memory,memory,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_memory,memory,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_memory,memory,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/P2_07/metrics.json,,,,,False
-without_memory,memory,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory/P2_08/metrics.json,,,,,False
-without_memory,memory,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_memory,memory,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_memory,memory,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_memory,memory,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_memory,memory,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_memory,memory,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_memory,memory,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_memory,memory,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_memory,memory,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_memory,memory,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_memory,memory,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_memory,memory,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_memory_structure,memory,G1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/G1_01/metrics.json,,,,,False
-without_memory_structure,memory,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_memory_structure,memory,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_memory_structure,memory,G1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/G1_04/metrics.json,,,,,False
-without_memory_structure,memory,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_memory_structure,memory,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_memory_structure,memory,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_memory_structure,memory,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/G2_08/metrics.json,,,,,False
-without_memory_structure,memory,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/G2_09/metrics.json,,,,,False
-without_memory_structure,memory,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_memory_structure,memory,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_memory_structure,memory,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_memory_structure,memory,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_memory_structure,memory,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_memory_structure,memory,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_memory_structure,memory,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_memory_structure,memory,G4_17,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/G4_17/metrics.json,,,,,False
-without_memory_structure,memory,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_memory_structure,memory,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_memory_structure,memory,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_memory_structure,memory,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_memory_structure,memory,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_memory_structure,memory,M1_03,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,,,,,False
-without_memory_structure,memory,M1_04,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,,,,,False
-without_memory_structure,memory,M1_05,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,,,,,False
-without_memory_structure,memory,M2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/M2_06/metrics.json,,,,,False
-without_memory_structure,memory,M2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/M2_07/metrics.json,,,,,False
-without_memory_structure,memory,M2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/M2_08/metrics.json,,,,,False
-without_memory_structure,memory,M2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/M2_09/metrics.json,,,,,False
-without_memory_structure,memory,M2_10,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/M2_10/metrics.json,,,,,False
-without_memory_structure,memory,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_memory_structure,memory,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_memory_structure,memory,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_memory_structure,memory,M3_14,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_14/run_M3_14.md,,,,,False
-without_memory_structure,memory,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_memory_structure,memory,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_memory_structure,memory,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_memory_structure,memory,M4_18,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,,,,,False
-without_memory_structure,memory,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_memory_structure,memory,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_memory_structure,memory,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/P1_01/metrics.json,,,,,False
-without_memory_structure,memory,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/P1_02/metrics.json,,,,,False
-without_memory_structure,memory,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/P1_03/metrics.json,,,,,False
-without_memory_structure,memory,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_memory_structure,memory,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_memory_structure,memory,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_memory_structure,memory,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/P2_07/metrics.json,,,,,False
-without_memory_structure,memory,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_memory_structure/P2_08/metrics.json,,,,,False
-without_memory_structure,memory,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_memory_structure,memory,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_memory_structure,memory,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_memory_structure,memory,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_memory_structure,memory,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_memory_structure,memory,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_memory_structure,memory,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_memory_structure,memory,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_memory_structure,memory,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_memory_structure,memory,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_memory_structure,memory,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_memory_structure,memory,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_state_alignment,memory,G1_01,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_state_alignment/G1_01/metrics.json,,,,,False
-without_state_alignment,memory,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_state_alignment,memory,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_state_alignment,memory,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_state_alignment/G1_04/metrics.json,,,,,False
-without_state_alignment,memory,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_state_alignment,memory,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_state_alignment,memory,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_state_alignment,memory,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/G2_08/metrics.json,,,,,False
-without_state_alignment,memory,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/G2_09/metrics.json,,,,,False
-without_state_alignment,memory,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_state_alignment,memory,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_state_alignment,memory,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_state_alignment,memory,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_state_alignment,memory,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_state_alignment,memory,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_state_alignment,memory,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_state_alignment,memory,G4_17,ablation,True,5.0,evaluation/results/table3/robostate/runs/without_state_alignment/G4_17/metrics.json,,,,,False
-without_state_alignment,memory,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_state_alignment,memory,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_state_alignment,memory,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_state_alignment,memory,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_state_alignment,memory,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_state_alignment,memory,M1_03,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,,,,,False
-without_state_alignment,memory,M1_04,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,,,,,False
-without_state_alignment,memory,M1_05,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,,,,,False
-without_state_alignment,memory,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_state_alignment,memory,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_state_alignment,memory,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_state_alignment,memory,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_state_alignment,memory,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_state_alignment,memory,M3_11,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/M3_11/metrics.json,,,,,False
-without_state_alignment,memory,M3_12,ablation,True,8.0,evaluation/results/table3/robostate/runs/without_state_alignment/M3_12/metrics.json,,,,,False
-without_state_alignment,memory,M3_13,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/M3_13/metrics.json,,,,,False
-without_state_alignment,memory,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/M3_14/metrics.json,,,,,False
-without_state_alignment,memory,M3_15,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/M3_15/metrics.json,,,,,False
-without_state_alignment,memory,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_state_alignment,memory,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_state_alignment,memory,M4_18,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,,,,,False
-without_state_alignment,memory,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_state_alignment,memory,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_state_alignment,memory,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/P1_01/metrics.json,,,,,False
-without_state_alignment,memory,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/P1_02/metrics.json,,,,,False
-without_state_alignment,memory,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/P1_03/metrics.json,,,,,False
-without_state_alignment,memory,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_state_alignment,memory,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_state_alignment,memory,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_state_alignment,memory,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/P2_07/metrics.json,,,,,False
-without_state_alignment,memory,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_state_alignment/P2_08/metrics.json,,,,,False
-without_state_alignment,memory,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_state_alignment,memory,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_state_alignment,memory,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_state_alignment,memory,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_state_alignment,memory,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_state_alignment,memory,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_state_alignment,memory,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_state_alignment,memory,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_state_alignment,memory,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_state_alignment,memory,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_state_alignment,memory,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_state_alignment,memory,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_stg_planning,stg,G1_01,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_stg_planning/G1_01/metrics.json,,,,,False
-without_stg_planning,stg,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_stg_planning,stg,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_stg_planning,stg,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_stg_planning/G1_04/metrics.json,,,,,False
-without_stg_planning,stg,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_stg_planning,stg,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_stg_planning,stg,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_stg_planning,stg,G2_08,ablation,True,4.0,evaluation/results/table3/robostate/runs/without_stg_planning/G2_08/metrics.json,,,,,False
-without_stg_planning,stg,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/G2_09/metrics.json,,,,,False
-without_stg_planning,stg,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_stg_planning,stg,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_stg_planning,stg,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_stg_planning,stg,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_stg_planning,stg,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_stg_planning,stg,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_stg_planning,stg,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_stg_planning,stg,G4_17,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/G4_17/metrics.json,,,,,False
-without_stg_planning,stg,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_stg_planning,stg,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_stg_planning,stg,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_stg_planning,stg,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_stg_planning,stg,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_stg_planning,stg,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/M1_03/metrics.json,,,,,False
-without_stg_planning,stg,M1_04,ablation,True,8.0,evaluation/results/table3/robostate/runs/without_stg_planning/M1_04/metrics.json,,,,,False
-without_stg_planning,stg,M1_05,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/M1_05/metrics.json,,,,,False
-without_stg_planning,stg,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_stg_planning,stg,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_stg_planning,stg,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_stg_planning,stg,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_stg_planning,stg,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_stg_planning,stg,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_stg_planning,stg,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_stg_planning,stg,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_stg_planning,stg,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/M3_14/metrics.json,,,,,False
-without_stg_planning,stg,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_stg_planning,stg,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_stg_planning,stg,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_stg_planning,stg,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/M4_18/metrics.json,,,,,False
-without_stg_planning,stg,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_stg_planning,stg,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_stg_planning,stg,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P1_01/metrics.json,,,,,False
-without_stg_planning,stg,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P1_02/metrics.json,,,,,False
-without_stg_planning,stg,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P1_03/metrics.json,,,,,False
-without_stg_planning,stg,P1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P1_04/metrics.json,,,,,False
-without_stg_planning,stg,P1_05,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P1_05/metrics.json,,,,,False
-without_stg_planning,stg,P2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P2_06/metrics.json,,,,,False
-without_stg_planning,stg,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P2_07/metrics.json,,,,,False
-without_stg_planning,stg,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P2_08/metrics.json,,,,,False
-without_stg_planning,stg,P2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P2_09/metrics.json,,,,,False
-without_stg_planning,stg,P2_10,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P2_10/metrics.json,,,,,False
-without_stg_planning,stg,P3_11,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_11/metrics.json,,,,,False
-without_stg_planning,stg,P3_12,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_12/metrics.json,,,,,False
-without_stg_planning,stg,P3_13,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_13/metrics.json,,,,,False
-without_stg_planning,stg,P3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_14/metrics.json,,,,,False
-without_stg_planning,stg,P3_15,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_stg_planning/P3_15/metrics.json,,,,,False
-without_stg_planning,stg,P3_16,ablation,True,11.0,evaluation/results/table3/robostate/runs/without_stg_planning/P3_16/metrics.json,,,,,False
-without_stg_planning,stg,P3_17,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_stg_planning/P3_17/metrics.json,,,,,False
-without_stg_planning,stg,P3_18,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_18/metrics.json,,,,,False
-without_stg_planning,stg,P3_19,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_planning/P3_19/metrics.json,,,,,False
-without_stg_planning,stg,P3_20,ablation,True,4.0,evaluation/results/table3/robostate/runs/without_stg_planning/P3_20/metrics.json,,,,,False
-without_stg_construction,stg,G1_01,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_stg_construction/G1_01/metrics.json,,,,,False
-without_stg_construction,stg,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_stg_construction,stg,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_stg_construction,stg,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_stg_construction/G1_04/metrics.json,,,,,False
-without_stg_construction,stg,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_stg_construction,stg,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_stg_construction,stg,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_stg_construction,stg,G2_08,ablation,True,3.0,evaluation/results/table3/robostate/runs/without_stg_construction/G2_08/metrics.json,,,,,False
-without_stg_construction,stg,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/G2_09/metrics.json,,,,,False
-without_stg_construction,stg,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_stg_construction,stg,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_stg_construction,stg,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_stg_construction,stg,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_stg_construction,stg,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_stg_construction,stg,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_stg_construction,stg,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_stg_construction,stg,G4_17,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_stg_construction/G4_17/metrics.json,,,,,False
-without_stg_construction,stg,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_stg_construction,stg,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_stg_construction,stg,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_stg_construction,stg,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_stg_construction,stg,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_stg_construction,stg,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/M1_03/metrics.json,,,,,False
-without_stg_construction,stg,M1_04,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_stg_construction/M1_04/metrics.json,,,,,False
-without_stg_construction,stg,M1_05,ablation,True,14.0,evaluation/results/table3/robostate/runs/without_stg_construction/M1_05/metrics.json,,,,,False
-without_stg_construction,stg,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_stg_construction,stg,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_stg_construction,stg,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_stg_construction,stg,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_stg_construction,stg,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_stg_construction,stg,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_stg_construction,stg,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_stg_construction,stg,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_stg_construction,stg,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/M3_14/metrics.json,,,,,False
-without_stg_construction,stg,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_stg_construction,stg,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_stg_construction,stg,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_stg_construction,stg,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/M4_18/metrics.json,,,,,False
-without_stg_construction,stg,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_stg_construction,stg,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_stg_construction,stg,P1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P1_01/metrics.json,,,,,False
-without_stg_construction,stg,P1_02,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P1_02/metrics.json,,,,,False
-without_stg_construction,stg,P1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P1_03/metrics.json,,,,,False
-without_stg_construction,stg,P1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P1_04/metrics.json,,,,,False
-without_stg_construction,stg,P1_05,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P1_05/metrics.json,,,,,False
-without_stg_construction,stg,P2_06,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P2_06/metrics.json,,,,,False
-without_stg_construction,stg,P2_07,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P2_07/metrics.json,,,,,False
-without_stg_construction,stg,P2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P2_08/metrics.json,,,,,False
-without_stg_construction,stg,P2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P2_09/metrics.json,,,,,False
-without_stg_construction,stg,P2_10,ablation,False,,evaluation/results/table3/robostate/runs/without_stg_construction/P2_10/metrics.json,,,,,False
-without_stg_construction,stg,P3_11,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,,,,,False
-without_stg_construction,stg,P3_12,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,,,,,False
-without_stg_construction,stg,P3_13,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,,,,,False
-without_stg_construction,stg,P3_14,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,,,,,False
-without_stg_construction,stg,P3_15,baseline,True,9,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,,,,,False
-without_stg_construction,stg,P3_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,,,,,False
-without_stg_construction,stg,P3_17,baseline,True,12,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,,,,,False
-without_stg_construction,stg,P3_18,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,,,,,False
-without_stg_construction,stg,P3_19,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,,,,,False
-without_stg_construction,stg,P3_20,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,,,,,False
-without_path_merging,stg,G1_01,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/G1_01/metrics.json,,,,,False
-without_path_merging,stg,G1_02,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,,,,,False
-without_path_merging,stg,G1_03,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,,,,,False
-without_path_merging,stg,G1_04,ablation,True,2.0,evaluation/results/table3/robostate/runs/without_path_merging/G1_04/metrics.json,,,,,False
-without_path_merging,stg,G1_05,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,,,,,False
-without_path_merging,stg,G2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,,,,,False
-without_path_merging,stg,G2_07,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,,,,,False
-without_path_merging,stg,G2_08,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/G2_08/metrics.json,,,,,False
-without_path_merging,stg,G2_09,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/G2_09/metrics.json,,,,,False
-without_path_merging,stg,G2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,,,,,False
-without_path_merging,stg,G3_11,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,,,,,False
-without_path_merging,stg,G3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,,,,,False
-without_path_merging,stg,G3_13,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,,,,,False
-without_path_merging,stg,G3_14,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,,,,,False
-without_path_merging,stg,G3_15,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,,,,,False
-without_path_merging,stg,G4_16,baseline,True,7,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,,,,,False
-without_path_merging,stg,G4_17,ablation,True,4.0,evaluation/results/table3/robostate/runs/without_path_merging/G4_17/metrics.json,,,,,False
-without_path_merging,stg,G4_18,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,,,,,False
-without_path_merging,stg,G4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,,,,,False
-without_path_merging,stg,G4_20,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,,,,,False
-without_path_merging,stg,M1_01,baseline,True,4,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,,,,,False
-without_path_merging,stg,M1_02,baseline,False,,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,,,,,False
-without_path_merging,stg,M1_03,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/M1_03/metrics.json,,,,,False
-without_path_merging,stg,M1_04,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/M1_04/metrics.json,,,,,False
-without_path_merging,stg,M1_05,ablation,True,13.0,evaluation/results/table3/robostate/runs/without_path_merging/M1_05/metrics.json,,,,,False
-without_path_merging,stg,M2_06,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,,,,,False
-without_path_merging,stg,M2_07,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,,,,,False
-without_path_merging,stg,M2_08,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,,,,,False
-without_path_merging,stg,M2_09,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,,,,,False
-without_path_merging,stg,M2_10,baseline,True,1,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,,,,,False
-without_path_merging,stg,M3_11,baseline,True,15,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,,,,,False
-without_path_merging,stg,M3_12,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,,,,,False
-without_path_merging,stg,M3_13,baseline,True,10,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,,,,,False
-without_path_merging,stg,M3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/M3_14/metrics.json,,,,,False
-without_path_merging,stg,M3_15,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,,,,,False
-without_path_merging,stg,M4_16,baseline,True,6,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,,,,,False
-without_path_merging,stg,M4_17,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,,,,,False
-without_path_merging,stg,M4_18,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/M4_18/metrics.json,,,,,False
-without_path_merging,stg,M4_19,baseline,True,2,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,,,,,False
-without_path_merging,stg,M4_20,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,,,,,False
-without_path_merging,stg,P1_01,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_01/run_P1_01.md,,,,,False
-without_path_merging,stg,P1_02,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_02/run_P1_02.md,,,,,False
-without_path_merging,stg,P1_03,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_03.json,,,,,False
-without_path_merging,stg,P1_04,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P1_04.json,,,,,False
-without_path_merging,stg,P1_05,baseline,True,0,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,,,,,False
-without_path_merging,stg,P2_06,baseline,False,,/Users/rushy/program/virtualhome/evaluation/configs/source_tasks/p_class/P2_06.json,,,,,False
-without_path_merging,stg,P2_07,baseline,True,8,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_07/run_P2_07.md,,,,,False
-without_path_merging,stg,P2_08,baseline,True,3,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_08/run_P2_08.md,,,,,False
-without_path_merging,stg,P2_09,baseline,True,11,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,,,,,False
-without_path_merging,stg,P2_10,baseline,True,5,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,,,,,False
-without_path_merging,stg,P3_11,ablation,True,7.0,evaluation/results/table3/robostate/runs/without_path_merging/P3_11/metrics.json,,,,,False
-without_path_merging,stg,P3_12,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_12/metrics.json,,,,,False
-without_path_merging,stg,P3_13,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_path_merging/P3_13/metrics.json,,,,,False
-without_path_merging,stg,P3_14,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_14/metrics.json,,,,,False
-without_path_merging,stg,P3_15,ablation,True,6.0,evaluation/results/table3/robostate/runs/without_path_merging/P3_15/metrics.json,,,,,False
-without_path_merging,stg,P3_16,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_16/metrics.json,,,,,False
-without_path_merging,stg,P3_17,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_17/metrics.json,,,,,False
-without_path_merging,stg,P3_18,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_18/metrics.json,,,,,False
-without_path_merging,stg,P3_19,ablation,False,,evaluation/results/table3/robostate/runs/without_path_merging/P3_19/metrics.json,,,,,False
-without_path_merging,stg,P3_20,ablation,True,5.0,evaluation/results/table3/robostate/runs/without_path_merging/P3_20/metrics.json,,,,,False
+profile,metric,scenario_id,correct,incorrect,excluded,coverage_status,log_path,review_note,reviewed
+full,GoalAlign,G1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G1_02,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+full,GoalAlign,G1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G1_05,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+full,GoalAlign,G2_06,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G2_07,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G2_08,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G2_08.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+full,GoalAlign,G2_09,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_09/run_G2_09.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G2_10,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G3_11,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,Asked about a missing object instead of identifying the broken trigger.,True
+full,GoalAlign,G3_12,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G3_13,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G3_14,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,Asked which light instead of identifying the broken trigger.,True
+full,GoalAlign,G3_15,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,Asked about ingredients instead of identifying the broken trigger.,True
+full,GoalAlign,G4_16,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G4_17,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_17/run_G4_17.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G4_18,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G4_19,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,Final adopted goal matches the gold atom.,True
+full,GoalAlign,G4_20,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+full,Halluc,P1_01,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_01/run_P1_01.md,Only excluded control actions were proposed.,True
+full,Halluc,P1_02,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_02/run_P1_02.md,Only excluded control actions were proposed.,True
+full,Halluc,P1_03,0,0,1,missing,,No Markdown execution log is available.,True
+full,Halluc,P1_04,0,0,1,missing,,No Markdown execution log is available.,True
+full,Halluc,P1_05,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P1_05/run_P1_05.md,Only excluded control actions were proposed.,True
+full,Halluc,P2_06,0,0,1,missing,,No Markdown execution log is available.,True
+full,Halluc,P2_07,8,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_07/run_P2_07.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P2_08,3,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_08/run_P2_08.md,Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P2_09,11,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_09/run_P2_09.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P2_10,5,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P2_10/run_P2_10.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_11,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_12,9,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_13,5,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_14,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_15,9,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_16,6,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_17,12,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_18,10,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_19,5,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,Halluc,P3_20,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+full,SlotID,M1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,First post-hide retry retained instance 321.,True
+full,SlotID,M1_02,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,The waterglass hide trigger never fired.,True
+full,SlotID,M1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,First post-hide retry retained instance 64.,True
+full,SlotID,M1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,First post-hide retry retained instance 122.,True
+full,SlotID,M1_05,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,The first post-reappearance target retained instance 176.,True
+full,SlotID,M2_06,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,Selected the dirty waterglass.,True
+full,SlotID,M2_07,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,Selected the red apple.,True
+full,SlotID,M2_08,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,Selected the ripe/red apple.,True
+full,SlotID,M2_09,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,Selected the clean waterglass.,True
+full,SlotID,M2_10,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,Selected the yellow pillow.,True
+full,SlotID,M3_11,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,M3 has no object-identity binding opportunity under the metric definition.,True
+full,SlotID,M3_12,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,M3 has no object-identity binding opportunity under the metric definition.,True
+full,SlotID,M3_13,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,M3 has no object-identity binding opportunity under the metric definition.,True
+full,SlotID,M3_14,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_14/run_M3_14.md,M3 has no object-identity binding opportunity under the metric definition.,True
+full,SlotID,M3_15,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,M3 has no object-identity binding opportunity under the metric definition.,True
+full,SlotID,M4_16,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,Selected the recently used waterglass.,True
+full,SlotID,M4_17,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,Selected the recently washed waterglass.,True
+full,SlotID,M4_18,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,Selected the recently used red plate.,True
+full,SlotID,M4_19,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,Selected the TV referenced by current/history state.,True
+full,SlotID,M4_20,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,Selected the washed red apple.,True
+without_goal_reasoning,GoalAlign,G1_01,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_01/run_T3_without_goal_reasoning_G1_01.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G1_02,2,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_02/run_T3_without_goal_reasoning_G1_02.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G1_03,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_03/run_T3_without_goal_reasoning_G1_03.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G1_04,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_04/run_T3_without_goal_reasoning_G1_04.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G1_05,2,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G1_05/run_T3_without_goal_reasoning_G1_05.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G2_06,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_goal_reasoning,GoalAlign,G2_07,0,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_07/run_T3_without_goal_reasoning_G2_07.md,The generic container was not resolved to the cabinet.,True
+without_goal_reasoning,GoalAlign,G2_08,1,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_08/run_T3_without_goal_reasoning_G2_08.md,Final adopted goal matches the gold atom. | The adopted target omitted or contradicted the requested binding/state.,True
+without_goal_reasoning,GoalAlign,G2_09,0,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_09/run_T3_without_goal_reasoning_G2_09.md,The generic surface was not resolved to the desk.,True
+without_goal_reasoning,GoalAlign,G2_10,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G2_10/run_T3_without_goal_reasoning_G2_10.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G3_11,0,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_11/run_T3_without_goal_reasoning_G3_11.md,Asked about a missing object instead of identifying the broken trigger.,True
+without_goal_reasoning,GoalAlign,G3_12,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_12/run_T3_without_goal_reasoning_G3_12.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G3_13,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_13/run_T3_without_goal_reasoning_G3_13.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G3_14,0,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_14/run_T3_without_goal_reasoning_G3_14.md,Asked which light instead of identifying the broken trigger.,True
+without_goal_reasoning,GoalAlign,G3_15,0,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G3_15/run_T3_without_goal_reasoning_G3_15.md,Asked about ingredients instead of identifying the broken trigger.,True
+without_goal_reasoning,GoalAlign,G4_16,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_16/run_T3_without_goal_reasoning_G4_16.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G4_17,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_17/run_T3_without_goal_reasoning_G4_17.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G4_18,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_18/run_T3_without_goal_reasoning_G4_18.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G4_19,1,0,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_19/run_T3_without_goal_reasoning_G4_19.md,Final adopted goal matches the gold atom.,True
+without_goal_reasoning,GoalAlign,G4_20,1,1,0,covered,evaluation/results/table3/robostate/runs/without_goal_reasoning/G4_20/run_T3_without_goal_reasoning_G4_20.md,"The filled object was represented, but the character-holds atom was omitted. | Final adopted goal matches the gold atom.",True
+without_intention,GoalAlign,G1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G1_02,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G1_05,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G2_06,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_06/run_G2_06.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G2_07,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_07/run_G2_07.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G2_08,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G2_08.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G2_09,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_09/run_G2_09.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G2_10,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G2_10/run_G2_10.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G3_11,0,1,0,covered,evaluation/results/table3/robostate/runs/without_intention/G3_11/run_T3_without_intention_G3_11.md,Asked about a missing object instead of identifying the broken trigger.,True
+without_intention,GoalAlign,G3_12,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G3_12/run_T3_without_intention_G3_12.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G3_13,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G3_13/run_T3_without_intention_G3_13.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G3_14,0,1,0,covered,evaluation/results/table3/robostate/runs/without_intention/G3_14/run_T3_without_intention_G3_14.md,Asked which light instead of identifying the broken trigger.,True
+without_intention,GoalAlign,G3_15,0,1,0,covered,evaluation/results/table3/robostate/runs/without_intention/G3_15/run_T3_without_intention_G3_15.md,Asked about ingredients instead of identifying the broken trigger.,True
+without_intention,GoalAlign,G4_16,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G4_16/run_T3_without_intention_G4_16.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G4_17,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G4_17/run_T3_without_intention_G4_17.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G4_18,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G4_18/run_T3_without_intention_G4_18.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G4_19,1,0,0,covered,evaluation/results/table3/robostate/runs/without_intention/G4_19/run_T3_without_intention_G4_19.md,Final adopted goal matches the gold atom.,True
+without_intention,GoalAlign,G4_20,1,1,0,covered,evaluation/results/table3/robostate/runs/without_intention/G4_20/run_T3_without_intention_G4_20.md,"The filled object was represented, but the character-holds atom was omitted. | Final adopted goal matches the gold atom.",True
+without_memory,SlotID,M1_01,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M1_01/run_T3_without_memory_M1_01.md,No hide/reappearance binding was observable.,True
+without_memory,SlotID,M1_02,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M1_02/run_T3_without_memory_M1_02.md,The waterglass hide trigger never fired.,True
+without_memory,SlotID,M1_03,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M1_03/run_T3_without_memory_M1_03.md,Post-hide retry switched from instance 64 to 79.,True
+without_memory,SlotID,M1_04,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M1_04/run_T3_without_memory_M1_04.md,Post-hide retry switched from instance 303 to 122.,True
+without_memory,SlotID,M1_05,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M1_05/run_T3_without_memory_M1_05.md,The hide occurred at the final target action.,True
+without_memory,SlotID,M2_06,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M2_06/run_T3_without_memory_M2_06.md,Never bound the dirty waterglass.,True
+without_memory,SlotID,M2_07,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_memory,SlotID,M2_08,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M2_08/run_T3_without_memory_M2_08.md,Never bound the ripe/red apple.,True
+without_memory,SlotID,M2_09,1,0,0,covered,evaluation/results/table3/robostate/runs/without_memory/M2_09/run_T3_without_memory_M2_09.md,First clean-waterglass binding retained instance 64.,True
+without_memory,SlotID,M2_10,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_memory,SlotID,M3_11,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M3_11/run_T3_without_memory_M3_11.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory,SlotID,M3_12,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M3_12/run_T3_without_memory_M3_12.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory,SlotID,M3_13,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M3_13/run_T3_without_memory_M3_13.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory,SlotID,M3_14,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M3_14/run_T3_without_memory_M3_14.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory,SlotID,M3_15,0,0,1,covered,evaluation/results/table3/robostate/runs/without_memory/M3_15/run_T3_without_memory_M3_15.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory,SlotID,M4_16,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M4_16/run_T3_without_memory_M4_16.md,Never bound the historical target instance.,True
+without_memory,SlotID,M4_17,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M4_17/run_T3_without_memory_M4_17.md,Selected a dirty alternative instead of washed instance 64.,True
+without_memory,SlotID,M4_18,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M4_18/run_T3_without_memory_M4_18.md,Selected an alternative instead of historical instance 67.,True
+without_memory,SlotID,M4_19,1,0,0,covered,evaluation/results/table3/robostate/runs/without_memory/M4_19/run_T3_without_memory_M4_19.md,Selected the correct TV instance.,True
+without_memory,SlotID,M4_20,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory/M4_20/run_T3_without_memory_M4_20.md,Never bound the washed red apple.,True
+without_memory_structure,SlotID,M1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,First post-hide retry retained instance 321.,True
+without_memory_structure,SlotID,M1_02,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,The waterglass hide trigger never fired.,True
+without_memory_structure,SlotID,M1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,First post-hide retry retained instance 64.,True
+without_memory_structure,SlotID,M1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,First post-hide retry retained instance 122.,True
+without_memory_structure,SlotID,M1_05,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,The first post-reappearance target retained instance 176.,True
+without_memory_structure,SlotID,M2_06,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory_structure/M2_06/run_T3_without_memory_structure_M2_06.md,Never bound the dirty waterglass.,True
+without_memory_structure,SlotID,M2_07,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_memory_structure,SlotID,M2_08,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory_structure/M2_08/run_T3_without_memory_structure_M2_08.md,Never bound the ripe/red apple.,True
+without_memory_structure,SlotID,M2_09,0,1,0,covered,evaluation/results/table3/robostate/runs/without_memory_structure/M2_09/run_T3_without_memory_structure_M2_09.md,Never selected a waterglass instance.,True
+without_memory_structure,SlotID,M2_10,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_memory_structure,SlotID,M3_11,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_11/run_M3_11.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory_structure,SlotID,M3_12,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_12.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory_structure,SlotID,M3_13,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_13/run_M3_13.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory_structure,SlotID,M3_14,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M3_14/run_M3_14.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory_structure,SlotID,M3_15,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M3_15.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_memory_structure,SlotID,M4_16,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,Selected the recently used waterglass.,True
+without_memory_structure,SlotID,M4_17,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,Selected the recently washed waterglass.,True
+without_memory_structure,SlotID,M4_18,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,Selected the recently used red plate.,True
+without_memory_structure,SlotID,M4_19,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,Selected the TV referenced by current/history state.,True
+without_memory_structure,SlotID,M4_20,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,Selected the washed red apple.,True
+without_parameter_binding,GoalAlign,G1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_01/run_G1_01.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G1_02,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G1_02.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_03/run_G1_03.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_04/run_G1_04.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G1_05,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G1_05/run_G1_05.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G2_06,0,0,1,missing,,No Markdown execution log is available; episode failure was not used as a proxy.,True
+without_parameter_binding,GoalAlign,G2_07,0,1,0,covered,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_07/run_T3_without_parameter_binding_G2_07.md,The generic container was not resolved to the cabinet.,True
+without_parameter_binding,GoalAlign,G2_08,0,2,0,covered,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_08/run_T3_without_parameter_binding_G2_08.md,The adopted target omitted or contradicted the requested binding/state. | The adopted target omitted or contradicted the requested binding/state.,True
+without_parameter_binding,GoalAlign,G2_09,0,1,0,covered,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_09/run_T3_without_parameter_binding_G2_09.md,The generic surface was not resolved to the desk.,True
+without_parameter_binding,GoalAlign,G2_10,1,0,0,covered,evaluation/results/table3/robostate/runs/without_parameter_binding/G2_10/run_T3_without_parameter_binding_G2_10.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G3_11,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_11/run_G3_11.md,Asked about a missing object instead of identifying the broken trigger.,True
+without_parameter_binding,GoalAlign,G3_12,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_12/run_G3_12.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G3_13,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_13/run_G3_13.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G3_14,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_14/run_G3_14.md,Asked which light instead of identifying the broken trigger.,True
+without_parameter_binding,GoalAlign,G3_15,0,1,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G3_15/run_G3_15.md,Asked about ingredients instead of identifying the broken trigger.,True
+without_parameter_binding,GoalAlign,G4_16,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_16/run_G4_16.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G4_17,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_17/run_G4_17.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G4_18,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_G4_18.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G4_19,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_19/run_G4_19.md,Final adopted goal matches the gold atom.,True
+without_parameter_binding,GoalAlign,G4_20,2,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/g_class/G4_20/run_G4_20.md,Final adopted goal matches the gold atom. | Final adopted goal matches the gold atom.,True
+without_state_alignment,SlotID,M1_01,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_01/run_M1_01.md,First post-hide retry retained instance 321.,True
+without_state_alignment,SlotID,M1_02,0,0,1,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_02.md,The waterglass hide trigger never fired.,True
+without_state_alignment,SlotID,M1_03,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_03/run_M1_03.md,First post-hide retry retained instance 64.,True
+without_state_alignment,SlotID,M1_04,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M1_04/run_M1_04.md,First post-hide retry retained instance 122.,True
+without_state_alignment,SlotID,M1_05,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_M1_05.md,The first post-reappearance target retained instance 176.,True
+without_state_alignment,SlotID,M2_06,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_06/run_M2_06.md,Selected the dirty waterglass.,True
+without_state_alignment,SlotID,M2_07,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_07/run_M2_07.md,Selected the red apple.,True
+without_state_alignment,SlotID,M2_08,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_08/run_M2_08.md,Selected the ripe/red apple.,True
+without_state_alignment,SlotID,M2_09,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_09/run_M2_09.md,Selected the clean waterglass.,True
+without_state_alignment,SlotID,M2_10,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M2_10/run_M2_10.md,Selected the yellow pillow.,True
+without_state_alignment,SlotID,M3_11,0,0,1,covered,evaluation/results/table3/robostate/runs/without_state_alignment/M3_11/run_T3_without_state_alignment_M3_11.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_state_alignment,SlotID,M3_12,0,0,1,covered,evaluation/results/table3/robostate/runs/without_state_alignment/M3_12/run_T3_without_state_alignment_M3_12.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_state_alignment,SlotID,M3_13,0,0,1,covered,evaluation/results/table3/robostate/runs/without_state_alignment/M3_13/run_T3_without_state_alignment_M3_13.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_state_alignment,SlotID,M3_14,0,0,1,covered,evaluation/results/table3/robostate/runs/without_state_alignment/M3_14/run_T3_without_state_alignment_M3_14.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_state_alignment,SlotID,M3_15,0,0,1,covered,evaluation/results/table3/robostate/runs/without_state_alignment/M3_15/run_T3_without_state_alignment_M3_15.md,M3 has no object-identity binding opportunity under the metric definition.,True
+without_state_alignment,SlotID,M4_16,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_16/run_M4_16.md,Selected the recently used waterglass.,True
+without_state_alignment,SlotID,M4_17,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_17/run_M4_17.md,Selected the recently washed waterglass.,True
+without_state_alignment,SlotID,M4_18,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_18/run_M4_18.md,Selected the recently used red plate.,True
+without_state_alignment,SlotID,M4_19,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_19/run_M4_19.md,Selected the TV referenced by current/history state.,True
+without_state_alignment,SlotID,M4_20,1,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/m_class/M4_20/run_M4_20.md,Selected the washed red apple.,True
+without_stg_construction,Halluc,P1_01,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P1_01/run_T3_without_stg_construction_P1_01.md,Only excluded control actions were proposed.,True
+without_stg_construction,Halluc,P1_02,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P1_02/run_T3_without_stg_construction_P1_02.md,Only excluded control actions were proposed.,True
+without_stg_construction,Halluc,P1_03,14,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P1_03/run_T3_without_stg_construction_P1_03.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P1_04,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_construction,Halluc,P1_05,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P1_05/run_T3_without_stg_construction_P1_05.md,Only excluded control actions were proposed.,True
+without_stg_construction,Halluc,P2_06,15,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P2_06/run_T3_without_stg_construction_P2_06.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P2_07,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_construction,Halluc,P2_08,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_construction,Halluc,P2_09,14,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P2_09/run_T3_without_stg_construction_P2_09.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P2_10,7,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_construction/P2_10/run_T3_without_stg_construction_P2_10.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_11,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_11/run_P3_11.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_12,9,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_12.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_13,5,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_13/run_P3_13.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_14,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_14/run_P3_14.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_15,9,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_15/run_P3_15.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_16,6,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_16/run_P3_16.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_17,12,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_17/run_P3_17.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_18,10,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_18.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_19,5,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/robostate/raw/run_P3_19.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_construction,Halluc,P3_20,7,0,0,covered,/Users/rushy/program/virtualhome/evaluation/results/source_tasks/robostate/p_class/P3_20/run_P3_20.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P1_01,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P1_01/run_T3_without_stg_planning_P1_01.md,Only excluded control actions were proposed.,True
+without_stg_planning,Halluc,P1_02,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P1_02/run_T3_without_stg_planning_P1_02.md,Only excluded control actions were proposed.,True
+without_stg_planning,Halluc,P1_03,14,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P1_03/run_T3_without_stg_planning_P1_03.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P1_04,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_planning,Halluc,P1_05,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P1_05/run_T3_without_stg_planning_P1_05.md,Only excluded control actions were proposed.,True
+without_stg_planning,Halluc,P2_06,15,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P2_06/run_T3_without_stg_planning_P2_06.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P2_07,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_planning,Halluc,P2_08,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_planning,Halluc,P2_09,14,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P2_09/run_T3_without_stg_planning_P2_09.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P2_10,1,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P2_10/run_T3_without_stg_planning_P2_10.md,Supported skill name.,True
+without_stg_planning,Halluc,P3_11,6,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_11/run_T3_without_stg_planning_P3_11.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_12,8,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_12/run_T3_without_stg_planning_P3_12.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_13,9,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_13/run_T3_without_stg_planning_P3_13.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_14,0,0,1,missing,,No Markdown execution log is available.,True
+without_stg_planning,Halluc,P3_15,6,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_15/run_T3_without_stg_planning_P3_15.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_16,8,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_16/run_T3_without_stg_planning_P3_16.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_17,7,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_17/run_T3_without_stg_planning_P3_17.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_18,0,0,1,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_18/run_T3_without_stg_planning_P3_18.md,Only excluded control actions were proposed.,True
+without_stg_planning,Halluc,P3_19,14,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_19/run_T3_without_stg_planning_P3_19.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True
+without_stg_planning,Halluc,P3_20,4,0,0,covered,evaluation/results/table3/robostate/runs/without_stg_planning/P3_20/run_T3_without_stg_planning_P3_20.md,Supported skill name. | Supported skill name. | Supported skill name. | Supported skill name.,True

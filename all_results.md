@@ -9,7 +9,6 @@
 | ExRAP | 53.3 / 7.9 | 52.0 / 8.6 | 31.4 / 9.4 | 57.1 / 3.8 | 71.4 / 4.0 | 42.9 / 3.7 | 28.6 / 5.5 | 28.6 / 14.0 | 28.6 / 13.0 |
 | **RoboState** | 80.0 / 8.2 | 76.0 / 11.1 | 80.0 / 15.8 | 71.4 / 3.8 | 100.0 / 5.0 | 85.7 / 7.7 | 71.4 / 13.6 | 71.4 / 13.6 | 71.4 / 18.0 |
 
-> *Note: Each cell reports SR ↑ / PS ↓*
 
 ---
 
@@ -20,7 +19,6 @@
 | **Method** | **3** | **5** | **7** | **Sent.** | **Summ.** | **Vague** | **L** | **M** | **H** |
 | **RoboState** | 100.0 / 8.5 | 100.0 / 11.8 | 91.4 / 14.8 | 100.0 / 8.1 | 100.0 / 9.4 | 40.0 / 5.5 | 86.7 / 8.8 | 86.7 / 9.0 | 80.0 / 9.5 |
 
-> *Note: Each cell reports SR ↑ / PS ↓*
 
 ---
 
@@ -38,5 +36,3 @@
 | **Planning** | w/o STG Planning | 33.33 | 6.93 | n/a | n/a | 14.15 (15/106) |
 | | w/o STG Construction | 51.67 | 6.61 | n/a | n/a | 7.09 (9/127) |
 | | w/o Path Merging | 38.33 | 6.72 | n/a | n/a | 0.00 (0/118) |
-
-> *Note: SR/PS use the accepted denominator-60 weighted aggregate. Manual metrics are computed only from auditable items; Halluc. scenario coverage is Full 17/20, w/o STG Planning 16/20, and w/o STG Construction 17/20. Missing logs are excluded rather than treated as metric errors.*

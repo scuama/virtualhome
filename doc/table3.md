@@ -1,51 +1,76 @@
 # Table 3 ablation protocol
 
-Table 3 reuses the 60 existing RoboState G/M/P results as the Full baseline.
-An old run without explicit success evidence is counted as a failure. The
-baseline audit is written to `evaluation/results/table3/baseline_audit.csv`.
+Table 3 reuses the 60 existing RoboState G/M/P results as the Full baseline. An
+old episode without explicit success evidence is a failed SR episode. The
+accepted SR/PS aggregate covers 195/195 runnable ablation configs and 540
+profile/scenario contributions.
 
-Component ablations rerun only the directly affected subclasses; other samples
-in the same 20-scenario row reuse their Full result:
+## Runtime matrix
 
-| Profile | Rerun | Reuse |
-|---|---|---|
-| without_goal_reasoning | G1-G4 (20) | none |
-| without_intention | G3-G4 (10) | G1-G2 |
-| without_parameter_binding | G2 (5) | G1, G3-G4 |
-| without_memory | M1-M4 (20) | none |
-| without_memory_structure | M2 (5) | M1, M3-M4 |
-| without_state_alignment | M4 (5) | M1-M3 |
-| without_stg_planning | P1-P3 (20) | none |
-| without_stg_construction | P3 (10) | P1-P2 |
-| without_path_merging | P1-P2 (10) | P3 |
+Each ablation profile has all 60 source tasks in the manifest. Its directly
+affected category is evaluated on 20 tasks; five fixed samples from each other
+category are rerun and receive weight four. Reused tasks use the Full result.
+Consequently every SR/PS row has effective denominator 60.
 
-This produces 105 new episodes and 180 ablation-row contributions. Every Table
-3 ablation row still has denominator 20; the Full row has denominator 60.
+| Profile | Directly rerun subclasses | Runnable configs |
+|---|---|---:|
+| without_goal_reasoning | G1-G4 | 30 |
+| without_intention | G3-G4 | 20 |
+| without_parameter_binding | G2 | 15 |
+| without_memory | M1-M4 | 30 |
+| without_memory_structure | M2 | 15 |
+| without_state_alignment | M3 | 15 |
+| without_stg_planning | P1-P4 | 30 |
+| without_stg_construction | P1-P2 | 20 |
+| without_path_merging | P3-P4 | 20 |
 
-Generate or validate configs:
+The counts include ten cross-category configs per profile. The source dataset
+currently has no separate P4 files; its P3 range contains scenarios P3_11
+through P3_20.
+
+## Manual metrics
+
+The persistent item-level decisions live in
+`evaluation/results/table3/table3_manual_items.csv`. Rebuilding the derived
+review and table does not overwrite those decisions.
+
+- `GoalAlign` is reviewed only for Full and the three Goal ablations, on G
+  scenarios. The denominator is the auditable gold goal atoms; navigation and
+  other execution prerequisites are excluded.
+- `SlotID` is reviewed only for Full and the three Memory ablations, on M
+  scenarios. M1 uses the first post-hide binding, M2 the first state-qualified
+  selection, M3 is excluded, and M4 the first history-qualified binding.
+- `Halluc.` is reviewed only for Full, `without_stg_planning`, and
+  `without_stg_construction`, on P scenarios. It reads original LLMExecutor
+  proposals and treats only action names absent from `ActionValidator.ARITY` as
+  hallucinations. `ask`, `wait`, and `FINISH` are not physical proposals.
+
+Missing Markdown logs do not inherit the episode's SR failure label. They are
+excluded from the manual denominator and remain visible in scenario coverage.
+Current Halluc. coverage is 17/20, 16/20, and 17/20 respectively.
+
+`without_state_alignment` currently reruns M3, while the approved SlotID metric
+excludes M3. Its SlotID value therefore comes from reused M1/M2/M4 evidence and
+does not measure an M4-specific state-alignment intervention.
+
+## Commands and outputs
+
+Validate the 195 generated configs:
 
 ```bash
-venv/bin/python evaluation/table3_configs.py generate
 venv/bin/python evaluation/table3_configs.py validate
 ```
 
-Run one profile (the runner backgrounds itself unless `--daemon` is supplied):
+Run a single profile or the complete config directory with
+`evaluation/test_runner.py`. To reconstruct the manual audit from the reviewed
+judgements and original LLMExecutor output, then aggregate:
 
 ```bash
-venv/bin/python evaluation/test_runner.py \
-  evaluation/configs/table3/runs/without_parameter_binding \
-  --method robostate --model gpt-5.4-mini
+PYTHONPATH=. venv/bin/python evaluation/build_table3_manual_audit.py
+PYTHONPATH=. venv/bin/python evaluation/aggregate_table3.py
 ```
 
-Run all 105 new episodes by passing `evaluation/configs/table3/runs`. Existing
-complete Table 3 metrics are skipped unless `--force` is specified.
-
-Aggregate the table:
-
-```bash
-venv/bin/python evaluation/aggregate_table3.py
-```
-
-The aggregator writes `table3.csv`, `table3_runs.csv`,
-`baseline_audit.csv`, `table3_manual_review.csv`, and
-`completeness_report.json`. GoalAlign, SlotID, and Halluc remain manual fields.
+The aggregator preserves the accepted SR/PS snapshot and writes `table3.csv`,
+`table3_manual_review.csv`, and `completeness_report.json`. It also records each
+manual metric's numerator, denominator, and scenario coverage. The existing
+`table3_runs.csv` and `baseline_audit.csv` remain the SR/PS evidence indexes.

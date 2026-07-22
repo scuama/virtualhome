@@ -5,7 +5,11 @@ import unittest
 
 from agent.robostate.ablation import get_ablation_policy
 from agent.robostate_agent import RoboStateAgent
-from evaluation.aggregate_table3 import aggregate, audit_baseline
+from evaluation.aggregate_table3 import (
+    aggregate,
+    apply_manual_metrics,
+    read_manual_items,
+)
 from evaluation.table3_configs import generate_all, validate
 from evaluation.test_runner import build_agent_config
 
@@ -17,27 +21,29 @@ class Table3ConfigTests(unittest.TestCase):
 
     def test_minimal_rerun_counts_and_full_cell_denominators(self):
         validate(self.runs, self.manifest)
-        self.assertEqual(len(self.runs), 105)
-        self.assertEqual(len(self.manifest["cells"]), 180)
+        self.assertEqual(len(self.runs), 195)
+        self.assertEqual(len(self.manifest["cells"]), 540)
         for profile in self.manifest["profiles"]:
             self.assertEqual(
                 sum(cell["profile"] == profile for cell in self.manifest["cells"]),
-                20,
+                60,
             )
 
     def test_component_subclass_reuse_mapping(self):
         reruns = {
             profile: {
                 cell["subclass"] for cell in self.manifest["cells"]
-                if cell["profile"] == profile and cell["result_source"] == "ablation"
+                if cell["profile"] == profile
+                and cell["category"] == self.manifest["profiles"][profile]["category"]
+                and cell["result_source"] == "ablation"
             }
             for profile in self.manifest["profiles"]
         }
         self.assertEqual(reruns["without_parameter_binding"], {"G2"})
         self.assertEqual(reruns["without_memory_structure"], {"M2"})
-        self.assertEqual(reruns["without_state_alignment"], {"M4"})
-        self.assertEqual(reruns["without_stg_construction"], {"P3"})
-        self.assertEqual(reruns["without_path_merging"], {"P1", "P2"})
+        self.assertEqual(reruns["without_state_alignment"], {"M3"})
+        self.assertEqual(reruns["without_stg_construction"], {"P1", "P2"})
+        self.assertEqual(reruns["without_path_merging"], {"P3"})
 
     def test_ablation_metadata_is_agent_visible_but_evaluator_truth_is_not(self):
         config = self.runs[0][1]
@@ -103,6 +109,32 @@ class Table3AggregationTests(unittest.TestCase):
         self.assertEqual(rows[0]["sr_denominator"], 60)
         self.assertFalse(report["complete"])
         self.assertEqual(report["recorded_runnable_episodes"], 0)
+
+    def test_manual_audit_fills_only_the_eleven_applicable_cells(self):
+        rows = [{
+            "profile": profile,
+            "complete": True,
+        } for profile in (
+            "full", "without_goal_reasoning", "without_intention",
+            "without_parameter_binding", "without_memory",
+            "without_memory_structure", "without_state_alignment",
+            "without_stg_planning", "without_stg_construction",
+            "without_path_merging",
+        )]
+        items = read_manual_items(
+            Path("evaluation/results/table3/table3_manual_items.csv")
+        )
+        summaries, _, issues = apply_manual_metrics(rows, items)
+        self.assertEqual(issues, [])
+        self.assertEqual(len(summaries), 11)
+        by_profile = {row["profile"]: row for row in rows}
+        self.assertEqual(by_profile["full"]["GoalAlign"], 87.5)
+        self.assertEqual(by_profile["full"]["SlotID"], 100.0)
+        self.assertEqual(by_profile["full"]["Halluc"], 0.0)
+        self.assertEqual(by_profile["without_memory"]["SlotID"], 20.0)
+        self.assertEqual(by_profile["without_path_merging"]["GoalAlign"], "n/a")
+        self.assertEqual(by_profile["without_path_merging"]["SlotID"], "n/a")
+        self.assertEqual(by_profile["without_path_merging"]["Halluc"], "n/a")
 
 
 if __name__ == "__main__":

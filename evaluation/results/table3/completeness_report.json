@@ -1,10 +1,110 @@
 {
-  "table_id": "table3",
   "complete": true,
-  "baseline_samples": 60,
+  "aggregation_mode": "accepted_sr_ps_snapshot_plus_manual_review",
   "expected_runnable_episodes": 195,
-  "recorded_runnable_episodes": 195,
-  "expected_cell_contributions": 540,
-  "materialized_cell_contributions": 540,
-  "issues": []
+  "completed_runnable_episodes": 195,
+  "expected_weighted_contributions": 540,
+  "issues": [],
+  "manual_review_items": 533,
+  "manual_metric_summary": [
+    {
+      "profile": "full",
+      "metric": "GoalAlign",
+      "numerator": 21,
+      "denominator": 24,
+      "percent": 87.5,
+      "scenario_coverage": "20/20",
+      "complete": true
+    },
+    {
+      "profile": "full",
+      "metric": "SlotID",
+      "numerator": 14,
+      "denominator": 14,
+      "percent": 100.0,
+      "scenario_coverage": "20/20",
+      "complete": true
+    },
+    {
+      "profile": "full",
+      "metric": "Halluc",
+      "numerator": 0,
+      "denominator": 104,
+      "percent": 0.0,
+      "scenario_coverage": "17/20",
+      "complete": true
+    },
+    {
+      "profile": "without_goal_reasoning",
+      "metric": "GoalAlign",
+      "numerator": 16,
+      "denominator": 23,
+      "percent": 69.57,
+      "scenario_coverage": "19/20",
+      "complete": true
+    },
+    {
+      "profile": "without_intention",
+      "metric": "GoalAlign",
+      "numerator": 20,
+      "denominator": 24,
+      "percent": 83.33,
+      "scenario_coverage": "20/20",
+      "complete": true
+    },
+    {
+      "profile": "without_parameter_binding",
+      "metric": "GoalAlign",
+      "numerator": 16,
+      "denominator": 23,
+      "percent": 69.57,
+      "scenario_coverage": "19/20",
+      "complete": true
+    },
+    {
+      "profile": "without_memory",
+      "metric": "SlotID",
+      "numerator": 2,
+      "denominator": 10,
+      "percent": 20.0,
+      "scenario_coverage": "18/20",
+      "complete": true
+    },
+    {
+      "profile": "without_memory_structure",
+      "metric": "SlotID",
+      "numerator": 9,
+      "denominator": 12,
+      "percent": 75.0,
+      "scenario_coverage": "18/20",
+      "complete": true
+    },
+    {
+      "profile": "without_state_alignment",
+      "metric": "SlotID",
+      "numerator": 14,
+      "denominator": 14,
+      "percent": 100.0,
+      "scenario_coverage": "20/20",
+      "complete": true
+    },
+    {
+      "profile": "without_stg_planning",
+      "metric": "Halluc",
+      "numerator": 0,
+      "denominator": 106,
+      "percent": 0.0,
+      "scenario_coverage": "16/20",
+      "complete": true
+    },
+    {
+      "profile": "without_stg_construction",
+      "metric": "Halluc",
+      "numerator": 0,
+      "denominator": 127,
+      "percent": 0.0,
+      "scenario_coverage": "17/20",
+      "complete": true
+    }
+  ]
 }
