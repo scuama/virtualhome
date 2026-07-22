@@ -1,0 +1,45 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 8.0,
+    "ps_sum": 8,
+    "ps_count": 1,
+    "mean_completion_step": 8.0,
+    "tasks": [
+        {
+            "task_id": "T3_without_stg_construction_P3_15",
+            "instruction": "Put the waterglass in the fridge and ensure the fridge is turned on to cool it.",
+            "success_condition": {
+                "target_class": "waterglass",
+                "states": [
+                    "COLD"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        }
+    ],
+    "scenario_id": "T3_without_stg_construction_P3_15",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_stg_construction",
+    "source_scenario_id": "P3_15",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 8,
+    "execution_time_seconds": 31.08,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

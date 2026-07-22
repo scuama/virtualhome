@@ -21,3 +21,22 @@
 | **RoboState** | 100.0 / 8.5 | 100.0 / 11.8 | 91.4 / 14.8 | 100.0 / 8.1 | 100.0 / 9.4 | 40.0 / 5.5 | 86.7 / 8.8 | 86.7 / 9.0 | 80.0 / 9.5 |
 
 > *Note: Each cell reports SR ↑ / PS ↓*
+
+---
+
+# Table 3: Ablation Study of RoboState Modules
+
+| Module | Ablation Setting | SR (%) ↑ | PS ↓ |
+| :--- | :--- | :---: | :---: |
+| **Full** | RoboState (Full) | 61.67 | 4.81 |
+| **Goal Reasoning** | w/o Goal Reasoning | 15.00 | 2.00 |
+| | w/o Intention | 70.00 | 3.21 |
+| | w/o Parameter Binding | 80.00 | 4.25 |
+| **Memory** | w/o Memory | 15.00 | 5.00 |
+| | w/o Memory Structure | 40.00 | 6.63 |
+| | w/o State Alignment | 75.00 | 4.93 |
+| **Planning** | w/o STG Planning | 25.00 | 7.00 |
+| | w/o STG Construction | 20.00 | 6.50 |
+| | w/o Path Merging | 25.00 | 6.80 |
+
+> *Note: Baseline SR represents the average across all 60 standard testing scenarios for direct comparison.*

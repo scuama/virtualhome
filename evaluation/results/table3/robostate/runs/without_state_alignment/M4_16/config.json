@@ -1,0 +1,86 @@
+{
+    "scenario_id": "T3_without_state_alignment_M4_16",
+    "scenario_type": "M",
+    "goal_instruction": "Put the waterglass we just used into the dishwasher.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "DIRTY",
+                "EMPTY"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "CLEAN",
+                "EMPTY"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "DIRTY",
+                "FILLED_MILK"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "waterglass",
+            "count": 3,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[pour] <waterglass> (15) <sink> (99)",
+            "success": true,
+            "reasoning": "I poured the milk into the sink. The waterglass is EMPTY and DIRTY."
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": [
+            "DIRTY",
+            "EMPTY"
+        ],
+        "relation": "INSIDE",
+        "destination_class": "dishwasher"
+    },
+    "source_scenario_id": "M4_16",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_state_alignment",
+    "ablation_module": "memory",
+    "table3_source_subclass": "M4",
+    "source_config": "configs/source_tasks/m_class/M4_16.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 24.37
+}

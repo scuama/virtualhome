@@ -1,0 +1,50 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the desk lamp is on, turn it off.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "hidden_broken_classes": [
+        "tablelamp"
+    ],
+    "success_condition": {
+        "target_class": "tablelamp",
+        "states": [
+            "OFF"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_goal_reasoning_G4_19",
+    "source_scenario_id": "G4_19",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_goal_reasoning",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G4",
+    "source_config": "configs/source_tasks/g_class/G4_19.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 5.67
+}

@@ -1,0 +1,71 @@
+{
+    "scenario_id": "T3_without_state_alignment_M4_18",
+    "scenario_type": "M",
+    "goal_instruction": "Put the plate we just used on the kitchentable.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_properties": [
+                "COLOR_RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_properties": [
+                "COLOR_GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "plate",
+            "count": 2,
+            "relation": "INSIDE",
+            "object": "kitchencabinet"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <plate> (15) <sink> (99)",
+            "success": true,
+            "reasoning": "I washed the plate with the COLOR_RED property."
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "properties": [
+            "COLOR_RED"
+        ],
+        "relation": "ON",
+        "destination_class": "kitchentable"
+    },
+    "source_scenario_id": "M4_18",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_state_alignment",
+    "ablation_module": "memory",
+    "table3_source_subclass": "M4",
+    "source_config": "configs/source_tasks/m_class/M4_18.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 42.35
+}

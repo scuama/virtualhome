@@ -1,0 +1,69 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there is water in the cup, pour it out and put the cup in the cabinet.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "cabinet"
+            ],
+            "remove_states": [
+                "OPEN"
+            ],
+            "add_states": [
+                "CLOSED"
+            ]
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "add_states": [
+                "FILLED_WATER"
+            ]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "mug",
+                "destination_class": "cabinet",
+                "relation": "INSIDE",
+                "min_count": 1
+            },
+            {
+                "target_class": "mug",
+                "states": [
+                    "EMPTY"
+                ],
+                "min_count": 1
+            }
+        ]
+    },
+    "scenario_id": "T3_without_goal_reasoning_G1_05",
+    "source_scenario_id": "G1_05",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_goal_reasoning",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G1",
+    "source_config": "configs/source_tasks/g_class/G1_05.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 5.88
+}

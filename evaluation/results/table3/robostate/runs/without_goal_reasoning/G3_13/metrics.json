@@ -1,0 +1,38 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 0.0,
+    "ps_sum": 0,
+    "ps_count": 1,
+    "mean_completion_step": 0.0,
+    "tasks": [
+        {
+            "task_id": "T3_without_goal_reasoning_G3_13",
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 0,
+            "completed": true,
+            "completion_step": 0,
+            "completion_evidence": "on_ask_policy"
+        }
+    ],
+    "scenario_id": "T3_without_goal_reasoning_G3_13",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_goal_reasoning",
+    "source_scenario_id": "G3_13",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Clarification/impossibility correctly requested",
+    "steps_executed": 0,
+    "execution_time_seconds": 8.2,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

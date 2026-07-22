@@ -1,0 +1,50 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T3_without_intention_G4_20",
+            "instruction": "If there is juice on the table, pour me a glass.",
+            "success_condition": {
+                "target_class": "character",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "destination_class": "ANY",
+                "destination_properties": [
+                    "POURABLE"
+                ],
+                "destination_states": [
+                    "FILLED_JUICE"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T3_without_intention_G4_20",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_intention",
+    "source_scenario_id": "G4_20",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 6.59,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

@@ -1,0 +1,43 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there are two books on the coffee table, take both of them to the sofa.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 2
+            }
+        ]
+    },
+    "execution_time_seconds": 33.05,
+    "scenario_id": "T3_without_path_merging_P2_10",
+    "source_scenario_id": "P2_10",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_path_merging",
+    "ablation_module": "planning",
+    "table3_source_subclass": "P2",
+    "source_config": "configs/source_tasks/p_class/P2_10.json",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini"
+}

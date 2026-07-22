@@ -1,0 +1,47 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the TV is on, turn it off with the remote.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "remove_states": [
+                "OFF"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        }
+    ],
+    "hidden_broken_classes": [
+        "remotecontrol"
+    ],
+    "success_condition": {
+        "target_class": "tv",
+        "states": [
+            "OFF"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_goal_reasoning_G4_18",
+    "source_scenario_id": "G4_18",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_goal_reasoning",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G4",
+    "source_config": "configs/source_tasks/g_class/G4_18.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 4.44
+}

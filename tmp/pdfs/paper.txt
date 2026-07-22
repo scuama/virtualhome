@@ -1,0 +1,549 @@
+ RoboState: State-Aware Planning for Continual Embodied Instruction Following
+                        in Open Dynamic Environment
+
+                                                       Anonymous submission
+
+
+
+
+                            Abstract
+  Continual embodied instruction following (CEIF) is preva-
+  lent in long-term human-agent cohabitation tasks such as
+  home service, elderly care, and autonomous inspection. CEIF
+  is particularly challenging in open dynamic environments
+  which is interved by human activity between consecutive ob-
+  servations, invalidating the agent’s previous recognition of
+  environment state. Existing methods make decisions primar-
+  ily from surface-level information of the environment, which
+  causes planning to depend on stale or misaligned information
+  and involve unavailable objects, ultimately leading to failures.
+  We propose RoboState, a state-aware framework for CEIF in
+  open dynamic environments, which operates through a three-
+  stage pipeline of (1) parsing an instruction into goal states,     Figure 1: Continual Embodied instruction following in open
+  (2) aligning and tracking the current states of the relevant ob-   dynamic environment.
+  jects, and (3) constructing an executable plan from the cur-
+  rent states to the goal states. We evaluate RoboState on a new
+  benchmark containing 120 CEIF tasks as well as on the ex-          closed), (2) coping with the interference caused by object
+  isting ExRAP benchmark. The results show that RoboState            changes across observation intervals (e.g., the bedroom and
+  remains robust across different dynamic difficulty levels, in-     living-room remotes being swapped) and (3) understanding
+  struction scales, instruction types, and LLM backbones, and        the state transitions that each action realizes (e.g., how clos-
+  achieves the higher task success rate and the lower pending        ing windows or turning on fans changes the temperature).
+  steps compared with the state-of-the-art (SOTA) methods.
+                                                                        Despite its practical significance, research on CEIF
+                                                                     of open dynamic environments remains very limited.
+                     1     Introduction                              ExRAP (?) is the sole study specifically designed for
+Embodied agents are with a growing demand on continu-                CEIF. However, ExRAP assumes a closed environment
+ously instructions, which is prevalent in long-term human-           that changes only through the agent’s own actions. Under
+agent cohabitation tasks such as home service (?), elderly           human-induced changes, its memory constructed from re-
+care (?), and autonomous inspection (?). This kind of                cent observations may treat a reappearing or relocated ob-
+tasks is referred as continual embodied instruction follow-          ject as a new instance, while directly generated plans from
+ing (CEIF), which requires an agent to continuously moni-            such memory may involve inavailable objects, causing task
+tor the environment, determine when continual instruction is         failure and redundant execution. Other notable efforts (?)
+triggered, and execute the task for the satisfied condition.         are broader embodied instruction following studies. Most
+   This requirement becomes particularly challenging in              of them process an instruction once upon receipt for ex-
+open dynamic environments, where relevant objects may be             ecution, without providing explicit mechanism for repeat-
+unknown in advance and may be altered by human activi-               edly determining whether a triggering condition holds. con-
+ties between consecutive observations (?). For example, for          sequently, they cannot directly handle continual tasks, not to
+the instruction “keep the bedroom cool when I am there               mention open dynamic environments. Further, existing ap-
+in the evening,” a family member may swap the bedroom                proaches remains limited due to depending on surface-level
+and living-room air-conditioner remotes or open a window,            information of the environment such as literal interpretion
+invalidating the agent’s previous recognition about object           of instructions, environmental exploration with recent ob-
+identity and the current environment state. Hence, reliable          servation, directly-generated model planning. And they may
+CEIF requires three capabilities, including (1) inferring in-        cause triggering conditions to be evaluated on false premises
+tended target states of actionable objects (e.g., the air con-       and plans to refer to unavailable objects for task failures.
+ditioner set to sleep mode, the fan turned on, the window               Our key insight is that, state-aware analysis can address
+this limitation, which can interpret an instruction as the in-      to align reappearing objects to the original instances and
+tended target states, overcomes the interference caused by          directly-generated plans may refer to unavailable objects,
+object changes across observations through state alignment,         leading to task failure and execution cost.
+and grounds planning on the state transitions that actions re-         Other related efforts (?) focus on broader embodied in-
+alize for avoiding unavailable plans.                               struction following, which can be divided into three cate-
+   We propose RoboState, a state-aware CEIF framework               gories. The first grounds natural-language instructions into
+with a pipeline of Goal Reasoning, State-Consistent Object          executable actions (???). The second augments planning
+Memory, and STG-Based Planning. These modules respec-               with memory or environment representations under partial
+tively parses an instruction into goal states, aligns and tracks    observability (???). The third addresses adaptation and er-
+the current states of the relevant objects, and construct an ex-    ror correction during planning (?????). These methods treat
+ecutable plan from the current states to the goal states once       each instruction as a one-shot task whose applicability is
+the instruction’s triggering condition is satisfied. In the first   evaluated once before execution. Hence, they lack an ex-
+module, RoboState first traces the actionable intention (i.e.,      plicit mechanism to repeatedly reevaluate trigger conditions
+the actionable objects) behind an instruction through inten-        while an instruction remains active, limiting their applicabil-
+tion reasoning, and then binds its key parameters through           ity to CEIF, not to mention open dynamic environments.
+parameter acquisition, ultimately yielding structured goal             Furthermore, existing approaches have limited effective-
+states (Section ??). In the second module, RoboState orga-          ness, due to relying on surface-level representations instead
+nizes environmental knowledge in an object-centric manner,          of underlying factors. Specifically, they interpret instructions
+and assigns each new observation to its corresponding ob-           as literal actions instead of the intended goal states, maintain
+ject via state alignment, thereby maintaining reliable current      memory from the isolated observations rather than the envi-
+states for planning. In the third module, constructs a state        ronmental changes across observations, and generate plans
+transition graph (SDG) for the relevant objects, and then de-       directly by the model rather than derive them through rea-
+rives a unified executable plan via path search and merging.        soning about the state transition that each action should re-
+   To evaluate the effectiveness of RoboState, we construct         alize. RoboState addresses this limitation with a state-aware
+the first dedicated benchmark for this setting, with 120 con-       manner, which maps instructions into intended goal states,
+tinual instructions across VirtualHome and ALFRED. We               aligns and tracks the current states of relevant objects, and
+additionally evaluate RoboState on the ExRAP benchmark              generate an feasible plans by searching paths from the cur-
+to compare it with state-of-the-art (SOTA) methods under            rent states to the goal states over STG.
+their same settings. Across both benchmarks, RoboState
+achieves the higher task success rate and the lower pend-           Embodied agent for open dynamic environment. Exist-
+ing steps than the representative and SOTA methods. And its         ing methods on embodied agents for open dynamic environ-
+advantage becomes more pronounced under higher dynamic              ments remains limited, and they lack the support for CEIF
+difficulty, larger instruction scales, and vague instruction ex-    planning for two limiations. First, existing studies address
+pressions Ablation studies further demonstrate the impact of        adjacent problems rather than CEIF planning. For exam-
+each module and its core components.                                ple, SGM outputs a posterior over object locations rather
+                                                                    than an executable plan. KnowNo requests assistance rather
+Contributions.     This paper makes the contributions:              than performs planning. ADAPT is an affordance-reasoning
+ • We propose a novel state-aware CEIF planning frame-              module that must be equipped with existing planners. And
+   work to address continual instruction following tasks in         InternVLA’s outputs correspond to single skills rather than
+   open dynamic environments.                                       long-horizon plans. Second, these methods model environ-
+ • We demonstrate the effectiveness and robustness of Ro-           mental dynamics only in isolated facets rather than within a
+   boState through extensive experiments in the Virtual-            unified framework. SGM (?) and LookPlanGraph (?) model
+   Home and ALFRED environments.                                    changing object locations. ADAPT (?) reasons about time-
+                                                                    varying object affordances. KnowNo (?) estimates planner
+ • We construct the first dataset for CEIF in open dynamic          uncertainty for assistance request. FLARE (?) addresses dis-
+   environments, and will release our artifact and datasets.        crepancies between plan subgoals and current environment
+                                                                    states in dynamic settings. InternVLA (?) improves control
+                    2    RelatedWork                                robustness under environmental changes. However, CEIF re-
+Continual Embodied instruction following. There are                 peatedly evaluates continual instructions against the same
+very limited studies on CEIF in open dynamic environ-               objects over time. The impact of any aspects (e.g., location,
+ments. ExRAP (?) is the only study explicitly developed             availability, identity, or existence status) can cause subse-
+for CEIF, which constructs memory from recent observa-              quent triggers to be evaluated or executed on false premises,
+tions, decides the execution by matching memory queries             leading to task failures.
+with instruction conditions and generates planning through             We characterize the impact posed by open dynamics as
+LLM reasoning. However, ExRAP assumes a closed envi-                uncontrolled divergence between the agent’s knowledge and
+ronment which changes only through the agent’s own ac-              the true environment state. Accordingly, RoboState main-
+tions. This assumption does not hold in real human-involved         tains an object-centric memory that tracks each object’s state
+open dynamic environments. Under externally-altered en-             over time and applies a unified state-alignment mechanism
+vironment, ExRAP’s observation-based memory may fail                to detect and correct this divergence. This keeps the agent’s
+                                                  Figure 2: Overview of RoboStates
+
+knowledge consistent with the environment while an instruc-          the object’s current state together with its past states. Every
+tion remains active.                                                 update is committed through state alignment, which recon-
+                                                                     ciles a new observation with the corresponding slot’s state
+                       3    Approach                                 trajectory rather than its latest snapshot alone, thereby ad-
+                                                                     dressing the two failure modes of observation-only memory:
+3.1   Overview
+                                                                     identity drift and trajectory blindness.
+Our system takes a continual instruction I in an open,
+dynamic environment and produces an executable plan Π                STG-Based Task Planning. Given (G, P ) and G (k) , this
+through three modules that decouple what the user wants,             module constructs a State-Transition Graph (STG) whose
+what the world currently is, and how to act. Goal Reason-            nodes are reachable object states and whose edges are skill-
+ing maps I to a structured state-level goal (G, P ); State-          induced transitions. Planning thereby reduces to path search
+Consistent Object Memory maintains an object-centric                 from the current states to the goal states admitted by (G, P ),
+graph G (k) that tracks the task-relevant objects to which           and the resulting per-object paths are composed under cross-
+(G, P ) refers; and STG-Based Task Planning searches over            object ordering, shared-resource, and spatial constraints into
+G (k) to turn (G, P ) into Π. The design rests on three choices:     a single executable plan.
+(i) reducing a standing instruction to a state goal rather than
+its surface actions, so that the same goal admits interchange-       3.2   Hierarchical Reasoning for Goal States
+able means; (ii) updating memory by state-trajectory align-          A continual instruction is a standing condition rather than a
+ment rather than against the latest snapshot, so that object         one-shot command, so executing its surface verbs literally is
+identity is preserved under occlusion and re-binding; and            unsafe: the same words (e.g., keep the bedroom cool) may
+(iii) recovering the plan as path search on a grounded state-        demand opposite actions in different states, or may be tem-
+transition graph rather than by direct end-to-end action gen-        porarily unsatisfiable. Goal Reasoning therefore does not
+eration, so that every step is executable by construction.           produce actions; it converts I into a structured goal (G, P ),
+                                                                     namely a goal predicate G together with a parameter bind-
+Hierarchical Reasoning for Goal States. Given the user               ing P , that specifies the state of the world the user intends to
+instruction I, this module outputs a structured goal (G, P ),        hold, leaving the realization of that state to the downstream
+where G is a goal predicate (e.g., the bedroom is thermally          planner.
+comfortable when occupied) and P is the parameter binding               Formally, given the user instruction I, the current memory
+of G (the bedroom air conditioner, the window, the occu-             G (k) , and the interaction history H,
+pant). Crucially, the module does not emit actions: it spec-
+ifies the state of the world the user intends to hold, leaving                         (G, P ) = R(I, G (k) , H).
+the realization to the downstream planner.
+                                                                     The mapping R is realized in four steps.
+State-Consistent Object Memory. This module main-                       Step-1. Root Intention Extraction. Continual instruc-
+tains an object-centric knowledge graph G (k) to model the           tions are typically phrased as actions or condition–action
+open, dynamic environment. Memory assigns each task-                 pairs, whereas the user’s stable concern resides at the state
+relevant object a slot, i.e., a persistent identifier, that holds    level. We extract the root intention by iteratively asking why
+the surface action would be issued, until the answer is a state    skill or an action. Downstream, §3.4 searches the STG for
+that the user intends the world to hold. This why-regression       paths that drive the bound slots into states admitted by G,
+follows the principle of root cause analysis in industrial         while §?? keeps those slots aligned with the evolving world.
+process improvement, in which repeatedly interrogating the         Whenever the memory module reports that the surface state
+cause of an observed symptom exposes the underlying con-           of the world contradicts the slot bindings or triggers in P ,
+dition rather than its surface manifestation (?). We denote        the pipeline re-enters Step-3 to re-ground (G, P ) against the
+this step by                                                       latest G (k) , without re-running Step-1 or Step-2, so that the
+                        G = ϕwhy (I).                              root intention G remains fixed while only its grounding is
+Consider the running example: the surface action                   refreshed.
+adjust the air conditioner (AC) regresses through
+make the bedroom cool to the state predicate                       3.3   State-Consistent Object-central Memory
+G = thermally comfortable, a predicate over                        Observation-only memory updates fail in open, dynamic en-
+a room rather than an action over a device. Alternative            vironments in two ways. First, identity drift: an object oc-
+surface actions (e.g., open the window, turn on the fan)           cluded for several steps and then observed again is easily
+share the same G and thereby constitute interchangeable            registered as a new instance, because the current observa-
+means, which is what permits replanning under device               tion is matched only against the latest snapshot. Second, tra-
+unavailability.                                                    jectory blindness: even when identity is preserved, a state
+   Step-2. Key Parameter Completion. A root intention              change is committed without verifying that the new state is
+G is verifiable only after its open parameters are bound to        a plausible successor of the slot’s recent history. For exam-
+concrete values. We close these parameters through option-         ple, if the last executed skill on a cup was fill, a subse-
+based clarification,                                               quent observation reporting the cup as empty contradicts the
+                   P = ϕask (G, G (k) , H).                        trajectory and should be rejected or re-examined rather than
+                                                                   committed; observation-only updates overwrite the state re-
+ϕask first attempts to resolve each parameter from G (k) and       gardless. State-Consistent Object Memory addresses both by
+H; residual unknowns are closed by short multiple-choice           representing memory as an object-centric knowledge graph
+queries to the user. The parameters fall into four categories,     in which each task-relevant object owns a persistent slot, and
+each of which is a binding rather than an action: slot bind-       by committing every update through alignment between the
+ings that identify which objects in G (k) realize the roles in     new observation and the slot’s state trajectory rather than its
+G (which AC, which room); thresholds that operationalize           latest state alone.
+the predicate ([Tmin , Tmax ]); triggers under which G must
+hold (occupant present, evening); and preferences that act         Object-centric memory and object slot. We represent
+as secondary constraints (energy saving, autonomy permis-          memory after k updates as G (k) = (V (k) , E (k) ), an object-
+sion). Clarification is restricted to parameters, and the user     centric graph with object, attribute, event, location, and rule
+is never asked to choose actions, thereby retaining action se-     nodes. Each edge carries a relation type and a validity in-
+lection within the system rather than delegating it to the user.   terval [kf rom , kto ), where kto = marks a still-active relation
+   Step-3. Intention–Environment Reconciliation. Even              and k counts memory-update events rather than wall-clock
+with (G, P ) resolved, the current world may render the            time. Every task-relevant object oi is persistently identified
+                                                                                                                    (k)
+literal commitment ill-posed. Two failure modes recur: a           by a single object node viobj , and its slot Si is the ego-
+slot in P is missing or inoperative in G (k) , so that G                                     obj
+                                                                   subgraph centered at vi at version k. The slot state is char-
+cannot be achieved by the canonical means (temporarily-            acterized by the four categories of currently-active relations
+unsatisfiable); or the trigger in P no longer applies, so that     on viobj ,
+G should be deferred (stale). We reconcile (G, P ) with the
+latest state by                                                               (k)   (︁ (k)       (k)      (k)        (k) )︁
+                                                                           Si = Ri,attr , Ri,temp , Ri,spat , Ri,rule ,
+             (G′ , P ′ ) = ϕrobust (G, P, G (k) , H),              spanning what the object is, what has happened to it, where
+where ϕrobust produces one of two outcomes. (i) If P is tem-       it is, and which rules apply. In particular, the temporal rela-
+                                                                            (k)
+porarily unsatisfiable or has become stale, the module seeks       tions Ri,temp record the events incident to the object, includ-
+a suboptimal resolution that preserves the root intention, ei-     ing the most recently executed skill acting on it; we denote
+ther by rebinding P to an alternative slot set (e.g., the win-     the last executed skill at version k by a(k−1) , which is thus
+dow together with the fan in place of the AC), or, when no         retained in memory and available for alignment. The slot
+such rebinding attains acceptable confidence, by querying          state changes whenever any one of the four sets changes.
+the user whether the goal itself should be revised. (ii) Other-
+wise, (G, P ) is confirmed unchanged. In both cases the root       Memory consolidation and retrival Past states are not
+intention G remains fixed and is never modified silently.          stored as separate snapshots; they are recovered on demand
+   Step-4. Goal Summarization. The reconciled pair from            from the validity intervals on G (k) . The slot’s recent state
+Step-3 is exposed as the module output, (G, P ) := (G′ , P ′ ).    trajectory over the last n updates is
+It is a declarative specification: it states what must hold,
+                                                                                   (k,n)    (︁ (k−n)            (k−1) )︁
+under which triggers, over which slots, but never names a                       Hi       = Si        , . . . , Si        ,
+                               (m)
+where each historical state Si is reconstructed by filtering        mistaken for k instances. Inter-object relation change (e.g.,
+the edges incident to viobj whose interval covers m. The tra-       near → on) is scored as a spatial transition against the tra-
+jectory is therefore a query over the single graph rather than      jectory and the recent action. In every case the slot identity
+additional storage, which keeps memory compact while ex-            is preserved, and both identity drift and trajectory blindness
+posing the full state history needed for alignment.                 are resolved by the single Align mechanism above.
+Memory operation by state alignment. A new percep-                  3.4   STG-Based Task Planning
+tion input at step k is parsed into an observation state Ŝ (k)     A goal (G, P ) does not by itself name the skills that real-
+of the same four-category form as a slot state. The update          ize it: the same target state can be reached by different se-
+problem is to determine which existing slot in the candidate        quences, and which sequence is feasible depends on the slots
+set C should absorb Ŝ (k) , or whether a new slot should be        currently present in G (k) and the skills that can plausibly act
+created. We frame this as state-trajectory alignment: Ŝ (k) is     on them. Directly asking an LLM to emit an end-to-end skill
+                                                (k,n)
+assigned to the slot whose recent trajectory Hi       best ex-      sequence forces a single model to perform semantic under-
+plains it as a plausible next state.                                standing and action selection jointly, with no constraint ty-
+   (1) Alignment score. For each candidate slot i ∈ C,              ing its output to the available skills or the observed scene;
+                (k,n) )︁
+                                     ∑︂                             as a result, the emitted skills are frequently grounded in nei-
+  Ali Ŝ (k) , Hi
+     (︁
+                         = λid Sid +    λc Sc +λdyn Sdyn , (1)      ther the skill library K nor the current memory G (k) . We
+                                  c∈Ccat                            instead separate semantic understanding from action selec-
+Alignment score combines (i) an identity term over name,            tion: the LLM is invoked only to parse the current memory
+category, and coreference; (ii) four per-category consistency       G (k) into a structured scene representation, while the plan
+terms that compare Ŝ (k) with the slot’s latest active relations   itself is recovered as a path-search problem on an explicit
+of each kind; and (iii) a trajectory-consistency term               State-Transition Graph (STG), whose nodes are reachable
+                                   (︁ (m)                           object states and whose edges are skill-induced transitions
+                             Trans Si , Ŝ (k) , a(k−1) ,
+                                                          )︁
+     Sdyn =      max                                                grounded in K ∪ G (k) .
+              m∈[k−n, k−1]
+                                                                       Formally, given the goal (G, P ) from §3.2 and the current
+where Trans(·) scores whether the change from a histori-            memory G (k) from §3.3,
+             (m)
+cal state Si     to Ŝ (k) is consistent with the last executed
+       (k−1)                                                                              Π = T (G, P, G (k) ).
+skill a       and with object-state continuity. Anchoring on
+the best-matching m, not necessarily m = k − 1, is what             The mapping T proceeds in four steps.
+survives occlusion: when the latest active state predates the          Step-1. Scene Analysis. The LLM is invoked in a read-
+occlusion gap, an earlier valid anchor still grounds the com-       only role to convert (G, P ) and the slot bindings in G (k) into
+parison.                                                            structured planning inputs,
+   (2) Alignment rule. Let z = arg maxi∈C Aligni , and let
+Alignz and Alignsecond be the top two scores. We align Ŝ (k)                    (O, ∆S, A) = ϕscene (G, P, G (k) ),
+to slot z if Alignz > τalign and Alignz − Alignsecond > δ;          where O = {o1 , . . . , om } is the set of task-relevant objects
+we create a new slot if maxi Aligni < τnew ; and we de-             (the slots that P binds, together with the tools or containers
+fer the write otherwise, so that ambiguous observations do          they require), ∆S = {(sinit        goal
+                                                                                                            )}o∈O collects each ob-
+                                                                                                 o , so
+not corrupt memory until disambiguating evidence is avail-                                            (k)
+                                                                    ject’s initial state (read from G ) and goal state (admitted
+able. The two thresholds satisfy τnew ≤ τalign , so that the
+                                                                    by G), and A ⊆ K is the subset of the skill library applicable
+create-new and align regions are disjoint and the residual
+                                                                    in the current scene. No action sequence is produced at this
+region is consistently resolved as deferral. Committed up-
+                                                                    step; the responsibility of the LLM is bounded to semantic
+dates are realized as versioned edge writes (closing the old
+                                                                    extraction.
+single-valued edge and opening a new one; adding or closing
+                                          (k,n)                        Step-2. STG Construction. For each object o ∈ O we
+multi-valued edges in place), so that Hi        remains fully re-   instantiate an object-centric State-Transition Graph Gostg =
+constructible at any later step.                                    (Vo , Eo ). Nodes in Vo are object states, and an edge
+Dynamic Scenarios. The same alignment rule absorbs the              (si , a, sj ) ∈ Eo asserts that executing skill a ∈ A on o in
+two root problems above as they manifest in six recurring           state si produces state sj . A transition is admitted into Eo
+scenarios that defeat observation-only memory. Movement             only if it is grounded, meaning that either (i) K declares a
+changes spatial relations and is scored against the last action     precondition–effect pair consistent with (si , a, sj ), or (ii) the
+and spatial continuity. Occlusion removes the object from           same transition can be reconstructed from G (k) , i.e., some
+the current observation; its last active spatial relation is re-    slot of o or of another object of the same category exhibits
+tained rather than deleted, so that the slot persists. Reap-        two consecutive historical states matching (si , sj ) with the
+pearance triggers alignment against the last visible or pre-        intervening executed skill a, under the assumption that skill
+dicted location and recovers the original slot. Rule binding        effects are shared within an object category. The grounding
+attaches new rule edges to an existing slot rather than cre-        requirement blocks skill hallucination, i.e., the emission of
+ating a new node. Repeated manipulation accumulates as              skills ungrounded in K ∪ G (k) , at graph-construction time:
+temporal edges, so that an object operated k times is not           an ungrounded (si , a, sj ) is rejected before it can enter any
+plan, so that every edge in Gostg corresponds to a transition       Datasets. We collect the following datasets for evaluation.
+the robot can actually perform.                                        Open dynamic CEIF Dateset (Dod ). To evaluate CEIF of
+   Step-3. Path Search and Merging. With each Gostg in              open dynamic environments systematically, we construct the
+place, per-object planning reduces to a shortest-path query,        first benchmark for this setting. We construct 60 continual
+                                                                    instruction-following instructions in each of VirtualHome
+           πo = PathSearch(Gostg , sinit goal
+                                    o , so    ),
+                                                                    and ALFRED, with 120 instructions in total. Within each
+producing a skill sequence whose every step is, by construc-        environment, the 60 instructions are organized into three
+tion, a grounded transition. The multi-object plan is then          module-oriented evaluation subsets, including 20 instruc-
+composed under cross-object constraints,                            tions of class G for Goal Reasoning, 20 instructions of class
+               (︁
+Π = Compose {πo }o∈O ; Corder ∪ Cresource ∪ Cspatial ,
+                                                          )︁        M for State-Consistent Memory, and 20 instructions of class
+                                                                    P for STG Planning.
+where Corder encodes state dependencies between objects,               Each class further contains certain scenario types that
+Cresource encodes shared-resource conflicts (a single grip-         evaluate different capabilities of the corresponding compo-
+per or tool used by several πo ), and Cspatial encodes co-          nent. Class G covers instructions that (1) normally satisfi-
+located navigation that should be merged rather than dupli-         able triggering conditions, (2) involve ambiguous referents
+cated. Compose is not a concatenation; it interleaves the           that require user clarification, (3) contain infeasible condi-
+per-object plans to honor C and collapses redundant skills          tions caused by missing object capabilities, and (4) miss
+arising from shared resources or locations.                         unavailable key elements that require an alternative feasi-
+   Step-4. Reflection and Re-planning. When a step                  ble strategy. Class M covers cases where (5) objects tem-
+fails—an empty path in some Gostg , an unsatisfiable con-           porarily disappear and later reappear or are relocated by
+straint in Compose, or an execution-time discrepancy                human activity, (6) visually-similar instances must be dis-
+reported by §3.3—the failure is labeled with a cause                tinguished, (7) environmental rules are temporarily intro-
+r ∈ { object missing, state mismatch, skill                         duced and subsequently removed by other occupants, and
+unavailable, resource conflict, constraint                          (8) object states change between observation intervals and
+violation } and fed back into Step-1: ϕscene is re-                 must be matched to their historical states. Class P covers (9)
+invoked on the latest G (k) , A and ∆S are refreshed, and only      resource-contention instructions that requires action seriali-
+the affected Gostg is rebuilt. Reflection is therefore the closed   sation or object substitution, (10) multi-object parallel cases
+loop that lets the pipeline absorb environment change with-         that require action merging, and (11) multi-step instructions
+out disturbing §3.2: the root intention G remains fixed, while      that require target objects to undergo prerequisite state trans-
+the path through the STG is re-derived against the updated          formations such as cooking, cleaning and slicing.
+world.                                                                 ExRAP (De ). ExRAP is the only public benchmark for
+                                                                    CEIF and contains 100 VirtualHome instructions and 50
+                     4    Experiment                                ALFRED instructions. Evaluation on ExRAP enables direct
+4.1   Experimental Setup                                            comparison with published results and assesses RoboState
+                                                                    under the same benchmark conditions used in prior work.
+Environments. We evaluate our method in two simulation
+environments for household planning, VirtualHome (?) and            Baselines. We first compare RoboState with four repre-
+ALFRED (?), on which we construct continual instruction             sentative baselines over Dod in Table 1. SayCan (?) and
+following tasks in open dynamic environments.                       LLMPlanner (?) are the classic baselines for embodied in-
+Metrics. We utilize two metrics for evaluating the overall          struction following. Both methods are also evaluated in
+effectiveness of RoboState. The success rate (SR) measures          ExRAP, which facilitates comparison between Table 1 and
+the proportion of completed tasks among the continual in-           Table 2. Since ExRAP (?) directly addresses CIEF, we use
+structions whose conditions are satisfied at each timestep.         it as our primary baseline. We contacted the authors to clar-
+The pending step (PS) measures the average number of                ify implementation details and reproduced the method ac-
+timesteps required to complete the associated task from the         cordingly. FLARE (?) is the SOTA study for correcting dis-
+moment that condition is satisfied in the environment.              crepancies between generated plans and observed environ-
+   To evaluate the impact of individual components, we fur-         ment states, and its problem setting most closely matches
+ther introduce three fine-grained metrics. GoalAlign mea-           our open dynamic setting. Together, these baselines repre-
+sures goal-interpretation accuracy as the proportion of pre-        sent the classic and SOTA studies for our topic. To reduce re-
+dicted goal states that match the annotated goal states un-         dundant comparisons in Table 1, we omit ZSP (?) and Prog-
+der the existing protocol (?). SlotID measures identity-            Prompt (?). ZSP closely overlaps with LLM-Planner without
+preservation accuracy as the proportion of post-perturbation        its replanning mechanism, whereas ProgPrompt and SayCan
+observations that are assigned to the correct object slot af-       both address action feasibility with different mechanisms.
+ter events such as movement, occlusion, or reappearance.               Moreover, we compare RoboState with ZSP, SayCan,
+Halluc. measures the skill-hallucination rate as the propor-        ProgPrompt, LLMPlanner, and ExRAP on De in Table 2.
+tion of planned skills that are absent from the skill library,      All methods are run under the same settings of ExRAP.
+with lower values indicating better performance. In addition,          We mainly use GPT-5 mini as the LLM backbone for Ro-
+ClarCost measures the clarfication cost as the average num-         boState and baselines. To enable fair comparsion, RoboState
+ber of clarification questions asked per execution.                 is equipped without user clarification under the same user-
+Table 1: Performance of RoboState over Dob with respect to            Instruction scale. Column xx of Table ?? also reports per-
+dynamic difficulty, instruction scale and instruction type.           formance under medium dynamic difficulty as the number
+                                                                      of parallel continual instructions increases from 3 to 7. As
+             Scale (#inst.)     Instruction Type   Dynamic Difficulty the instruction scale increases, the agent must monitor more
+Method
+             3 5†      7    Sent.† Summ. Vague L M†           H
+                                                                      triggering conditions and coordinate more pending tasks.
+                                                                         As can be seen, RoboState outperforms all baselines at
+SayCan       – –       –       –        –       –  – –         –      each instruction scale. Specifically, RoboState improve SR
+LLMPlanner – –         –       –        –       –  – –         –      by xx% and reducing PS by xx timesteps on average, com-
+FLARE        – –       –       –        –       –  – –         –      pared with the strongest baseline xx. Particularly, RoboState
+ExRAP        – –       –       –        –       –  – –         –      shows better enhancement as the instruction scale increases.
+RoboState – –          –       –        –       –  – –         –      Conpared to baselines, the SR improvement increases from
+              Note: Each cell reports SR ↑ / PS ↓.                    xx% at a scale of 3 to xx% at a scale of 7, while the PS reduc-
+                                                                      tion increases from xx to xx timesteps. The results show that
+                                                                      RoboState remains effective in integrating the executions of
+Table 2: Performance of RoboState over De with respect to             multiple instructions into unified plan and collapsing the re-
+non-stationarity, instruction scale and instruction type.             dundant actions therein, which enables the efficient handling
+                                                                      of multiple instructions simultaneously.
+             Non-stationarity Scale (#inst.)    Instruction Type
+Method                                                                Instruction type. We further evaluate performance across
+             L M        H      3 5      7      Sent. Summ. Vague      three instruction types under medium dynamic difficulty. In
+ZSP          –   –      –      – –      –       –      –       –      the sentence-wise type, each instruction is expressed as a
+SayCan       –   –      –      – –      –       –      –       –      distinct sentence, which serves as the default setting. The
+ProgPrompt   –   –      –      – –      –       –      –       –      summarized type transforms instructions into more compact
+LLMPlanner   –   –      –      – –      –       –      –       –      descriptions, whereas the vague type refers to target objects
+ExRAP        –   –      –      – –      –       –      –       –      using abstract expressions.
+RoboState    –   –      –      – –      –       –      –       –         As can be seen, RoboState achieves the highest SR and
+                                                                      the lowest PS across all three instruction types. RoboState
+              Note: Each cell reports SR ↑ / PS ↓.                    performs best for vague instructions, for which it improves
+                                                                      SR by xx% and reduces PS by xx timesteps compared to
+                                                                      strongest baseline xx. The results present that RoboState
+information constraint as the baselines in Section 4.2.               is effective in infers the intension of each instruction and
+                                                                      grounds vague references to concrete objects, which sup-
+4.2   Overall Effectiveness                                           ports different forms of instruction expression.
+
+We mainly evaluate the effectiveness of RoboState over Dob            Neutral Verification on the ExRAP Dataset. We evalu-
+through the following dimensions.                                     ate RoboState on the ExRAP dataset under the benchmark
+                                                                      conditions used in prior work (?). The evaluation follows
+Dynamic difficulty. We define dynamic difficulty accord-              ExRAP’s original three dimensions of non-stationarity, in-
+ing to the frequency of environmental changes. Under low,             struction scale, and instruction type.
+medium, and high difficulty, instruction-triggering condi-               As presented in Table 2, RoboState outperforms ExRAP
+tions and human-induced environmental events(e.g., object             across all settings of the three dimensions. Compared with
+movement, occlusion, removal) occur at intervals of 8, 6,             ExRAP, RoboState achieves an improvement in SR of xx%
+and 4 timesteps, respectively. Hence, higher dynamic diffi-           and a reduction in PS of xx timesteps with respect to non-
+culty corresponds to more frequent environmental changes              stationarity, an increasement in SR of xx% and a decrease-
+and requires the agent to update its environment knowledge            ment in PS of xx timesteps with respect to instruction scale,
+more rapidly.                                                         and an enhancement in SR of xx% and a reduction in PS of
+   Column xx of Table 1 reports SR and PS under three lev-            xx timesteps with respect to instruction type.
+els of dynamic difficulty. RoboState achieves the highest SR             Across both benchmarks, RoboState achieves the highest
+and the lowest PS at all three difficulty levels. Specifically,       SR and the lowest PS among the evaluated baselines. These
+RoboState improves SR by xx% and reducing PS by xx                    results indicates that RoboState surpasses existing methods
+timesteps on average, compared to the SOTA baseline xxx.              in both effectiveness and efficiency, and it is effective across
+More importantly, RoboState achieves higher performance               different CEIF tasks.
+improvement as dynamic difficulty increases. Specifically,
+conpared with strongest baseline xxx, the SR improvement              4.3   Ablation study
+increases from xx% under low difficulty to xx% under high             We conduct the ablation studies under the default setting of
+difficulty, while the PS reduction increases from xx to xx            medium dynamic difficulty, an instruction scale of 5, and the
+timesteps. All these results indicate that RoboState is effec-        sentence-wise instruction type. For each module, we con-
+tive in identifying dynamic changes caused by human inter-            struct three ablated versions of RoboState, i.e., one module-
+vention, which enables RoboState to cope effectively with             level ablated version that removes the entire module and
+open dynamic environments                                             multiple component-level ablated versions that each remove
+                         Table 3: Ablation results for modules and components integrated by RoboState
+
+             Level         Module            Version                    SR ↑ PS ↓ GoalAlign ↑ SlotID ↑ Halluc. ↓
+             –             –                 RoboState                    –      –         –           –          –
+             Module                          w/o Goal Reasoning           –      –         –          n/a        n/a
+             Component Goal Reasoning        w/o Intention                –      –         –          n/a        n/a
+             Component                       w/o Parameter                –      –         –          n/a        n/a
+             Module                     w/o State-Consistent Memory       –      –        n/a          –         n/a
+                       State-Consistent
+             Component                  w/o Memory Structure              –      –        n/a          –         n/a
+                       Memory
+             Component                  w/o State Alignment               –      –        n/a          –         n/a
+             Module                          w/o STG Planning             –      –        n/a         n/a         –
+             Component STG Planning          w/o STG Construction         –      –        n/a         n/a         –
+             Component                       w/o Path Merging             –      –        n/a         n/a        n/a
+
+
+one core component while retaining the remainder of the             timesteps, while decreases SlotID from xx% to xx%. Fur-
+module. We run RoboState and ablated versions over Dob .            thermore, the w/o Memory Structure and w/o State Align-
+                                                                    ment versions reduce SR by xx% and xx% percentage
+Inpact of Hierarchical Reasoning for Goal States. We                points, increase PS by xx and xx timesteps, and reduce
+establish the w/o Goal Reasoning ablated version by remov-          SlotID to xx% and xx%, respectively.
+ing this entire module and passes the original instruction di-
+                                                                       Further, we inspect all failure cases of w/o Memory Struc-
+rectly to the downstream planner. Further, we develop the
+                                                                    ture and w/o State Alignment versions. Particularly, most
+w/o Intention ablated version through removing intension-
+                                                                    failures of the first version are observed in scenario with
+reasoning component and utilizing LLM to infer the re-
+                                                                    human intervention. When objects are removed by human
+quired parameter types directly from the instruction. We es-
+                                                                    and later reappear at the same or different locations, tex-
+tablish the w/o Parameter ablated version by retaining inten-
+                                                                    titw/o State Alignment version may register them as new
+sion reasoning but removing parameter binding.
+                                                                    instances. The failures of w/o Memory Structure version is
+   As shown in rows xx of Table 3, compared to RoboState,
+                                                                    concentrated in following scenarios. When visually-similar
+w/o Goal Reasoning version degard its performance with SR
+                                                                    instances must be distinguished, this version lacks structured
+decreasing by xx% and PS increasing by xx timesteps, while
+                                                                    attributes (e.g., state, spatial) for comparison , making it dif-
+decreasing GoalAlign from xx% to xx%. Further, the w/o
+                                                                    ficult to determine which instance corresponds to a new ob-
+Intention and w/o Parameter versions reduce SR by xx%
+                                                                    servation. When environmental rules are temporarily intro-
+and xx%, increase PS by xx and xx timesteps, and reduce
+                                                                    duced and later removed, this version lacks temporal validity
+GoalAlign to xx% and xx%, respectively.
+                                                                    intervals, making it difficult to determine whether the rule is
+   We further investigate the failure cases of w/o Intention
+                                                                    currently active. All these cases can produce incorrect iden-
+and w/o Parameter versions. Particularly, most failures of
+                                                                    tity or state associations in memory, causing downstream
+the former are observed in two scenario types. When a con-
+                                                                    tasks to rely on inaccurate information for failures.
+dition is infeasible because an object lacks the required capa-
+bility, w/o Intention version fails to identify the infeasibility   Impact of STG-based Task Planning We establish the
+and continues waiting until task failure. When a key element        w/o STG Planning ablated version through removing the en-
+is unavailable, the variant follows the literal instruction and     tire module and utilizing the LLM to generate the complete
+fails to identify an alternative feasible strategy for the same     skill sequence. And we develop the w/o STG construction
+underlying goal. And most failures of the latter are concen-        ablated version by omitting graph construction, using the
+trated in scenario with ambiguous referents. Since target ob-       LLM to generate the skill sequence for subtasks and reduc-
+ject is inferred by LLM directly, hallucinative selection can       ing redundancy via path merging. The w/o Path Merging ab-
+cause subsequent executions to operate on the wrong object.         lated version retains STG construction and path search but
+Inpact of State-consistent Memory. We establish the                 directly concatenates the paths without merging.
+w/o State-consistent Memory ablated version by remov-                  As presented in rows xx of Table 3, compared to Ro-
+ing the memory module and utilizing the LLM to ana-                 boState, w/o STG Planning version reduces SR by xx% and
+lyze the current observation for environment queries. Fur-          increases PS by xx timesteps, while Halluc. rises from xx%
+ther, we develop the w/o Memory Structure ablated version           to xx%. The w/o STG construction version reduces SR by
+by representing the memory as unstructured text instead of          xx%, increases PS by xx timesteps, and raises Halluc. to
+graph-structured relations. Moreover, we construct the w/o          xx%. The results indicate that STG constrains planning to
+State Alignment version by retaining the graph structure            feasible skill sequence effectively. The w/o Path Merging
+but updates observations directly to memory without state-          version primarily affects efficiency and reduces PS by xx
+trajectory alignment.                                               timesteps.
+   As shown in row xx in Table 3, w/o State-consistent Mem-            We further analyze all failures of w/o STG construction
+ory version reduces SR by xx% and increases PS by xx                and w/o Path Merging versions The failures of the former
+Table 4: The results across RoboState’s versions with differ-             their effectiveness is not attributed to clarification or addi-
+ent LLMs, for evaluating the applicability to different LLMs              tional user-provided information.
+
+Model           Claude    GPT-5mini   Gemini    Llama-3-8B (local)   Qwen
+RoboState         –          –          –               –             –                           References
+
+Table 5: Clarification-budget results of RoboState over Class
+G − (2) of dateset Dob .
+
+                      KnowNo                     RoboState
+Budget SR ↑ ClarCost ∆SR / clar. SR ↑ ClarCost ∆SR / clar.
+0           –         0          –          –      0           –
+1           –         –          –          –      –           –
+2           –         –          –          –      –           –
+3           –         –          –          –      –           –
+
+
+
+version is concentrated in scenarios involving multi-step
+state transformations. When target objects must undergo a
+action sequence in the required order, w/o STG construction
+version may omit prerequisite steps or arrange them incor-
+rectly. w/o Path Merging version fails to address resource
+contention and multi-object parallelism. Without path merg-
+ing for redundance elimination, this version struggles with
+shared appliances and duplicate navigation across multi-
+object tasks.
+
+4.4     Robustness and Cost
+Backbone Robustness. We further evaluate RoboState
+with multiple LLM backbones under the default setting,
+which cover both open and closed source models from dif-
+ferent types and scales.
+   As shown in Table 4, RoboState maintains high SR and PS
+regardless of model types and scales. Specifically, SR ranges
+from xx% to xx%, and PS ranges from xx to xx timesteps.
+In particular, RoboState continues to perform well on the
+locally-deployed 8B-parameter Llama-3 model. The reason
+is that, RoboState uses the LLM for semantic interpreta-
+tion within each module, whereas module outputs are con-
+strained by explicit structures. These constraints reduce the
+dependency on unconstrained LLM generation and limit its
+sensitivity to the type and scale of the backbones.
+Clarification Cost. We conduct this experiment on the
+parameter-missing subset, which is the only scenario subset
+designed to require clarification. We vary the budget b over
+0, 1, 2, 3, where b specifies the maximum number of ques-
+tions permitted during each execution. Section ?? both use
+b = 0. We measure the clarification effectiveness by report-
+ing SR and ClarCost. ClarCost is upper-bounded by b but
+does not necessarily attain this bound. During evaluation, a
+simulated user answers clarification queries using the anno-
+tated ground-truth parameters.
+   As shown in Table 5, SR improves as the budget increases
+and largely saturates once b reaches 2, which indicate that
+user clarification therefore provides an effective optional ex-
+tension for RoboState. Since all main experiments use b = 0,
+

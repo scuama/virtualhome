@@ -1,0 +1,59 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the TV is on, adjust the desk lamp to an appropriate setting.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF"
+            ]
+        }
+    ],
+    "user_clarification_reply": "Just open it.",
+    "success_condition": {
+        "target_class": "tablelamp",
+        "states": [
+            "ON"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T3_without_goal_reasoning_G2_06",
+    "source_scenario_id": "G2_06",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "ablation_profile": "without_goal_reasoning",
+    "ablation_module": "goal",
+    "table3_source_subclass": "G2",
+    "source_config": "configs/source_tasks/g_class/G2_06.json",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 0
+}

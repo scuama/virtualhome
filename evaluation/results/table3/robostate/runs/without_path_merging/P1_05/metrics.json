@@ -1,0 +1,51 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 0.0,
+    "ps_sum": 0,
+    "ps_count": 1,
+    "mean_completion_step": 0.0,
+    "tasks": [
+        {
+            "task_id": "T3_without_path_merging_P1_05",
+            "instruction": "If the washing machine is not working, turn it on and wash the two piles of dirty clothes on the floor.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "check_type": "state",
+                        "target_class": "clothespile",
+                        "require_states": [
+                            "CLEAN"
+                        ],
+                        "min_count": 2
+                    }
+                ]
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 0,
+            "completed": true,
+            "completion_step": 0
+        }
+    ],
+    "scenario_id": "T3_without_path_merging_P1_05",
+    "table_id": "table3",
+    "experiment_axis": "ablation",
+    "sample_id": null,
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": "without_path_merging",
+    "source_scenario_id": "P1_05",
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "invalid",
+    "valid_for_aggregation": false,
+    "reason": "Invalid benchmark: task(s) already satisfied at step 0: ['T3_without_path_merging_P1_05']",
+    "steps_executed": 0,
+    "execution_time_seconds": 0.0,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}
