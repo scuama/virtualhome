@@ -35,8 +35,8 @@
 | **Memory** | w/o Memory | 11.67 | 3.29 | n/a | 18.18 (2/11) | n/a |
 | | w/o Memory Structure | 21.67 | 5.77 | n/a | 69.23 (9/13) | n/a |
 | | w/o State Alignment | 43.33 | 4.50 | n/a | 64.29 (9/14) | n/a |
-| **Planning** | w/o STG Planning | 33.33 | 5.83 | n/a | n/a | 14.15 (15/106) |
+| **Planning** | w/o STG Planning | 33.33 | 6.93 | n/a | n/a | 14.15 (15/106) |
 | | w/o STG Construction | 51.67 | 6.61 | n/a | n/a | 7.09 (9/127) |
-| | w/o Path Merging | 38.33 | 5.91 | n/a | n/a | 0.00 (0/118) |
+| | w/o Path Merging | 38.33 | 6.72 | n/a | n/a | 0.00 (0/118) |
 
 > *Note: SR/PS use the accepted denominator-60 weighted aggregate. Manual metrics are computed only from auditable items; Halluc. scenario coverage is Full 17/20, w/o STG Planning 16/20, and w/o STG Construction 17/20. Missing logs are excluded rather than treated as metric errors.*
