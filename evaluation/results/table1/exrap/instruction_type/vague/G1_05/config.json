@@ -1,0 +1,239 @@
+{
+    "scenario_id": "T1_INST_G1_05_vague",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_05",
+    "setting": "vague",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_05"
+    ],
+    "instruction_type": "vague",
+    "preprocessed_instruction": false,
+    "environment_id": 0,
+    "goal_instruction": "Empty the water from the drinking cup and place it in the kitchen storage compartment.",
+    "tasks": [
+        {
+            "task_id": "G1_05",
+            "instruction": "Empty the water from the drinking cup and place it in the kitchen storage compartment.",
+            "source_scenario": "G1_05",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "mug",
+                        "destination_class": "cabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1,
+                        "target_instance": 0,
+                        "destination_instance": 0
+                    },
+                    {
+                        "target_class": "mug",
+                        "states": [
+                            "EMPTY"
+                        ],
+                        "min_count": 1,
+                        "target_instance": 0
+                    }
+                ]
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "cabinet"
+            ],
+            "remove_states": [
+                "OPEN"
+            ],
+            "add_states": [
+                "CLOSED"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "add_states": [
+                "FILLED_WATER"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "FILLED_WATER"
+            ],
+            "remove_states": [
+                "EMPTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "mug",
+                "destination_class": "cabinet",
+                "relation": "INSIDE",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "mug",
+                "states": [
+                    "EMPTY"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        ]
+    },
+    "max_steps": 45,
+    "grounding_candidates": [
+        "apple",
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bellpepper",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "candybar",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "cereal",
+        "chair",
+        "chips",
+        "chocolatesyrup",
+        "clock",
+        "closet",
+        "closetdrawer",
+        "clothespants",
+        "clothespile",
+        "clothesshirt",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cpuscreen",
+        "crackers",
+        "creamybuns",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwashingliquid",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "hanger",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "lightswitch",
+        "lime",
+        "microwave",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "paper",
+        "peach",
+        "perfume",
+        "photoframe",
+        "pie",
+        "pillow",
+        "plate",
+        "plum",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "washingsponge",
+        "waterglass",
+        "whippedcream",
+        "window",
+        "wineglass"
+    ],
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 27.05
+}

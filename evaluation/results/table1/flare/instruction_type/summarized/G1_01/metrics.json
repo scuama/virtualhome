@@ -1,0 +1,46 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 7.0,
+    "ps_sum": 7,
+    "ps_count": 1,
+    "mean_completion_step": 7.0,
+    "tasks": [
+        {
+            "task_id": "G1_01",
+            "instruction": "If milk is in the fridge, heat one cup of it in the microwave.",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 7,
+            "completed": true,
+            "completion_step": 7
+        }
+    ],
+    "scenario_id": "T1_INST_G1_01_summarized",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_01",
+    "setting": "summarized",
+    "extension_type": "table1_instruction_type",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "flare",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 7,
+    "execution_time_seconds": 4.79,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

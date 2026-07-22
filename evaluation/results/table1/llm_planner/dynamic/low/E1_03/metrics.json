@@ -1,0 +1,67 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 7.0,
+    "ps_sum": 7,
+    "ps_count": 1,
+    "mean_completion_step": 7.0,
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 7,
+            "completed": true,
+            "completion_step": 7
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_03_low",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_03",
+    "setting": "low",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "llm_planner",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 7,
+    "execution_time_seconds": 8.27,
+    "dynamic_event_counts": {
+        "hide_book": {
+            "times_triggered": 1,
+            "max_triggers": 1
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 1,
+            "event": "hide",
+            "event_id": "hide_book",
+            "object_id": 105,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 5
+        },
+        {
+            "step": 5,
+            "event": "reappear",
+            "object_id": 105
+        }
+    ]
+}

@@ -1,0 +1,191 @@
+{
+    "scenario_id": "T1_INST_G2_08_vague",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G2_08",
+    "setting": "vague",
+    "single_run": true,
+    "source_scenarios": [
+        "G2_08"
+    ],
+    "instruction_type": "vague",
+    "preprocessed_instruction": false,
+    "environment_id": 2,
+    "goal_instruction": "Warm up the dairy beverage and bring it to me.",
+    "tasks": [
+        {
+            "task_id": "G2_08",
+            "instruction": "Warm up the dairy beverage and bring it to me.",
+            "source_scenario": "G2_08",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "milk",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "HOT"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 0,
+            "add_states": [
+                "COLD"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 1,
+            "add_states": [
+                "HOT"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "milk",
+        "relation": "HOLDS_RH",
+        "min_count": 1,
+        "destination_states": [
+            "HOT"
+        ],
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "max_steps": 45,
+    "grounding_candidates": [
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "chair",
+        "closet",
+        "clothespile",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cookingpot",
+        "cpuscreen",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "cutlets",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwasher",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "juice",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "knifeblock",
+        "lightswitch",
+        "microwave",
+        "milk",
+        "mincedmeat",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "perfume",
+        "photoframe",
+        "pillow",
+        "plate",
+        "poundcake",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "toy",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "waterglass",
+        "window"
+    ],
+    "evaluation_method": "flare",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 4.68
+}

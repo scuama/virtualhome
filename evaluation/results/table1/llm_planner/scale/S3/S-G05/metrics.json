@@ -1,0 +1,93 @@
+{
+    "task_total": 3,
+    "task_completed": 1,
+    "sr": 0.3333,
+    "ps": 9.0,
+    "ps_sum": 9,
+    "ps_count": 1,
+    "mean_completion_step": 9.0,
+    "tasks": [
+        {
+            "task_id": "G1_05",
+            "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "mug",
+                        "destination_class": "cabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1,
+                        "target_instance": 0,
+                        "destination_instance": 0
+                    },
+                    {
+                        "target_class": "mug",
+                        "states": [
+                            "EMPTY"
+                        ],
+                        "min_count": 1,
+                        "target_instance": 0
+                    }
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_01",
+            "instruction": "If no one is watching the TV, turn it on.",
+            "success_condition": {
+                "target_class": "tv",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 9,
+            "completed": true,
+            "completion_step": 9
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_SCALE_SG05_S3",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G05",
+    "setting": "S3",
+    "extension_type": "table1_scale",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "llm_planner",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 24,
+    "execution_time_seconds": 20.64,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

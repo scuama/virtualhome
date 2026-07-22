@@ -1,0 +1,82 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 14.0,
+    "ps_sum": 14,
+    "ps_count": 1,
+    "mean_completion_step": 14.0,
+    "tasks": [
+        {
+            "task_id": "E1_02",
+            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "success_condition": {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 14,
+            "completed": true,
+            "completion_step": 14
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_02_medium",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_02",
+    "setting": "medium",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 14,
+    "execution_time_seconds": 21.06,
+    "dynamic_event_counts": {
+        "hide_apple": {
+            "times_triggered": 2,
+            "max_triggers": 2
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 1,
+            "event": "hide",
+            "event_id": "hide_apple",
+            "object_id": 437,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 2,
+            "visible_at_step": 5
+        },
+        {
+            "step": 5,
+            "event": "reappear",
+            "object_id": 437
+        },
+        {
+            "step": 5,
+            "event": "hide",
+            "event_id": "hide_apple",
+            "object_id": 437,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 2,
+            "visible_at_step": 9
+        },
+        {
+            "step": 9,
+            "event": "reappear",
+            "object_id": 437
+        }
+    ]
+}

@@ -1,0 +1,82 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "M1_05",
+            "instruction": "If the milk is cold, put it in the microwave to heat it up.",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_DYN_M1_05_medium",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_05",
+    "setting": "medium",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (21 steps without progress)",
+    "steps_executed": 21,
+    "execution_time_seconds": 33.15,
+    "dynamic_event_counts": {
+        "hide_milk": {
+            "times_triggered": 2,
+            "max_triggers": 2
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 3,
+            "event": "hide",
+            "event_id": "hide_milk",
+            "object_id": 176,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 2,
+            "visible_at_step": 7
+        },
+        {
+            "step": 7,
+            "event": "reappear",
+            "object_id": 176
+        },
+        {
+            "step": 10,
+            "event": "hide",
+            "event_id": "hide_milk",
+            "object_id": 176,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 2,
+            "visible_at_step": 14
+        },
+        {
+            "step": 14,
+            "event": "reappear",
+            "object_id": 176
+        }
+    ]
+}

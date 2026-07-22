@@ -1,0 +1,46 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "G1_04",
+            "instruction": "If the small bedroom light is on, turn it off.",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "OFF"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_INST_G1_04_vague",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_04",
+    "setting": "vague",
+    "extension_type": "table1_instruction_type",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "saycan",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Exception: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x156388b80>: Failed to establish a new connection: [Errno 61] Connection refused'))",
+    "steps_executed": 13,
+    "execution_time_seconds": 18.01,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

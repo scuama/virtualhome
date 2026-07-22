@@ -1,0 +1,96 @@
+{
+    "scenario_id": "T1_DYN_E1_10_high",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_10",
+    "setting": "high",
+    "single_run": true,
+    "source_scenarios": [
+        "E1_10"
+    ],
+    "dynamic_difficulty": "high",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "towel",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "If your towel isn't stored somewhere else, put it in the closet.",
+    "tasks": [
+        {
+            "task_id": "E1_10",
+            "instruction": "If your towel isn't stored somewhere else, put it in the closet.",
+            "source_scenario": "E1_10",
+            "success_condition": {
+                "target_class": "towel",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "closet"
+            ],
+            "add_states": [
+                "OPEN"
+            ],
+            "remove_states": [
+                "CLOSED"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bathroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "towel",
+            "relation": "ON",
+            "object": "bathroomcounter",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "towel",
+        "relation": "INSIDE",
+        "destination_class": "closet",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "towel",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "towel",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_towel",
+            "max_triggers": 3
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 39.19
+}

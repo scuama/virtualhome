@@ -1,0 +1,117 @@
+{
+    "task_total": 5,
+    "task_completed": 1,
+    "sr": 0.2,
+    "ps": 4.0,
+    "ps_sum": 4,
+    "ps_count": 1,
+    "mean_completion_step": 4.0,
+    "tasks": [
+        {
+            "task_id": "G1_02",
+            "instruction": "If there are apples on the table, wash them clean and bring them over.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "apple",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "CLEAN"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 4,
+            "completed": true,
+            "completion_step": 4
+        },
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on",
+            "success_condition": {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_SCALE_SG02_S5",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G02",
+    "setting": "S5",
+    "extension_type": "table1_scale",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "flare",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 19,
+    "execution_time_seconds": 14.54,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

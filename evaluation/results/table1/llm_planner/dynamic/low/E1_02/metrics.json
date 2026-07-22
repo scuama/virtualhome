@@ -1,0 +1,51 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "E1_02",
+            "instruction": "If you have an apple somewhere, bring it to your desk.",
+            "success_condition": {
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "desk",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_02_low",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_02",
+    "setting": "low",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "llm_planner",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 6,
+    "execution_time_seconds": 18.44,
+    "dynamic_event_counts": {
+        "hide_apple": {
+            "times_triggered": 0,
+            "max_triggers": 1
+        }
+    },
+    "dynamic_event_trace": []
+}

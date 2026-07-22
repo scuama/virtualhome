@@ -1,0 +1,80 @@
+{
+    "task_total": 3,
+    "task_completed": 3,
+    "sr": 1.0,
+    "ps": 6.6667,
+    "ps_sum": 20,
+    "ps_count": 3,
+    "mean_completion_step": 6.6667,
+    "tasks": [
+        {
+            "task_id": "G1_04",
+            "instruction": "If the table lamp is on, turn it off.",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "OFF"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        },
+        {
+            "task_id": "E1_01",
+            "instruction": "If no one is watching the TV, turn it on.",
+            "success_condition": {
+                "target_class": "tv",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 9,
+            "completed": true,
+            "completion_step": 9
+        }
+    ],
+    "scenario_id": "T1_SCALE_SG04_S3",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G04",
+    "setting": "S3",
+    "extension_type": "table1_scale",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 9,
+    "execution_time_seconds": 15.17,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

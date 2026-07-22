@@ -1,0 +1,80 @@
+{
+    "scenario_id": "T1_DYN_M1_04_high",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_04",
+    "setting": "high",
+    "single_run": true,
+    "source_scenarios": [
+        "M1_04"
+    ],
+    "dynamic_difficulty": "high",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "pillow",
+        "instance_index": 0
+    },
+    "environment_id": 1,
+    "goal_instruction": "If there is a pillow on the sofa, please bring me one.",
+    "tasks": [
+        {
+            "task_id": "M1_04",
+            "instruction": "If there is a pillow on the sofa, please bring me one.",
+            "source_scenario": "M1_04",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "pillow",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "pillow",
+            "relation": "ON",
+            "object": "sofa",
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "pillow",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "pillow",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "pillow",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_pillow",
+            "max_triggers": 3
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "flare",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 21.53
+}

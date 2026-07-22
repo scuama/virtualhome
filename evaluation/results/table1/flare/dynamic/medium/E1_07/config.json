@@ -1,0 +1,81 @@
+{
+    "scenario_id": "T1_DYN_E1_07_medium",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_07",
+    "setting": "medium",
+    "single_run": true,
+    "source_scenarios": [
+        "E1_07"
+    ],
+    "dynamic_difficulty": "medium",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "mug",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "The mug should always be on the coffeetable.",
+    "tasks": [
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "source_scenario": "E1_07",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "mug",
+        "relation": "ON",
+        "destination_class": "coffeetable",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "mug",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "mug",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_mug",
+            "max_triggers": 2
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "flare",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 22.32
+}

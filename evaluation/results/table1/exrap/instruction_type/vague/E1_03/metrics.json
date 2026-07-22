@@ -1,0 +1,46 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 3.0,
+    "ps_sum": 3,
+    "ps_count": 1,
+    "mean_completion_step": 3.0,
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "Move the misplaced reading item to the main seat.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        }
+    ],
+    "scenario_id": "T1_INST_E1_03_vague",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "E1_03",
+    "setting": "vague",
+    "extension_type": "table1_instruction_type",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 3,
+    "execution_time_seconds": 18.92,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

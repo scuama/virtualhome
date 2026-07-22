@@ -1,0 +1,97 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "E1_10",
+            "instruction": "If your towel isn't stored somewhere else, put it in the closet.",
+            "success_condition": {
+                "target_class": "towel",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_10_high",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_10",
+    "setting": "high",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "flare",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 22,
+    "execution_time_seconds": 22.42,
+    "dynamic_event_counts": {
+        "hide_towel": {
+            "times_triggered": 3,
+            "max_triggers": 3
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 1,
+            "event": "hide",
+            "event_id": "hide_towel",
+            "object_id": 317,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 3,
+            "visible_at_step": 5
+        },
+        {
+            "step": 5,
+            "event": "reappear",
+            "object_id": 317
+        },
+        {
+            "step": 5,
+            "event": "hide",
+            "event_id": "hide_towel",
+            "object_id": 318,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 3,
+            "visible_at_step": 9
+        },
+        {
+            "step": 9,
+            "event": "reappear",
+            "object_id": 318
+        },
+        {
+            "step": 9,
+            "event": "hide",
+            "event_id": "hide_towel",
+            "object_id": 317,
+            "duration_steps": 3,
+            "trigger_index": 3,
+            "max_triggers": 3,
+            "visible_at_step": 13
+        },
+        {
+            "step": 13,
+            "event": "reappear",
+            "object_id": 317
+        }
+    ]
+}

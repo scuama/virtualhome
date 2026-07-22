@@ -1,0 +1,73 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 6.0,
+    "ps_sum": 6,
+    "ps_count": 1,
+    "mean_completion_step": 6.0,
+    "tasks": [
+        {
+            "task_id": "M1_02",
+            "instruction": "If there is juice on the table, pour me a glass of juice.",
+            "success_condition": {
+                "target_class": "character",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "destination_class": "waterglass",
+                "destination_properties": [
+                    "POURABLE"
+                ],
+                "destination_states": [
+                    "FILLED_JUICE"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6
+        }
+    ],
+    "scenario_id": "T1_DYN_M1_02_low",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_02",
+    "setting": "low",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "saycan",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 6,
+    "execution_time_seconds": 11.07,
+    "dynamic_event_counts": {
+        "hide_waterglass": {
+            "times_triggered": 1,
+            "max_triggers": 1
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 0,
+            "event": "hide",
+            "event_id": "hide_waterglass",
+            "object_id": 64,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 4
+        },
+        {
+            "step": 4,
+            "event": "reappear",
+            "object_id": 64
+        }
+    ]
+}

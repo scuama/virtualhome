@@ -1,0 +1,121 @@
+{
+    "scenario_id": "T1_DYN_M1_03_low",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_03",
+    "setting": "low",
+    "single_run": true,
+    "source_scenarios": [
+        "M1_03"
+    ],
+    "dynamic_difficulty": "low",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "waterglass",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "If you see dirty water glasses, put them in the sink right away.",
+    "tasks": [
+        {
+            "task_id": "M1_03",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
+            "source_scenario": "M1_03",
+            "success_condition": {
+                "target_class": "waterglass",
+                "destination_class": "sink",
+                "relation": "ON",
+                "min_count": 1,
+                "states": [
+                    "DIRTY"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLEAN"
+            ],
+            "remove_states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "mug",
+            "count": 0,
+            "object": "kitchentable",
+            "subject_instance": 0,
+            "object_instance": 0
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "destination_class": "sink",
+        "relation": "ON",
+        "min_count": 1,
+        "states": [
+            "DIRTY"
+        ],
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "waterglass",
+                "target_state": "DIRTY",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "waterglass",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_waterglass",
+            "max_triggers": 1
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 29.35
+}

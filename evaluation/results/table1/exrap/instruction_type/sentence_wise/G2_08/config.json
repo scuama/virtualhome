@@ -1,0 +1,91 @@
+{
+    "scenario_id": "T1_INST_G2_08_sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G2_08",
+    "setting": "sentence_wise",
+    "single_run": true,
+    "source_scenarios": [
+        "G2_08"
+    ],
+    "instruction_type": "sentence_wise",
+    "preprocessed_instruction": true,
+    "environment_id": 2,
+    "goal_instruction": "If you see milk, heat a cup of it and bring it over.",
+    "tasks": [
+        {
+            "task_id": "G2_08",
+            "instruction": "If you see milk, heat a cup of it and bring it over.",
+            "source_scenario": "G2_08",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "milk",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "HOT"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 0,
+            "add_states": [
+                "COLD"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 1,
+            "add_states": [
+                "HOT"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "milk",
+        "relation": "HOLDS_RH",
+        "min_count": 1,
+        "destination_states": [
+            "HOT"
+        ],
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "max_steps": 45,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 2.13
+}

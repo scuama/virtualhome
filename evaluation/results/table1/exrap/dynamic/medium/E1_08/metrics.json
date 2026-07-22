@@ -1,0 +1,82 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 12.0,
+    "ps_sum": 12,
+    "ps_count": 1,
+    "mean_completion_step": 12.0,
+    "tasks": [
+        {
+            "task_id": "E1_08",
+            "instruction": "To wash dishes, place the plates in the microwave as shown.",
+            "success_condition": {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "microwave",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 12,
+            "completed": true,
+            "completion_step": 12
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_08_medium",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_08",
+    "setting": "medium",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 12,
+    "execution_time_seconds": 18.23,
+    "dynamic_event_counts": {
+        "hide_plate": {
+            "times_triggered": 2,
+            "max_triggers": 2
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "hide_plate",
+            "object_id": 75,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 2,
+            "visible_at_step": 6
+        },
+        {
+            "step": 5,
+            "event": "hide",
+            "event_id": "hide_plate",
+            "object_id": 67,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 2,
+            "visible_at_step": 9
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 75
+        },
+        {
+            "step": 9,
+            "event": "reappear",
+            "object_id": 67
+        }
+    ]
+}

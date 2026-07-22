@@ -1,0 +1,148 @@
+{
+    "task_total": 7,
+    "task_completed": 1,
+    "sr": 0.1429,
+    "ps": 5.0,
+    "ps_sum": 5,
+    "ps_count": 1,
+    "mean_completion_step": 5.0,
+    "tasks": [
+        {
+            "task_id": "G1_01",
+            "instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_01",
+            "instruction": "If no one is watching the TV, turn it on.",
+            "success_condition": {
+                "target_class": "tv",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_04",
+            "instruction": "The dishwasher must always be open to dry the dishwasher.",
+            "success_condition": {
+                "target_class": "dishwasher",
+                "states": [
+                    "OPEN"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 5,
+            "completed": true,
+            "completion_step": 5
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        },
+        {
+            "task_id": "E1_15",
+            "instruction": "Put the folder in the closet.",
+            "success_condition": {
+                "target_class": "folder",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_SCALE_SG01_S7",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G01",
+    "setting": "S7",
+    "extension_type": "table1_scale",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "saycan",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 20,
+    "execution_time_seconds": 30.48,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

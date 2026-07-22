@@ -1,0 +1,67 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 13.0,
+    "ps_sum": 13,
+    "ps_count": 1,
+    "mean_completion_step": 13.0,
+    "tasks": [
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 13,
+            "completed": true,
+            "completion_step": 13
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_07_low",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_07",
+    "setting": "low",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "exrap",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 13,
+    "execution_time_seconds": 20.52,
+    "dynamic_event_counts": {
+        "hide_mug": {
+            "times_triggered": 1,
+            "max_triggers": 1
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 4,
+            "event": "hide",
+            "event_id": "hide_mug",
+            "object_id": 384,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 8
+        },
+        {
+            "step": 8,
+            "event": "reappear",
+            "object_id": 384
+        }
+    ]
+}

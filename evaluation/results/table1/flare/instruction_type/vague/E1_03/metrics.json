@@ -1,0 +1,46 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "Move the misplaced reading item to the main seat.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_INST_E1_03_vague",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "E1_03",
+    "setting": "vague",
+    "extension_type": "table1_instruction_type",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "flare",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 24.76,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

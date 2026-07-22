@@ -1,0 +1,92 @@
+{
+    "scenario_id": "T1_DYN_M1_01_high",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "M1_01",
+    "setting": "high",
+    "single_run": true,
+    "source_scenarios": [
+        "M1_01"
+    ],
+    "dynamic_difficulty": "high",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "remotecontrol",
+        "instance_index": 0
+    },
+    "environment_id": 1,
+    "goal_instruction": "If the TV is on, bring me the remote control.",
+    "tasks": [
+        {
+            "task_id": "M1_01",
+            "instruction": "If the TV is on, bring me the remote control.",
+            "source_scenario": "M1_01",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "remotecontrol",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "remotecontrol",
+            "relation": "ON",
+            "object": "coffeetable",
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "remotecontrol",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "remotecontrol",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "remotecontrol",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_remotecontrol",
+            "max_triggers": 3
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 33.17
+}

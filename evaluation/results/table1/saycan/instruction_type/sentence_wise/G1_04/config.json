@@ -1,0 +1,78 @@
+{
+    "scenario_id": "T1_INST_G1_04_sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_04",
+    "setting": "sentence_wise",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_04"
+    ],
+    "instruction_type": "sentence_wise",
+    "preprocessed_instruction": true,
+    "environment_id": 0,
+    "goal_instruction": "If the table lamp is on, turn it off.",
+    "tasks": [
+        {
+            "task_id": "G1_04",
+            "instruction": "If the table lamp is on, turn it off.",
+            "source_scenario": "G1_04",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "OFF"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "add_states": [
+                "ON"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "ON"
+            ],
+            "remove_states": [
+                "OFF"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "tablelamp",
+        "states": [
+            "OFF"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+    },
+    "max_steps": 45,
+    "evaluation_method": "saycan",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 2.47
+}

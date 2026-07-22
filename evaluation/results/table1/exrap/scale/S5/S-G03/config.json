@@ -1,0 +1,209 @@
+{
+    "scenario_id": "T1_SCALE_SG03_S5",
+    "extension_type": "table1_scale",
+    "table_id": "table1",
+    "experiment_axis": "scale",
+    "sample_id": "S-G03",
+    "setting": "S5",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_03",
+        "E1_11",
+        "E1_03",
+        "E1_17",
+        "E1_07"
+    ],
+    "instruction_scale": 5,
+    "instruction_type": "sentence_wise",
+    "environment_id": 0,
+    "goal_instruction": "1. If the TV is on, bring the remote control here.\n2. If your computer stays off, turn it on.\n3. If you see a book somewhere unorganized, bring it to the sofa.\n4. If the radio is off, turn it on\n5. The mug should always be on the coffeetable.",
+    "tasks": [
+        {
+            "task_id": "G1_03",
+            "instruction": "If the TV is on, bring the remote control here.",
+            "source_scenario": "G1_03",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "remotecontrol",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_11",
+            "instruction": "If your computer stays off, turn it on.",
+            "source_scenario": "E1_11",
+            "success_condition": {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "source_scenario": "E1_03",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_17",
+            "instruction": "If the radio is off, turn it on",
+            "source_scenario": "E1_17",
+            "success_condition": {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        },
+        {
+            "task_id": "E1_07",
+            "instruction": "The mug should always be on the coffeetable.",
+            "source_scenario": "E1_07",
+            "success_condition": {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "add_states": [
+                "ON"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "computer"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        },
+        {
+            "target_classes": [
+                "radio"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "OFF"
+            ],
+            "remove_states": [
+                "ON"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "remotecontrol",
+            "relation": "ON",
+            "object": "sofa",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "character",
+                "destination_class": "remotecontrol",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "computer",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "radio",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            },
+            {
+                "target_class": "mug",
+                "relation": "ON",
+                "destination_class": "coffeetable",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        ]
+    },
+    "max_steps": 75,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 52.79
+}

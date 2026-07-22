@@ -1,0 +1,82 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "E1_10",
+            "instruction": "If your towel isn't stored somewhere else, put it in the closet.",
+            "success_condition": {
+                "target_class": "towel",
+                "relation": "INSIDE",
+                "destination_class": "closet",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_10_medium",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_10",
+    "setting": "medium",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "llm_planner",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (21 steps without progress)",
+    "steps_executed": 21,
+    "execution_time_seconds": 27.58,
+    "dynamic_event_counts": {
+        "hide_towel": {
+            "times_triggered": 2,
+            "max_triggers": 2
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "hide_towel",
+            "object_id": 328,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 2,
+            "visible_at_step": 6
+        },
+        {
+            "step": 4,
+            "event": "hide",
+            "event_id": "hide_towel",
+            "object_id": 330,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 2,
+            "visible_at_step": 8
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 328
+        },
+        {
+            "step": 8,
+            "event": "reappear",
+            "object_id": 330
+        }
+    ]
+}

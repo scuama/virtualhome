@@ -1,0 +1,175 @@
+{
+    "scenario_id": "T1_INST_G1_01_vague",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_01",
+    "setting": "vague",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_01"
+    ],
+    "instruction_type": "vague",
+    "preprocessed_instruction": false,
+    "environment_id": 2,
+    "goal_instruction": "If the chilled dairy drink is in cold storage, heat one cup of it in the food-heating appliance.",
+    "tasks": [
+        {
+            "task_id": "G1_01",
+            "instruction": "If the chilled dairy drink is in cold storage, heat one cup of it in the food-heating appliance.",
+            "source_scenario": "G1_01",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "COLD"
+            ],
+            "remove_states": [
+                "HOT"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1,
+        "target_instance": 0
+    },
+    "max_steps": 45,
+    "grounding_candidates": [
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "chair",
+        "closet",
+        "clothespile",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cookingpot",
+        "cpuscreen",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "cutlets",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwasher",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "juice",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "knifeblock",
+        "lightswitch",
+        "microwave",
+        "milk",
+        "mincedmeat",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "perfume",
+        "photoframe",
+        "pillow",
+        "plate",
+        "poundcake",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "toy",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "waterglass",
+        "window"
+    ],
+    "evaluation_method": "flare",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 4.68
+}

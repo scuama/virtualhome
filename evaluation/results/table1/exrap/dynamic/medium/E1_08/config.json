@@ -1,0 +1,81 @@
+{
+    "scenario_id": "T1_DYN_E1_08_medium",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_08",
+    "setting": "medium",
+    "single_run": true,
+    "source_scenarios": [
+        "E1_08"
+    ],
+    "dynamic_difficulty": "medium",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "plate",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "To wash dishes, place the plates in the microwave as shown.",
+    "tasks": [
+        {
+            "task_id": "E1_08",
+            "instruction": "To wash dishes, place the plates in the microwave as shown.",
+            "source_scenario": "E1_08",
+            "success_condition": {
+                "target_class": "plate",
+                "relation": "INSIDE",
+                "destination_class": "microwave",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "plate",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "relation": "INSIDE",
+        "destination_class": "microwave",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "plate",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "plate",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_plate",
+            "max_triggers": 2
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 18.23
+}

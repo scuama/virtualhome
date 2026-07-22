@@ -1,0 +1,206 @@
+{
+    "scenario_id": "T1_INST_G1_02_vague",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_02",
+    "setting": "vague",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_02"
+    ],
+    "instruction_type": "vague",
+    "preprocessed_instruction": false,
+    "environment_id": 0,
+    "goal_instruction": "If the fruit is on the kitchen surface, wash it clean and bring it to me.",
+    "tasks": [
+        {
+            "task_id": "G1_02",
+            "instruction": "If the fruit is on the kitchen surface, wash it clean and bring it to me.",
+            "source_scenario": "G1_02",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "apple",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "CLEAN"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "remove_states": [
+                "CLEAN"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "faucet"
+            ],
+            "in_room": "kitchen",
+            "add_states": [
+                "ON"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "apple",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "apple",
+        "relation": "HOLDS_RH",
+        "min_count": 1,
+        "destination_states": [
+            "CLEAN"
+        ],
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "max_steps": 45,
+    "grounding_candidates": [
+        "apple",
+        "bananas",
+        "barsoap",
+        "bathroomcabinet",
+        "bathroomcounter",
+        "bathtub",
+        "bed",
+        "bellpepper",
+        "bench",
+        "book",
+        "bookshelf",
+        "box",
+        "breadslice",
+        "cabinet",
+        "candle",
+        "candybar",
+        "ceiling",
+        "ceilinglamp",
+        "cellphone",
+        "cereal",
+        "chair",
+        "chips",
+        "chocolatesyrup",
+        "clock",
+        "closet",
+        "closetdrawer",
+        "clothespants",
+        "clothespile",
+        "clothesshirt",
+        "coffeemaker",
+        "coffeepot",
+        "coffeetable",
+        "computer",
+        "condimentbottle",
+        "condimentshaker",
+        "cpuscreen",
+        "crackers",
+        "creamybuns",
+        "cupcake",
+        "curtains",
+        "cutleryfork",
+        "cutleryknife",
+        "deodorant",
+        "desk",
+        "dishbowl",
+        "dishwashingliquid",
+        "door",
+        "doorjamb",
+        "facecream",
+        "faucet",
+        "floor",
+        "folder",
+        "fridge",
+        "fryingpan",
+        "garbagecan",
+        "hairproduct",
+        "hanger",
+        "keyboard",
+        "kitchencabinet",
+        "kitchencounter",
+        "kitchencounterdrawer",
+        "kitchentable",
+        "lightswitch",
+        "lime",
+        "microwave",
+        "mouse",
+        "mousemat",
+        "mug",
+        "nightstand",
+        "orchid",
+        "oventray",
+        "painkillers",
+        "paper",
+        "peach",
+        "perfume",
+        "photoframe",
+        "pie",
+        "pillow",
+        "plate",
+        "plum",
+        "powersocket",
+        "radio",
+        "remotecontrol",
+        "rug",
+        "salmon",
+        "sink",
+        "slippers",
+        "sofa",
+        "stall",
+        "stove",
+        "stovefan",
+        "tablelamp",
+        "toaster",
+        "toilet",
+        "toothbrush",
+        "toothpaste",
+        "towel",
+        "towelrack",
+        "tv",
+        "tvstand",
+        "wall",
+        "walllamp",
+        "wallphone",
+        "wallpictureframe",
+        "wallshelf",
+        "washingmachine",
+        "washingsponge",
+        "waterglass",
+        "whippedcream",
+        "window",
+        "wineglass"
+    ],
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 20.51
+}

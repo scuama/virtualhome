@@ -1,0 +1,49 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 4.0,
+    "ps_sum": 4,
+    "ps_count": 1,
+    "mean_completion_step": 4.0,
+    "tasks": [
+        {
+            "task_id": "G1_02",
+            "instruction": "If there are apples on the table, wash them clean and bring them over.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "apple",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "CLEAN"
+                ],
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 4,
+            "completed": true,
+            "completion_step": 4
+        }
+    ],
+    "scenario_id": "T1_INST_G1_02_sentence_wise",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_02",
+    "setting": "sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "flare",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 4,
+    "execution_time_seconds": 6.06,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": []
+}

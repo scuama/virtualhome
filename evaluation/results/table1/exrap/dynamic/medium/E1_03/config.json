@@ -1,0 +1,81 @@
+{
+    "scenario_id": "T1_DYN_E1_03_medium",
+    "extension_type": "table1_dynamic",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_03",
+    "setting": "medium",
+    "single_run": true,
+    "source_scenarios": [
+        "E1_03"
+    ],
+    "dynamic_difficulty": "medium",
+    "dynamic_policy": "action_triggered_disturbance_count",
+    "dynamic_target": {
+        "class_name": "book",
+        "instance_index": 0
+    },
+    "environment_id": 2,
+    "goal_instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "source_scenario": "E1_03",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            }
+        }
+    ],
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom",
+            "object_instance": 0
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "coffeetable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "target_class": "book",
+        "relation": "ON",
+        "destination_class": "sofa",
+        "min_count": 1,
+        "target_instance": 0,
+        "destination_instance": 0
+    },
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "book",
+                "type": "action"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "book",
+                "duration_steps": 3,
+                "instance_index": 0
+            },
+            "event_id": "hide_book",
+            "max_triggers": 2
+        }
+    ],
+    "max_steps": 45,
+    "evaluation_method": "exrap",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 25.59
+}

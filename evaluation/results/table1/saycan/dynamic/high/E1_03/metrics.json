@@ -1,0 +1,97 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "E1_03",
+            "instruction": "If you see a book somewhere unorganized, bring it to the sofa.",
+            "success_condition": {
+                "target_class": "book",
+                "relation": "ON",
+                "destination_class": "sofa",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T1_DYN_E1_03_high",
+    "table_id": "table1",
+    "experiment_axis": "dynamic_difficulty",
+    "sample_id": "E1_03",
+    "setting": "high",
+    "extension_type": "table1_dynamic",
+    "ablation_profile": null,
+    "source_scenario_id": null,
+    "method": "saycan",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "incomplete",
+    "valid_for_aggregation": false,
+    "reason": "Agent stagnated (24 steps without progress)",
+    "steps_executed": 24,
+    "execution_time_seconds": 31.22,
+    "dynamic_event_counts": {
+        "hide_book": {
+            "times_triggered": 3,
+            "max_triggers": 3
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 0,
+            "event": "hide",
+            "event_id": "hide_book",
+            "object_id": 105,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 3,
+            "visible_at_step": 4
+        },
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "hide_book",
+            "object_id": 229,
+            "duration_steps": 3,
+            "trigger_index": 2,
+            "max_triggers": 3,
+            "visible_at_step": 6
+        },
+        {
+            "step": 3,
+            "event": "hide",
+            "event_id": "hide_book",
+            "object_id": 230,
+            "duration_steps": 3,
+            "trigger_index": 3,
+            "max_triggers": 3,
+            "visible_at_step": 7
+        },
+        {
+            "step": 4,
+            "event": "reappear",
+            "object_id": 105
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 229
+        },
+        {
+            "step": 7,
+            "event": "reappear",
+            "object_id": 230
+        }
+    ]
+}

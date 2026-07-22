@@ -1,0 +1,126 @@
+{
+    "scenario_id": "T1_INST_G1_05_sentence_wise",
+    "extension_type": "table1_instruction_type",
+    "table_id": "table1",
+    "experiment_axis": "instruction_type",
+    "sample_id": "G1_05",
+    "setting": "sentence_wise",
+    "single_run": true,
+    "source_scenarios": [
+        "G1_05"
+    ],
+    "instruction_type": "sentence_wise",
+    "preprocessed_instruction": true,
+    "environment_id": 0,
+    "goal_instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
+    "tasks": [
+        {
+            "task_id": "G1_05",
+            "instruction": "If there is water in the mug, pour it out and put the mug in the cabinet.",
+            "source_scenario": "G1_05",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "mug",
+                        "destination_class": "cabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1,
+                        "target_instance": 0,
+                        "destination_instance": 0
+                    },
+                    {
+                        "target_class": "mug",
+                        "states": [
+                            "EMPTY"
+                        ],
+                        "min_count": 1,
+                        "target_instance": 0
+                    }
+                ]
+            }
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "cabinet"
+            ],
+            "remove_states": [
+                "OPEN"
+            ],
+            "add_states": [
+                "CLOSED"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "add_states": [
+                "FILLED_WATER"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "mug"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "FILLED_WATER"
+            ],
+            "remove_states": [
+                "EMPTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen",
+            "object_instance": 0
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1,
+            "subject_instance": 0,
+            "object_instance": 0
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "mug",
+                "destination_class": "cabinet",
+                "relation": "INSIDE",
+                "min_count": 1,
+                "target_instance": 0,
+                "destination_instance": 0
+            },
+            {
+                "target_class": "mug",
+                "states": [
+                    "EMPTY"
+                ],
+                "min_count": 1,
+                "target_instance": 0
+            }
+        ]
+    },
+    "max_steps": 45,
+    "evaluation_method": "llm_planner",
+    "evaluation_model": "gpt-5.4-mini",
+    "execution_time_seconds": 16.89
+}
