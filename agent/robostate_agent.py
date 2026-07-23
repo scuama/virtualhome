@@ -15,7 +15,7 @@ from .robostate.loop_detector import LoopDetector
 from .robostate.perception_filter import PerceptionFilter
 from .robostate.sdg_planner import SDGPlanner
 from .robostate.task_manager import MultiTaskManager, TaskState
-from .utils.llm_client import LLMClient
+from .utils.llm_client import LLMClient, LLMRequestError
 from .utils.logger import AgentLogger
 
 
@@ -44,7 +44,8 @@ class RoboStateAgent(BaseAgent):
                 log_mode=config.get("log_mode", "markdown"),
                 scenario_id=self.scenario_id,
             )
-        self.llm.set_telemetry_logger(self.logger)
+        if hasattr(self.llm, "set_telemetry_logger"):
+            self.llm.set_telemetry_logger(self.logger)
         self.action_history = env_info.get("action_history", [])
 
         if step == 0 or not self._initialized:
@@ -81,9 +82,31 @@ class RoboStateAgent(BaseAgent):
             attempted_tasks.add(task.task_id)
 
             try:
+                self.task_manager.ensure_intent(task, self.goal_reasoner)
+                clarification_question = str(
+                    (task.intent or {}).get("clarification_question") or ""
+                ).strip()
+                if (
+                    self._allow_ask(task)
+                    and bool((task.intent or {}).get(
+                        "is_instruction_obviously_vague", False
+                    ))
+                    and clarification_question
+                ):
+                    task.clarification_asked = True
+                    return self._return_action(
+                        step,
+                        f"[ask] {clarification_question}",
+                        task,
+                        effective_graph,
+                        source="goal_reasoner_clarification",
+                        reasoning="Goal Reasoner identified unresolved ambiguity.",
+                    )
                 self.task_manager.ensure_plan(
                     task, self.goal_reasoner, self.sdg_planner
                 )
+            except LLMRequestError:
+                raise
             except Exception as exc:
                 self.logger.error(
                     f"Planning failed for task {task.task_id}: {exc}"
@@ -131,8 +154,9 @@ class RoboStateAgent(BaseAgent):
                     task.sdg,
                     self.action_history,
                     config.get("scheduled_rules"),
-                    allow_ask=self._allow_ask(),
+                    allow_ask=self._allow_ask(task),
                     task_context=self.task_manager.task_context(),
+                    planner_feedback=task.planner_feedback,
                 )
             )
             candidate = self._normalize_action(candidate)
@@ -141,6 +165,9 @@ class RoboStateAgent(BaseAgent):
             if loop.detected:
                 self.logger.info(
                     f"LoopDetector rejected {candidate!r}: {loop.reason}."
+                )
+                self.task_manager.record_planner_rejection(
+                    task.task_id, candidate, loop.reason or "loop detected"
                 )
                 self.task_manager.defer(task.task_id, step, loop.reason or "loop")
                 continue
@@ -157,6 +184,11 @@ class RoboStateAgent(BaseAgent):
                     f"ActionValidator rejected {candidate!r} for task "
                     f"{task.task_id}: {validation.reason}."
                 )
+                self.task_manager.record_planner_rejection(
+                    task.task_id,
+                    candidate,
+                    validation.reason or "invalid action",
+                )
                 self.task_manager.defer(
                     task.task_id, step, validation.reason or "invalid action"
                 )
@@ -167,6 +199,7 @@ class RoboStateAgent(BaseAgent):
                     f"ActionValidator replaced {candidate!r} with "
                     f"{validation.action!r}: {validation.reason}."
                 )
+            self.task_manager.clear_planner_feedback(task.task_id)
             return self._return_action(
                 step,
                 validation.action,
@@ -211,8 +244,8 @@ class RoboStateAgent(BaseAgent):
             source="no_safe_action",
         )
 
-    def _allow_ask(self) -> bool:
-        if self.clarification_received:
+    def _allow_ask(self, task: Optional[TaskState] = None) -> bool:
+        if task is not None and task.clarification_asked:
             return False
         if (
             self.table3_source_subclass == "G2"
@@ -496,6 +529,8 @@ class RoboStateAgent(BaseAgent):
         reasoning: str = "",
     ) -> str:
         task_id = task.task_id if task else None
+        if task and str(action).strip().lower().startswith("[ask]"):
+            task.clarification_asked = True
         self._issued_task_by_step[int(step)] = task_id
         observed_items = self._get_observed_items(graph)
         self.last_decision = {

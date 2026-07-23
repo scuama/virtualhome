@@ -27,7 +27,7 @@
             }
         ]
     },
-    "execution_time_seconds": 89.82,
+    "execution_time_seconds": 154.74,
     "scenario_id": "T4_llama_P2_10",
     "source_scenario_id": "P2_10",
     "source_config": "configs/source_tasks/p_class/P2_10.json",
@@ -38,6 +38,9 @@
     "model_alias": "llama",
     "evaluation_model": "meta-llama/llama-3.1-8b-instruct",
     "provider": "openrouter",
+    "framework_revision": "table4-interface-fairness-v1",
+    "result_source": "post_fix_rerun",
+    "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/P2_10",
     "single_run": true,
     "max_steps": 90,
     "evaluation_method": "robostate"

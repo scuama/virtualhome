@@ -66,6 +66,9 @@
   "model_alias": "gemini",
   "evaluation_model": "google/gemini-3.5-flash",
   "provider": "openrouter",
+  "framework_revision": "table4-interface-fairness-v1",
+  "result_source": "post_fix_rerun",
+  "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M1_03",
   "single_run": true,
   "max_steps": 45
 }

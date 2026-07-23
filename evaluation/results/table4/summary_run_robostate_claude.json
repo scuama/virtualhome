@@ -1,0 +1,140 @@
+{
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "total": 13,
+    "skipped": 12,
+    "success": 1,
+    "fail": 0,
+    "incomplete": 0,
+    "failures": [],
+    "extension_metrics": [
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 8.0,
+            "ps_sum": 8,
+            "ps_count": 1,
+            "mean_completion_step": 8.0,
+            "tasks": [
+                {
+                    "task_id": "T4_claude_M1_03",
+                    "instruction": "If you see dirty water glasses, put them in the sink right away.",
+                    "success_condition": {
+                        "target_class": "waterglass",
+                        "destination_class": "sink",
+                        "relation": "ON",
+                        "min_count": 1,
+                        "states": [
+                            "DIRTY"
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 8,
+                    "completed": true,
+                    "completion_step": 8
+                }
+            ],
+            "scenario_id": "T4_claude_M1_03",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "M1_03",
+            "setting": null,
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "M1_03",
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M1_03",
+            "method": "robostate",
+            "model": "anthropic/claude-haiku-4.5",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 8,
+            "execution_time_seconds": 87.86,
+            "dynamic_event_counts": {
+                "event_1": {
+                    "times_triggered": 1,
+                    "max_triggers": null
+                }
+            },
+            "dynamic_event_trace": [
+                {
+                    "step": 0,
+                    "event": "hide",
+                    "event_id": "event_1",
+                    "object_id": 64,
+                    "duration_steps": 3,
+                    "trigger_index": 1,
+                    "max_triggers": 1,
+                    "visible_at_step": 4
+                },
+                {
+                    "step": 4,
+                    "event": "reappear",
+                    "object_id": 64
+                }
+            ],
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.439321,
+                    "input_tokens": 1076,
+                    "output_tokens": 559,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1635,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 37.028513,
+                    "input_tokens": 43658,
+                    "output_tokens": 2100,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 45758,
+                    "call_count": 7,
+                    "successful_calls": 7,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003071,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 8,
+                    "successful_calls": 8,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 32.992004,
+                    "input_tokens": 10432,
+                    "output_tokens": 2199,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 12631,
+                    "call_count": 7,
+                    "successful_calls": 7,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 10.686429,
+                    "input_tokens": 3515,
+                    "output_tokens": 1352,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4867,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        }
+    ],
+    "aggregate_task_completed": 1,
+    "aggregate_task_total": 1,
+    "aggregate_ps_count": 1,
+    "aggregate_sr": 1.0,
+    "aggregate_ps": 8.0
+}

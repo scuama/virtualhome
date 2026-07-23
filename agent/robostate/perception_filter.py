@@ -1,6 +1,10 @@
 import json
-from ..utils.llm_client import LLMClient
+from ..utils.llm_client import LLMClient, LLMRequestError
 from .prompt_templates import PERCEPTION_SYSTEM_PROMPT
+from .class_resolver import (
+    canonicalize_selected_classes,
+    resolve_scene_class,
+)
 
 class PerceptionFilter:
     def __init__(self, llm_client: LLMClient, logger):
@@ -50,9 +54,14 @@ class PerceptionFilter:
                     module_name="perception_filter",
                 )
                 result_dict = json.loads(result_str)
-                selected_classes = [c.lower() for c in result_dict.get("selected_classes", [])]
+                selected_classes = list(canonicalize_selected_classes(
+                    result_dict.get("selected_classes", []),
+                    unique_classes,
+                ))
                 reasoning = result_dict.get("reasoning", "")
                 self._selection_cache[cache_key] = tuple(selected_classes)
+            except LLMRequestError:
+                raise
             except Exception as e:
                 self.logger.error(f"PerceptionFilter failed: {e}")
                 selected_classes = []
@@ -62,12 +71,19 @@ class PerceptionFilter:
         sdg_str_lower = sdg_str.lower()
         intent_str_lower = intent_str.lower()
         
-        selected_classes_set = set(selected_classes)
+        selected_classes_set = canonicalize_selected_classes(
+            selected_classes, unique_classes
+        )
         selected_classes_set.add('character')
         
         for cname in unique_classes:
             if cname in sdg_str_lower or cname in intent_str_lower:
                 selected_classes_set.add(cname)
+        for payload in (current_sdg or {}, intent_dict or {}):
+            for value in self._string_values(payload):
+                resolved = resolve_scene_class(value, unique_classes)
+                if resolved:
+                    selected_classes_set.add(resolved)
             
         self.logger.log_module_output("PerceptionFilter", 0, {
             "reasoning": reasoning,
@@ -112,3 +128,14 @@ class PerceptionFilter:
         
         self.logger.info(f"PerceptionFilter: Graph reduced from {len(raw_graph.get('nodes', []))} to {len(filtered_nodes)} nodes.")
         return filtered_graph
+
+    @staticmethod
+    def _string_values(value):
+        if isinstance(value, dict):
+            for nested in value.values():
+                yield from PerceptionFilter._string_values(nested)
+        elif isinstance(value, list):
+            for nested in value:
+                yield from PerceptionFilter._string_values(nested)
+        elif isinstance(value, str):
+            yield value

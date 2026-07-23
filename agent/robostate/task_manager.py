@@ -4,6 +4,8 @@ from dataclasses import dataclass, field
 import re
 from typing import Iterable, List, Optional, Set
 
+from .class_resolver import resolve_scene_class
+
 
 def _compact(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", str(value).lower())
@@ -41,6 +43,9 @@ class TaskState:
     cooldown_until: int = 0
     first_activated_step: Optional[int] = None
     last_activated_step: Optional[int] = None
+    clarification_asked: bool = False
+    planner_feedback: List[dict] = field(default_factory=list)
+    planning_failed: bool = False
 
 
 class MultiTaskManager:
@@ -190,11 +195,21 @@ class MultiTaskManager:
         self._log(f"Active task at step {step}: {selected.task_id}")
         return selected
 
-    def ensure_plan(self, task: TaskState, goal_reasoner, sdg_planner) -> None:
+    def ensure_intent(self, task: TaskState, goal_reasoner) -> None:
         if task.intent is None:
             task.intent = goal_reasoner.extract_intent(task.instruction)
+
+    def ensure_plan(self, task: TaskState, goal_reasoner, sdg_planner) -> None:
+        self.ensure_intent(task, goal_reasoner)
+        if task.planning_failed:
+            raise ValueError("SDG planning previously failed semantic validation")
         if task.sdg is None:
-            task.sdg = sdg_planner.generate_sdg(task.instruction)
+            task.sdg = sdg_planner.generate_sdg(
+                task.instruction, sorted(self.scene_classes)
+            )
+            if not task.sdg:
+                task.planning_failed = True
+                raise ValueError("SDG generation failed semantic validation")
         self._extract_required_classes(task)
 
     def refresh_graph_classes(self, graph: dict) -> None:
@@ -205,6 +220,7 @@ class MultiTaskManager:
             if str(node.get("category", "")) != "Rooms"
             and str(node.get("class_name", "")).lower() != "character"
         }
+        self.scene_classes.update(graph_classes)
         for task in self.tasks:
             compact_instruction = _compact(task.instruction)
             for class_name in graph_classes:
@@ -219,6 +235,8 @@ class MultiTaskManager:
         task.intent = None
         task.sdg = None
         task.required_classes.clear()
+        task.planner_feedback.clear()
+        task.planning_failed = False
         task.failure_count = 0
         task.cooldown_until = 0
         if not task.currently_satisfied:
@@ -259,6 +277,23 @@ class MultiTaskManager:
             ],
         }
 
+    def record_planner_rejection(
+        self, task_id: str, action: str, reason: str
+    ) -> None:
+        task = self.get(task_id)
+        if not task:
+            return
+        task.planner_feedback.append({
+            "rejected_action": str(action),
+            "reason": str(reason or "rejected by controller"),
+        })
+        task.planner_feedback = task.planner_feedback[-2:]
+
+    def clear_planner_feedback(self, task_id: str) -> None:
+        task = self.get(task_id)
+        if task:
+            task.planner_feedback.clear()
+
     def protected_classes(self) -> Set[str]:
         protected = set()
         for task in self.tasks:
@@ -281,8 +316,12 @@ class MultiTaskManager:
                 value = re.sub(r"_\d+$", "", value)
                 if value.replace(" ", "_") in NON_ENVIRONMENT_CLASSES:
                     continue
-                normalized = value.replace(" ", "_")
-                if self.scene_classes and normalized not in self.scene_classes:
+                normalized = (
+                    resolve_scene_class(value, self.scene_classes)
+                    if self.scene_classes
+                    else value.replace(" ", "_")
+                )
+                if self.scene_classes and not normalized:
                     continue
                 if re.fullmatch(r"[a-z][a-z0-9_ -]*", value):
                     task.required_classes.add(normalized)

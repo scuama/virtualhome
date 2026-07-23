@@ -65,8 +65,11 @@
     "model_alias": "qwen",
     "evaluation_model": "qwen/qwen3-8b",
     "provider": "openrouter",
+    "framework_revision": "table4-interface-fairness-v1",
+    "result_source": "post_fix_rerun",
+    "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M4_18",
     "single_run": true,
     "max_steps": 45,
     "evaluation_method": "robostate",
-    "execution_time_seconds": 51.17
+    "execution_time_seconds": 79.6
 }

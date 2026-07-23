@@ -13,9 +13,18 @@ for k in ['http_proxy', 'https_proxy', 'HTTP_PROXY', 'HTTPS_PROXY', 'all_proxy',
     os.environ.pop(k, None)
 
 
-def _resolve_api_key(explicit_key: Optional[str] = None) -> str:
+class LLMRequestError(RuntimeError):
+    """Raised when both the SDK request and HTTP fallback fail."""
+
+
+def _resolve_api_key(
+    explicit_key: Optional[str] = None,
+    base_url: Optional[str] = None,
+) -> str:
     if explicit_key:
         return explicit_key.strip()
+    if base_url and "openrouter.ai" in base_url:
+        return os.environ.get("OPENROUTER_API_KEY", "").strip()
     return os.environ.get("OPENAI_API_KEY", "")
 
 def encode_image(image_path):
@@ -28,16 +37,23 @@ class LLMClient:
         初始化 LLM 客户端。默认使用 gpt-5.4-mini。
         优先使用显式传入的 api_key；否则自动从环境变量 OPENAI_API_KEY 读取。
         """
-        self.api_key = _resolve_api_key(api_key)
+        self.base_url = (
+            base_url or os.environ.get("OPENAI_API_BASE", "")
+        ).strip() or None
+        self.api_key = _resolve_api_key(api_key, self.base_url)
         if self.api_key:
             os.environ["OPENAI_API_KEY"] = self.api_key
         else:
             self.api_key = os.environ.get("OPENAI_API_KEY", "")
         print(f"DEBUG: API_KEY loaded: {bool(self.api_key)}")
         if not self.api_key:
-            raise ValueError("Environment variable OPENAI_API_KEY is not set.")
+            expected = (
+                "OPENROUTER_API_KEY"
+                if self.base_url and "openrouter.ai" in self.base_url
+                else "OPENAI_API_KEY"
+            )
+            raise ValueError(f"Environment variable {expected} is not set.")
 
-        self.base_url = (base_url or os.environ.get("OPENAI_API_BASE", "")).strip() or None
         self.is_v1 = hasattr(openai, "OpenAI")
         if self.is_v1:
             self.client = openai.OpenAI(api_key=self.api_key, base_url=self.base_url)
@@ -88,7 +104,7 @@ class LLMClient:
         })
 
     def _request_with_fallback(self, payload: dict, *, is_vision: bool = False, return_metadata: bool = False):
-        endpoint = os.environ.get("OPENAI_API_BASE", "").strip()
+        endpoint = str(self.base_url or "").strip()
         if endpoint:
             endpoint = endpoint.rstrip("/")
             if endpoint.endswith("/v1"):
@@ -194,7 +210,9 @@ class LLMClient:
                 self._record(module_name, kwargs["model"], started, "failed", error_type=type(fallback_error).__name__)
                 print(f"LLM API Call failed: {e}")
                 print(f"LLM fallback request failed: {fallback_error}")
-                return "{}" if response_format == "json_object" else ""
+                raise LLMRequestError(
+                    f"LLM request failed for {kwargs['model']}: {fallback_error}"
+                ) from fallback_error
 
     def generate_json(self, system_prompt: str, user_prompt: str, model_override=None, module_name=None) -> dict:
         """便捷方法：强制输出 JSON 并解析为字典"""

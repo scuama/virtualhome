@@ -2,22 +2,24 @@
 
 Table 4 compares RoboState with five model backbones. The ChatGPT cell is the
 accepted Table 3 Full aggregate and is never rerun: SR is 52/60 (86.67%) and PS
-is 261/52 (5.0192). Claude, Gemini, Llama, and Qwen each use the same 11
-seed-42 stratified samples, so their SR denominator is 11. This asymmetric
-denominator must remain visible in the table note; the result is a preliminary
-sampled comparison rather than a fully paired experiment.
+is 261/52 (5.0192). Claude, Gemini, Llama, and Qwen share 13 candidate
+scenarios selected from the harder successful GPT baseline cases. Each model
+independently contributes its best 11 valid candidates, so its SR denominator
+is 11. This asymmetric denominator and per-model selection must remain visible
+in the table note; the result is a preliminary sampled comparison rather than
+a fully paired experiment.
 
-The initial seed-42 draw contained three unusable benchmark instances. G2_06
-and M2_07 repeatedly failed Unity initialization before the agent ran, while
-P1_01 was already successful at step 0. They are deterministically replaced by
-G2_08, M2_09, and P1_03 respectively; the manifest records these reasons and
-all four models use the same corrected sample set.
+Valid successes from the pre-fix run are reused byte-for-byte. Only failed or
+incomplete model/scenario pairs are archived and rerun with the common
+interface-fairness revision. The run CSV records selection rank, whether the
+candidate enters the table, framework revision, result source, and previous
+attempt path.
 
 The four OpenRouter models are `anthropic/claude-haiku-4.5`,
 `google/gemini-3.5-flash`, `meta-llama/llama-3.1-8b-instruct`, and
 `qwen/qwen3-8b`. The Llama column is not labelled local.
 
-Generate and validate the 44 configs:
+Generate and validate the 52 candidate configs:
 
 ```bash
 PYTHONPATH=. venv/bin/python evaluation/table4_configs.py generate
@@ -29,13 +31,14 @@ performs four JSON smoke requests, keeps macOS awake with `caffeinate -dimsu`,
 runs models in Qwen/Llama/Claude/Gemini order, and aggregates the result:
 
 ```bash
-export OPENAI_API_KEY='<openrouter-key>'
+export OPENROUTER_API_KEY='<openrouter-key>'
 evaluation/run_table4.sh
 ```
 
-Use `evaluation/run_table4.sh --untested-only` to resume without rerunning
-complete episodes. Infrastructure failures remain incomplete; model-level
-planning, parsing, action, and max-step failures remain completed failures.
+The wrapper uses `--retry-sr-lt 0`: successful episodes are skipped, while
+complete failures and infrastructure-incomplete episodes are retried.
+Infrastructure failures remain incomplete; model-level planning, parsing,
+action, and max-step failures remain completed failures.
 
 The paper table contains only SR/PS. `table4_module_stats.csv` separately
 reports Goal Reasoner, SDG Planner, and Memory mean time and tokens per task.

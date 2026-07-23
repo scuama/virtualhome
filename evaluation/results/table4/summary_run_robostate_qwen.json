@@ -1,0 +1,405 @@
+{
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "total": 13,
+    "skipped": 8,
+    "success": 0,
+    "fail": 3,
+    "incomplete": 2,
+    "failures": [
+        {
+            "scenario": "T4_qwen_G2_06",
+            "reason": "Initialization Failed: Scene initialization failed while grabbing tablelamp(102): walk=True {'0': {'message': 'Success'}}, grab=False {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}.",
+            "run_status": "incomplete"
+        },
+        {
+            "scenario": "T4_qwen_G4_20",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T4_qwen_M2_06",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T4_qwen_M4_18",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T4_qwen_P2_08",
+            "reason": "Initialization Failed: Scene initialization failed while placing apple(437) INSIDE box: 192: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 287: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 300: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 435: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}",
+            "run_status": "incomplete"
+        }
+    ],
+    "extension_metrics": [
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T4_qwen_G2_06",
+                    "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T4_qwen_G2_06",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "G2_06",
+            "setting": null,
+            "extension_type": null,
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G2_06",
+            "method": "robostate",
+            "model": "qwen/qwen3-8b",
+            "success": false,
+            "run_status": "incomplete",
+            "valid_for_aggregation": false,
+            "reason": "Initialization Failed: Scene initialization failed while grabbing tablelamp(102): walk=True {'0': {'message': 'Success'}}, grab=False {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}.",
+            "steps_executed": 0,
+            "execution_time_seconds": 0,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": []
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T4_qwen_G4_20",
+                    "instruction": "If there is juice on the table, pour me a glass.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "relation": "HOLDS_RH|HOLDS_LH",
+                        "min_count": 1,
+                        "destination_class": "ANY",
+                        "destination_properties": [
+                            "POURABLE"
+                        ],
+                        "destination_states": [
+                            "FILLED_JUICE"
+                        ]
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T4_qwen_G4_20",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "G4_20",
+            "setting": null,
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G4_20",
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G4_20",
+            "method": "robostate",
+            "model": "qwen/qwen3-8b",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 26.78,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.215212,
+                    "input_tokens": 953,
+                    "output_tokens": 324,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1277,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004631,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 18.986861,
+                    "input_tokens": 3211,
+                    "output_tokens": 973,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4184,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T4_qwen_M2_06",
+                    "instruction": "If there is a water glass on the table, put the dirty water glass into the sink.",
+                    "success_condition": {
+                        "target_class": "waterglass",
+                        "destination_class": "sink",
+                        "relation": "ON",
+                        "min_count": 1,
+                        "states": [
+                            "DIRTY"
+                        ]
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T4_qwen_M2_06",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "M2_06",
+            "setting": null,
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "M2_06",
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M2_06",
+            "method": "robostate",
+            "model": "qwen/qwen3-8b",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 36.56,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 11.953503,
+                    "input_tokens": 959,
+                    "output_tokens": 351,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1310,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.008524,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 23.10201,
+                    "input_tokens": 3234,
+                    "output_tokens": 945,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4179,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T4_qwen_M4_18",
+                    "instruction": "Put the plate we just used on the kitchentable.",
+                    "success_condition": {
+                        "target_class": "plate",
+                        "properties": [
+                            "COLOR_RED"
+                        ],
+                        "relation": "ON",
+                        "destination_class": "kitchentable"
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T4_qwen_M4_18",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "M4_18",
+            "setting": null,
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "M4_18",
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M4_18",
+            "method": "robostate",
+            "model": "qwen/qwen3-8b",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 79.6,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.204352,
+                    "input_tokens": 953,
+                    "output_tokens": 333,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1286,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 66.538853,
+                    "input_tokens": 76656,
+                    "output_tokens": 2222,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 78878,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.009072,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.505923,
+                    "input_tokens": 1077,
+                    "output_tokens": 109,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1186,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.03491,
+                    "input_tokens": 1593,
+                    "output_tokens": 133,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1726,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T4_qwen_P2_08",
+                    "instruction": "If there are apples in the box, take all of them to the kitchentable.",
+                    "success_condition": {
+                        "mode": "AND",
+                        "conditions": [
+                            {
+                                "check_type": "relation",
+                                "target_class": "apple",
+                                "relation": "ON",
+                                "destination_class": "kitchentable",
+                                "min_count": 2
+                            }
+                        ]
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T4_qwen_P2_08",
+            "table_id": "table4",
+            "experiment_axis": "model_backbone",
+            "sample_id": "P2_08",
+            "setting": null,
+            "extension_type": null,
+            "framework_revision": "table4-interface-fairness-v1",
+            "result_source": "post_fix_rerun",
+            "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/P2_08",
+            "method": "robostate",
+            "model": "qwen/qwen3-8b",
+            "success": false,
+            "run_status": "incomplete",
+            "valid_for_aggregation": false,
+            "reason": "Initialization Failed: Scene initialization failed while placing apple(437) INSIDE box: 192: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 287: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 300: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}; 435: placement failed {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}",
+            "steps_executed": 0,
+            "execution_time_seconds": 0,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": []
+        }
+    ],
+    "aggregate_task_completed": 0,
+    "aggregate_task_total": 3,
+    "aggregate_ps_count": 0,
+    "aggregate_sr": 0.0,
+    "aggregate_ps": null
+}

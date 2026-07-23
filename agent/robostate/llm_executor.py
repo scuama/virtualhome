@@ -1,5 +1,5 @@
 import json
-from ..utils.llm_client import LLMClient
+from ..utils.llm_client import LLMClient, LLMRequestError
 from .prompt_templates import EXECUTOR_SYSTEM_PROMPT
 from .ablation import get_ablation_policy
 
@@ -42,6 +42,7 @@ class LLMExecutor:
         scheduled_rules=None,
         allow_ask=True,
         task_context=None,
+        planner_feedback=None,
     ):
         self.logger.info("LLMExecutor: Analyzing filtered graph to decide next action...")
         
@@ -85,7 +86,10 @@ class LLMExecutor:
         task_context_str = json.dumps(
             task_context or {}, ensure_ascii=False
         )
-        user_prompt = f"Task Scheduling Context:\n{task_context_str}\n\nGoal Intent FOR THE ACTIVE TASK ONLY:\n{intent_str}\n\nRequired SDG FOR THE ACTIVE TASK ONLY:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nClarification Rule:\n{clarification_rule}\n\nWork only on active_task_id. Never manipulate objects belonging to satisfied_task_ids. What is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
+        feedback_str = json.dumps(
+            list(planner_feedback or [])[-2:], ensure_ascii=False
+        )
+        user_prompt = f"Task Scheduling Context:\n{task_context_str}\n\nGoal Intent FOR THE ACTIVE TASK ONLY:\n{intent_str}\n\nRequired SDG FOR THE ACTIVE TASK ONLY:\n{sdg_str}\n\nPast Actions (last 10):\n{history_str}\n\nController Rejections (latest two; do not repeat these mistakes):\n{feedback_str}\n\nCurrent Filtered Graph:\n{graph_str}\n\nActive Global Rules:\n{rules_str}\n\nClarification Rule:\n{clarification_rule}\n\nHistorical Binding Rule:\nPast object IDs are historical handles and may be stale. Rebind an object using its class, states, properties, and action history. Never reuse a historical ID unless that ID and matching attributes exist in the current graph.\n\nWork only on active_task_id. Never manipulate objects belonging to satisfied_task_ids. What is the SINGLE NEXT action to execute? (Do not repeat a walk action if you just did it)"
 
         system_prompt = EXECUTOR_SYSTEM_PROMPT
         if not self.policy.state_alignment:
@@ -128,6 +132,8 @@ class LLMExecutor:
             satisfied_nodes = result_dict.get("satisfied_nodes", [])
             current_node_focus = result_dict.get("current_node_focus", "")
             
+        except LLMRequestError:
+            raise
         except Exception as e:
             self.logger.error(f"LLMExecutor failed: {e}")
             action = "WAIT"

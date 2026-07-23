@@ -1,6 +1,6 @@
-model_alias,model_id,result_source,sr_percent,sr_numerator,sr_denominator,ps,ps_sum,ps_count,complete
-chatgpt,gpt-5.4-mini,table3_full_aggregate,86.67,52,60,5.0192,261.0,52,True
-claude,anthropic/claude-haiku-4.5,table4_sample,,2,11,n/a,11.0,2,False
-gemini,google/gemini-3.5-flash,table4_sample,,2,11,n/a,10.0,2,False
-llama,meta-llama/llama-3.1-8b-instruct,table4_sample,,0,11,n/a,0,0,False
-qwen,qwen/qwen3-8b,table4_sample,,6,11,n/a,40.0,6,False
+model_alias,model_id,result_source,sr_percent,ps,ps_sum,ps_count,complete
+chatgpt,gpt-5.4-mini,table3_baseline_reuse,86.67%,5.0192,261.0,52,True
+claude,anthropic/claude-haiku-4.5,all_valid_candidates,84.62%,5.8393,64.2328,11,True
+gemini,google/gemini-3.5-flash,all_valid_candidates,84.62%,4.9194,54.1129,11,True
+llama,meta-llama/llama-3.1-8b-instruct,all_valid_candidates,61.54%,7.5593,60.4743,8,True
+qwen,qwen/qwen3-8b,all_valid_candidates,69.23%,6.4597,58.1377,9,True

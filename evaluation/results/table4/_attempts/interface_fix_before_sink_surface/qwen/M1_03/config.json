@@ -1,0 +1,76 @@
+{
+    "scenario_id": "T4_qwen_M1_03",
+    "scenario_type": "M",
+    "goal_instruction": "If you see dirty water glasses, put them in the sink right away.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "mug",
+            "count": 0,
+            "object": "kitchentable"
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "dynamic_events": [
+        {
+            "trigger": {
+                "action": "grab",
+                "target": "waterglass",
+                "target_state": "DIRTY"
+            },
+            "effect": {
+                "type": "hide",
+                "target": "waterglass",
+                "duration_steps": 3
+            }
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "destination_class": "sink",
+        "relation": "ON",
+        "min_count": 1,
+        "states": [
+            "DIRTY"
+        ]
+    },
+    "source_scenario_id": "M1_03",
+    "source_config": "configs/source_tasks/m_class/M1_03.json",
+    "source_sha256": "f3db595187ad45167acb1e7183561dd74e7be128c98e161957408eef014cd40b",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M1_03",
+    "model_alias": "qwen",
+    "evaluation_model": "qwen/qwen3-8b",
+    "provider": "openrouter",
+    "framework_revision": "table4-interface-fairness-v1",
+    "result_source": "post_fix_rerun",
+    "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M1_03",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 143.79
+}

@@ -52,6 +52,9 @@ class FakeLogger:
     def log_module_output(self, *args, **kwargs):
         return None
 
+    def record_module_call(self, *args, **kwargs):
+        return None
+
 
 class FakeGoalReasoner:
     def __init__(self):
@@ -66,7 +69,7 @@ class FakeSDGPlanner:
     def __init__(self):
         self.instructions = []
 
-    def generate_sdg(self, instruction):
+    def generate_sdg(self, instruction, scene_classes=None):
         self.instructions.append(instruction)
         return {
             "nodes": [
@@ -570,6 +573,21 @@ class ActionValidatorTests(unittest.TestCase):
         self.assertTrue(result.repaired)
         self.assertEqual(result.action, "[walk] <sofa> (3)")
 
+    def test_sink_accepts_putback_as_virtualhome_surface(self):
+        sink = node(5, "sink")
+        graph = {
+            "nodes": self.graph["nodes"] + [sink],
+            "edges": self.graph["edges"] + [
+                {"from_id": 1, "to_id": 2, "relation_type": "HOLDS_RH"},
+                {"from_id": 1, "to_id": 5, "relation_type": "CLOSE"},
+            ],
+        }
+        result = self.validator.validate(
+            "[putback] <book> (2) <sink> (5)", graph
+        )
+        self.assertTrue(result.valid)
+        self.assertEqual(result.action, "[putback] <book> (2) <sink> (5)")
+
     def test_wait_requires_explicit_gate(self):
         self.assertFalse(self.validator.validate("[wait]", self.graph).valid)
         self.assertTrue(
@@ -591,11 +609,13 @@ class FakeLLMClient:
     def __init__(self, model_name=None):
         self.sdg_prompts = []
 
-    def generate_json(self, system_prompt, user_prompt, model_override=None):
+    def generate_json(self, system_prompt, user_prompt, model_override=None, **kwargs):
+        if "Execution Engine" in system_prompt:
+            return json.loads(self.generate_response(system_prompt, user_prompt))
         if "State Dependency Graph" not in system_prompt:
             return {"intent": user_prompt}
         self.sdg_prompts.append(user_prompt)
-        if "computer" in user_prompt.lower():
+        if "task: turn on the computer" in user_prompt.lower():
             return {
                 "nodes": [
                     {"id": "N1", "type": "State", "object": "computer", "value": "ON"}
@@ -613,7 +633,8 @@ class FakeLLMClient:
         }
 
     def generate_response(
-        self, system_prompt, user_prompt, response_format="text", model_override=None
+        self, system_prompt, user_prompt, response_format="text",
+        model_override=None, **kwargs
     ):
         if "Execution Engine" in system_prompt:
             if "computer_task" in user_prompt and '"active_task_id": "computer_task"' in user_prompt:
@@ -631,6 +652,48 @@ class FakeLLMClient:
 
 
 class RoboStateAgentIntegrationTests(unittest.TestCase):
+    def test_goal_reasoner_ambiguity_asks_before_sdg_and_physical_action(self):
+        graph = {
+            "nodes": [
+                node(1, "character"),
+                node(2, "book", properties=["GRABBABLE"]),
+                node(10, "kitchen", category="Rooms"),
+            ],
+            "edges": [
+                {"from_id": 1, "to_id": 10, "relation_type": "INSIDE"},
+                {"from_id": 1, "to_id": 2, "relation_type": "CLOSE"},
+            ],
+        }
+        logger = FakeLogger()
+        with patch("agent.robostate_agent.LLMClient", FakeLLMClient):
+            agent = RoboStateAgent("fake", "ambiguous")
+
+        def vague_intent(system_prompt, user_prompt, **kwargs):
+            return {
+                "is_instruction_obviously_vague": True,
+                "clarification_question": "Which book do you mean?",
+            }
+
+        agent.llm.generate_json = vague_intent
+        action = agent.get_action(
+            graph,
+            {
+                "scenario_id": "ambiguous",
+                "goal_instruction": "Bring the appropriate one.",
+            },
+            {
+                "step": 0,
+                "logger": logger,
+                "action_history": [],
+                "task_progress": [
+                    {"task_id": "task_1", "currently_satisfied": False},
+                ],
+            },
+        )
+        self.assertEqual(action, "[ask] Which book do you mean?")
+        self.assertIsNone(agent.task_manager.tasks[0].sdg)
+        self.assertTrue(agent.task_manager.tasks[0].clarification_asked)
+
     def test_agent_switches_between_independent_task_plans(self):
         config = {
             "scenario_id": "multi",

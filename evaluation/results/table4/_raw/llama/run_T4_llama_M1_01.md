@@ -19,30 +19,30 @@
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "The user wants to access entertainment or information."
+      "answer": "The user wants to interact with the TV."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user wants to relax or be informed."
+      "answer": "The user wants to relax and enjoy their favorite show."
     }
   ],
-  "deep_intent": "access entertainment or information",
+  "deep_intent": "interact with the TV",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "The TV's built-in controls or a universal remote control"
+      "description": "Other devices that can control the TV, such as a universal remote or a smart speaker with TV control capabilities."
     },
     {
       "priority": 2,
-      "description": "A smartphone or tablet with a remote control app"
+      "description": "Other devices that can provide similar interactive experiences, such as a gaming controller or a tablet with streaming apps."
     },
     {
       "priority": 3,
-      "description": "A voice assistant or smart speaker with TV control capabilities"
+      "description": "Devices that can provide a similar level of control, such as a smart speaker with voice control or a wall-mounted control panel."
     },
     {
       "priority": 4,
-      "description": "A physical button or switch on the TV or its surrounding device"
+      "description": "A smartphone or tablet with a streaming app, which can provide a similar interactive experience, although in a different form factor."
     }
   ]
 }
@@ -52,39 +52,25 @@
 ```json
 {
   "action": "[walk] <bathroom> (11)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 0
 - **Action**: `[walk] <bathroom> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_llama_M1_01=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["TV<br>(ON)"]
-    N2["TV<br>HAS<br>remote_control"]
-    N3["remote_control<br>(HELD)"]
-    N4["remote_control<br>IS<br>nearby"]
-    N5["agent<br>IS<br>nearby"]
-    N6["agent<br>IS<br>holding"]
-    N7["remote_control<br>(ON_TABLE)"]
-    N1 -->|"TV is on, so the remote control is nearby"| N2
-    N2 -->|"The remote control is held by the agent"| N3
-    N3 -->|"The agent is holding the remote control"| N4
-    N4 -->|"The agent is holding the remote control"| N5
-    N5 -->|"The agent is holding the remote control"| N6
-    N6 -->|"The remote control is on the table"| N7
-```
+No SDG active.
 - **Observed Items (63)**: wall(262), wall(263), wall(264), wall(265), wall(266), wall(267), wall(268), wall(269), ceiling(270), ceiling(271), ceiling(272), ceiling(273), ceiling(274), ceiling(275), ceiling(276)...
 
 
@@ -92,39 +78,25 @@ graph TD
 ```json
 {
   "action": "[walk] <bedroom> (50)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 1
 - **Action**: `[walk] <bedroom> (50)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_llama_M1_01=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["TV<br>(ON)"]
-    N2["TV<br>HAS<br>remote_control"]
-    N3["remote_control<br>(HELD)"]
-    N4["remote_control<br>IS<br>nearby"]
-    N5["agent<br>IS<br>nearby"]
-    N6["agent<br>IS<br>holding"]
-    N7["remote_control<br>(ON_TABLE)"]
-    N1 -->|"TV is on, so the remote control is nearby"| N2
-    N2 -->|"The remote control is held by the agent"| N3
-    N3 -->|"The agent is holding the remote control"| N4
-    N4 -->|"The agent is holding the remote control"| N5
-    N5 -->|"The agent is holding the remote control"| N6
-    N6 -->|"The remote control is on the table"| N7
-```
+No SDG active.
 - **Observed Items (101)**: wall(262), wall(263), wall(264), wall(265), wall(266), wall(267), wall(268), wall(269), ceiling(270), ceiling(271), ceiling(272), ceiling(273), ceiling(274), ceiling(275), ceiling(276)...
 
 
@@ -132,39 +104,25 @@ graph TD
 ```json
 {
   "action": "[walk] <kitchen> (126)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 2
 - **Action**: `[walk] <kitchen> (126)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_llama_M1_01=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["TV<br>(ON)"]
-    N2["TV<br>HAS<br>remote_control"]
-    N3["remote_control<br>(HELD)"]
-    N4["remote_control<br>IS<br>nearby"]
-    N5["agent<br>IS<br>nearby"]
-    N6["agent<br>IS<br>holding"]
-    N7["remote_control<br>(ON_TABLE)"]
-    N1 -->|"TV is on, so the remote control is nearby"| N2
-    N2 -->|"The remote control is held by the agent"| N3
-    N3 -->|"The agent is holding the remote control"| N4
-    N4 -->|"The agent is holding the remote control"| N5
-    N5 -->|"The agent is holding the remote control"| N6
-    N6 -->|"The remote control is on the table"| N7
-```
+No SDG active.
 - **Observed Items (172)**: wall(262), wall(263), wall(264), wall(265), wall(266), wall(267), wall(268), wall(269), ceiling(270), ceiling(271), ceiling(272), ceiling(273), ceiling(274), ceiling(275), ceiling(276)...
 
 

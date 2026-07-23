@@ -1,0 +1,57 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there are apples in the box, take all of them to the kitchentable.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "box",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "box",
+            "states": [
+                "OPEN"
+            ]
+        },
+        {
+            "subject": "apple",
+            "states": [
+                "GRABBABLE"
+            ]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "check_type": "relation",
+                "target_class": "apple",
+                "relation": "ON",
+                "destination_class": "kitchentable",
+                "min_count": 2
+            }
+        ]
+    },
+    "execution_time_seconds": 0,
+    "scenario_id": "T4_gemini_P2_08",
+    "source_scenario_id": "P2_08",
+    "source_config": "configs/source_tasks/p_class/P2_08.json",
+    "source_sha256": "f2673382019899c0c73665ac7c62a9a361b8675ff4a6bbd4933a89e928ccd795",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P2_08",
+    "model_alias": "gemini",
+    "evaluation_model": "google/gemini-3.5-flash",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate"
+}

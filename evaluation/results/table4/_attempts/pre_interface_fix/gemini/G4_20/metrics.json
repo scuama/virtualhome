@@ -1,0 +1,82 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_gemini_G4_20",
+            "instruction": "If there is juice on the table, pour me a glass.",
+            "success_condition": {
+                "target_class": "character",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "min_count": 1,
+                "destination_class": "ANY",
+                "destination_properties": [
+                    "POURABLE"
+                ],
+                "destination_states": [
+                    "FILLED_JUICE"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_gemini_G4_20",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G4_20",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G4_20",
+    "method": "robostate",
+    "model": "google/gemini-3.5-flash",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 8.38,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 4.109506,
+            "input_tokens": 992,
+            "output_tokens": 391,
+            "reasoning_tokens": 0,
+            "total_tokens": 1383,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004178,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.964749,
+            "input_tokens": 1034,
+            "output_tokens": 331,
+            "reasoning_tokens": 0,
+            "total_tokens": 1365,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

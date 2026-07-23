@@ -101,314 +101,472 @@
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "G2_06",
-      "config_path": "configs/table4/runs/claude/G2_06.json"
+      "config_path": "configs/table4/runs/claude/G2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/G2_06"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "G2_06",
-      "config_path": "configs/table4/runs/gemini/G2_06.json"
+      "config_path": "configs/table4/runs/gemini/G2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/G2_06"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "G2_06",
-      "config_path": "configs/table4/runs/llama/G2_06.json"
+      "config_path": "configs/table4/runs/llama/G2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/G2_06"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "G2_06",
-      "config_path": "configs/table4/runs/qwen/G2_06.json"
+      "config_path": "configs/table4/runs/qwen/G2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G2_06"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M2_06",
-      "config_path": "configs/table4/runs/claude/M2_06.json"
+      "config_path": "configs/table4/runs/claude/M2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M2_06"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M2_06",
-      "config_path": "configs/table4/runs/gemini/M2_06.json"
+      "config_path": "configs/table4/runs/gemini/M2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M2_06"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M2_06",
-      "config_path": "configs/table4/runs/llama/M2_06.json"
+      "config_path": "configs/table4/runs/llama/M2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M2_06"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M2_06",
-      "config_path": "configs/table4/runs/qwen/M2_06.json"
+      "config_path": "configs/table4/runs/qwen/M2_06.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M2_06"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M4_18",
-      "config_path": "configs/table4/runs/claude/M4_18.json"
+      "config_path": "configs/table4/runs/claude/M4_18.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M4_18"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M4_18",
-      "config_path": "configs/table4/runs/gemini/M4_18.json"
+      "config_path": "configs/table4/runs/gemini/M4_18.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M4_18"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M4_18",
-      "config_path": "configs/table4/runs/llama/M4_18.json"
+      "config_path": "configs/table4/runs/llama/M4_18.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M4_18"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M4_18",
-      "config_path": "configs/table4/runs/qwen/M4_18.json"
+      "config_path": "configs/table4/runs/qwen/M4_18.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M4_18"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M4_17",
-      "config_path": "configs/table4/runs/claude/M4_17.json"
+      "config_path": "configs/table4/runs/claude/M4_17.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M4_17"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M4_17",
-      "config_path": "configs/table4/runs/gemini/M4_17.json"
+      "config_path": "configs/table4/runs/gemini/M4_17.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M4_17"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M4_17",
-      "config_path": "configs/table4/runs/llama/M4_17.json"
+      "config_path": "configs/table4/runs/llama/M4_17.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M4_17"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M4_17",
-      "config_path": "configs/table4/runs/qwen/M4_17.json"
+      "config_path": "configs/table4/runs/qwen/M4_17.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M4_17"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "P2_08",
-      "config_path": "configs/table4/runs/claude/P2_08.json"
+      "config_path": "configs/table4/runs/claude/P2_08.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/P2_08"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "P2_08",
-      "config_path": "configs/table4/runs/gemini/P2_08.json"
+      "config_path": "configs/table4/runs/gemini/P2_08.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/P2_08"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "P2_08",
-      "config_path": "configs/table4/runs/llama/P2_08.json"
+      "config_path": "configs/table4/runs/llama/P2_08.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/P2_08"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "P2_08",
-      "config_path": "configs/table4/runs/qwen/P2_08.json"
+      "config_path": "configs/table4/runs/qwen/P2_08.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/P2_08"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M1_01",
-      "config_path": "configs/table4/runs/claude/M1_01.json"
+      "config_path": "configs/table4/runs/claude/M1_01.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M1_01"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M1_01",
-      "config_path": "configs/table4/runs/gemini/M1_01.json"
+      "config_path": "configs/table4/runs/gemini/M1_01.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M1_01"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M1_01",
-      "config_path": "configs/table4/runs/llama/M1_01.json"
+      "config_path": "configs/table4/runs/llama/M1_01.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M1_01"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M1_01",
-      "config_path": "configs/table4/runs/qwen/M1_01.json"
+      "config_path": "configs/table4/runs/qwen/M1_01.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M1_01"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "P2_10",
-      "config_path": "configs/table4/runs/claude/P2_10.json"
+      "config_path": "configs/table4/runs/claude/P2_10.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/P2_10"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "P2_10",
-      "config_path": "configs/table4/runs/gemini/P2_10.json"
+      "config_path": "configs/table4/runs/gemini/P2_10.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/P2_10"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "P2_10",
-      "config_path": "configs/table4/runs/llama/P2_10.json"
+      "config_path": "configs/table4/runs/llama/P2_10.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/P2_10"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "P2_10",
-      "config_path": "configs/table4/runs/qwen/P2_10.json"
+      "config_path": "configs/table4/runs/qwen/P2_10.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/P2_10"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "G2_07",
-      "config_path": "configs/table4/runs/claude/G2_07.json"
+      "config_path": "configs/table4/runs/claude/G2_07.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/G2_07"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "G2_07",
-      "config_path": "configs/table4/runs/gemini/G2_07.json"
+      "config_path": "configs/table4/runs/gemini/G2_07.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/G2_07"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "G2_07",
-      "config_path": "configs/table4/runs/llama/G2_07.json"
+      "config_path": "configs/table4/runs/llama/G2_07.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/G2_07"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "G2_07",
-      "config_path": "configs/table4/runs/qwen/G2_07.json"
+      "config_path": "configs/table4/runs/qwen/G2_07.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G2_07"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "P3_13",
-      "config_path": "configs/table4/runs/claude/P3_13.json"
+      "config_path": "configs/table4/runs/claude/P3_13.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/P3_13"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "P3_13",
-      "config_path": "configs/table4/runs/gemini/P3_13.json"
+      "config_path": "configs/table4/runs/gemini/P3_13.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/P3_13"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "P3_13",
-      "config_path": "configs/table4/runs/llama/P3_13.json"
+      "config_path": "configs/table4/runs/llama/P3_13.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/P3_13"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "P3_13",
-      "config_path": "configs/table4/runs/qwen/P3_13.json"
+      "config_path": "configs/table4/runs/qwen/P3_13.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/P3_13"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "G3_14",
-      "config_path": "configs/table4/runs/claude/G3_14.json"
+      "config_path": "configs/table4/runs/claude/G3_14.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/G3_14"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "G3_14",
-      "config_path": "configs/table4/runs/gemini/G3_14.json"
+      "config_path": "configs/table4/runs/gemini/G3_14.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/G3_14"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "G3_14",
-      "config_path": "configs/table4/runs/llama/G3_14.json"
+      "config_path": "configs/table4/runs/llama/G3_14.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/G3_14"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "G3_14",
-      "config_path": "configs/table4/runs/qwen/G3_14.json"
+      "config_path": "configs/table4/runs/qwen/G3_14.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G3_14"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "G4_20",
-      "config_path": "configs/table4/runs/claude/G4_20.json"
+      "config_path": "configs/table4/runs/claude/G4_20.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/G4_20"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "G4_20",
-      "config_path": "configs/table4/runs/gemini/G4_20.json"
+      "config_path": "configs/table4/runs/gemini/G4_20.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/G4_20"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "G4_20",
-      "config_path": "configs/table4/runs/llama/G4_20.json"
+      "config_path": "configs/table4/runs/llama/G4_20.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/G4_20"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "G4_20",
-      "config_path": "configs/table4/runs/qwen/G4_20.json"
+      "config_path": "configs/table4/runs/qwen/G4_20.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/G4_20"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M2_09",
-      "config_path": "configs/table4/runs/claude/M2_09.json"
+      "config_path": "configs/table4/runs/claude/M2_09.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M2_09"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M2_09",
-      "config_path": "configs/table4/runs/gemini/M2_09.json"
+      "config_path": "configs/table4/runs/gemini/M2_09.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M2_09"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M2_09",
-      "config_path": "configs/table4/runs/llama/M2_09.json"
+      "config_path": "configs/table4/runs/llama/M2_09.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M2_09"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M2_09",
-      "config_path": "configs/table4/runs/qwen/M2_09.json"
+      "config_path": "configs/table4/runs/qwen/M2_09.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M2_09"
     },
     {
       "model_alias": "claude",
       "model_id": "anthropic/claude-haiku-4.5",
       "source_scenario_id": "M1_03",
-      "config_path": "configs/table4/runs/claude/M1_03.json"
+      "config_path": "configs/table4/runs/claude/M1_03.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/claude/M1_03"
     },
     {
       "model_alias": "gemini",
       "model_id": "google/gemini-3.5-flash",
       "source_scenario_id": "M1_03",
-      "config_path": "configs/table4/runs/gemini/M1_03.json"
+      "config_path": "configs/table4/runs/gemini/M1_03.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/gemini/M1_03"
     },
     {
       "model_alias": "llama",
       "model_id": "meta-llama/llama-3.1-8b-instruct",
       "source_scenario_id": "M1_03",
-      "config_path": "configs/table4/runs/llama/M1_03.json"
+      "config_path": "configs/table4/runs/llama/M1_03.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/llama/M1_03"
     },
     {
       "model_alias": "qwen",
       "model_id": "qwen/qwen3-8b",
       "source_scenario_id": "M1_03",
-      "config_path": "configs/table4/runs/qwen/M1_03.json"
+      "config_path": "configs/table4/runs/qwen/M1_03.json",
+      "framework_revision": "table4-interface-fairness-v1",
+      "result_source": "post_fix_rerun",
+      "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M1_03"
     }
   ],
-  "expected_runnable_episodes": 52
+  "expected_runnable_episodes": 52,
+  "selection_policy": "per-model best 11 of 13 candidates",
+  "successful_result_policy": "reuse pre-fix success without rerun"
 }

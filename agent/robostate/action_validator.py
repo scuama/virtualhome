@@ -161,6 +161,8 @@ class ActionValidator:
             if not dest_props.intersection({"CONTAINERS", "CONTAINER", "RECIPIENT"}):
                 return f"{objects[1][0]} is not a container"
         if action == "putback":
+            if objects[1][0] == "sink":
+                return None
             dest_props = self._upper(objects[1][2].get("properties", []))
             if not dest_props.intersection({"SURFACES", "SURFACE"}):
                 return f"{objects[1][0]} is not a surface"

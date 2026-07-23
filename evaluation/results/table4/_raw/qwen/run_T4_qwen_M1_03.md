@@ -15,7 +15,7 @@
     },
     {
       "question": "Why is that important?",
-      "answer": "It is important to maintain cleanliness and order in the environment."
+      "answer": "It is important to maintain cleanliness and hygiene in the environment."
     },
     {
       "question": "What fundamental need does this fulfill?",
@@ -23,26 +23,26 @@
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user likely wants to maintain hygiene and prevent the spread of germs."
+      "answer": "The user likely wants to maintain a clean and organized space, which contributes to a sense of order and well-being."
     }
   ],
-  "deep_intent": "The user wants to maintain cleanliness and order by properly managing dirty items.",
+  "deep_intent": "The user wants to maintain cleanliness and order by properly disposing of dirty items.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other dirty glassware items, such as cups or mugs."
+      "description": "Other dirty glassware or containers that need to be cleaned or disposed of."
     },
     {
       "priority": 2,
-      "description": "Dirty containers or vessels used for liquids."
+      "description": "Items that are considered dirty or require cleaning, such as used cups or plates."
     },
     {
       "priority": 3,
-      "description": "Items that require cleaning, such as plates or utensils."
+      "description": "Items that are no longer in use and need to be discarded or cleaned, such as cups, bowls, or mugs."
     },
     {
       "priority": 4,
-      "description": "Any object that is considered dirty and needs to be placed in a designated area for cleaning."
+      "description": "Items that are considered unhygienic or contaminated, such as used utensils or containers."
     }
   ]
 }
@@ -51,12 +51,12 @@
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to manage and organize dirty water glasses, which implies identifying and handling dirty glassware. The SDG requires the glass to be dirty, placed on a surface, and inside the sink, with the sink open. The location hint is 'sink', so the sink must be included. Additionally, the waterglass is the target object. Since the goal involves managing dirty items, we must include the sink as the designated area for handling dirty glasses and the waterglass as the specific object. No alternative tools are needed since the task is straightforward and does not require backups or additional functional tools.",
+  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them in the sink. The SDG requires the presence of dirty water glasses, the sink, and the ability to interact with the sink (open and close). The sink is explicitly mentioned as the location, and the waterglass is the target object. To ensure functionality, the sink must be included as it is the required location for disposal. No alternative tools are needed since the task is straightforward and does not require additional tools beyond the sink and the waterglass.",
   "selected_classes": [
-    "plate",
-    "character",
+    "sink",
     "waterglass",
-    "sink"
+    "character",
+    "plate"
   ],
   "raw_class_count": 50
 }
@@ -65,17 +65,135 @@
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current Filtered Graph shows that there is a `waterglass(64)` with the `DIRTY` state, which matches the SDG node N1. However, the SDG node N3 requires the glass to be inside the sink, and the sink (sink(155)) is not currently open. Therefore, the next step is to open the sink to satisfy the condition for placing the glass inside it.",
+  "reasoning": "The current Filtered Graph shows that there is a `waterglass(64)` with the `DIRTY` state, which matches the SDG node N1. However, the robot is not holding this object, and it is not on the sink. The next logical step is to grab the dirty water glass and then walk to the sink to place it there. Since the robot is not holding the object, the first action must be to grab it.",
   "satisfied_nodes": [
-    "N1"
+    "N2",
+    "N3",
+    "N4",
+    "N5",
+    "N6"
   ],
-  "current_node_focus": "N4",
+  "current_node_focus": "N1",
   "mapped_variables": {
-    "?Sink": "sink(155)"
+    "?Washer": "sink(155)"
   },
-  "action": "[open] <sink> (155)"
+  "action": "[grab] <waterglass> (64)"
 }
 ```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[grab] <waterglass> (64)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 0
+- **Action**: `[grab] <waterglass> (64)`
+- **Action Success**: `False`
+- **Action Message**: temporary_unavailable: target disappeared; wait or search and retry
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T4_qwen_M1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>(DIRTY)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["waterglass<br>ON<br>?Surface"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["waterglass<br>ON<br>sink"]
+    style N4 fill:#9f9,stroke:#333,stroke-width:2px
+    N5["sink<br>(OPEN)"]
+    style N5 fill:#9f9,stroke:#333,stroke-width:2px
+    N6["sink<br>(CLOSED)"]
+    style N6 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
+```
+- **Observed Items (24)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "sink",
+    "waterglass",
+    "character",
+    "plate"
+  ],
+  "raw_class_count": 50
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The previous attempt to grab the waterglass(64) failed because it disappeared, likely due to another character using it. Since the task requires managing dirty water glasses, and the sink(155) is the target location, the next logical step is to locate a dirty water glass and walk to the sink. The current Filtered Graph shows multiple waterglasses, but only waterglass(64) is marked as DIRTY. We must first walk to waterglass(64) to grab it, then walk to the sink to place it there.",
+  "satisfied_nodes": [
+    "N6"
+  ],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Washer": "sink(155)",
+    "?Surface": "kitchen(11)"
+  },
+  "action": "[walk] <waterglass> (64)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <waterglass> (64)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 1
+- **Action**: `[walk] <waterglass> (64)`
+- **Action Success**: `False`
+- **Action Message**: temporary_unavailable: target is temporarily hidden
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T4_qwen_M1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>(DIRTY)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["waterglass<br>ON<br>?Surface"]
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    style N6 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
+```
+- **Observed Items (24)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+
 
 ### [RoboStateMultiTaskController] Output
 ```json
@@ -92,7 +210,7 @@
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 0
+## Step 2
 - **Action**: `[walk] <livingroom> (183)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -106,13 +224,12 @@ No SDG active.
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them in the sink. The SDG requires identifying the glass as dirty, placing it on a surface, and then inside the sink, which must be open. Therefore, the essential object classes are 'waterglass' (the target object), 'sink' (the location and receptacle), and 'fridge' (as a backup for storing clean glasses if needed).",
+  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them in the sink. The SDG requires the presence of dirty water glasses, the sink, and the ability to interact with the sink (open and close). To ensure the task can be completed, we must include the exact object classes mentioned in the goal and SDG, such as 'dirty water glasses' (represented as 'waterglass' in the SDG), 'sink', and any necessary tools or locations implied by the task. Since the SDG explicitly mentions 'sink' and 'waterglass', these must be included. Additionally, the sink must be open and closed, so the 'sink' class is critical. No other objects are necessary for this task.",
   "selected_classes": [
-    "character",
-    "plate",
-    "fridge",
+    "sink",
     "waterglass",
-    "sink"
+    "character",
+    "plate"
   ],
   "raw_class_count": 59
 }
@@ -121,124 +238,11 @@ No SDG active.
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them in the sink. The current Filtered Graph shows that there is a waterglass(64) with the state 'DIRTY', which matches the requirement of being 'DIRTY'. However, the sink (sink(155)) is not yet open, which is a prerequisite for placing the glass inside it. Therefore, the next step is to open the sink to satisfy the condition for placing the glass inside it.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N4",
-  "mapped_variables": {
-    "?Glass": "waterglass(64)",
-    "?Sink": "sink(155)"
-  },
-  "action": "[open] <sink> (155)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (241)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 1
-- **Action**: `[walk] <bedroom> (241)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to manage and organize dirty water glasses, specifically targeting 'dirty water glasses' and implying the need to interact with a sink. The SDG requires identifying the glass as dirty, placing it on a surface, and then inside the sink, which must be open. The observed object classes include 'waterglass' (the target object), 'sink' (the location), and 'fridge' (a potential backup for storing clean glasses or related items). These classes are necessary to fulfill the goal and maintain cleanliness.",
-  "selected_classes": [
-    "character",
-    "plate",
-    "fridge",
-    "dirty water glasses",
-    "sink"
-  ],
-  "raw_class_count": 65
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current Filtered Graph does not show any object matching the target object 'dirty water glasses'. However, the task requires managing dirty glasses, and the sink (sink(155)) is the designated location for this. Since the sink is not currently open, the next logical step is to open it to prepare for placing the glasses inside.",
-  "satisfied_nodes": [],
-  "current_node_focus": "N4",
-  "mapped_variables": {
-    "?Sink": "sink(155)"
-  },
-  "action": "[open] <sink> (155)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bathroom> (285)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 2
-- **Action**: `[walk] <bathroom> (285)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "The goal is to manage and organize dirty water glasses, which implies the need to locate and handle these items. The SDG indicates that the glasses must be identified as dirty, placed on a surface, and then inside a sink. The sink is explicitly mentioned as the location, and the waterglass is the target object. To ensure functionality, we must include the sink and waterglass. Additionally, the fridge is included as a potential backup for storing clean glasses if needed.",
-  "selected_classes": [
-    "character",
-    "plate",
-    "fridge",
-    "waterglass",
-    "sink"
-  ],
-  "raw_class_count": 81
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current Filtered Graph shows that there is a `waterglass(64)` with the `DIRTY` state, which matches the SDG node N1 (dirty glass). However, the glass is currently `INSIDE kitchen(11)` and not on a surface (`ON`), which is required for node N2. The next logical step is to walk to the glass to grab it and then proceed to the sink to clean it. Since the glass is inside the kitchen, we need to first walk to it.",
+  "reasoning": "The current Filtered Graph does not show any DIRTY waterglass objects, which is required for the task. The SDG node N1 (waterglass is DIRTY) is not satisfied. The task requires finding a DIRTY waterglass to proceed. Since the previous attempt to grab waterglass(64) failed due to it being temporarily unavailable, we need to search for another DIRTY waterglass in the environment. The sink (sink(155)) is the target location for placing the DIRTY waterglass, so we must first locate a DIRTY waterglass and then walk to the sink to place it.",
   "satisfied_nodes": [],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Glass": "waterglass(64)",
-    "?Surface": "kitchen(11)",
-    "?Sink": "sink(155)"
+    "?Surface": "sink(155)"
   },
   "action": "[walk] <waterglass> (64)"
 }
@@ -259,124 +263,79 @@ No SDG active.
 ```
 ## Step 3
 - **Action**: `[walk] <waterglass> (64)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
+- **Action Success**: `False`
+- **Action Message**: temporary_unavailable: target is temporarily hidden
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T4_qwen_M1_03=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
+    N1["waterglass<br>(DIRTY)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    N4["?Sink<br>(OPEN)"]
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N2["waterglass<br>ON<br>?Surface"]
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (31)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+- **Observed Items (26)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "character",
-    "plate",
-    "fridge",
-    "waterglass",
-    "sink"
-  ],
-  "raw_class_count": 81
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N1, which requires the glass to be DIRTY. The waterglass(64) is already identified as DIRTY in the Filtered Graph. The next step is to grab the waterglass(64) to proceed with placing it in the sink. Since the robot is already near the waterglass(64), the [grab] action can be executed directly.",
-  "satisfied_nodes": [
-    "N2",
-    "N3",
-    "N4"
-  ],
-  "current_node_focus": "N1",
-  "mapped_variables": {
-    "?Glass": "waterglass(64)",
-    "?Surface": "kitchen(11)",
-    "?Sink": "sink(155)"
-  },
-  "action": "[grab] <waterglass> (64)"
-}
-```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <waterglass> (64)",
-  "active_task_id": "task_1",
+  "action": "[walk] <bedroom> (241)",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 4
-- **Action**: `[grab] <waterglass> (64)`
-- **Action Success**: `False`
-- **Action Message**: temporary_unavailable: target disappeared; wait or search and retry
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
+- **Action**: `[walk] <bedroom> (241)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_qwen_M1_03=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["?Glass<br>(DIRTY)"]
-    style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["?Glass<br>ON<br>?Surface"]
-    style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    style N3 fill:#9f9,stroke:#333,stroke-width:2px
-    N4["?Sink<br>(OPEN)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
-```
-- **Observed Items (31)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+No SDG active.
+- **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them in the sink. The SDG indicates that the water glasses are dirty, need to be placed on the sink, and require the sink to be open. Therefore, the essential object classes are 'waterglass' (the target object), 'sink' (the location and receptacle), and 'fridge' (as a backup for storing clean glasses if needed).",
   "selected_classes": [
     "character",
-    "plate",
     "fridge",
+    "sink",
     "waterglass",
-    "sink"
+    "plate"
   ],
-  "raw_class_count": 81
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is on satisfying node N1, which requires the glass to be DIRTY. The waterglass(64) is already marked as DIRTY, so this condition is satisfied. The next step is to satisfy node N2, which requires the glass to be ON a surface. However, the glass is currently INSIDE the kitchen(11), not on a surface. Therefore, the next action is to move the glass to a surface. Since the task involves managing dirty water glasses, the sink(155) is the most appropriate surface to place the glass. Before placing the glass on the sink, we need to ensure the sink is open (node N4). However, the sink is not explicitly mentioned as being open in the current graph, so we need to check its state. If it is closed, we must open it first. Since the glass is already in the kitchen, we need to walk to it first to grab it, then walk to the sink to place it. However, since the glass is already in the kitchen, we can directly walk to it and then proceed.",
-  "satisfied_nodes": [
-    "N1"
-  ],
-  "current_node_focus": "N2",
+  "reasoning": "The current Filtered Graph does not show any DIRTY waterglass objects. The SDG requires a DIRTY waterglass to be placed on the sink. Since the target object is missing, I must search for a suitable alternative that matches the properties of a DIRTY waterglass. The available waterglasses are all clean, so I need to find a DIRTY one or substitute it with a similar object that can fulfill the task.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
   "mapped_variables": {
-    "?Glass": "waterglass(64)",
-    "?Surface": "sink(155)"
+    "?Washer": "sink(155)"
   },
   "action": "[walk] <waterglass> (64)"
 }
@@ -397,86 +356,132 @@ graph TD
 ```
 ## Step 5
 - **Action**: `[walk] <waterglass> (64)`
-- **Action Success**: `False`
-- **Action Message**: temporary_unavailable: target is temporarily hidden
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
 - **Decision Source**: `llm_executor`
 - **Task Progress**: T4_qwen_M1_03=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
-    style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["?Glass<br>ON<br>?Surface"]
-    style N2 fill:#ff9,stroke:#333,stroke-width:4px
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    N4["?Sink<br>(OPEN)"]
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N1["waterglass<br>(DIRTY)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["waterglass<br>ON<br>?Surface"]
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (31)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
-
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (346)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 6
-- **Action**: `[walk] <bedroom> (346)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
+- **Observed Items (28)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "",
+  "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "plate",
     "character",
-    "mug",
-    "sink"
+    "fridge",
+    "sink",
+    "waterglass",
+    "plate"
   ],
-  "raw_class_count": 91
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current Filtered Graph does not contain the 'dirty water glasses' object, which was previously attempted to be located. However, the task requires managing dirty water glasses, and the available objects include various plates and a sink. Since the task is to manage dirty items, the sink (sink(326)) in the bathroom (285) is the most relevant location for handling such items. The next logical step is to walk to the sink to prepare for placing the dirty glasses there.",
-  "satisfied_nodes": [],
+  "reasoning": "The current Filtered Graph shows that the waterglass(64) is DIRTY and is closed by the character(1). The goal is to manage dirty water glasses by placing them on the sink. However, the waterglass(64) is not currently in the kitchen(11) where the sink(155) is located. The robot must first locate the waterglass(64) and then walk to the sink(155) to place it there. Since the robot is currently in the bedroom(241), it needs to walk to the kitchen(11) to access the sink(155).",
+  "satisfied_nodes": [
+    "N6"
+  ],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Glass": "plate(383)",
-    "?Surface": "bedroom(346)",
-    "?Sink": "sink(326)"
+    "?Surface": "sink(155)"
   },
-  "action": "[walk] <sink> (326)"
+  "action": "[walk] <kitchen> (11)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <sink> (326)",
+  "action": "[walk] <kitchen> (11)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 6
+- **Action**: `[walk] <kitchen> (11)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T4_qwen_M1_03=pending
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>(DIRTY)"]
+    style N1 fill:#ff9,stroke:#333,stroke-width:4px
+    N2["waterglass<br>ON<br>?Surface"]
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    style N6 fill:#9f9,stroke:#333,stroke-width:2px
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
+```
+- **Observed Items (28)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "fridge",
+    "sink",
+    "waterglass",
+    "plate"
+  ],
+  "raw_class_count": 65
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The current Filtered Graph shows that there are multiple waterglasses inside the kitchen, but none of them are marked as DIRTY. The goal is to manage and organize dirty water glasses, which implies that we need to find a DIRTY waterglass. Since the initial target (waterglass(64)) is no longer available and the current graph does not show any DIRTY waterglasses, we need to search for a DIRTY waterglass in the kitchen. The next logical step is to walk to the kitchen to locate a DIRTY waterglass.",
+  "satisfied_nodes": [],
+  "current_node_focus": "N1",
+  "mapped_variables": {
+    "?Washer": "sink(155)"
+  },
+  "action": "[walk] <kitchen> (11)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[walk] <kitchen> (11)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -487,7 +492,7 @@ No SDG active.
 }
 ```
 ## Step 7
-- **Action**: `[walk] <sink> (326)`
+- **Action**: `[walk] <kitchen> (11)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -496,16 +501,20 @@ No SDG active.
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
+    N1["waterglass<br>(DIRTY)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    N4["?Sink<br>(OPEN)"]
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N2["waterglass<br>ON<br>?Surface"]
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
+- **Observed Items (28)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 
 
 ### [PerceptionFilter] Output
@@ -513,32 +522,36 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "plate",
     "character",
-    "mug",
-    "sink"
+    "fridge",
+    "sink",
+    "waterglass",
+    "plate"
   ],
-  "raw_class_count": 91
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is on satisfying node N1, which requires the glass to be DIRTY. However, the target object 'dirty water glasses' is not present in the current Filtered Graph. The available objects include various plates and mugs, but none are explicitly marked as DIRTY. Since the task requires managing dirty water glasses, and no such object is available, the next logical step is to search for a suitable substitute that matches the properties of a dirty glassware item. The mug(384) is a potential candidate as it is POURABLE and located in the bedroom(346), which is close to the current location. The next step is to walk to the mug(384) to verify its state and determine if it can be used as a substitute.",
-  "satisfied_nodes": [],
+  "reasoning": "The current Filtered Graph shows that the waterglass(64) is DIRTY and located inside the kitchen(11). However, the robot has previously attempted to grab it and encountered a temporary unavailability error. The next logical step is to walk to the waterglass(64) to confirm its location and attempt to grab it again. Since the robot is already in the kitchen(11), it can proceed to interact with the waterglass(64) directly.",
+  "satisfied_nodes": [
+    "N2",
+    "N3"
+  ],
   "current_node_focus": "N1",
   "mapped_variables": {
-    "?Glass": "mug(384)"
+    "?Washer": "sink(155)"
   },
-  "action": "[walk] <mug> (384)"
+  "action": "[walk] <waterglass> (64)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[walk] <mug> (384)",
+  "action": "[walk] <waterglass> (64)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -549,7 +562,7 @@ graph TD
 }
 ```
 ## Step 8
-- **Action**: `[walk] <mug> (384)`
+- **Action**: `[walk] <waterglass> (64)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -558,16 +571,22 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
+    N1["waterglass<br>(DIRTY)"]
     style N1 fill:#ff9,stroke:#333,stroke-width:4px
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    N4["?Sink<br>(OPEN)"]
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N2["waterglass<br>ON<br>?Surface"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
+- **Observed Items (28)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 
 
 ### [PerceptionFilter] Output
@@ -575,35 +594,35 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "plate",
     "character",
-    "mug",
-    "sink"
+    "fridge",
+    "sink",
+    "waterglass",
+    "plate"
   ],
-  "raw_class_count": 91
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is not currently in the Filtered Graph, and the sink (sink(326)) is the target location. Since the glass is missing, we need to search for an alternative substitute that matches the properties of a 'dirty water glass' (e.g., a mug or plate that is dirty and can be placed in the sink). The mug (mug(384)) is currently in the Filtered Graph and is a valid substitute. We must first ensure the mug is dirty and then proceed to place it in the sink.",
+  "reasoning": "The current Filtered Graph shows that the waterglass(64) is DIRTY and located inside the kitchen(11). However, the robot has not yet grabbed it. The next logical step is to grab the waterglass(64) to satisfy the SDG node N3 (HOLDS relation). Since the robot is already in the kitchen(11), it can directly attempt to grab the waterglass(64).",
   "satisfied_nodes": [
-    "N4"
+    "N2"
   ],
   "current_node_focus": "N3",
   "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
+    "?Waterglass": "waterglass(64)"
   },
-  "action": "[grab] <mug> (384)"
+  "action": "[grab] <waterglass> (64)"
 }
 ```
 
 ### [RoboStateMultiTaskController] Output
 ```json
 {
-  "action": "[grab] <mug> (384)",
+  "action": "[grab] <waterglass> (64)",
   "active_task_id": "task_1",
   "task_context": {
     "active_task_id": "task_1",
@@ -614,7 +633,7 @@ graph TD
 }
 ```
 ## Step 9
-- **Action**: `[grab] <mug> (384)`
+- **Action**: `[grab] <waterglass> (64)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
@@ -623,17 +642,21 @@ graph TD
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
+    N1["waterglass<br>(DIRTY)"]
+    N2["waterglass<br>ON<br>?Surface"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>HOLDS<br>?Agent"]
     style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Sink<br>(OPEN)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N4["waterglass<br>ON<br>sink"]
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
+- **Observed Items (28)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 
 
 ### [PerceptionFilter] Output
@@ -641,326 +664,28 @@ graph TD
 {
   "reasoning": "Reused cached class selection.",
   "selected_classes": [
-    "plate",
     "character",
-    "mug",
-    "sink"
+    "fridge",
+    "sink",
+    "waterglass",
+    "plate"
   ],
-  "raw_class_count": 91
+  "raw_class_count": 65
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is on satisfying node N3, which requires placing the dirty water glass inside the sink. However, the glass is not currently in the Filtered Graph, and the sink (sink(326)) is already in the current location. The next step is to check if the sink is open (node N4), as the glass must be placed inside an open sink. Since the sink is not explicitly marked as open, we need to verify its state.",
+  "reasoning": "The current Filtered Graph shows that the robot is holding the waterglass(64), which is DIRTY. The next step is to place it on the sink. However, the sink must be open to place the waterglass inside. The sink(155) is currently not open, so the next action should be to open the sink.",
   "satisfied_nodes": [
-    "N2"
+    "N3"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N4",
   "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
+    "?Surface": "sink(155)"
   },
-  "action": "[open] <sink> (326)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <livingroom> (183)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 10
-- **Action**: `[walk] <livingroom> (183)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (361)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires placing the dirty water glass inside the sink. However, the glass is not currently in the Filtered Graph, and the sink (sink(326)) is already in the environment. Since the glass is missing, it is likely temporarily hidden or moved by another entity. According to the rules, if an object disappears while approaching, we should wait for it to return. Therefore, the next logical step is to wait for the glass to reappear.",
-  "satisfied_nodes": [
-    "N4"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Glass": "waterglass(64)",
-    "?Sink": "sink(326)"
-  },
-  "action": "[wait]"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[wait]",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 11
-- **Action**: `[wait]`
-- **Action Success**: `True`
-- **Action Message**: Time passes. You waited for a while.
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Glass<br>(DIRTY)"]
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Sink<br>(OPEN)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
-```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is not currently in the environment, and the sink (sink(326)) is already in the Filtered Graph. Since the glass is missing, I must search for an alternative substitute that matches the properties of a dirty water glass. The mug(384) is a suitable substitute as it is a pourable object and is currently in the livingroom(183). I will first walk to the mug to grab it, then proceed to the sink to place it inside.",
-  "satisfied_nodes": [
-    "N4"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
-  },
-  "action": "[walk] <mug> (384)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <mug> (384)",
-  "active_task_id": "task_1",
-  "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
-    "satisfied_task_ids": []
-  },
-  "source": "llm_executor"
-}
-```
-## Step 12
-- **Action**: `[walk] <mug> (384)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-```mermaid
-graph TD
-    N1["?Glass<br>(DIRTY)"]
-    N2["?Glass<br>ON<br>?Surface"]
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Sink<br>(OPEN)"]
-    style N4 fill:#9f9,stroke:#333,stroke-width:2px
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
-```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is not currently in the Filtered Graph, and the sink (sink(326)) is not open. The next step is to ensure the sink is open, as this is a prerequisite for placing the glass inside it. Since the sink is closed, we must first open it.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Sink": "sink(326)"
-  },
-  "action": "[open] <sink> (326)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (241)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 13
-- **Action**: `[walk] <bedroom> (241)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (361)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is not currently in the environment, and the sink (sink(326)) is closed. The next step is to open the sink to prepare for placing the glass inside it. This action aligns with the requirement that the sink must be open to place the glass inside it.",
-  "satisfied_nodes": [
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Sink": "sink(326)"
-  },
-  "action": "[open] <sink> (326)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <kitchen> (11)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 14
-- **Action**: `[walk] <kitchen> (11)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (361)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is not yet in the sink. The sink (sink(326)) is already in the environment, and the robot is currently near it. The next step is to place the glass inside the sink. Since the robot is holding the mug (mug(384)), it needs to first put the mug down to free up a hand to grab the glass. However, the glass is not currently in the robot's possession, so the next step is to grab the glass from its current location, which is not specified. Therefore, the robot must first locate the glass and grab it before proceeding to place it in the sink.",
-  "satisfied_nodes": [
-    "N4"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
-  },
-  "action": "[putback] <mug> (384) <sink> (326)"
+  "action": "[open] <sink> (155)"
 }
 ```
 
@@ -979,7 +704,7 @@ No SDG active.
   "source": "loop_recovery_room_revisit"
 }
 ```
-## Step 15
+## Step 10
 - **Action**: `[walk] <bathroom> (285)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
@@ -987,94 +712,39 @@ No SDG active.
 - **Task Progress**: T4_qwen_M1_03=pending
 - **SDG Status**:
 No SDG active.
-- **Observed Items (361)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
+- **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
 ### [PerceptionFilter] Output
 ```json
 {
-  "reasoning": "Reused cached class selection.",
+  "reasoning": "The goal is to manage and organize dirty water glasses, specifically by placing them on the sink. The SDG requires the presence of dirty water glasses, the sink, and the ability to interact with the sink (open and close). To ensure the task can be completed, we must include the target object 'waterglass' and the location 'sink'. Additionally, we must include the 'fridge' as a potential backup for storing clean glasses or related items, and 'dishbowl' as an alternative container for holding water glasses if needed.",
   "selected_classes": [
-    "plate",
     "character",
-    "mug",
-    "sink"
+    "fridge",
+    "sink",
+    "waterglass",
+    "dishbowl",
+    "plate"
   ],
-  "raw_class_count": 91
+  "raw_class_count": 81
 }
 ```
 
 ### [LLMExecutor] Output
 ```json
 {
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is currently not in the sink. The sink (sink(326)) is in the bathroom, and the robot is currently in the bathroom. The next step is to place the glass inside the sink. Since the robot is already near the sink, the next action is to [putback] the glass into the sink.",
+  "reasoning": "The current focus is on satisfying node N4, which requires placing the dirty water glass on the sink. The robot is already holding the waterglass(64) and is in the bathroom(285), which contains the sink(326). The next step is to place the waterglass on the sink. Since the sink is a flat surface, the correct action is [putback] <waterglass> (64) <sink> (326).",
   "satisfied_nodes": [
     "N1",
-    "N2"
+    "N2",
+    "N3"
   ],
-  "current_node_focus": "N3",
+  "current_node_focus": "N4",
   "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
+    "?Surface": "sink(326)"
   },
-  "action": "[putback] <mug> (384) <sink> (326)"
-}
-```
-
-### [RoboStateMultiTaskController] Output
-```json
-{
-  "action": "[walk] <bedroom> (346)",
-  "active_task_id": null,
-  "task_context": {
-    "active_task_id": null,
-    "pending_task_ids": [
-      "task_1"
-    ],
-    "satisfied_task_ids": []
-  },
-  "source": "loop_recovery_room_revisit"
-}
-```
-## Step 16
-- **Action**: `[walk] <bedroom> (346)`
-- **Action Success**: `True`
-- **Action Message**: {'0': {'message': 'Success'}}
-- **Decision Source**: `loop_recovery_room_revisit`
-- **Task Progress**: T4_qwen_M1_03=pending
-- **SDG Status**:
-No SDG active.
-- **Observed Items (361)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
-
-
-### [PerceptionFilter] Output
-```json
-{
-  "reasoning": "Reused cached class selection.",
-  "selected_classes": [
-    "plate",
-    "character",
-    "mug",
-    "sink"
-  ],
-  "raw_class_count": 91
-}
-```
-
-### [LLMExecutor] Output
-```json
-{
-  "reasoning": "The current focus is on satisfying node N3, which requires the glass to be inside the sink. However, the glass is currently not in the sink. The sink (sink(326)) is in the bathroom (bathroom(285)), and the robot is currently in the bedroom (bedroom(346)). The next step is to walk to the sink (sink(326)) to place the glass inside it. This action will satisfy the relation that the glass is inside the sink, which is a prerequisite for opening the sink (node N4).",
-  "satisfied_nodes": [
-    "N1",
-    "N2"
-  ],
-  "current_node_focus": "N3",
-  "mapped_variables": {
-    "?Glass": "mug(384)",
-    "?Sink": "sink(326)"
-  },
-  "action": "[walk] <sink> (326)"
+  "action": "[putback] <waterglass> (64) <sink> (326)"
 }
 ```
 
@@ -1088,29 +758,109 @@ No SDG active.
     "pending_task_ids": [],
     "satisfied_task_ids": []
   },
-  "source": "llm_executor"
+  "source": "llm_executor_repaired"
 }
 ```
-## Step 17
+## Step 11
 - **Action**: `[walk] <sink> (326)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
 - **Active Task**: `task_1`
-- **Decision Source**: `llm_executor`
+- **Decision Source**: `llm_executor_repaired`
 - **Task Progress**: T4_qwen_M1_03=pending
 - **SDG Status**:
 ```mermaid
 graph TD
-    N1["?Glass<br>(DIRTY)"]
+    N1["waterglass<br>(DIRTY)"]
     style N1 fill:#9f9,stroke:#333,stroke-width:2px
-    N2["?Glass<br>ON<br>?Surface"]
+    N2["waterglass<br>ON<br>?Surface"]
     style N2 fill:#9f9,stroke:#333,stroke-width:2px
-    N3["?Glass<br>INSIDE<br>?Sink"]
-    style N3 fill:#ff9,stroke:#333,stroke-width:4px
-    N4["?Sink<br>(OPEN)"]
-    N3 -->|"To place the glass inside the sink, the sink must be open."| N4
-    N2 -->|"The glass must be on a surface before being placed inside the sink."| N3
-    N1 -->|"The glass must be identified as dirty before being placed in the sink."| N2
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["waterglass<br>ON<br>sink"]
+    style N4 fill:#ff9,stroke:#333,stroke-width:4px
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
 ```
-- **Observed Items (23)**: plate(67), plate(68), plate(75), plate(76), plate(83), plate(84), plate(91), plate(103), plate(104), sink(155), character(1), kitchen(11), livingroom(183), bedroom(241), bathroom(285)...
+- **Observed Items (37)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
+
+
+### [PerceptionFilter] Output
+```json
+{
+  "reasoning": "Reused cached class selection.",
+  "selected_classes": [
+    "character",
+    "fridge",
+    "sink",
+    "waterglass",
+    "dishbowl",
+    "plate"
+  ],
+  "raw_class_count": 81
+}
+```
+
+### [LLMExecutor] Output
+```json
+{
+  "reasoning": "The current focus is on satisfying node N4, which requires placing the dirty water glass on the sink. The robot is already holding the waterglass(64) and is near the sink(326). The next step is to place the waterglass on the sink.",
+  "satisfied_nodes": [
+    "N1",
+    "N2",
+    "N3"
+  ],
+  "current_node_focus": "N4",
+  "mapped_variables": {
+    "?Surface": "sink(326)"
+  },
+  "action": "[putback] <waterglass> (64) <sink> (326)"
+}
+```
+
+### [RoboStateMultiTaskController] Output
+```json
+{
+  "action": "[putback] <waterglass> (64) <sink> (326)",
+  "active_task_id": "task_1",
+  "task_context": {
+    "active_task_id": "task_1",
+    "pending_task_ids": [],
+    "satisfied_task_ids": []
+  },
+  "source": "llm_executor"
+}
+```
+## Step 12
+- **Action**: `[putback] <waterglass> (64) <sink> (326)`
+- **Action Success**: `True`
+- **Action Message**: {'0': {'message': 'Success'}}
+- **Active Task**: `task_1`
+- **Decision Source**: `llm_executor`
+- **Task Progress**: T4_qwen_M1_03=done
+- **SDG Status**:
+```mermaid
+graph TD
+    N1["waterglass<br>(DIRTY)"]
+    style N1 fill:#9f9,stroke:#333,stroke-width:2px
+    N2["waterglass<br>ON<br>?Surface"]
+    style N2 fill:#9f9,stroke:#333,stroke-width:2px
+    N3["waterglass<br>HOLDS<br>?Agent"]
+    style N3 fill:#9f9,stroke:#333,stroke-width:2px
+    N4["waterglass<br>ON<br>sink"]
+    style N4 fill:#ff9,stroke:#333,stroke-width:4px
+    N5["sink<br>(OPEN)"]
+    N6["sink<br>(CLOSED)"]
+    N1 -->|"Dirty water glasses are observed on a surface."| N2
+    N2 -->|"To pick up the water glass, it must be held by the agent."| N3
+    N3 -->|"The agent must place the water glass on the sink."| N4
+    N4 -->|"The sink must be open to place the water glass inside."| N5
+    N5 -->|"The sink must be closed after placing the water glass inside."| N6
+```
+- **Observed Items (37)**: waterglass(64) [DIRTY], plate(67), plate(68), waterglass(71), waterglass(72), plate(75), plate(76), waterglass(79), waterglass(80), plate(83), plate(84), waterglass(87), waterglass(88), plate(91), waterglass(100)...
 

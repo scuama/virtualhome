@@ -1,0 +1,11 @@
+{
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "total": 13,
+    "skipped": 13,
+    "success": 0,
+    "fail": 0,
+    "incomplete": 0,
+    "failures": [],
+    "extension_metrics": []
+}

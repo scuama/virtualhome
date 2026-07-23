@@ -11,38 +11,38 @@
   "reasoning_chain": [
     {
       "question": "Why does the user want this object?",
-      "answer": "The user wants a glass of juice to drink."
+      "answer": "The user wants to consume juice, which is a liquid beverage."
     },
     {
       "question": "Why is that important?",
-      "answer": "The user is likely thirsty and needs a drink."
+      "answer": "The user is likely thirsty and seeking hydration or a refreshing drink."
     },
     {
       "question": "What fundamental need does this fulfill?",
-      "answer": "The user wants to relieve thirst and obtain hydration."
+      "answer": "The user wants to satisfy their thirst and obtain a refreshing beverage."
     },
     {
       "question": "Are there any deeper psychological or physical motivations?",
-      "answer": "The user may be seeking a quick and convenient way to satisfy their thirst without needing to prepare anything else."
+      "answer": "The user may be seeking comfort, hydration, or a quick refreshment."
     }
   ],
-  "deep_intent": "Relieve thirst and obtain hydration.",
+  "deep_intent": "The user wants to satisfy thirst and obtain a refreshing beverage.",
   "acceptable_alternatives_properties": [
     {
       "priority": 1,
-      "description": "Other liquids such as water, soda, or milk, which can also provide hydration."
+      "description": "Other liquid beverages such as water, soda, or tea."
     },
     {
       "priority": 2,
-      "description": "Beverages with similar properties to juice, such as smoothies or sports drinks."
+      "description": "Non-liquid refreshments like a fruit or a yogurt that can provide hydration or satisfaction."
     },
     {
       "priority": 3,
-      "description": "Non-liquid alternatives that can provide hydration, such as electrolyte tablets or rehydration solutions."
+      "description": "Any food or drink that can provide hydration or a refreshing experience."
     },
     {
       "priority": 4,
-      "description": "Foods that can provide hydration, such as fruits or vegetables with high water content."
+      "description": "Fruits or other natural sources of moisture that can fulfill the need for hydration."
     }
   ]
 }
@@ -52,35 +52,25 @@
 ```json
 {
   "action": "[walk] <livingroom> (183)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 0
 - **Action**: `[walk] <livingroom> (183)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_qwen_G4_20=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["glass<br>(HELD)"]
-    N2["glass<br>ON<br>?Surface"]
-    N3["juice<br>ON<br>?Surface"]
-    N4["juice<br>INSIDE<br>glass"]
-    N5["glass<br>(FILLED_JUICE)"]
-    N1 -->|"The glass must be held before placing it on a surface."| N2
-    N2 -->|"The glass must be on a surface before pouring juice into it."| N4
-    N4 -->|"Pouring juice into the glass changes its state to FILLED_JUICE."| N5
-    N3 -->|"The juice must be on a surface before it can be poured into the glass."| N4
-```
+No SDG active.
 - **Observed Items (159)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
@@ -88,35 +78,25 @@ graph TD
 ```json
 {
   "action": "[walk] <bedroom> (241)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 1
 - **Action**: `[walk] <bedroom> (241)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_qwen_G4_20=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["glass<br>(HELD)"]
-    N2["glass<br>ON<br>?Surface"]
-    N3["juice<br>ON<br>?Surface"]
-    N4["juice<br>INSIDE<br>glass"]
-    N5["glass<br>(FILLED_JUICE)"]
-    N1 -->|"The glass must be held before placing it on a surface."| N2
-    N2 -->|"The glass must be on a surface before pouring juice into it."| N4
-    N4 -->|"Pouring juice into the glass changes its state to FILLED_JUICE."| N5
-    N3 -->|"The juice must be on a surface before it can be poured into the glass."| N4
-```
+No SDG active.
 - **Observed Items (211)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
@@ -124,35 +104,25 @@ graph TD
 ```json
 {
   "action": "[walk] <bathroom> (285)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 2
 - **Action**: `[walk] <bathroom> (285)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_qwen_G4_20=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["glass<br>(HELD)"]
-    N2["glass<br>ON<br>?Surface"]
-    N3["juice<br>ON<br>?Surface"]
-    N4["juice<br>INSIDE<br>glass"]
-    N5["glass<br>(FILLED_JUICE)"]
-    N1 -->|"The glass must be held before placing it on a surface."| N2
-    N2 -->|"The glass must be on a surface before pouring juice into it."| N4
-    N4 -->|"Pouring juice into the glass changes its state to FILLED_JUICE."| N5
-    N3 -->|"The juice must be on a surface before it can be poured into the glass."| N4
-```
+No SDG active.
 - **Observed Items (243)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 
@@ -160,35 +130,25 @@ graph TD
 ```json
 {
   "action": "[walk] <bedroom> (346)",
-  "active_task_id": "task_1",
+  "active_task_id": null,
   "task_context": {
-    "active_task_id": "task_1",
-    "pending_task_ids": [],
+    "active_task_id": null,
+    "pending_task_ids": [
+      "task_1"
+    ],
     "satisfied_task_ids": []
   },
-  "source": "room_frontier"
+  "source": "loop_recovery_room_revisit"
 }
 ```
 ## Step 3
 - **Action**: `[walk] <bedroom> (346)`
 - **Action Success**: `True`
 - **Action Message**: {'0': {'message': 'Success'}}
-- **Active Task**: `task_1`
-- **Decision Source**: `room_frontier`
+- **Decision Source**: `loop_recovery_room_revisit`
 - **Task Progress**: T4_qwen_G4_20=pending
 - **SDG Status**:
-```mermaid
-graph TD
-    N1["glass<br>(HELD)"]
-    N2["glass<br>ON<br>?Surface"]
-    N3["juice<br>ON<br>?Surface"]
-    N4["juice<br>INSIDE<br>glass"]
-    N5["glass<br>(FILLED_JUICE)"]
-    N1 -->|"The glass must be held before placing it on a surface."| N2
-    N2 -->|"The glass must be on a surface before pouring juice into it."| N4
-    N4 -->|"Pouring juice into the glass changes its state to FILLED_JUICE."| N5
-    N3 -->|"The juice must be on a surface before it can be poured into the glass."| N4
-```
+No SDG active.
 - **Observed Items (303)**: wall(12), wall(13), wall(14), wall(15), wall(16), wall(17), wall(18), wall(19), wall(20), wall(21), floor(22), floor(23), floor(24), floor(25), floor(26)...
 
 

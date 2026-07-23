@@ -1,79 +1,9 @@
 {
-    "task_total": 1,
-    "task_completed": 0,
-    "sr": 0.0,
-    "ps": null,
-    "ps_sum": 0,
-    "ps_count": 0,
-    "mean_completion_step": null,
-    "tasks": [
-        {
-            "task_id": "T4_gemini_M2_06",
-            "instruction": "If there is a water glass on the table, put the dirty water glass into the sink.",
-            "success_condition": {
-                "target_class": "waterglass",
-                "destination_class": "sink",
-                "relation": "ON",
-                "min_count": 1,
-                "states": [
-                    "DIRTY"
-                ]
-            },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
-        }
-    ],
-    "scenario_id": "T4_gemini_M2_06",
-    "table_id": "table4",
-    "experiment_axis": "model_backbone",
-    "sample_id": "M2_06",
-    "setting": null,
-    "extension_type": null,
-    "ablation_profile": null,
-    "source_scenario_id": "M2_06",
-    "method": "robostate",
-    "model": "google/gemini-3.5-flash",
-    "success": false,
-    "run_status": "complete",
-    "valid_for_aggregation": true,
-    "reason": "Agent stagnated (15 steps without progress)",
-    "steps_executed": 15,
-    "execution_time_seconds": 7.37,
-    "dynamic_event_counts": {},
-    "dynamic_event_trace": [],
-    "module_stats": {
-        "goal_reasoner": {
-            "duration_seconds": 3.811984,
-            "input_tokens": 998,
-            "output_tokens": 427,
-            "reasoning_tokens": 0,
-            "total_tokens": 1425,
-            "call_count": 1,
-            "successful_calls": 1,
-            "failed_calls": 0
-        },
-        "memory": {
-            "duration_seconds": 0.003753,
-            "input_tokens": 0,
-            "output_tokens": 0,
-            "reasoning_tokens": 0,
-            "total_tokens": 0,
-            "call_count": 15,
-            "successful_calls": 15,
-            "failed_calls": 0
-        },
-        "sdg_planner": {
-            "duration_seconds": 2.244543,
-            "input_tokens": 1040,
-            "output_tokens": 255,
-            "reasoning_tokens": 0,
-            "total_tokens": 1295,
-            "call_count": 1,
-            "successful_calls": 1,
-            "failed_calls": 0
-        }
-    }
+  "run_status": "complete",
+  "valid_for_aggregation": true,
+  "success": true,
+  "framework_revision": "table4-interface-fairness-v1",
+  "result_source": "post_fix_rerun",
+  "ps_count": 1,
+  "ps_sum": 4.503723828588961
 }

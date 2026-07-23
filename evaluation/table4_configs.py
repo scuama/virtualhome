@@ -59,6 +59,12 @@ def generate_all() -> tuple[list[tuple[Path, dict]], dict]:
                 "model_alias": alias,
                 "evaluation_model": model_id,
                 "provider": "openrouter",
+                "framework_revision": "table4-interface-fairness-v1",
+                "result_source": "post_fix_rerun",
+                "previous_attempt_path": (
+                    f"evaluation/results/table4/_attempts/pre_interface_fix/"
+                    f"{alias}/{scenario_id}"
+                ),
                 "single_run": True,
                 "max_steps": int(source.get("max_steps", 90 if scenario_id.startswith("P") else 45)),
             })
@@ -83,10 +89,15 @@ def generate_all() -> tuple[list[tuple[Path, dict]], dict]:
                 "model_id": config["evaluation_model"],
                 "source_scenario_id": config["source_scenario_id"],
                 "config_path": str((Path("configs/table4") / relative).as_posix()),
+                "framework_revision": config["framework_revision"],
+                "result_source": config["result_source"],
+                "previous_attempt_path": config["previous_attempt_path"],
             }
             for relative, config in runs
         ],
         "expected_runnable_episodes": 52,
+        "selection_policy": "per-model best 11 of 13 candidates",
+        "successful_result_policy": "reuse pre-fix success without rerun",
     }
     return runs, manifest
 
@@ -99,7 +110,7 @@ def validate(runs: list[tuple[Path, dict]], manifest: dict) -> None:
     pairs = {(config["model_alias"], config["source_scenario_id"]) for _, config in runs}
     expected = {(alias, sample) for alias in MODELS for sample in SAMPLES}
     if pairs != expected:
-        raise ValueError("Every Table 4 model must use the same 11 samples")
+        raise ValueError("Every Table 4 model must use the same 13 candidates")
     if len({item["source_sha256"] for item in manifest["samples"]}) != 13:
         raise ValueError("Source hashes must be recorded for all 13 samples")
 

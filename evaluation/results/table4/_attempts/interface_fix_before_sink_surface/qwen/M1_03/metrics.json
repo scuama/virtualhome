@@ -1,0 +1,123 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_qwen_M1_03",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
+            "success_condition": {
+                "target_class": "waterglass",
+                "destination_class": "sink",
+                "relation": "ON",
+                "min_count": 1,
+                "states": [
+                    "DIRTY"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_qwen_M1_03",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M1_03",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "M1_03",
+    "framework_revision": "table4-interface-fairness-v1",
+    "result_source": "post_fix_rerun",
+    "previous_attempt_path": "evaluation/results/table4/_attempts/pre_interface_fix/qwen/M1_03",
+    "method": "robostate",
+    "model": "qwen/qwen3-8b",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (18 steps without progress)",
+    "steps_executed": 18,
+    "execution_time_seconds": 143.79,
+    "dynamic_event_counts": {
+        "event_1": {
+            "times_triggered": 1,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 1,
+            "event": "hide",
+            "event_id": "event_1",
+            "object_id": 64,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 5
+        },
+        {
+            "step": 5,
+            "event": "reappear",
+            "object_id": 64
+        }
+    ],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 29.670445,
+            "input_tokens": 955,
+            "output_tokens": 324,
+            "reasoning_tokens": 0,
+            "total_tokens": 1279,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 85.18039,
+            "input_tokens": 97774,
+            "output_tokens": 2951,
+            "reasoning_tokens": 0,
+            "total_tokens": 100725,
+            "call_count": 18,
+            "successful_calls": 18,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.007182,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 18,
+            "successful_calls": 18,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 14.081022,
+            "input_tokens": 6777,
+            "output_tokens": 566,
+            "reasoning_tokens": 0,
+            "total_tokens": 7343,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 13.052682,
+            "input_tokens": 3221,
+            "output_tokens": 775,
+            "reasoning_tokens": 0,
+            "total_tokens": 3996,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

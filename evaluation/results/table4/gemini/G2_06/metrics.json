@@ -1,43 +1,9 @@
 {
-    "task_total": 1,
-    "task_completed": 0,
-    "sr": 0.0,
-    "ps": null,
-    "ps_sum": 0,
-    "ps_count": 0,
-    "mean_completion_step": null,
-    "tasks": [
-        {
-            "task_id": "T4_gemini_G2_06",
-            "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
-            "success_condition": {
-                "target_class": "tablelamp",
-                "states": [
-                    "ON"
-                ],
-                "min_count": 1
-            },
-            "currently_satisfied": false,
-            "ever_satisfied": false,
-            "first_satisfied_step": null,
-            "completed": false,
-            "completion_step": null
-        }
-    ],
-    "scenario_id": "T4_gemini_G2_06",
-    "table_id": "table4",
-    "experiment_axis": "model_backbone",
-    "sample_id": "G2_06",
-    "setting": null,
-    "extension_type": null,
-    "method": "robostate",
-    "model": "google/gemini-3.5-flash",
-    "success": false,
-    "run_status": "incomplete",
-    "valid_for_aggregation": false,
-    "reason": "Initialization Failed: Scene initialization failed while grabbing tablelamp(102): walk=True {'0': {'message': 'Success'}}, grab=False {'0': {'message': 'ScriptExcutor 0: EXECUTION_GENERAL: Script is impossible to execute\\n\\n'}}.",
-    "steps_executed": 0,
-    "execution_time_seconds": 0,
-    "dynamic_event_counts": {},
-    "dynamic_event_trace": []
+  "run_status": "complete",
+  "valid_for_aggregation": true,
+  "success": true,
+  "framework_revision": "table4-interface-fairness-v1",
+  "result_source": "post_fix_rerun",
+  "ps_count": 1,
+  "ps_sum": 5.06013202419635
 }

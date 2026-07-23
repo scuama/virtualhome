@@ -933,6 +933,18 @@ def main():
                         prior_metrics = {}
                 if prior_metrics.get('run_status') == 'complete':
                     sr = prior_metrics.get('sr', 0.0)
+                    if (
+                        table4_run
+                        and prior_metrics.get("result_source") == "post_fix_rerun"
+                        and prior_metrics.get("framework_revision")
+                        == config.get("framework_revision")
+                    ):
+                        print(
+                            f"[SKIP] {scenario_id} — interface-fix result "
+                            "already recorded."
+                        )
+                        summary["skipped"] += 1
+                        continue
                     
                     if getattr(args, 'untested_only', False):
                         print(f"[SKIP] {scenario_id} — previous run complete, skipped due to --untested-only.")
@@ -970,6 +982,9 @@ def main():
                     "sample_id": config.get("sample_id"),
                     "setting": config.get("setting"),
                     "extension_type": config.get("extension_type"),
+                    "framework_revision": config.get("framework_revision"),
+                    "result_source": config.get("result_source"),
+                    "previous_attempt_path": config.get("previous_attempt_path"),
                     "method": method_name,
                     "model": configured_model,
                     "success": False,
@@ -1054,6 +1069,19 @@ def main():
                     summary["fail"] += 1
                     summary["failures"].append({"scenario": scenario_id, "reason": reason})
                 continue
+
+            if table4_run:
+                # Table 4 exposes only the class-name catalog requested by the
+                # model-interface experiment. IDs, states, relations, and
+                # evaluator success conditions remain private.
+                initialized_graph = env.get_graph()
+                agent_config["grounding_candidates"] = sorted({
+                    str(node.get("class_name", "")).strip().lower()
+                    for node in initialized_graph.get("nodes", [])
+                    if str(node.get("class_name", "")).strip()
+                    and str(node.get("category", "")) != "Rooms"
+                    and str(node.get("class_name", "")).lower() != "character"
+                })
 
             # ===================== 根据 method 选择 Agent =====================
             agent_cls = AGENT_REGISTRY[method_name]
@@ -1421,6 +1449,9 @@ def main():
                     "extension_type": config.get("extension_type"),
                     "ablation_profile": config.get("ablation_profile"),
                     "source_scenario_id": config.get("source_scenario_id"),
+                    "framework_revision": config.get("framework_revision"),
+                    "result_source": config.get("result_source"),
+                    "previous_attempt_path": config.get("previous_attempt_path"),
                     "method": method_name,
                     "model": configured_model,
                     "success": bool(success),
@@ -1527,10 +1558,18 @@ def main():
                 f"PS={summary['aggregate_ps']}"
             )
 
-        summary_path = os.path.join(
-            results_dir,
-            f"summary_run_{method_name}.json",
-        )
+        if config.get("table_id") == "table4":
+            summary_path = os.path.join(
+                base_dir,
+                "results",
+                "table4",
+                f"summary_run_{method_name}_{config.get('model_alias', 'mixed')}.json",
+            )
+        else:
+            summary_path = os.path.join(
+                results_dir,
+                f"summary_run_{method_name}.json",
+            )
         with open(summary_path, 'w', encoding='utf-8') as summary_file:
             json.dump(summary, summary_file, indent=4, ensure_ascii=False)
 

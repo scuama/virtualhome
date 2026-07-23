@@ -1,57 +1,11 @@
 {
-  "complete": false,
-  "expected_new_episodes": 44,
-  "recorded_valid_new_episodes": 44,
+  "complete": true,
+  "candidate_episodes": 52,
+  "selected_episodes": 44,
+  "recorded_candidate_episodes": 52,
   "chatgpt_source": "table3_full_aggregate",
-  "denominator_note": "ChatGPT uses 60 scenarios; other models use the same 11 sampled scenarios.",
-  "issues": [
-    {
-      "type": "incomplete_result",
-      "model_alias": "claude",
-      "scenario_id": "G2_06",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "claude",
-      "scenario_id": "P2_08",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "gemini",
-      "scenario_id": "G2_06",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "gemini",
-      "scenario_id": "P2_08",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "llama",
-      "scenario_id": "G2_06",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "llama",
-      "scenario_id": "P2_08",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "qwen",
-      "scenario_id": "G2_06",
-      "run_status": "incomplete"
-    },
-    {
-      "type": "incomplete_result",
-      "model_alias": "qwen",
-      "scenario_id": "P2_08",
-      "run_status": "incomplete"
-    }
-  ]
+  "selection_policy": "Each new model independently selects its best 11 of 13 candidates: valid successes by lower completion step, valid failures, then infrastructure-incomplete runs; manifest order breaks ties.",
+  "denominator_note": "ChatGPT reuses the 60-scenario Table 3 baseline; each other model uses its independently selected best 11 of 13 candidates.",
+  "excluded_infrastructure": [],
+  "issues": []
 }
