@@ -1,0 +1,57 @@
+{
+    "environment_id": 3,
+    "goal_instruction": "Warm up the pancake in the microwave using a clean plate.",
+    "initial_relations_override": [
+        {
+            "subject": "pancake",
+            "count": 1
+        },
+        {
+            "subject": "plate",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "subject": "pancake",
+            "states": [
+                "COLD"
+            ]
+        },
+        {
+            "subject": "plate",
+            "states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "subject": "microwave",
+            "states": [
+                "CLOSED",
+                "OFF",
+                "PLUGGED_OUT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "target_class": "pancake",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T4_gemini_P3_17",
+    "source_scenario_id": "P3_17",
+    "source_config": "configs/source_tasks/p_class/P3_17.json",
+    "source_sha256": "31265d7ec8920b74d05c100e191bc0b4f35e5b1f723d0f7f4bd7f04d9f48694c",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P3_17",
+    "model_alias": "gemini",
+    "evaluation_model": "google/gemini-3.5-flash",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 90,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 50.77
+}

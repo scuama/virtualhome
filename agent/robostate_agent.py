@@ -2,6 +2,7 @@
 
 import json
 import re
+import time
 from typing import Optional, Set
 
 from .base_agent import BaseAgent
@@ -43,6 +44,7 @@ class RoboStateAgent(BaseAgent):
                 log_mode=config.get("log_mode", "markdown"),
                 scenario_id=self.scenario_id,
             )
+        self.llm.set_telemetry_logger(self.logger)
         self.action_history = env_info.get("action_history", [])
 
         if step == 0 or not self._initialized:
@@ -50,7 +52,15 @@ class RoboStateAgent(BaseAgent):
 
         self._consume_previous_result(step)
         self._handle_clarification()
+        memory_started = time.perf_counter()
         memory_graph, effective_graph, _ = self._update_memory(obs, step)
+        self.logger.record_module_call({
+            "module": "memory",
+            "model": "local_deterministic",
+            "provider": "local",
+            "duration_seconds": time.perf_counter() - memory_started,
+            "status": "success",
+        })
         self.task_manager.update_progress(env_info.get("task_progress"), step)
         self.task_manager.refresh_graph_classes(memory_graph)
         self.explorer.update(obs, step)

@@ -1,0 +1,46 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the light is on, turn it off.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "bedroom"
+        },
+        {
+            "subject": "tablelamp",
+            "relation": "INSIDE",
+            "object": "bedroom",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tablelamp"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF",
+                "BROKEN"
+            ]
+        }
+    ],
+    "on_ask_policy": "SUCCESS",
+    "scenario_id": "T4_qwen_G3_14",
+    "source_scenario_id": "G3_14",
+    "source_config": "configs/source_tasks/g_class/G3_14.json",
+    "source_sha256": "d6062e94d3c6c33b8b1d77b715b9a644d42543bd2939bde32f4cca87d0cda46c",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G3_14",
+    "model_alias": "qwen",
+    "evaluation_model": "qwen/qwen3-8b",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 52.78
+}

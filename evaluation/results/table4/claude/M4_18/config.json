@@ -1,0 +1,72 @@
+{
+    "scenario_id": "T4_claude_M4_18",
+    "scenario_type": "M",
+    "goal_instruction": "Put the plate we just used on the kitchentable.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_properties": [
+                "COLOR_RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "plate"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_properties": [
+                "COLOR_GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "plate",
+            "count": 2,
+            "relation": "INSIDE",
+            "object": "kitchencabinet"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <plate> (15) <sink> (99)",
+            "success": true,
+            "reasoning": "I washed the plate with the COLOR_RED property."
+        }
+    ],
+    "success_condition": {
+        "target_class": "plate",
+        "properties": [
+            "COLOR_RED"
+        ],
+        "relation": "ON",
+        "destination_class": "kitchentable"
+    },
+    "source_scenario_id": "M4_18",
+    "source_config": "configs/source_tasks/m_class/M4_18.json",
+    "source_sha256": "c3831cf7523dbb2ef124a2651c9fc79b9605100fc498d95313d93bd3b25a6b47",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M4_18",
+    "model_alias": "claude",
+    "evaluation_model": "anthropic/claude-haiku-4.5",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 14.12
+}

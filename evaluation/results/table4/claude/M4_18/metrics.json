@@ -1,0 +1,78 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_claude_M4_18",
+            "instruction": "Put the plate we just used on the kitchentable.",
+            "success_condition": {
+                "target_class": "plate",
+                "properties": [
+                    "COLOR_RED"
+                ],
+                "relation": "ON",
+                "destination_class": "kitchentable"
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_claude_M4_18",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M4_18",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "M4_18",
+    "method": "robostate",
+    "model": "anthropic/claude-haiku-4.5",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 14.12,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 8.687737,
+            "input_tokens": 1074,
+            "output_tokens": 677,
+            "reasoning_tokens": 0,
+            "total_tokens": 1751,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.003917,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 4.111227,
+            "input_tokens": 1124,
+            "output_tokens": 359,
+            "reasoning_tokens": 0,
+            "total_tokens": 1483,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

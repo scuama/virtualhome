@@ -1,5 +1,6 @@
 import json
 import os
+from collections import defaultdict
 
 class AgentLogger:
     def __init__(self, log_mode="text", scenario_id="", log_dir=None):
@@ -11,10 +12,60 @@ class AgentLogger:
         os.makedirs(log_dir, exist_ok=True)
         prefix = f"run_{scenario_id}" if scenario_id else "run_log"
         self.log_file = os.path.join(log_dir, f"{prefix}.md")
+        self.scenario_id = scenario_id
+        self.llm_calls_file = os.path.join(log_dir, f"llm_calls_{scenario_id}.jsonl")
+        self._module_stats = defaultdict(lambda: {
+            "duration_seconds": 0.0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 0,
+            "successful_calls": 0,
+            "failed_calls": 0,
+        })
         
         # Initialize markdown file
         with open(self.log_file, "w", encoding="utf-8") as f:
             f.write("# 🚀 VirtualHome Agent Episode Log\n\n")
+        if os.path.exists(self.llm_calls_file):
+            os.remove(self.llm_calls_file)
+
+    def record_module_call(self, record):
+        """Persist one model/local-module call without credentials or prompts."""
+        safe = {
+            "scenario_id": self.scenario_id,
+            "module": str(record.get("module", "unknown")),
+            "model": str(record.get("model", "")),
+            "provider": str(record.get("provider", "")),
+            "duration_seconds": round(float(record.get("duration_seconds", 0)), 6),
+            "input_tokens": int(record.get("input_tokens", 0) or 0),
+            "output_tokens": int(record.get("output_tokens", 0) or 0),
+            "reasoning_tokens": int(record.get("reasoning_tokens", 0) or 0),
+            "total_tokens": int(record.get("total_tokens", 0) or 0),
+            "status": str(record.get("status", "success")),
+            "error_type": str(record.get("error_type", "")),
+        }
+        with open(self.llm_calls_file, "a", encoding="utf-8") as handle:
+            handle.write(json.dumps(safe, ensure_ascii=False) + "\n")
+        stats = self._module_stats[safe["module"]]
+        stats["duration_seconds"] += safe["duration_seconds"]
+        for field in ("input_tokens", "output_tokens", "reasoning_tokens", "total_tokens"):
+            stats[field] += safe[field]
+        stats["call_count"] += 1
+        if safe["status"] == "success":
+            stats["successful_calls"] += 1
+        else:
+            stats["failed_calls"] += 1
+
+    def module_stats(self):
+        return {
+            module: {
+                **values,
+                "duration_seconds": round(values["duration_seconds"], 6),
+            }
+            for module, values in sorted(self._module_stats.items())
+        }
             
     def info(self, msg):
         print(f"INFO: {msg}")

@@ -117,13 +117,11 @@ class LLMExecutor:
                 )
         
         try:
-            result_str = self.llm.generate_response(
+            result_dict = self.llm.generate_json(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                response_format="json_object",
-                model_override="gpt-5.4-mini" # Use fast model for action step
+                module_name="llm_executor",
             )
-            result_dict = json.loads(result_str)
             action = result_dict.get("action", "WAIT")
             reasoning = result_dict.get("reasoning", "")
             mapped_vars = result_dict.get("mapped_variables", {})

@@ -21,6 +21,7 @@ class SDGPlanner:
                     "Return JSON as {\"checklist\": [\"step\"]}."
                 ),
                 user_prompt=f"Task: {goal_description}",
+                module_name="sdg_planner",
             )
             result = {
                 "planning_ablation": "flat_checklist",
@@ -31,7 +32,8 @@ class SDGPlanner:
         user_prompt = SDG_USER_PROMPT.format(goal_description=goal_description)
         sdg_data = self.llm.generate_json(
             system_prompt=SDG_SYSTEM_PROMPT,
-            user_prompt=user_prompt
+            user_prompt=user_prompt,
+            module_name="sdg_planner",
         )
         
         if sdg_data:
@@ -43,4 +45,3 @@ class SDGPlanner:
             if self.logger:
                 self.logger.log_error(f"SDG JSON 解析失败, 返回空。")
             return None
-

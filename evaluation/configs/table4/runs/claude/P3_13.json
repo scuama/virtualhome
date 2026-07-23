@@ -1,0 +1,45 @@
+{
+  "environment_id": 2,
+  "goal_instruction": "If the waterglass is dirty, wash it in the sink and then put it on the kitchentable.",
+  "initial_relations_override": [
+    {
+      "subject": "waterglass",
+      "count": 1
+    }
+  ],
+  "initial_states_override": [
+    {
+      "subject": "waterglass",
+      "states": [
+        "DIRTY"
+      ]
+    },
+    {
+      "subject": "faucet",
+      "states": [
+        "OFF"
+      ]
+    }
+  ],
+  "success_condition": {
+    "target_class": "waterglass",
+    "destination_class": "kitchentable",
+    "relation": "ON",
+    "min_count": 1,
+    "states": [
+      "CLEAN"
+    ]
+  },
+  "scenario_id": "T4_claude_P3_13",
+  "source_scenario_id": "P3_13",
+  "source_config": "configs/source_tasks/p_class/P3_13.json",
+  "source_sha256": "c4e00ae6b7efb1802cacc3c0f5c25293ce50f9b26a96aed223475a3a89476f52",
+  "table_id": "table4",
+  "experiment_axis": "model_backbone",
+  "sample_id": "P3_13",
+  "model_alias": "claude",
+  "evaluation_model": "anthropic/claude-haiku-4.5",
+  "provider": "openrouter",
+  "single_run": true,
+  "max_steps": 90
+}

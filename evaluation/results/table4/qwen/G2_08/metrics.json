@@ -1,0 +1,99 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_qwen_G2_08",
+            "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "milk",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "HOT"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_qwen_G2_08",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G2_08",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_08",
+    "method": "robostate",
+    "model": "qwen/qwen3-8b",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 50.8,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 14.352111,
+            "input_tokens": 1914,
+            "output_tokens": 702,
+            "reasoning_tokens": 0,
+            "total_tokens": 2616,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 3.90319,
+            "input_tokens": 5571,
+            "output_tokens": 119,
+            "reasoning_tokens": 0,
+            "total_tokens": 5690,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004318,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 5.288089,
+            "input_tokens": 1722,
+            "output_tokens": 130,
+            "reasoning_tokens": 0,
+            "total_tokens": 1852,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 25.216504,
+            "input_tokens": 2062,
+            "output_tokens": 1497,
+            "reasoning_tokens": 0,
+            "total_tokens": 3559,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

@@ -1,0 +1,127 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_llama_P1_03",
+            "instruction": "If there is chicken in the fridge, heat the chicken and cutlets in the microwave, put them on a plate, and place the plate on the kitchen table.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "check_type": "state",
+                        "target_class": "chicken",
+                        "require_states": [
+                            "HOT"
+                        ]
+                    },
+                    {
+                        "check_type": "state",
+                        "target_class": "cutlets",
+                        "require_states": [
+                            "HOT"
+                        ]
+                    },
+                    {
+                        "check_type": "relation",
+                        "target_class": "chicken",
+                        "relation": "INSIDE",
+                        "destination_class": "plate"
+                    },
+                    {
+                        "check_type": "relation",
+                        "target_class": "cutlets",
+                        "relation": "INSIDE",
+                        "destination_class": "plate"
+                    },
+                    {
+                        "check_type": "relation",
+                        "target_class": "plate",
+                        "relation": "ON",
+                        "destination_class": "kitchentable"
+                    }
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_llama_P1_03",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P1_03",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "P1_03",
+    "method": "robostate",
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 195.89,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 3.855743,
+            "input_tokens": 989,
+            "output_tokens": 310,
+            "reasoning_tokens": 0,
+            "total_tokens": 1299,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 107.59157,
+            "input_tokens": 86579,
+            "output_tokens": 2078,
+            "reasoning_tokens": 0,
+            "total_tokens": 88657,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.00568,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 19.969338,
+            "input_tokens": 5395,
+            "output_tokens": 496,
+            "reasoning_tokens": 0,
+            "total_tokens": 5891,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 63.389704,
+            "input_tokens": 1043,
+            "output_tokens": 925,
+            "reasoning_tokens": 0,
+            "total_tokens": 1968,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

@@ -36,3 +36,14 @@
 | **Planning** | w/o STG Planning | 33.33 | 6.93 | n/a | n/a | 14.15 (15/106) |
 | | w/o STG Construction | 51.67 | 6.61 | n/a | n/a | 7.09 (9/127) |
 | | w/o Path Merging | 38.33 | 6.72 | n/a | n/a | 0.00 (0/118) |
+
+
+---
+
+# Table 4: RoboState with Different LLM Backbones
+
+| Model | ChatGPT | Claude | Gemini | Llama-3-8B | Qwen |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **RoboState** | 86.67 / 5.02 | 0.00 / n/a | 9.09 / 7.00 | 0.00 / n/a | 45.45 / 8.20 |
+
+> *Note: Each cell reports SR ↑ / PS ↓. ChatGPT directly reuses the Table 3 Full aggregate over 60 scenarios (52/60); the other models use the same 11 sampled scenarios, so this is a preliminary sampled comparison rather than a fully paired experiment.*

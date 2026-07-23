@@ -1,0 +1,95 @@
+{
+    "scenario_id": "T4_qwen_M2_07",
+    "scenario_type": "M",
+    "goal_instruction": "If there are apples in the refrigerator door, take out the red apples.",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "fridge"
+            ],
+            "add_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "GREEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "GREEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 3
+            },
+            "add_states": [
+                "GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 4
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "apple",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "min_count": 1,
+        "destination_states": [
+            "RED"
+        ]
+    },
+    "source_scenario_id": "M2_07",
+    "source_config": "configs/source_tasks/m_class/M2_07.json",
+    "source_sha256": "224cb3fa68e6b1db2bdf4e36e4f8fbd06421c6b2843e3eff4e545a2c9aae14fd",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M2_07",
+    "model_alias": "qwen",
+    "evaluation_model": "qwen/qwen3-8b",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 0
+}

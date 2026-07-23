@@ -1,0 +1,62 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If you see milk, bring over a cup of it at the right temperature.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 0,
+            "add_states": [
+                "COLD"
+            ]
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "target_index": 1,
+            "add_states": [
+                "HOT"
+            ]
+        }
+    ],
+    "user_clarification_reply": "Hot.",
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "milk",
+        "relation": "HOLDS_RH",
+        "min_count": 1,
+        "destination_states": [
+            "HOT"
+        ]
+    },
+    "require_ask_to_pass": true,
+    "scenario_id": "T4_qwen_G2_08",
+    "source_scenario_id": "G2_08",
+    "source_config": "configs/source_tasks/g_class/G2_08.json",
+    "source_sha256": "bddf1858558f0b0c13b296f1de33e8fe1c985b20ec6690660318723d4a5ed7ad",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G2_08",
+    "model_alias": "qwen",
+    "evaluation_model": "qwen/qwen3-8b",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 50.8
+}

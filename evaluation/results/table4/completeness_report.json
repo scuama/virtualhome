@@ -1,0 +1,57 @@
+{
+  "complete": false,
+  "expected_new_episodes": 44,
+  "recorded_valid_new_episodes": 44,
+  "chatgpt_source": "table3_full_aggregate",
+  "denominator_note": "ChatGPT uses 60 scenarios; other models use the same 11 sampled scenarios.",
+  "issues": [
+    {
+      "type": "incomplete_result",
+      "model_alias": "claude",
+      "scenario_id": "G2_06",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "claude",
+      "scenario_id": "P2_08",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "gemini",
+      "scenario_id": "G2_06",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "gemini",
+      "scenario_id": "P2_08",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "llama",
+      "scenario_id": "G2_06",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "llama",
+      "scenario_id": "P2_08",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "qwen",
+      "scenario_id": "G2_06",
+      "run_status": "incomplete"
+    },
+    {
+      "type": "incomplete_result",
+      "model_alias": "qwen",
+      "scenario_id": "P2_08",
+      "run_status": "incomplete"
+    }
+  ]
+}

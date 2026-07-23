@@ -1,0 +1,97 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 10.0,
+    "ps_sum": 10,
+    "ps_count": 1,
+    "mean_completion_step": 10.0,
+    "tasks": [
+        {
+            "task_id": "T4_qwen_P3_17",
+            "instruction": "Warm up the pancake in the microwave using a clean plate.",
+            "success_condition": {
+                "target_class": "pancake",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 10,
+            "completed": true,
+            "completion_step": 10
+        }
+    ],
+    "scenario_id": "T4_qwen_P3_17",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P3_17",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "P3_17",
+    "method": "robostate",
+    "model": "qwen/qwen3-8b",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 10,
+    "execution_time_seconds": 61.93,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 7.013235,
+            "input_tokens": 953,
+            "output_tokens": 357,
+            "reasoning_tokens": 0,
+            "total_tokens": 1310,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 39.88734,
+            "input_tokens": 50900,
+            "output_tokens": 1459,
+            "reasoning_tokens": 0,
+            "total_tokens": 52359,
+            "call_count": 10,
+            "successful_calls": 10,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.005312,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 10,
+            "successful_calls": 10,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 3.363091,
+            "input_tokens": 1484,
+            "output_tokens": 147,
+            "reasoning_tokens": 0,
+            "total_tokens": 1631,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 10.625031,
+            "input_tokens": 1027,
+            "output_tokens": 554,
+            "reasoning_tokens": 0,
+            "total_tokens": 1581,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If there are apples on the table, rinse them under the tap and bring me one.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "remove_states": [
+                "CLEAN"
+            ],
+            "add_states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "hidden_broken_classes": [
+        "faucet"
+    ],
+    "success_condition": {
+        "target_class": "apple",
+        "states": [
+            "CLEAN"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T4_gemini_G4_17",
+    "source_scenario_id": "G4_17",
+    "source_config": "configs/source_tasks/g_class/G4_17.json",
+    "source_sha256": "fb234eea429ff4d67a9bc9a1d61b73c903301c0a7a8f8707a1c8937f7883ad02",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G4_17",
+    "model_alias": "gemini",
+    "evaluation_model": "google/gemini-3.5-flash",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 9.06
+}

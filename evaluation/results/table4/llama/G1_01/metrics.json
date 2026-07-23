@@ -1,0 +1,87 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_llama_G1_01",
+            "instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+            "success_condition": {
+                "target_class": "milk",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_llama_G1_01",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G1_01",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G1_01",
+    "method": "robostate",
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 1070.77,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 1.705325,
+            "input_tokens": 990,
+            "output_tokens": 314,
+            "reasoning_tokens": 0,
+            "total_tokens": 1304,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 12.576777,
+            "input_tokens": 31427,
+            "output_tokens": 296,
+            "reasoning_tokens": 0,
+            "total_tokens": 31723,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.003755,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 1055.114847,
+            "input_tokens": 4112,
+            "output_tokens": 15513,
+            "reasoning_tokens": 0,
+            "total_tokens": 19625,
+            "call_count": 4,
+            "successful_calls": 4,
+            "failed_calls": 0
+        }
+    }
+}

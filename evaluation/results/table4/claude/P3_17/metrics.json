@@ -1,0 +1,97 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_claude_P3_17",
+            "instruction": "Warm up the pancake in the microwave using a clean plate.",
+            "success_condition": {
+                "target_class": "pancake",
+                "states": [
+                    "HOT"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_claude_P3_17",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P3_17",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "P3_17",
+    "method": "robostate",
+    "model": "anthropic/claude-haiku-4.5",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 5,
+    "execution_time_seconds": 59.5,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 5.412603,
+            "input_tokens": 1076,
+            "output_tokens": 538,
+            "reasoning_tokens": 0,
+            "total_tokens": 1614,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 24.598242,
+            "input_tokens": 29169,
+            "output_tokens": 1507,
+            "reasoning_tokens": 0,
+            "total_tokens": 30676,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.002039,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 6,
+            "successful_calls": 6,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 24.376666,
+            "input_tokens": 9320,
+            "output_tokens": 1617,
+            "reasoning_tokens": 0,
+            "total_tokens": 10937,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 4.910955,
+            "input_tokens": 1126,
+            "output_tokens": 773,
+            "reasoning_tokens": 0,
+            "total_tokens": 1899,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

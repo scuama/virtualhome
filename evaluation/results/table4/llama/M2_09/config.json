@@ -1,0 +1,87 @@
+{
+    "scenario_id": "T4_llama_M2_09",
+    "scenario_type": "M",
+    "goal_instruction": "If there is juice in the fridge, pour some into a clean water glass.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "CLEAN"
+            ],
+            "instance_filter": {
+                "index": 0
+            }
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 1
+            }
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "add_states": [
+                "DIRTY"
+            ],
+            "instance_filter": {
+                "index": 2
+            }
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "juice",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1
+        },
+        {
+            "subject": "waterglass",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": [
+            "FILLED_JUICE",
+            "CLEAN"
+        ],
+        "min_count": 1
+    },
+    "source_scenario_id": "M2_09",
+    "source_config": "configs/source_tasks/m_class/M2_09.json",
+    "source_sha256": "f0cb5753b70774f25649ff26e0221cad36ed8f0bbceebf6a408befb8d7f05831",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M2_09",
+    "model_alias": "llama",
+    "evaluation_model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 9.82
+}

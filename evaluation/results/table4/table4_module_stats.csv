@@ -1,0 +1,16 @@
+model_alias,model_id,module,task_count,total_duration_seconds,mean_duration_seconds_per_task,input_tokens,output_tokens,reasoning_tokens,total_tokens,mean_total_tokens_per_task,call_count,successful_calls,failed_calls,note
+chatgpt,gpt-5.4-mini,goal_reasoner,60,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,legacy logs lack module usage telemetry
+chatgpt,gpt-5.4-mini,sdg_planner,60,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,legacy logs lack module usage telemetry
+chatgpt,gpt-5.4-mini,memory,60,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,n/a,legacy logs lack module usage telemetry
+claude,anthropic/claude-haiku-4.5,goal_reasoner,11,73.485729,6.680521,11850,6500,0,18350,1668.18,11,11,0,
+claude,anthropic/claude-haiku-4.5,sdg_planner,11,51.791811,4.708346,12400,6403,0,18803,1709.36,11,11,0,
+claude,anthropic/claude-haiku-4.5,memory,11,0.046361,0.004215,0,0,0,0,0.0,152,152,0,
+gemini,google/gemini-3.5-flash,goal_reasoner,11,49.356673,4.48697,10937,4523,0,15460,1405.45,11,11,0,
+gemini,google/gemini-3.5-flash,sdg_planner,11,40.581429,3.689221,11403,3009,0,14412,1310.18,11,11,0,
+gemini,google/gemini-3.5-flash,memory,11,0.038824,0.003529,0,0,0,0,0.0,137,137,0,
+llama,meta-llama/llama-3.1-8b-instruct,goal_reasoner,11,62.827925,5.71163,10680,3522,0,14202,1291.09,11,11,0,
+llama,meta-llama/llama-3.1-8b-instruct,sdg_planner,11,266.807696,24.255245,12467,9703,0,22170,2015.45,12,12,0,
+llama,meta-llama/llama-3.1-8b-instruct,memory,11,0.047539,0.004322,0,0,0,0,0.0,171,171,0,
+qwen,qwen/qwen3-8b,goal_reasoner,11,73.78092,6.707356,10512,3708,0,14220,1292.73,11,11,0,
+qwen,qwen/qwen3-8b,sdg_planner,11,66.841687,6.076517,11326,4035,0,15361,1396.45,11,11,0,
+qwen,qwen/qwen3-8b,memory,11,0.035636,0.00324,0,0,0,0,0.0,112,112,0,

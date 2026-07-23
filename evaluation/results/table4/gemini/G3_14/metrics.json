@@ -1,0 +1,91 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_gemini_G3_14",
+            "instruction": "If the light is on, turn it off.",
+            "success_condition": {},
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_gemini_G3_14",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G3_14",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G3_14",
+    "method": "robostate",
+    "model": "google/gemini-3.5-flash",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 6,
+    "execution_time_seconds": 34.06,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 5.309134,
+            "input_tokens": 989,
+            "output_tokens": 417,
+            "reasoning_tokens": 0,
+            "total_tokens": 1406,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 22.882845,
+            "input_tokens": 34402,
+            "output_tokens": 1104,
+            "reasoning_tokens": 0,
+            "total_tokens": 35506,
+            "call_count": 7,
+            "successful_calls": 7,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.001543,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 7,
+            "successful_calls": 7,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 2.761894,
+            "input_tokens": 956,
+            "output_tokens": 128,
+            "reasoning_tokens": 0,
+            "total_tokens": 1084,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.736659,
+            "input_tokens": 1031,
+            "output_tokens": 57,
+            "reasoning_tokens": 0,
+            "total_tokens": 1088,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

@@ -1,0 +1,38 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If there is milk in the fridge, please heat a cup of it in the microwave.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "milk",
+        "states": [
+            "HOT"
+        ],
+        "min_count": 1
+    },
+    "scenario_id": "T4_claude_G1_01",
+    "source_scenario_id": "G1_01",
+    "source_config": "configs/source_tasks/g_class/G1_01.json",
+    "source_sha256": "f16595f1110a251cefedee2e1b536acba4ac27b3a4dcbc5b215cc5ad2cb318c8",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G1_01",
+    "model_alias": "claude",
+    "evaluation_model": "anthropic/claude-haiku-4.5",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 83.26
+}

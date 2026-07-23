@@ -41,7 +41,7 @@ class GoalReasoner:
         result_dict = self.llm.generate_json(
             system_prompt=system_prompt,
             user_prompt=user_prompt,
-            model_override="gpt-5.4-mini"
+            module_name="goal_reasoner",
         )
         
         if result_dict:

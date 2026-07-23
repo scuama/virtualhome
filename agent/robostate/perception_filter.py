@@ -47,7 +47,7 @@ class PerceptionFilter:
                     system_prompt=PERCEPTION_SYSTEM_PROMPT,
                     user_prompt=user_prompt,
                     response_format="json_object",
-                    model_override="gpt-5.4-mini" # Use a fast/cheap model for attention
+                    module_name="perception_filter",
                 )
                 result_dict = json.loads(result_str)
                 selected_classes = [c.lower() for c in result_dict.get("selected_classes", [])]

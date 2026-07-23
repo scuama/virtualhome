@@ -1,0 +1,43 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If there are two books on the coffee table, take both of them to the sofa.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "livingroom"
+    },
+    {
+      "subject": "book",
+      "relation": "ON",
+      "object": "coffeetable",
+      "count": 2
+    }
+  ],
+  "initial_states_override": [],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "check_type": "relation",
+        "target_class": "book",
+        "relation": "ON",
+        "destination_class": "sofa",
+        "min_count": 2
+      }
+    ]
+  },
+  "execution_time_seconds": 60,
+  "scenario_id": "T4_gemini_P2_10",
+  "source_scenario_id": "P2_10",
+  "source_config": "configs/source_tasks/p_class/P2_10.json",
+  "source_sha256": "2a45c3a477db22e0d0139b7e3c1da7dc264f7df0ff3083a4effe5bbab5c49915",
+  "table_id": "table4",
+  "experiment_axis": "model_backbone",
+  "sample_id": "P2_10",
+  "model_alias": "gemini",
+  "evaluation_model": "google/gemini-3.5-flash",
+  "provider": "openrouter",
+  "single_run": true,
+  "max_steps": 90
+}

@@ -393,6 +393,15 @@ def table3_result_folder(base_dir, config, method_name):
         str(config.get('source_scenario_id', config.get('scenario_id', 'unknown')))
     )
 
+
+def table4_result_folder(base_dir, config, method_name):
+    """Return the non-overlapping Table 4 model/scenario result location."""
+    return os.path.join(
+        base_dir, 'results', 'table4',
+        str(config.get('model_alias', 'unknown')),
+        str(config.get('source_scenario_id', config.get('scenario_id', 'unknown'))),
+    )
+
 def source_tasks_result_folder(base_dir, config, method_name, config_path):
     """Return the result location for standard source tasks."""
     # config_path typically looks like: .../configs/source_tasks/<subclass>/E1_07.json
@@ -416,6 +425,7 @@ def write_result_artifacts(
     method_name,
     model_name,
     scenario_log_file=None,
+    llm_calls_file=None,
 ):
     os.makedirs(dest_folder, exist_ok=True)
     recorded_config = copy.deepcopy(config)
@@ -433,6 +443,8 @@ def write_result_artifacts(
             scenario_log_file,
             os.path.join(dest_folder, f"run_{config['scenario_id']}.md"),
         )
+    if llm_calls_file and os.path.exists(llm_calls_file):
+        shutil.copy(llm_calls_file, os.path.join(dest_folder, 'llm_calls.jsonl'))
 
 
 def apply_overrides(env, config, debug=False):
@@ -846,6 +858,9 @@ def main():
         table1_raw_logs_dir = os.path.join(
             base_dir, 'results', 'table1', '_raw', method_name
         )
+        table4_raw_logs_root = os.path.join(
+            base_dir, 'results', 'table4', '_raw'
+        )
         os.makedirs(success_dir, exist_ok=True)
         os.makedirs(fail_dir, exist_ok=True)
         
@@ -875,9 +890,15 @@ def main():
             table1_run = config.get('table_id') == 'table1'
             table2_run = config.get('table_id') == 'table2'
             table3_run = config.get('table_id') == 'table3'
-            raw_logs_dir = (
-                table1_raw_logs_dir if table1_run else standard_raw_logs_dir
-            )
+            table4_run = config.get('table_id') == 'table4'
+            if table1_run:
+                raw_logs_dir = table1_raw_logs_dir
+            elif table4_run:
+                raw_logs_dir = os.path.join(
+                    table4_raw_logs_root, str(config.get('model_alias', 'unknown'))
+                )
+            else:
+                raw_logs_dir = standard_raw_logs_dir
             os.makedirs(raw_logs_dir, exist_ok=True)
 
             if table1_run:
@@ -890,6 +911,10 @@ def main():
                 )
             elif table3_run:
                 configured_result_folder = table3_result_folder(
+                    base_dir, config, method_name
+                )
+            elif table4_run:
+                configured_result_folder = table4_result_folder(
                     base_dir, config, method_name
                 )
             else:
@@ -932,6 +957,7 @@ def main():
             print(f"[RUN] {scenario_id}")
 
             agent_config = build_agent_config(config)
+            configured_model = str(config.get("evaluation_model", args.model))
 
             env_id = config.get('environment_id', 0)
 
@@ -945,7 +971,7 @@ def main():
                     "setting": config.get("setting"),
                     "extension_type": config.get("extension_type"),
                     "method": method_name,
-                    "model": args.model,
+                    "model": configured_model,
                     "success": False,
                     "run_status": "incomplete",
                     "valid_for_aggregation": False,
@@ -968,7 +994,7 @@ def main():
                         config,
                         metrics,
                         method_name,
-                        args.model,
+                        configured_model,
                     )
                 elif table3_run:
                     write_result_artifacts(
@@ -976,7 +1002,15 @@ def main():
                         config,
                         metrics,
                         method_name,
-                        args.model,
+                        configured_model,
+                    )
+                elif table4_run:
+                    write_result_artifacts(
+                        table4_result_folder(base_dir, config, method_name),
+                        config,
+                        metrics,
+                        method_name,
+                        config.get("evaluation_model", args.model),
                     )
 
             old_stdout = sys.stdout
@@ -1000,7 +1034,7 @@ def main():
                     sys.stdout = old_stdout
                     reason = f"Engine Reset Failed twice: {e2}"
                     print(f"  {reason}")
-                    if table1_run or table3_run:
+                    if table1_run or table3_run or table4_run:
                         record_initialization_incomplete(reason)
                     else:
                         summary["fail"] += 1
@@ -1014,7 +1048,7 @@ def main():
                 sys.stdout = old_stdout
                 reason = f"Initialization Failed: {e}"
                 print(f"  {reason}")
-                if table1_run or table3_run:
+                if table1_run or table3_run or table4_run:
                     record_initialization_incomplete(reason)
                 else:
                     summary["fail"] += 1
@@ -1024,7 +1058,7 @@ def main():
             # ===================== 根据 method 选择 Agent =====================
             agent_cls = AGENT_REGISTRY[method_name]
             agent = agent_cls(
-                model_name=args.model,
+                model_name=configured_model,
                 scenario_id=(
                     "evaluation_episode"
                     if method_name == "robostate"
@@ -1070,6 +1104,7 @@ def main():
             task_tracker = None
             dynamic_runtime = None
             ask_policy_satisfied_step = None
+            logger = None
 
             try:
                 signal.signal(signal.SIGALRM, timeout_handler)
@@ -1123,7 +1158,6 @@ def main():
                     elif step_count - last_task_completion_step >= stagnation_limit:
                         success = False
                         reason = f"Agent stagnated ({stagnation_limit} steps without progress)"
-                        run_status = "incomplete"
                         break
 
                     if step_count == 0:
@@ -1190,7 +1224,6 @@ def main():
                         if consecutive_waits >= 5:
                             success = False
                             reason = "Agent gave up (5 consecutive waits)"
-                            run_status = "incomplete"
                             break
                     else:
                         consecutive_waits = 0
@@ -1389,7 +1422,7 @@ def main():
                     "ablation_profile": config.get("ablation_profile"),
                     "source_scenario_id": config.get("source_scenario_id"),
                     "method": method_name,
-                    "model": args.model,
+                    "model": configured_model,
                     "success": bool(success),
                     "run_status": run_status,
                     "valid_for_aggregation": run_status == "complete",
@@ -1404,6 +1437,7 @@ def main():
                     ),
                 }
             )
+            metrics["module_stats"] = logger.module_stats() if logger else {}
             summary["extension_metrics"].append(metrics)
 
             print(f"  Result: {'✅ SUCCESS' if success else '❌ FAILED'} — {reason}")
@@ -1420,6 +1454,8 @@ def main():
                 dest_folder = table2_result_folder(base_dir, config, method_name)
             elif table3_run:
                 dest_folder = table3_result_folder(base_dir, config, method_name)
+            elif table4_run:
+                dest_folder = table4_result_folder(base_dir, config, method_name)
             else:
                 dest_folder = source_tasks_result_folder(base_dir, config, method_name, config_path)
             write_result_artifacts(
@@ -1427,8 +1463,9 @@ def main():
                 config,
                 metrics,
                 method_name,
-                args.model,
+                configured_model,
                 scenario_log_file,
+                logger.llm_calls_file if logger else None,
             )
 
             if run_status != "complete":

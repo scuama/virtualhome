@@ -1,0 +1,97 @@
+{
+    "scenario_id": "T4_claude_M4_17",
+    "scenario_type": "M",
+    "goal_instruction": "If the kitchencabinet is open, put the waterglass you just washed inside.",
+    "environment_id": 2,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "kitchencabinet"
+            ],
+            "add_states": [
+                "OPEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLEAN",
+                "EMPTY"
+            ],
+            "remove_states": [
+                "DIRTY",
+                "FILLED_MILK",
+                "FILLED_WATER"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "DIRTY"
+            ]
+        },
+        {
+            "target_classes": [
+                "waterglass"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "DIRTY"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "waterglass",
+            "count": 3,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <waterglass> (15)",
+            "success": true,
+            "reasoning": "I washed the waterglass. It is CLEAN and EMPTY."
+        }
+    ],
+    "success_condition": {
+        "target_class": "waterglass",
+        "states": [
+            "CLEAN"
+        ],
+        "relation": "INSIDE",
+        "destination_class": "kitchencabinet"
+    },
+    "source_scenario_id": "M4_17",
+    "source_config": "configs/source_tasks/m_class/M4_17.json",
+    "source_sha256": "1922f7195c00136463a1e629edff0a7e886d5d086e1abe1b7d7c9acaf329dc30",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M4_17",
+    "model_alias": "claude",
+    "evaluation_model": "anthropic/claude-haiku-4.5",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 46.67
+}

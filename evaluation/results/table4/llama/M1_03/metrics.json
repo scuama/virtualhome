@@ -1,0 +1,120 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_llama_M1_03",
+            "instruction": "If you see dirty water glasses, put them in the sink right away.",
+            "success_condition": {
+                "target_class": "waterglass",
+                "destination_class": "sink",
+                "relation": "ON",
+                "min_count": 1,
+                "states": [
+                    "DIRTY"
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_llama_M1_03",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M1_03",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "M1_03",
+    "method": "robostate",
+    "model": "meta-llama/llama-3.1-8b-instruct",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (18 steps without progress)",
+    "steps_executed": 18,
+    "execution_time_seconds": 67.41,
+    "dynamic_event_counts": {
+        "event_1": {
+            "times_triggered": 1,
+            "max_triggers": null
+        }
+    },
+    "dynamic_event_trace": [
+        {
+            "step": 2,
+            "event": "hide",
+            "event_id": "event_1",
+            "object_id": 64,
+            "duration_steps": 3,
+            "trigger_index": 1,
+            "max_triggers": 1,
+            "visible_at_step": 6
+        },
+        {
+            "step": 6,
+            "event": "reappear",
+            "object_id": 64
+        }
+    ],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 3.2279,
+            "input_tokens": 971,
+            "output_tokens": 344,
+            "reasoning_tokens": 0,
+            "total_tokens": 1315,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 32.204439,
+            "input_tokens": 99516,
+            "output_tokens": 2239,
+            "reasoning_tokens": 0,
+            "total_tokens": 101755,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.006004,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 18,
+            "successful_calls": 18,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 18.088319,
+            "input_tokens": 6582,
+            "output_tokens": 545,
+            "reasoning_tokens": 0,
+            "total_tokens": 7127,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 12.647943,
+            "input_tokens": 1025,
+            "output_tokens": 307,
+            "reasoning_tokens": 0,
+            "total_tokens": 1332,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

@@ -1,0 +1,49 @@
+{
+    "scenario_id": "T4_gemini_M3_11",
+    "scenario_type": "M",
+    "goal_instruction": "If there is an apple in the fridge, take two and put them on the kitchen table.",
+    "environment_id": 0,
+    "max_steps": 25,
+    "initial_states_override": [],
+    "initial_relations_override": [
+        {
+            "subject": "apple",
+            "relation": "INSIDE",
+            "object": "fridge",
+            "count": 2
+        }
+    ],
+    "scheduled_rules": [
+        {
+            "start_step": 0,
+            "end_step": 5,
+            "rule_text": "The fridge is currently being cleaned. Do not approach or open the fridge."
+        }
+    ],
+    "failure_condition": {
+        "start_step": 0,
+        "end_step": 5,
+        "target_class": "fridge",
+        "states": [
+            "OPEN"
+        ]
+    },
+    "success_condition": {
+        "target_class": "apple",
+        "destination_class": "kitchentable",
+        "relation": "ON",
+        "min_count": 2
+    },
+    "source_scenario_id": "M3_11",
+    "source_config": "configs/source_tasks/m_class/M3_11.json",
+    "source_sha256": "8488b923f82aac11ee03ee7023dea8c86cb67f799231e2672027f915a82e5cf7",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M3_11",
+    "model_alias": "gemini",
+    "evaluation_model": "google/gemini-3.5-flash",
+    "provider": "openrouter",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 0.0
+}

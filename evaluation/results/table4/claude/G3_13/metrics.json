@@ -1,0 +1,81 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T4_claude_G3_13",
+            "instruction": "If the TV is on, bring the remote control.",
+            "success_condition": {},
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T4_claude_G3_13",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G3_13",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G3_13",
+    "method": "robostate",
+    "model": "anthropic/claude-haiku-4.5",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 4,
+    "execution_time_seconds": 57.21,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 7.122686,
+            "input_tokens": 1072,
+            "output_tokens": 618,
+            "reasoning_tokens": 0,
+            "total_tokens": 1690,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 28.802386,
+            "input_tokens": 38834,
+            "output_tokens": 1642,
+            "reasoning_tokens": 0,
+            "total_tokens": 40476,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.001406,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 21.107279,
+            "input_tokens": 5610,
+            "output_tokens": 2104,
+            "reasoning_tokens": 0,
+            "total_tokens": 7714,
+            "call_count": 5,
+            "successful_calls": 5,
+            "failed_calls": 0
+        }
+    }
+}

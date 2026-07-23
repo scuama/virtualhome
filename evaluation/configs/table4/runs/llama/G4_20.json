@@ -1,0 +1,67 @@
+{
+  "environment_id": 2,
+  "max_steps": 25,
+  "goal_instruction": "If there is juice on the table, pour me a glass.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "ON",
+      "object": "kitchentable",
+      "in_room": "kitchen"
+    },
+    {
+      "subject": "juice",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    },
+    {
+      "subject": "mug",
+      "count": 0,
+      "object": "kitchentable"
+    },
+    {
+      "subject": "glass",
+      "count": 0,
+      "object": "kitchentable"
+    },
+    {
+      "subject": "drinking_glass",
+      "count": 0,
+      "object": "kitchentable"
+    },
+    {
+      "subject": "cup",
+      "count": 0,
+      "object": "kitchentable"
+    },
+    {
+      "subject": "coffee_cup",
+      "count": 0,
+      "object": "kitchentable"
+    }
+  ],
+  "success_condition": {
+    "target_class": "character",
+    "relation": "HOLDS_RH|HOLDS_LH",
+    "min_count": 1,
+    "destination_class": "ANY",
+    "destination_properties": [
+      "POURABLE"
+    ],
+    "destination_states": [
+      "FILLED_JUICE"
+    ]
+  },
+  "scenario_id": "T4_llama_G4_20",
+  "source_scenario_id": "G4_20",
+  "source_config": "configs/source_tasks/g_class/G4_20.json",
+  "source_sha256": "354c4b7b9c743a2e31ab177731253005d27f86847dec19e4d20ef68b51deafd3",
+  "table_id": "table4",
+  "experiment_axis": "model_backbone",
+  "sample_id": "G4_20",
+  "model_alias": "llama",
+  "evaluation_model": "meta-llama/llama-3.1-8b-instruct",
+  "provider": "openrouter",
+  "single_run": true
+}

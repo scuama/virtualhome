@@ -1,0 +1,40 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the TV is on, bring the remote control.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "tv"
+            ],
+            "remove_states": [
+                "ON"
+            ],
+            "add_states": [
+                "OFF",
+                "BROKEN"
+            ]
+        }
+    ],
+    "on_ask_policy": "SUCCESS",
+    "scenario_id": "T4_llama_G3_13",
+    "source_scenario_id": "G3_13",
+    "source_config": "configs/source_tasks/g_class/G3_13.json",
+    "source_sha256": "7d2107415df7c4c745b3a4374e7e4399d6dbda358ea30a6b323f29523e1a3acb",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G3_13",
+    "model_alias": "llama",
+    "evaluation_model": "meta-llama/llama-3.1-8b-instruct",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 22.5
+}

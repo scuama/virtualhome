@@ -1,0 +1,60 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 0.0,
+    "ps_sum": 0,
+    "ps_count": 1,
+    "mean_completion_step": 0.0,
+    "tasks": [
+        {
+            "task_id": "T4_qwen_P1_01",
+            "instruction": "If there is a coffeepot on the table, pour two water glasses for me.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "check_type": "state",
+                        "target_class": "waterglass",
+                        "require_states": [
+                            "FILLED_WATER"
+                        ],
+                        "min_count": 1
+                    },
+                    {
+                        "check_type": "state",
+                        "target_class": "dishbowl",
+                        "require_states": [
+                            "FILLED_WATER"
+                        ],
+                        "min_count": 1
+                    }
+                ]
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 0,
+            "completed": true,
+            "completion_step": 0
+        }
+    ],
+    "scenario_id": "T4_qwen_P1_01",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "P1_01",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "P1_01",
+    "method": "robostate",
+    "model": "qwen/qwen3-8b",
+    "success": false,
+    "run_status": "invalid",
+    "valid_for_aggregation": false,
+    "reason": "Invalid benchmark: task(s) already satisfied at step 0: ['T4_qwen_P1_01']",
+    "steps_executed": 0,
+    "execution_time_seconds": 0.0,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {}
+}

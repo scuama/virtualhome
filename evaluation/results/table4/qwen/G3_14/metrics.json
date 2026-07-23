@@ -1,0 +1,90 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 6.0,
+    "ps_sum": 6,
+    "ps_count": 1,
+    "mean_completion_step": 6.0,
+    "tasks": [
+        {
+            "task_id": "T4_qwen_G3_14",
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 6,
+            "completed": true,
+            "completion_step": 6,
+            "completion_evidence": "on_ask_policy"
+        }
+    ],
+    "scenario_id": "T4_qwen_G3_14",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "G3_14",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G3_14",
+    "method": "robostate",
+    "model": "qwen/qwen3-8b",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Clarification/impossibility correctly requested",
+    "steps_executed": 6,
+    "execution_time_seconds": 52.78,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 5.558005,
+            "input_tokens": 950,
+            "output_tokens": 317,
+            "reasoning_tokens": 0,
+            "total_tokens": 1267,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 35.519439,
+            "input_tokens": 36061,
+            "output_tokens": 968,
+            "reasoning_tokens": 0,
+            "total_tokens": 37029,
+            "call_count": 7,
+            "successful_calls": 7,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.001424,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 7,
+            "successful_calls": 7,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 8.69494,
+            "input_tokens": 1041,
+            "output_tokens": 141,
+            "reasoning_tokens": 0,
+            "total_tokens": 1182,
+            "call_count": 2,
+            "successful_calls": 1,
+            "failed_calls": 1
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.577988,
+            "input_tokens": 1024,
+            "output_tokens": 119,
+            "reasoning_tokens": 0,
+            "total_tokens": 1143,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

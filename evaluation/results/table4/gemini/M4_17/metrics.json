@@ -1,0 +1,98 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 3.0,
+    "ps_sum": 3,
+    "ps_count": 1,
+    "mean_completion_step": 3.0,
+    "tasks": [
+        {
+            "task_id": "T4_gemini_M4_17",
+            "instruction": "If the kitchencabinet is open, put the waterglass you just washed inside.",
+            "success_condition": {
+                "target_class": "waterglass",
+                "states": [
+                    "CLEAN"
+                ],
+                "relation": "INSIDE",
+                "destination_class": "kitchencabinet"
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        }
+    ],
+    "scenario_id": "T4_gemini_M4_17",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M4_17",
+    "setting": null,
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "M4_17",
+    "method": "robostate",
+    "model": "google/gemini-3.5-flash",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 3,
+    "execution_time_seconds": 20.99,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 4.354423,
+            "input_tokens": 995,
+            "output_tokens": 388,
+            "reasoning_tokens": 0,
+            "total_tokens": 1383,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 10.15894,
+            "input_tokens": 19464,
+            "output_tokens": 537,
+            "reasoning_tokens": 0,
+            "total_tokens": 20001,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.001373,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 3.300346,
+            "input_tokens": 1178,
+            "output_tokens": 174,
+            "reasoning_tokens": 0,
+            "total_tokens": 1352,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.87566,
+            "input_tokens": 1037,
+            "output_tokens": 330,
+            "reasoning_tokens": 0,
+            "total_tokens": 1367,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

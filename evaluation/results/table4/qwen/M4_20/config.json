@@ -1,0 +1,99 @@
+{
+    "scenario_id": "T4_qwen_M4_20",
+    "scenario_type": "M",
+    "goal_instruction": "If there are apples on the table, put the washed red one in the fridge.",
+    "environment_id": 1,
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "CLEAN",
+                "RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "add_states": [
+                "DIRTY",
+                "RED"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 2
+            },
+            "add_states": [
+                "CLEAN",
+                "GREEN"
+            ]
+        },
+        {
+            "target_classes": [
+                "apple"
+            ],
+            "instance_filter": {
+                "index": 3
+            },
+            "add_states": [
+                "DIRTY",
+                "GREEN"
+            ]
+        }
+    ],
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "apple",
+            "count": 4,
+            "relation": "ON",
+            "object": "kitchentable"
+        }
+    ],
+    "prior_action_history": [
+        {
+            "step": -1,
+            "action": "[wash] <apple> (33)",
+            "success": true,
+            "reasoning": "I washed the red apple. It is CLEAN and RED."
+        }
+    ],
+    "success_condition": {
+        "target_class": "apple",
+        "states": [
+            "CLEAN",
+            "RED"
+        ],
+        "relation": "INSIDE",
+        "destination_class": "fridge"
+    },
+    "source_scenario_id": "M4_20",
+    "source_config": "configs/source_tasks/m_class/M4_20.json",
+    "source_sha256": "2cac1c91234f11f168371a3eba44b7914f50ddd9420076ab01e4219a7e614397",
+    "table_id": "table4",
+    "experiment_axis": "model_backbone",
+    "sample_id": "M4_20",
+    "model_alias": "qwen",
+    "evaluation_model": "qwen/qwen3-8b",
+    "provider": "openrouter",
+    "single_run": true,
+    "max_steps": 45,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 84.0
+}

@@ -1,0 +1,414 @@
+{
+  "table_id": "table4",
+  "sampling_seed": 42,
+  "sample_replacements": {
+    "G2_06": "G2_08: repeated Unity initialization failure",
+    "M2_07": "M2_09: repeated Unity initialization failure",
+    "P1_01": "P1_03: source task was already satisfied at step 0"
+  },
+  "chatgpt": {
+    "model_id": "gpt-5.4-mini",
+    "result_source": "table3_full_aggregate"
+  },
+  "models": {
+    "claude": "anthropic/claude-haiku-4.5",
+    "gemini": "google/gemini-3.5-flash",
+    "llama": "meta-llama/llama-3.1-8b-instruct",
+    "qwen": "qwen/qwen3-8b"
+  },
+  "samples": [
+    {
+      "scenario_id": "G2_06",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_06.json",
+      "source_sha256": "50c77e3db2a2435b895265324e38f8873d6ce27251c7d90f3fb852d79e7413e7"
+    },
+    {
+      "scenario_id": "M2_06",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_06.json",
+      "source_sha256": "a200bbc0c29652182a2d8e5caaa13c092d46db3b38b7471b3c243339380ae0d8"
+    },
+    {
+      "scenario_id": "M4_18",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_18.json",
+      "source_sha256": "c3831cf7523dbb2ef124a2651c9fc79b9605100fc498d95313d93bd3b25a6b47"
+    },
+    {
+      "scenario_id": "M4_17",
+      "subclass": "M4",
+      "source_config": "configs/source_tasks/m_class/M4_17.json",
+      "source_sha256": "1922f7195c00136463a1e629edff0a7e886d5d086e1abe1b7d7c9acaf329dc30"
+    },
+    {
+      "scenario_id": "P2_08",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_08.json",
+      "source_sha256": "f2673382019899c0c73665ac7c62a9a361b8675ff4a6bbd4933a89e928ccd795"
+    },
+    {
+      "scenario_id": "M1_01",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_01.json",
+      "source_sha256": "e632e6572d26466ee853bb752de0bca6c76c0dfe18928053e0431ab207b3062d"
+    },
+    {
+      "scenario_id": "P2_10",
+      "subclass": "P2",
+      "source_config": "configs/source_tasks/p_class/P2_10.json",
+      "source_sha256": "2a45c3a477db22e0d0139b7e3c1da7dc264f7df0ff3083a4effe5bbab5c49915"
+    },
+    {
+      "scenario_id": "G2_07",
+      "subclass": "G2",
+      "source_config": "configs/source_tasks/g_class/G2_07.json",
+      "source_sha256": "78677c6078ee1a12016ad19eb4a7f8fd0fe756e1a0ad116f52dd6e737a488253"
+    },
+    {
+      "scenario_id": "P3_13",
+      "subclass": "P3",
+      "source_config": "configs/source_tasks/p_class/P3_13.json",
+      "source_sha256": "c4e00ae6b7efb1802cacc3c0f5c25293ce50f9b26a96aed223475a3a89476f52"
+    },
+    {
+      "scenario_id": "G3_14",
+      "subclass": "G3",
+      "source_config": "configs/source_tasks/g_class/G3_14.json",
+      "source_sha256": "d6062e94d3c6c33b8b1d77b715b9a644d42543bd2939bde32f4cca87d0cda46c"
+    },
+    {
+      "scenario_id": "G4_20",
+      "subclass": "G4",
+      "source_config": "configs/source_tasks/g_class/G4_20.json",
+      "source_sha256": "354c4b7b9c743a2e31ab177731253005d27f86847dec19e4d20ef68b51deafd3"
+    },
+    {
+      "scenario_id": "M2_09",
+      "subclass": "M2",
+      "source_config": "configs/source_tasks/m_class/M2_09.json",
+      "source_sha256": "f0cb5753b70774f25649ff26e0221cad36ed8f0bbceebf6a408befb8d7f05831"
+    },
+    {
+      "scenario_id": "M1_03",
+      "subclass": "M1",
+      "source_config": "configs/source_tasks/m_class/M1_03.json",
+      "source_sha256": "f3db595187ad45167acb1e7183561dd74e7be128c98e161957408eef014cd40b"
+    }
+  ],
+  "runnable_configs": [
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table4/runs/claude/G2_06.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table4/runs/gemini/G2_06.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table4/runs/llama/G2_06.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "G2_06",
+      "config_path": "configs/table4/runs/qwen/G2_06.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table4/runs/claude/M2_06.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table4/runs/gemini/M2_06.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table4/runs/llama/M2_06.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M2_06",
+      "config_path": "configs/table4/runs/qwen/M2_06.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table4/runs/claude/M4_18.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table4/runs/gemini/M4_18.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table4/runs/llama/M4_18.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M4_18",
+      "config_path": "configs/table4/runs/qwen/M4_18.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table4/runs/claude/M4_17.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table4/runs/gemini/M4_17.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table4/runs/llama/M4_17.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M4_17",
+      "config_path": "configs/table4/runs/qwen/M4_17.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table4/runs/claude/P2_08.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table4/runs/gemini/P2_08.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table4/runs/llama/P2_08.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "P2_08",
+      "config_path": "configs/table4/runs/qwen/P2_08.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M1_01",
+      "config_path": "configs/table4/runs/claude/M1_01.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M1_01",
+      "config_path": "configs/table4/runs/gemini/M1_01.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M1_01",
+      "config_path": "configs/table4/runs/llama/M1_01.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M1_01",
+      "config_path": "configs/table4/runs/qwen/M1_01.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table4/runs/claude/P2_10.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table4/runs/gemini/P2_10.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table4/runs/llama/P2_10.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "P2_10",
+      "config_path": "configs/table4/runs/qwen/P2_10.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table4/runs/claude/G2_07.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table4/runs/gemini/G2_07.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table4/runs/llama/G2_07.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "G2_07",
+      "config_path": "configs/table4/runs/qwen/G2_07.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table4/runs/claude/P3_13.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table4/runs/gemini/P3_13.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table4/runs/llama/P3_13.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "P3_13",
+      "config_path": "configs/table4/runs/qwen/P3_13.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table4/runs/claude/G3_14.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table4/runs/gemini/G3_14.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table4/runs/llama/G3_14.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "G3_14",
+      "config_path": "configs/table4/runs/qwen/G3_14.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table4/runs/claude/G4_20.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table4/runs/gemini/G4_20.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table4/runs/llama/G4_20.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "G4_20",
+      "config_path": "configs/table4/runs/qwen/G4_20.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table4/runs/claude/M2_09.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table4/runs/gemini/M2_09.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table4/runs/llama/M2_09.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M2_09",
+      "config_path": "configs/table4/runs/qwen/M2_09.json"
+    },
+    {
+      "model_alias": "claude",
+      "model_id": "anthropic/claude-haiku-4.5",
+      "source_scenario_id": "M1_03",
+      "config_path": "configs/table4/runs/claude/M1_03.json"
+    },
+    {
+      "model_alias": "gemini",
+      "model_id": "google/gemini-3.5-flash",
+      "source_scenario_id": "M1_03",
+      "config_path": "configs/table4/runs/gemini/M1_03.json"
+    },
+    {
+      "model_alias": "llama",
+      "model_id": "meta-llama/llama-3.1-8b-instruct",
+      "source_scenario_id": "M1_03",
+      "config_path": "configs/table4/runs/llama/M1_03.json"
+    },
+    {
+      "model_alias": "qwen",
+      "model_id": "qwen/qwen3-8b",
+      "source_scenario_id": "M1_03",
+      "config_path": "configs/table4/runs/qwen/M1_03.json"
+    }
+  ],
+  "expected_runnable_episodes": 52
+}
