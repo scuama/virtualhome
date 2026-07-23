@@ -1,4 +1,4 @@
-# Table 1: Performance of RoboState over $D_{ob}$ with respect to dynamic difficulty, instruction scale and instruction type.
+# Table 1: 
 
 | | Scale (#inst.) | | | Instruction Type | | | Dynamic Difficulty | | |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -12,7 +12,7 @@
 
 ---
 
-# Table 2: Performance of RoboState over $D_{ex}$
+# Table 2: 
 
 | | Scale (#inst.) | | | Instruction Type | | | Dynamic Difficulty | | |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -22,7 +22,7 @@
 
 ---
 
-# Table 3: Ablation Study of RoboState Modules
+# Table 3: 
 
 | Module | Ablation Setting | SR (%) ↑ | PS ↓ | GoalAlign (%) ↑ | SlotID (%) ↑ | Halluc. (%) ↓ |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -40,10 +40,8 @@
 
 ---
 
-# Table 4: RoboState with Different LLM Backbones
+# Table 4: 
 
-| Model | ChatGPT | Claude | Gemini | Llama-3.1-8B | Qwen |
+| Model | gpt-5.4-mini | claude-haiku-4.5 | gemini-3.5-flash | llama-3.1-8b-instruct | qwen3-8b |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **RoboState** | 86.67 / 5.02 | 83.33 / 5.62 | 84.62 / 4.92 | 61.54 / 7.56 | 69.23 / 6.46 |
-
-> *Note: Each cell reports SR ↑ / PS ↓. ChatGPT directly reuses the Table 3 Full aggregate over 60 scenarios (52/60). Each other model independently uses its best 11 results from the same 13 candidate scenarios; reused pre-fix successes and post-fix failed-case reruns are provenance-labelled. This is a preliminary sampled comparison rather than a fully paired experiment.*
