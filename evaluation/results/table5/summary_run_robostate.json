@@ -1,0 +1,4211 @@
+{
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "total": 36,
+    "skipped": 0,
+    "success": 22,
+    "fail": 14,
+    "incomplete": 0,
+    "failures": [
+        {
+            "scenario": "T5_G2_06_B0",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_07_B0",
+            "reason": "Agent gave up (5 consecutive waits)"
+        },
+        {
+            "scenario": "T5_G2_08_B0",
+            "reason": "Agent gave up (5 consecutive waits)"
+        },
+        {
+            "scenario": "T5_G2_09_B0",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_10_B0",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_11_B0",
+            "reason": "Agent gave up (5 consecutive waits)"
+        },
+        {
+            "scenario": "T5_G2_12_B0",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_09_B1",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_11_B1",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_13_B1",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_06_B2",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_09_B2",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_10_B2",
+            "reason": "Agent stagnated (15 steps without progress)"
+        },
+        {
+            "scenario": "T5_G2_09_B3",
+            "reason": "Agent stagnated (15 steps without progress)"
+        }
+    ],
+    "extension_metrics": [
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_06_B0",
+                    "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_06_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_06",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_06",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 8.01,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.382035,
+                    "input_tokens": 1085,
+                    "output_tokens": 260,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1345,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003948,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.299286,
+                    "input_tokens": 2608,
+                    "output_tokens": 201,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2809,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_07_B0",
+                    "instruction": "If you see the mug on the table, put it where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_07_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_07",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_07",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent gave up (5 consecutive waits)",
+            "steps_executed": 14,
+            "execution_time_seconds": 38.97,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.507531,
+                    "input_tokens": 1085,
+                    "output_tokens": 391,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1476,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 30.716172,
+                    "input_tokens": 78714,
+                    "output_tokens": 2309,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 81023,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.006549,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.749785,
+                    "input_tokens": 1103,
+                    "output_tokens": 112,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1215,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.759746,
+                    "input_tokens": 1399,
+                    "output_tokens": 90,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1489,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_08_B0",
+                    "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "milk",
+                        "relation": "HOLDS_RH",
+                        "min_count": 1,
+                        "destination_states": [
+                            "HOT"
+                        ]
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_08_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_08",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_08",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent gave up (5 consecutive waits)",
+            "steps_executed": 7,
+            "execution_time_seconds": 31.04,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.483222,
+                    "input_tokens": 1086,
+                    "output_tokens": 355,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1441,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 20.269433,
+                    "input_tokens": 41724,
+                    "output_tokens": 1604,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 43328,
+                    "call_count": 8,
+                    "successful_calls": 8,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004725,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 8,
+                    "successful_calls": 8,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.579622,
+                    "input_tokens": 1178,
+                    "output_tokens": 95,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1273,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 5.085893,
+                    "input_tokens": 2796,
+                    "output_tokens": 503,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3299,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_09_B0",
+                    "instruction": "If the book falls on the floor, please pick it up and put it back neatly.",
+                    "success_condition": {
+                        "target_class": "book",
+                        "destination_class": "desk",
+                        "relation": "ON",
+                        "min_count": 3
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_09_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_09",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_09",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 42.63,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.49873,
+                    "input_tokens": 1088,
+                    "output_tokens": 275,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1363,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 34.242334,
+                    "input_tokens": 77456,
+                    "output_tokens": 2579,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 80035,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.00488,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.508776,
+                    "input_tokens": 1081,
+                    "output_tokens": 68,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1149,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.90902,
+                    "input_tokens": 1317,
+                    "output_tokens": 217,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1534,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_10_B0",
+                    "instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+                    "success_condition": {
+                        "target_class": "stove",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_10_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_10",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_10",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 8.52,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.5641,
+                    "input_tokens": 1086,
+                    "output_tokens": 291,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1377,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003777,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.636766,
+                    "input_tokens": 2847,
+                    "output_tokens": 312,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3159,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_11_B0",
+                    "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_11_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_11",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_11",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent gave up (5 consecutive waits)",
+            "steps_executed": 8,
+            "execution_time_seconds": 24.66,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.218256,
+                    "input_tokens": 1088,
+                    "output_tokens": 268,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1356,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 18.037258,
+                    "input_tokens": 41423,
+                    "output_tokens": 1324,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 42747,
+                    "call_count": 9,
+                    "successful_calls": 9,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005067,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 9,
+                    "successful_calls": 9,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.507719,
+                    "input_tokens": 1044,
+                    "output_tokens": 75,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1119,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.288536,
+                    "input_tokens": 1451,
+                    "output_tokens": 39,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1490,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_12_B0",
+                    "instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+                    "success_condition": {
+                        "target_class": "apple",
+                        "destination_class": "fridge",
+                        "relation": "INSIDE",
+                        "min_count": 2
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_12_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_12",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_12",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 39.54,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.849776,
+                    "input_tokens": 1088,
+                    "output_tokens": 374,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1462,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 27.883126,
+                    "input_tokens": 63971,
+                    "output_tokens": 2172,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 66143,
+                    "call_count": 13,
+                    "successful_calls": 13,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.006487,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 4.356324,
+                    "input_tokens": 3638,
+                    "output_tokens": 217,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3855,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.038482,
+                    "input_tokens": 1451,
+                    "output_tokens": 228,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1679,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 2.0,
+            "ps_sum": 2,
+            "ps_count": 1,
+            "mean_completion_step": 2.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_13_B0",
+                    "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+                    "success_condition": {
+                        "mode": "AND",
+                        "conditions": [
+                            {
+                                "target_class": "toaster",
+                                "states": [
+                                    "OFF"
+                                ],
+                                "min_count": 1
+                            },
+                            {
+                                "target_class": "coffeemaker",
+                                "states": [
+                                    "ON"
+                                ],
+                                "min_count": 1
+                            }
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 2,
+                    "completed": true,
+                    "completion_step": 2
+                }
+            ],
+            "scenario_id": "T5_G2_13_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_13",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_13",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 2,
+            "execution_time_seconds": 10.91,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.09467,
+                    "input_tokens": 1088,
+                    "output_tokens": 259,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1347,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 3.844752,
+                    "input_tokens": 8981,
+                    "output_tokens": 277,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 9258,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.000462,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.556307,
+                    "input_tokens": 1153,
+                    "output_tokens": 79,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1232,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.180413,
+                    "input_tokens": 1408,
+                    "output_tokens": 251,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1659,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 1.0,
+            "ps_sum": 1,
+            "ps_count": 1,
+            "mean_completion_step": 1.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_14_B0",
+                    "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "juice",
+                        "relation": "HOLDS_RH|HOLDS_LH",
+                        "destination_states": [
+                            "COLD"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 1,
+                    "completed": true,
+                    "completion_step": 1
+                }
+            ],
+            "scenario_id": "T5_G2_14_B0",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_14",
+            "setting": "B0",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_14",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 1,
+            "execution_time_seconds": 10.42,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 0,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.465884,
+                    "input_tokens": 1089,
+                    "output_tokens": 279,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1368,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 1.885944,
+                    "input_tokens": 5347,
+                    "output_tokens": 152,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 5499,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.000294,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.619829,
+                    "input_tokens": 1310,
+                    "output_tokens": 88,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1398,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.299523,
+                    "input_tokens": 1383,
+                    "output_tokens": 430,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1813,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_06_B1",
+                    "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_06_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_06",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_06",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 20.25,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact lamp state should I set it to?",
+                    "answer": "Turn it on."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.113903,
+                    "input_tokens": 2174,
+                    "output_tokens": 623,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2797,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 4.629727,
+                    "input_tokens": 11044,
+                    "output_tokens": 340,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 11384,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.001474,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.203862,
+                    "input_tokens": 1240,
+                    "output_tokens": 136,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1376,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 4.792666,
+                    "input_tokens": 2616,
+                    "output_tokens": 560,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3176,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.34631,
+                    "input_tokens": 403,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 422,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 6.0,
+            "ps_sum": 6,
+            "ps_count": 1,
+            "mean_completion_step": 6.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_07_B1",
+                    "instruction": "If you see the mug on the table, put it where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 6,
+                    "completed": true,
+                    "completion_step": 6
+                }
+            ],
+            "scenario_id": "T5_G2_07_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_07",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_07",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 6,
+            "execution_time_seconds": 24.46,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Where should I put the mug?",
+                    "answer": "Inside a kitchen cabinet."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.589944,
+                    "input_tokens": 2174,
+                    "output_tokens": 657,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2831,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 10.755081,
+                    "input_tokens": 25356,
+                    "output_tokens": 777,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 26133,
+                    "call_count": 5,
+                    "successful_calls": 5,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004192,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 6,
+                    "successful_calls": 6,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.873701,
+                    "input_tokens": 1211,
+                    "output_tokens": 89,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1300,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.925955,
+                    "input_tokens": 1403,
+                    "output_tokens": 184,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1587,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.639293,
+                    "input_tokens": 402,
+                    "output_tokens": 20,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 422,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_08_B1",
+                    "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "milk",
+                        "relation": "HOLDS_RH",
+                        "min_count": 1,
+                        "destination_states": [
+                            "HOT"
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_08_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_08",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_08",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 25.97,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What temperature should the milk be?",
+                    "answer": "Hot."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 7.546439,
+                    "input_tokens": 2173,
+                    "output_tokens": 633,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2806,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 5.538934,
+                    "input_tokens": 11536,
+                    "output_tokens": 387,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 11923,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.002917,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.956747,
+                    "input_tokens": 1493,
+                    "output_tokens": 144,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1637,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 7.67267,
+                    "input_tokens": 2834,
+                    "output_tokens": 933,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3767,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.714458,
+                    "input_tokens": 401,
+                    "output_tokens": 17,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 418,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_09_B1",
+                    "instruction": "If the book falls on the floor, please pick it up and put it back neatly.",
+                    "success_condition": {
+                        "target_class": "book",
+                        "destination_class": "desk",
+                        "relation": "ON",
+                        "min_count": 3
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_09_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_09",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_09",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 45.95,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.022954,
+                    "input_tokens": 1088,
+                    "output_tokens": 295,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1383,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 34.906266,
+                    "input_tokens": 73724,
+                    "output_tokens": 2463,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 76187,
+                    "call_count": 14,
+                    "successful_calls": 14,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005418,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 4.42193,
+                    "input_tokens": 3431,
+                    "output_tokens": 210,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3641,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.188336,
+                    "input_tokens": 1317,
+                    "output_tokens": 217,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1534,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_10_B1",
+                    "instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+                    "success_condition": {
+                        "target_class": "stove",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_10_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_10",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_10",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 16.85,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact safe state should the stove be in?",
+                    "answer": "Turn it off."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.584576,
+                    "input_tokens": 2173,
+                    "output_tokens": 656,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2829,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 3.415538,
+                    "input_tokens": 9015,
+                    "output_tokens": 225,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 9240,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.001833,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.474349,
+                    "input_tokens": 1012,
+                    "output_tokens": 58,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1070,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.734089,
+                    "input_tokens": 2831,
+                    "output_tokens": 131,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2962,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.466458,
+                    "input_tokens": 399,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 418,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_11_B1",
+                    "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_11_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_11",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_11",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 45.85,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which specific item should I move?",
+                    "answer": "The mug."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.30175,
+                    "input_tokens": 2174,
+                    "output_tokens": 673,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2847,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 32.728257,
+                    "input_tokens": 71659,
+                    "output_tokens": 2227,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 73886,
+                    "call_count": 14,
+                    "successful_calls": 14,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.010151,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.50991,
+                    "input_tokens": 1143,
+                    "output_tokens": 76,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1219,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.403918,
+                    "input_tokens": 1449,
+                    "output_tokens": 91,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1540,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.264445,
+                    "input_tokens": 405,
+                    "output_tokens": 18,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 423,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 13.0,
+            "ps_sum": 13,
+            "ps_count": 1,
+            "mean_completion_step": 13.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_12_B1",
+                    "instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+                    "success_condition": {
+                        "target_class": "apple",
+                        "destination_class": "fridge",
+                        "relation": "INSIDE",
+                        "min_count": 2
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 13,
+                    "completed": true,
+                    "completion_step": 13
+                }
+            ],
+            "scenario_id": "T5_G2_12_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_12",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_12",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 13,
+            "execution_time_seconds": 40.24,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact place should the apples be stored in?",
+                    "answer": "Inside the refrigerator."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.244464,
+                    "input_tokens": 2175,
+                    "output_tokens": 630,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2805,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 24.750173,
+                    "input_tokens": 59237,
+                    "output_tokens": 1966,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 61203,
+                    "call_count": 12,
+                    "successful_calls": 12,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.008238,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 13,
+                    "successful_calls": 13,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.189456,
+                    "input_tokens": 1293,
+                    "output_tokens": 72,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1365,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.544793,
+                    "input_tokens": 1450,
+                    "output_tokens": 229,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1679,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.048538,
+                    "input_tokens": 407,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 426,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_13_B1",
+                    "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+                    "success_condition": {
+                        "mode": "AND",
+                        "conditions": [
+                            {
+                                "target_class": "toaster",
+                                "states": [
+                                    "OFF"
+                                ],
+                                "min_count": 1
+                            },
+                            {
+                                "target_class": "coffeemaker",
+                                "states": [
+                                    "ON"
+                                ],
+                                "min_count": 1
+                            }
+                        ]
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_13_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_13",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_13",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 14.37,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which appliance should I adjust: the toaster or the coffee maker?",
+                    "answer": "The toaster."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 7.023591,
+                    "input_tokens": 2175,
+                    "output_tokens": 762,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2937,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005514,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.562324,
+                    "input_tokens": 2846,
+                    "output_tokens": 311,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3157,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.468947,
+                    "input_tokens": 410,
+                    "output_tokens": 18,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 428,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 2.0,
+            "ps_sum": 2,
+            "ps_count": 1,
+            "mean_completion_step": 2.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_14_B1",
+                    "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "juice",
+                        "relation": "HOLDS_RH|HOLDS_LH",
+                        "destination_states": [
+                            "COLD"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 2,
+                    "completed": true,
+                    "completion_step": 2
+                }
+            ],
+            "scenario_id": "T5_G2_14_B1",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_14",
+            "setting": "B1",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_14",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 2,
+            "execution_time_seconds": 18.94,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 1,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which drink should I bring?",
+                    "answer": "The juice."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.890032,
+                    "input_tokens": 2177,
+                    "output_tokens": 614,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2791,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 2.039927,
+                    "input_tokens": 5498,
+                    "output_tokens": 133,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 5631,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003455,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.906441,
+                    "input_tokens": 1402,
+                    "output_tokens": 119,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1521,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 4.272592,
+                    "input_tokens": 1382,
+                    "output_tokens": 374,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1756,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.533177,
+                    "input_tokens": 403,
+                    "output_tokens": 18,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 421,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_06_B2",
+                    "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_06_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_06",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_06",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 22.55,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact setting should the table lamp be adjusted to?",
+                    "answer": "Turn it on."
+                },
+                {
+                    "step": 1,
+                    "question": "What exact lamp setting should I adjust it to?",
+                    "answer": "I have no additional preference."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 11.027124,
+                    "input_tokens": 3263,
+                    "output_tokens": 1045,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4308,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004778,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 4.306214,
+                    "input_tokens": 2632,
+                    "output_tokens": 263,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2895,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 3.775486,
+                    "input_tokens": 832,
+                    "output_tokens": 38,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 870,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 6.0,
+            "ps_sum": 6,
+            "ps_count": 1,
+            "mean_completion_step": 6.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_07_B2",
+                    "instruction": "If you see the mug on the table, put it where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 6,
+                    "completed": true,
+                    "completion_step": 6
+                }
+            ],
+            "scenario_id": "T5_G2_07_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_07",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_07",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 6,
+            "execution_time_seconds": 29.11,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Where exactly should I put the mug?",
+                    "answer": "Inside a kitchen cabinet."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 8.244577,
+                    "input_tokens": 2171,
+                    "output_tokens": 643,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2814,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 9.814414,
+                    "input_tokens": 25191,
+                    "output_tokens": 702,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 25893,
+                    "call_count": 5,
+                    "successful_calls": 5,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.002487,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 6,
+                    "successful_calls": 6,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 3.19209,
+                    "input_tokens": 1208,
+                    "output_tokens": 107,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1315,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.769969,
+                    "input_tokens": 1400,
+                    "output_tokens": 299,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1699,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 3.084852,
+                    "input_tokens": 403,
+                    "output_tokens": 20,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 423,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 4.0,
+            "ps_sum": 4,
+            "ps_count": 1,
+            "mean_completion_step": 4.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_08_B2",
+                    "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "milk",
+                        "relation": "HOLDS_RH",
+                        "min_count": 1,
+                        "destination_states": [
+                            "HOT"
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 4,
+                    "completed": true,
+                    "completion_step": 4
+                }
+            ],
+            "scenario_id": "T5_G2_08_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_08",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_08",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 4,
+            "execution_time_seconds": 36.55,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What temperature should the milk be brought to?",
+                    "answer": "Hot."
+                },
+                {
+                    "step": 1,
+                    "question": "What exact temperature should the milk be?",
+                    "answer": "I have no additional preference."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 10.878395,
+                    "input_tokens": 3259,
+                    "output_tokens": 904,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4163,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 8.367275,
+                    "input_tokens": 10915,
+                    "output_tokens": 346,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 11261,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.007577,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 4,
+                    "successful_calls": 4,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.040504,
+                    "input_tokens": 1397,
+                    "output_tokens": 114,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1511,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.897976,
+                    "input_tokens": 1380,
+                    "output_tokens": 534,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1914,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 8.113786,
+                    "input_tokens": 826,
+                    "output_tokens": 34,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 860,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_09_B2",
+                    "instruction": "If the book falls on the floor, please pick it up and put it back neatly.",
+                    "success_condition": {
+                        "target_class": "book",
+                        "destination_class": "desk",
+                        "relation": "ON",
+                        "min_count": 3
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_09_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_09",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_09",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 44.69,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 0,
+            "clarification_trace": [],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 3.083943,
+                    "input_tokens": 1088,
+                    "output_tokens": 357,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1445,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 36.495529,
+                    "input_tokens": 76432,
+                    "output_tokens": 2519,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 78951,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004564,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.514996,
+                    "input_tokens": 1071,
+                    "output_tokens": 68,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1139,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.151313,
+                    "input_tokens": 1317,
+                    "output_tokens": 217,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1534,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_10_B2",
+                    "instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+                    "success_condition": {
+                        "target_class": "stove",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_10_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_10",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_10",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 13.21,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What specific safe state should the stove be in?",
+                    "answer": "Turn it off."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.421634,
+                    "input_tokens": 2176,
+                    "output_tokens": 731,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2907,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005426,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.902722,
+                    "input_tokens": 2837,
+                    "output_tokens": 172,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3009,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.404199,
+                    "input_tokens": 399,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 418,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 6.0,
+            "ps_sum": 6,
+            "ps_count": 1,
+            "mean_completion_step": 6.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_11_B2",
+                    "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 6,
+                    "completed": true,
+                    "completion_step": 6
+                }
+            ],
+            "scenario_id": "T5_G2_11_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_11",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_11",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 6,
+            "execution_time_seconds": 23.96,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which specific destination should the drinkware be placed in?",
+                    "answer": "Inside a kitchen cabinet."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 5.827804,
+                    "input_tokens": 2177,
+                    "output_tokens": 712,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2889,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 10.456274,
+                    "input_tokens": 25354,
+                    "output_tokens": 732,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 26086,
+                    "call_count": 5,
+                    "successful_calls": 5,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003476,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 6,
+                    "successful_calls": 6,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.890964,
+                    "input_tokens": 1220,
+                    "output_tokens": 98,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1318,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.456687,
+                    "input_tokens": 1452,
+                    "output_tokens": 300,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1752,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.620057,
+                    "input_tokens": 409,
+                    "output_tokens": 20,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 429,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 12.0,
+            "ps_sum": 12,
+            "ps_count": 1,
+            "mean_completion_step": 12.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_12_B2",
+                    "instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+                    "success_condition": {
+                        "target_class": "apple",
+                        "destination_class": "fridge",
+                        "relation": "INSIDE",
+                        "min_count": 2
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 12,
+                    "completed": true,
+                    "completion_step": 12
+                }
+            ],
+            "scenario_id": "T5_G2_12_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_12",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_12",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 12,
+            "execution_time_seconds": 43.45,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What is the proper place for the apples?",
+                    "answer": "Inside the refrigerator."
+                },
+                {
+                    "step": 1,
+                    "question": "How many apples should be stored inside the refrigerator?",
+                    "answer": "Both apples."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 9.884829,
+                    "input_tokens": 3261,
+                    "output_tokens": 995,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4256,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 21.919945,
+                    "input_tokens": 51807,
+                    "output_tokens": 1537,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 53344,
+                    "call_count": 10,
+                    "successful_calls": 10,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.007734,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 12,
+                    "successful_calls": 12,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.368444,
+                    "input_tokens": 1532,
+                    "output_tokens": 76,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1608,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 4.093715,
+                    "input_tokens": 1449,
+                    "output_tokens": 671,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2120,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 3.081783,
+                    "input_tokens": 836,
+                    "output_tokens": 37,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 873,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 4.0,
+            "ps_sum": 4,
+            "ps_count": 1,
+            "mean_completion_step": 4.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_13_B2",
+                    "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+                    "success_condition": {
+                        "mode": "AND",
+                        "conditions": [
+                            {
+                                "target_class": "toaster",
+                                "states": [
+                                    "OFF"
+                                ],
+                                "min_count": 1
+                            },
+                            {
+                                "target_class": "coffeemaker",
+                                "states": [
+                                    "ON"
+                                ],
+                                "min_count": 1
+                            }
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 4,
+                    "completed": true,
+                    "completion_step": 4
+                }
+            ],
+            "scenario_id": "T5_G2_13_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_13",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_13",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 4,
+            "execution_time_seconds": 22.94,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which appliance should be adjusted: the toaster or the coffee maker?",
+                    "answer": "The toaster."
+                },
+                {
+                    "step": 1,
+                    "question": "What exact state should the toaster be adjusted to?",
+                    "answer": "Turn it off."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 9.436939,
+                    "input_tokens": 3259,
+                    "output_tokens": 951,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4210,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 4.206291,
+                    "input_tokens": 9203,
+                    "output_tokens": 303,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 9506,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.002778,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 4,
+                    "successful_calls": 4,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.546646,
+                    "input_tokens": 1136,
+                    "output_tokens": 77,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1213,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.84229,
+                    "input_tokens": 2838,
+                    "output_tokens": 152,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2990,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.431961,
+                    "input_tokens": 843,
+                    "output_tokens": 37,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 880,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_14_B2",
+                    "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "juice",
+                        "relation": "HOLDS_RH|HOLDS_LH",
+                        "destination_states": [
+                            "COLD"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_14_B2",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_14",
+            "setting": "B2",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_14",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 20.57,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 2,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which drink should I bring from the kitchen table?",
+                    "answer": "The juice."
+                },
+                {
+                    "step": 1,
+                    "question": "What temperature should the juice be?",
+                    "answer": "Cold."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 8.688042,
+                    "input_tokens": 3262,
+                    "output_tokens": 809,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4071,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 2.02291,
+                    "input_tokens": 5515,
+                    "output_tokens": 129,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 5644,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003666,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.073781,
+                    "input_tokens": 1297,
+                    "output_tokens": 159,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1456,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 3.023148,
+                    "input_tokens": 1379,
+                    "output_tokens": 442,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1821,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.572041,
+                    "input_tokens": 834,
+                    "output_tokens": 35,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 869,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_06_B3",
+                    "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+                    "success_condition": {
+                        "target_class": "tablelamp",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_06_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_06",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_06",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 18.36,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact setting should the table lamp be adjusted to?",
+                    "answer": "Turn it on."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.256082,
+                    "input_tokens": 2167,
+                    "output_tokens": 587,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2754,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 4.307022,
+                    "input_tokens": 9820,
+                    "output_tokens": 353,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 10173,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.000901,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.417232,
+                    "input_tokens": 951,
+                    "output_tokens": 151,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1102,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.572116,
+                    "input_tokens": 1283,
+                    "output_tokens": 128,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1411,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.294377,
+                    "input_tokens": 404,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 423,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 6.0,
+            "ps_sum": 6,
+            "ps_count": 1,
+            "mean_completion_step": 6.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_07_B3",
+                    "instruction": "If you see the mug on the table, put it where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 6,
+                    "completed": true,
+                    "completion_step": 6
+                }
+            ],
+            "scenario_id": "T5_G2_07_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_07",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_07",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 6,
+            "execution_time_seconds": 24.14,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Where should I put the mug?",
+                    "answer": "Inside a kitchen cabinet."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.348544,
+                    "input_tokens": 2171,
+                    "output_tokens": 649,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2820,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 10.423549,
+                    "input_tokens": 25276,
+                    "output_tokens": 681,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 25957,
+                    "call_count": 5,
+                    "successful_calls": 5,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.004116,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 6,
+                    "successful_calls": 6,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.9052,
+                    "input_tokens": 1226,
+                    "output_tokens": 97,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1323,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.364273,
+                    "input_tokens": 1400,
+                    "output_tokens": 185,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1585,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.564992,
+                    "input_tokens": 402,
+                    "output_tokens": 20,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 422,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_08_B3",
+                    "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "milk",
+                        "relation": "HOLDS_RH",
+                        "min_count": 1,
+                        "destination_states": [
+                            "HOT"
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_08_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_08",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_08",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 21.19,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact temperature should the milk be brought to?",
+                    "answer": "Hot."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.411885,
+                    "input_tokens": 2174,
+                    "output_tokens": 633,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2807,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 3.597146,
+                    "input_tokens": 10511,
+                    "output_tokens": 297,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 10808,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.002499,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.492075,
+                    "input_tokens": 1371,
+                    "output_tokens": 87,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1458,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 6.572007,
+                    "input_tokens": 2818,
+                    "output_tokens": 795,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3613,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.530418,
+                    "input_tokens": 404,
+                    "output_tokens": 17,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 421,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 0,
+            "sr": 0.0,
+            "ps": null,
+            "ps_sum": 0,
+            "ps_count": 0,
+            "mean_completion_step": null,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_09_B3",
+                    "instruction": "If the book falls on the floor, please pick it up and put it back neatly.",
+                    "success_condition": {
+                        "target_class": "book",
+                        "destination_class": "desk",
+                        "relation": "ON",
+                        "min_count": 3
+                    },
+                    "currently_satisfied": false,
+                    "ever_satisfied": false,
+                    "first_satisfied_step": null,
+                    "completed": false,
+                    "completion_step": null
+                }
+            ],
+            "scenario_id": "T5_G2_09_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_09",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_09",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": false,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Agent stagnated (15 steps without progress)",
+            "steps_executed": 15,
+            "execution_time_seconds": 52.76,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 9,
+                    "question": "I’m holding the book, but placing it onto the bookshelf is failing as impossible. Should I place it on a different nearby surface instead?",
+                    "answer": "Place it on the living-room desk."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 6.700552,
+                    "input_tokens": 2180,
+                    "output_tokens": 592,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2772,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 33.173138,
+                    "input_tokens": 80300,
+                    "output_tokens": 2454,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 82754,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005751,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 15,
+                    "successful_calls": 15,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 4.557184,
+                    "input_tokens": 3432,
+                    "output_tokens": 196,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3628,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 4.084817,
+                    "input_tokens": 2732,
+                    "output_tokens": 433,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 3165,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.724057,
+                    "input_tokens": 429,
+                    "output_tokens": 23,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 452,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 3.0,
+            "ps_sum": 3,
+            "ps_count": 1,
+            "mean_completion_step": 3.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_10_B3",
+                    "instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+                    "success_condition": {
+                        "target_class": "stove",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 3,
+                    "completed": true,
+                    "completion_step": 3
+                }
+            ],
+            "scenario_id": "T5_G2_10_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "G2_10",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "G2_10",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 3,
+            "execution_time_seconds": 16.92,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 1,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "What exact safe state should the stove be in?",
+                    "answer": "Turn it off."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 7.108585,
+                    "input_tokens": 2176,
+                    "output_tokens": 669,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 2845,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 4.071807,
+                    "input_tokens": 8577,
+                    "output_tokens": 263,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 8840,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.001134,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.261933,
+                    "input_tokens": 1006,
+                    "output_tokens": 58,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1064,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.175671,
+                    "input_tokens": 1400,
+                    "output_tokens": 32,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1432,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 1.563655,
+                    "input_tokens": 399,
+                    "output_tokens": 19,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 418,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 8.0,
+            "ps_sum": 8,
+            "ps_count": 1,
+            "mean_completion_step": 8.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_11_B3",
+                    "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+                    "success_condition": {
+                        "target_class": "mug",
+                        "destination_class": "kitchencabinet",
+                        "relation": "INSIDE",
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 8,
+                    "completed": true,
+                    "completion_step": 8
+                }
+            ],
+            "scenario_id": "T5_G2_11_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_11",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_11",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 8,
+            "execution_time_seconds": 32.22,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which specific drinkware item should I put away?",
+                    "answer": "The mug."
+                },
+                {
+                    "step": 1,
+                    "question": "Where should the mug be placed?",
+                    "answer": "Inside a kitchen cabinet."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 10.128502,
+                    "input_tokens": 3263,
+                    "output_tokens": 1063,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4326,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 11.702833,
+                    "input_tokens": 33142,
+                    "output_tokens": 853,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 33995,
+                    "call_count": 6,
+                    "successful_calls": 6,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.008115,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 8,
+                    "successful_calls": 8,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.980102,
+                    "input_tokens": 1317,
+                    "output_tokens": 80,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1397,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.764775,
+                    "input_tokens": 1451,
+                    "output_tokens": 374,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1825,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.650655,
+                    "input_tokens": 836,
+                    "output_tokens": 38,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 874,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 10.0,
+            "ps_sum": 10,
+            "ps_count": 1,
+            "mean_completion_step": 10.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_12_B3",
+                    "instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+                    "success_condition": {
+                        "target_class": "apple",
+                        "destination_class": "fridge",
+                        "relation": "INSIDE",
+                        "min_count": 2
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 10,
+                    "completed": true,
+                    "completion_step": 10
+                }
+            ],
+            "scenario_id": "T5_G2_12_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_12",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_12",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 10,
+            "execution_time_seconds": 41.39,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Where should the apples be stored?",
+                    "answer": "Inside the refrigerator."
+                },
+                {
+                    "step": 1,
+                    "question": "What is the required number of apples to store in the refrigerator?",
+                    "answer": "Both apples."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 10.280838,
+                    "input_tokens": 3261,
+                    "output_tokens": 1091,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4352,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 21.371788,
+                    "input_tokens": 39883,
+                    "output_tokens": 1256,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 41139,
+                    "call_count": 8,
+                    "successful_calls": 8,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.009085,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 10,
+                    "successful_calls": 10,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 1.491015,
+                    "input_tokens": 1402,
+                    "output_tokens": 73,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1475,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.606124,
+                    "input_tokens": 1449,
+                    "output_tokens": 315,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1764,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.433875,
+                    "input_tokens": 835,
+                    "output_tokens": 37,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 872,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 4.0,
+            "ps_sum": 4,
+            "ps_count": 1,
+            "mean_completion_step": 4.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_13_B3",
+                    "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+                    "success_condition": {
+                        "mode": "AND",
+                        "conditions": [
+                            {
+                                "target_class": "toaster",
+                                "states": [
+                                    "OFF"
+                                ],
+                                "min_count": 1
+                            },
+                            {
+                                "target_class": "coffeemaker",
+                                "states": [
+                                    "ON"
+                                ],
+                                "min_count": 1
+                            }
+                        ]
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 4,
+                    "completed": true,
+                    "completion_step": 4
+                }
+            ],
+            "scenario_id": "T5_G2_13_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_13",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_13",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 4,
+            "execution_time_seconds": 22.56,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which appliance should I adjust: the toaster or the coffee maker?",
+                    "answer": "The toaster."
+                },
+                {
+                    "step": 1,
+                    "question": "What exact state should the toaster be adjusted to?",
+                    "answer": "Turn it off."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 9.838618,
+                    "input_tokens": 3259,
+                    "output_tokens": 946,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4205,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 3.376799,
+                    "input_tokens": 9157,
+                    "output_tokens": 254,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 9411,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.003023,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 4,
+                    "successful_calls": 4,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.088705,
+                    "input_tokens": 1144,
+                    "output_tokens": 66,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1210,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 1.756018,
+                    "input_tokens": 1404,
+                    "output_tokens": 125,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1529,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.851829,
+                    "input_tokens": 843,
+                    "output_tokens": 37,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 880,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        },
+        {
+            "task_total": 1,
+            "task_completed": 1,
+            "sr": 1.0,
+            "ps": 4.0,
+            "ps_sum": 4,
+            "ps_count": 1,
+            "mean_completion_step": 4.0,
+            "tasks": [
+                {
+                    "task_id": "T5_G2_14_B3",
+                    "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+                    "success_condition": {
+                        "target_class": "character",
+                        "destination_class": "juice",
+                        "relation": "HOLDS_RH|HOLDS_LH",
+                        "destination_states": [
+                            "COLD"
+                        ],
+                        "min_count": 1
+                    },
+                    "currently_satisfied": true,
+                    "ever_satisfied": true,
+                    "first_satisfied_step": 4,
+                    "completed": true,
+                    "completion_step": 4
+                }
+            ],
+            "scenario_id": "T5_G2_14_B3",
+            "table_id": "table5",
+            "experiment_axis": "clarification_budget",
+            "sample_id": "T5_G2_14",
+            "setting": "B3",
+            "extension_type": null,
+            "ablation_profile": null,
+            "source_scenario_id": "T5_G2_14",
+            "framework_revision": "table5-structured-atomic-sim-user-v2",
+            "result_source": null,
+            "previous_attempt_path": null,
+            "method": "robostate",
+            "model": "gpt-5.4-mini",
+            "success": true,
+            "run_status": "complete",
+            "valid_for_aggregation": true,
+            "reason": "Goal Reached",
+            "steps_executed": 4,
+            "execution_time_seconds": 23.41,
+            "dynamic_event_counts": {},
+            "dynamic_event_trace": [],
+            "clarification_budget": 3,
+            "clarification_count": 2,
+            "clarification_trace": [
+                {
+                    "step": 0,
+                    "question": "Which drink should I bring?",
+                    "answer": "The juice."
+                },
+                {
+                    "step": 1,
+                    "question": "What temperature should the juice be?",
+                    "answer": "Cold."
+                }
+            ],
+            "simulated_user_model": "gpt-5.4-mini",
+            "module_stats": {
+                "goal_reasoner": {
+                    "duration_seconds": 9.013461,
+                    "input_tokens": 3262,
+                    "output_tokens": 828,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 4090,
+                    "call_count": 3,
+                    "successful_calls": 3,
+                    "failed_calls": 0
+                },
+                "llm_executor": {
+                    "duration_seconds": 4.469825,
+                    "input_tokens": 10521,
+                    "output_tokens": 293,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 10814,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                },
+                "memory": {
+                    "duration_seconds": 0.005711,
+                    "input_tokens": 0,
+                    "output_tokens": 0,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 0,
+                    "call_count": 4,
+                    "successful_calls": 4,
+                    "failed_calls": 0
+                },
+                "perception_filter": {
+                    "duration_seconds": 2.334185,
+                    "input_tokens": 1202,
+                    "output_tokens": 113,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1315,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "sdg_planner": {
+                    "duration_seconds": 2.647343,
+                    "input_tokens": 1379,
+                    "output_tokens": 361,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 1740,
+                    "call_count": 1,
+                    "successful_calls": 1,
+                    "failed_calls": 0
+                },
+                "simulated_user": {
+                    "duration_seconds": 2.518482,
+                    "input_tokens": 826,
+                    "output_tokens": 35,
+                    "reasoning_tokens": 0,
+                    "total_tokens": 861,
+                    "call_count": 2,
+                    "successful_calls": 2,
+                    "failed_calls": 0
+                }
+            }
+        }
+    ],
+    "aggregate_task_completed": 22,
+    "aggregate_task_total": 36,
+    "aggregate_ps_count": 22,
+    "aggregate_sr": 0.6111,
+    "aggregate_ps": 4.9545
+}

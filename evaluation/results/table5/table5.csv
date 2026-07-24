@@ -1,0 +1,5 @@
+budget,sr,sr_percent,sr_numerator,sr_denominator,ClarCost,clarification_total,delta_sr_per_clarification,complete
+0,0.222222,22.22,2,9,0.0,0,n/a,True
+1,0.666667,66.67,6,9,0.8889,8,50.0,True
+2,0.888889,88.89,8,9,1.3333,12,50.0,True
+3,0.888889,88.89,8,9,1.4444,13,46.1538,True

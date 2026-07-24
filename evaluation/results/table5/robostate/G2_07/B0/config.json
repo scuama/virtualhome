@@ -1,0 +1,39 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If you see the mug on the table, put it where it belongs.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "mug",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        }
+    ],
+    "success_condition": {
+        "target_class": "mug",
+        "destination_class": "kitchencabinet",
+        "relation": "INSIDE",
+        "min_count": 1
+    },
+    "simulated_user_intent": "Put the mug from the kitchen table inside a kitchen cabinet.",
+    "max_steps": 45,
+    "scenario_id": "T5_G2_07_B0",
+    "source_scenario_id": "G2_07",
+    "source_config": "configs/source_tasks/g_class/G2_07.json",
+    "source_sha256": "78677c6078ee1a12016ad19eb4a7f8fd0fe756e1a0ad116f52dd6e737a488253",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_07",
+    "setting": "B0",
+    "clarification_budget": 0,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-structured-atomic-sim-user-v2",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 38.97
+}

@@ -1,0 +1,106 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 1.0,
+    "ps_sum": 1,
+    "ps_count": 1,
+    "mean_completion_step": 1.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_14_B0",
+            "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "juice",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "destination_states": [
+                    "COLD"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 1,
+            "completed": true,
+            "completion_step": 1
+        }
+    ],
+    "scenario_id": "T5_G2_14_B0",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_14",
+    "setting": "B0",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_14",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 1,
+    "execution_time_seconds": 11.32,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 0,
+    "clarification_count": 0,
+    "clarification_trace": [],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 3.709755,
+            "input_tokens": 1089,
+            "output_tokens": 359,
+            "reasoning_tokens": 0,
+            "total_tokens": 1448,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 2.013168,
+            "input_tokens": 5639,
+            "output_tokens": 130,
+            "reasoning_tokens": 0,
+            "total_tokens": 5769,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.000362,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 2.013285,
+            "input_tokens": 1435,
+            "output_tokens": 101,
+            "reasoning_tokens": 0,
+            "total_tokens": 1536,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 3.42831,
+            "input_tokens": 1383,
+            "output_tokens": 596,
+            "reasoning_tokens": 0,
+            "total_tokens": 1979,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

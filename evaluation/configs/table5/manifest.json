@@ -1,0 +1,292 @@
+{
+  "table_id": "table5",
+  "framework_revision": "table5-structured-atomic-sim-user-v2",
+  "method": "robostate",
+  "evaluation_model": "gpt-5.4-mini",
+  "simulated_user_model": "gpt-5.4-mini",
+  "budgets": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "scenarios": [
+    {
+      "source_scenario_id": "G2_06",
+      "source_config": "configs/source_tasks/g_class/G2_06.json",
+      "source_sha256": "50c77e3db2a2435b895265324e38f8873d6ce27251c7d90f3fb852d79e7413e7",
+      "simulated_user_intent": "Turn on the table lamp on the coffee table."
+    },
+    {
+      "source_scenario_id": "G2_07",
+      "source_config": "configs/source_tasks/g_class/G2_07.json",
+      "source_sha256": "78677c6078ee1a12016ad19eb4a7f8fd0fe756e1a0ad116f52dd6e737a488253",
+      "simulated_user_intent": "Put the mug from the kitchen table inside a kitchen cabinet."
+    },
+    {
+      "source_scenario_id": "G2_08",
+      "source_config": "configs/source_tasks/g_class/G2_08.json",
+      "source_sha256": "bddf1858558f0b0c13b296f1de33e8fe1c985b20ec6690660318723d4a5ed7ad",
+      "simulated_user_intent": "Bring me the hot milk from the kitchen table."
+    },
+    {
+      "source_scenario_id": "G2_09",
+      "source_config": "configs/source_tasks/g_class/G2_09.json",
+      "source_sha256": "a7a78d6da456dcb59a67286418a67e5fb025357e792baa64d2f2322c04e6559d",
+      "simulated_user_intent": "Put all three books from the living-room floor on the living-room desk."
+    },
+    {
+      "source_scenario_id": "G2_10",
+      "source_config": "configs/source_tasks/g_class/G2_10.json",
+      "source_sha256": "07179317ea000eb0fc9a76ab850730fd6981b45077ca25ec18d07c91de962bbc",
+      "simulated_user_intent": "Turn off the stove."
+    },
+    {
+      "source_scenario_id": "T5_G2_11",
+      "source_config": "configs/table5/sources/T5_G2_11.json",
+      "source_sha256": "3ab61326bd76e9112e442992eda6506894a8191a91f27993cb212cead12f7b26",
+      "simulated_user_intent": "Put one mug from the kitchen table inside a kitchen cabinet."
+    },
+    {
+      "source_scenario_id": "T5_G2_12",
+      "source_config": "configs/table5/sources/T5_G2_12.json",
+      "source_sha256": "8e00356a209d16eae39e294d7b193b5f28452b58975fd2e1af39a9c1712e8aac",
+      "simulated_user_intent": "Put both apples from the kitchen table inside the refrigerator."
+    },
+    {
+      "source_scenario_id": "T5_G2_13",
+      "source_config": "configs/table5/sources/T5_G2_13.json",
+      "source_sha256": "defb9103bddccfe63ce72a96ce67c56b2e7bc902e3325634875bdf958fe1e105",
+      "simulated_user_intent": "Turn off the toaster and leave the coffee maker on."
+    },
+    {
+      "source_scenario_id": "T5_G2_14",
+      "source_config": "configs/table5/sources/T5_G2_14.json",
+      "source_sha256": "c411f7b2491d71fb6932d62d6bc499e64d686aed4ad7006c16b8bbe04d99a7a8",
+      "simulated_user_intent": "Bring me the cold juice from the kitchen table."
+    }
+  ],
+  "expected_runnable_episodes": 36,
+  "legacy_b1_candidates": {
+    "G2_07": "results/robostate/raw/run_G2_07.md",
+    "G2_10": "results/robostate/raw/run_G2_10.md"
+  },
+  "runnable_configs": [
+    {
+      "scenario_id": "T5_G2_06_B0",
+      "source_scenario_id": "G2_06",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/G2_06.json"
+    },
+    {
+      "scenario_id": "T5_G2_06_B1",
+      "source_scenario_id": "G2_06",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/G2_06.json"
+    },
+    {
+      "scenario_id": "T5_G2_06_B2",
+      "source_scenario_id": "G2_06",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/G2_06.json"
+    },
+    {
+      "scenario_id": "T5_G2_06_B3",
+      "source_scenario_id": "G2_06",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/G2_06.json"
+    },
+    {
+      "scenario_id": "T5_G2_07_B0",
+      "source_scenario_id": "G2_07",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/G2_07.json"
+    },
+    {
+      "scenario_id": "T5_G2_07_B1",
+      "source_scenario_id": "G2_07",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/G2_07.json"
+    },
+    {
+      "scenario_id": "T5_G2_07_B2",
+      "source_scenario_id": "G2_07",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/G2_07.json"
+    },
+    {
+      "scenario_id": "T5_G2_07_B3",
+      "source_scenario_id": "G2_07",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/G2_07.json"
+    },
+    {
+      "scenario_id": "T5_G2_08_B0",
+      "source_scenario_id": "G2_08",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/G2_08.json"
+    },
+    {
+      "scenario_id": "T5_G2_08_B1",
+      "source_scenario_id": "G2_08",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/G2_08.json"
+    },
+    {
+      "scenario_id": "T5_G2_08_B2",
+      "source_scenario_id": "G2_08",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/G2_08.json"
+    },
+    {
+      "scenario_id": "T5_G2_08_B3",
+      "source_scenario_id": "G2_08",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/G2_08.json"
+    },
+    {
+      "scenario_id": "T5_G2_09_B0",
+      "source_scenario_id": "G2_09",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/G2_09.json"
+    },
+    {
+      "scenario_id": "T5_G2_09_B1",
+      "source_scenario_id": "G2_09",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/G2_09.json"
+    },
+    {
+      "scenario_id": "T5_G2_09_B2",
+      "source_scenario_id": "G2_09",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/G2_09.json"
+    },
+    {
+      "scenario_id": "T5_G2_09_B3",
+      "source_scenario_id": "G2_09",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/G2_09.json"
+    },
+    {
+      "scenario_id": "T5_G2_10_B0",
+      "source_scenario_id": "G2_10",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/G2_10.json"
+    },
+    {
+      "scenario_id": "T5_G2_10_B1",
+      "source_scenario_id": "G2_10",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/G2_10.json"
+    },
+    {
+      "scenario_id": "T5_G2_10_B2",
+      "source_scenario_id": "G2_10",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/G2_10.json"
+    },
+    {
+      "scenario_id": "T5_G2_10_B3",
+      "source_scenario_id": "G2_10",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/G2_10.json"
+    },
+    {
+      "scenario_id": "T5_G2_11_B0",
+      "source_scenario_id": "T5_G2_11",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/T5_G2_11.json"
+    },
+    {
+      "scenario_id": "T5_G2_11_B1",
+      "source_scenario_id": "T5_G2_11",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/T5_G2_11.json"
+    },
+    {
+      "scenario_id": "T5_G2_11_B2",
+      "source_scenario_id": "T5_G2_11",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/T5_G2_11.json"
+    },
+    {
+      "scenario_id": "T5_G2_11_B3",
+      "source_scenario_id": "T5_G2_11",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/T5_G2_11.json"
+    },
+    {
+      "scenario_id": "T5_G2_12_B0",
+      "source_scenario_id": "T5_G2_12",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/T5_G2_12.json"
+    },
+    {
+      "scenario_id": "T5_G2_12_B1",
+      "source_scenario_id": "T5_G2_12",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/T5_G2_12.json"
+    },
+    {
+      "scenario_id": "T5_G2_12_B2",
+      "source_scenario_id": "T5_G2_12",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/T5_G2_12.json"
+    },
+    {
+      "scenario_id": "T5_G2_12_B3",
+      "source_scenario_id": "T5_G2_12",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/T5_G2_12.json"
+    },
+    {
+      "scenario_id": "T5_G2_13_B0",
+      "source_scenario_id": "T5_G2_13",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/T5_G2_13.json"
+    },
+    {
+      "scenario_id": "T5_G2_13_B1",
+      "source_scenario_id": "T5_G2_13",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/T5_G2_13.json"
+    },
+    {
+      "scenario_id": "T5_G2_13_B2",
+      "source_scenario_id": "T5_G2_13",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/T5_G2_13.json"
+    },
+    {
+      "scenario_id": "T5_G2_13_B3",
+      "source_scenario_id": "T5_G2_13",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/T5_G2_13.json"
+    },
+    {
+      "scenario_id": "T5_G2_14_B0",
+      "source_scenario_id": "T5_G2_14",
+      "clarification_budget": 0,
+      "config_path": "configs/table5/runs/B0/T5_G2_14.json"
+    },
+    {
+      "scenario_id": "T5_G2_14_B1",
+      "source_scenario_id": "T5_G2_14",
+      "clarification_budget": 1,
+      "config_path": "configs/table5/runs/B1/T5_G2_14.json"
+    },
+    {
+      "scenario_id": "T5_G2_14_B2",
+      "source_scenario_id": "T5_G2_14",
+      "clarification_budget": 2,
+      "config_path": "configs/table5/runs/B2/T5_G2_14.json"
+    },
+    {
+      "scenario_id": "T5_G2_14_B3",
+      "source_scenario_id": "T5_G2_14",
+      "clarification_budget": 3,
+      "config_path": "configs/table5/runs/B3/T5_G2_14.json"
+    }
+  ]
+}

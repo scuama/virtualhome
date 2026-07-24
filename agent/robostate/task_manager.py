@@ -43,7 +43,6 @@ class TaskState:
     cooldown_until: int = 0
     first_activated_step: Optional[int] = None
     last_activated_step: Optional[int] = None
-    clarification_asked: bool = False
     planner_feedback: List[dict] = field(default_factory=list)
     planning_failed: bool = False
 

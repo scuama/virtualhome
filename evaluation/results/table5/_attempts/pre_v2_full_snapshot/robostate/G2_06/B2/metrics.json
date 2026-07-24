@@ -1,0 +1,105 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_06_B2",
+            "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_06_B2",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_06",
+    "setting": "B2",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_06",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 18.01,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 2,
+    "clarification_count": 2,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "What exact lamp state should I set it to?",
+            "answer": "Turn it on."
+        },
+        {
+            "step": 1,
+            "question": "What specific setting should the table lamp be adjusted to?",
+            "answer": "I have no additional preference."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 8.675431,
+            "input_tokens": 3263,
+            "output_tokens": 790,
+            "reasoning_tokens": 0,
+            "total_tokens": 4053,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004964,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 3.376026,
+            "input_tokens": 2632,
+            "output_tokens": 331,
+            "reasoning_tokens": 0,
+            "total_tokens": 2963,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 2.621341,
+            "input_tokens": 831,
+            "output_tokens": 38,
+            "reasoning_tokens": 0,
+            "total_tokens": 869,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

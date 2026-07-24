@@ -11,6 +11,8 @@ CRITICAL RULES FOR DEEP INTENT:
 3. When considering alternatives, restrict your thoughts to typical objects found in an indoor/household environment.
 4. ALTERNATIVES SCOPE: Describe practical and closely related substitutes. If the exact object is unavailable, suggest items that share the same primary physical category and function (e.g., if the user wants an apple, suggest other fruits; if the user wants a burger, suggest other ready-to-eat cooked foods). Do NOT suggest wildly different objects or abstract concepts.
 5. AMBIGUITY & VAGUE INSTRUCTION CHECK: A robot must operate in a deterministic physical world. If the instruction contains semantic ambiguities that prevent determining exact physical targets or final physical states, you MUST ask for clarification by setting `is_instruction_obviously_vague` to true. 
+6. ATOMIC CLARIFICATION: Ask about exactly one missing detail at a time. Never combine questions about the target object, quantity, destination, target state, or temperature in one clarification question. After receiving one answer, analyze the revised instruction again and ask another single question only if a separate ambiguity remains.
+7. DO NOT INFER A STORAGE DESTINATION: Phrases such as "put it away", "where it belongs", "proper place", "appropriate place", or "store it properly" do not identify a deterministic physical destination. If the exact support or container is still absent after another detail was clarified, keep `is_instruction_obviously_vague` true and ask one destination-only question.
 Triggers for clarification include:
 - Unresolved pronouns (e.g., "it", "that thing", "this one", "use that") where the context does not make the referent obvious.
 - Subjective adjectives or human-judgment states (e.g., "make it better", "adjust to the right level", "appropriate temperature", "clean enough") where the exact thermodynamic (HOT/COLD), topological (INSIDE/ON), or mechanical state (OPEN/CLOSED) is undefined. A robot cannot guess what "appropriate" means; it needs concrete states.
@@ -201,4 +203,3 @@ SDG_USER_PROMPT = """
 Please generate a complete State Dependency Graph (SDG) for the following user task:
 Task: {goal_description}
 """
-

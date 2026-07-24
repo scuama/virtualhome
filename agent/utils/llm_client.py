@@ -151,7 +151,15 @@ class LLMClient:
         except Exception as exc:
             raise RuntimeError(f"OpenAI request failed: {exc}") from exc
 
-    def generate_response(self, system_prompt: str, user_prompt: str, response_format="text", model_override=None, module_name=None) -> str:
+    def generate_response(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        response_format="text",
+        model_override=None,
+        module_name=None,
+        temperature=None,
+    ) -> str:
         """
         调用纯文本 LLM 接口
         """
@@ -164,10 +172,24 @@ class LLMClient:
             "model": model_override if model_override else self.model_name,
             "messages": messages,
         }
-        kwargs["max_tokens"] = 4096
+        token_limit_field = (
+            "max_completion_tokens"
+            if (
+                "gpt-5" in kwargs["model"]
+                and not (
+                    self.base_url
+                    and "openrouter.ai" in self.base_url
+                )
+            )
+            else "max_tokens"
+        )
+        kwargs[token_limit_field] = 4096
         
-        # Only add temperature if it's not a gpt-5 model (which often strictly requires default)
-        if "gpt-5" not in kwargs["model"]:
+        # Only add temperature if it is explicitly requested or the model accepts
+        # the historical default. Some GPT-5 endpoints require their API default.
+        if temperature is not None:
+            kwargs["temperature"] = float(temperature)
+        elif "gpt-5" not in kwargs["model"]:
             kwargs["temperature"] = 0.2
             
         if response_format == "json_object":
@@ -199,7 +221,7 @@ class LLMClient:
                 result, usage, provider = self._request_with_fallback(payload={
                     "model": kwargs["model"],
                     "messages": kwargs["messages"],
-                    "max_tokens": kwargs["max_tokens"],
+                    token_limit_field: kwargs[token_limit_field],
                     **({"temperature": kwargs["temperature"]} if "temperature" in kwargs else {}),
                     **({"response_format": {"type": "json_object"}} if response_format == "json_object" else {}),
                     **kwargs.get("extra_body", {}),

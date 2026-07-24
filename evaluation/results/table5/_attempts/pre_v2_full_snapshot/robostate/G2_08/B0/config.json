@@ -1,0 +1,72 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If you see milk, bring over a cup of it at the right temperature.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        },
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "add_states": [
+                "COLD"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "remove_states": [
+                "HOT"
+            ]
+        },
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "add_states": [
+                "HOT"
+            ],
+            "instance_filter": {
+                "index": 1
+            },
+            "remove_states": [
+                "COLD"
+            ]
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "milk",
+        "relation": "HOLDS_RH",
+        "min_count": 1,
+        "destination_states": [
+            "HOT"
+        ]
+    },
+    "simulated_user_intent": "Bring me the hot milk from the kitchen table.",
+    "max_steps": 45,
+    "scenario_id": "T5_G2_08_B0",
+    "source_scenario_id": "G2_08",
+    "source_config": "configs/source_tasks/g_class/G2_08.json",
+    "source_sha256": "bddf1858558f0b0c13b296f1de33e8fe1c985b20ec6690660318723d4a5ed7ad",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_08",
+    "setting": "B0",
+    "clarification_budget": 0,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 11.33
+}

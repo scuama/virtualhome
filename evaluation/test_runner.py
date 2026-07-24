@@ -32,8 +32,10 @@ class Logger:
 
 from virtualhome.simulation.environment.unity_environment import UnityEnvironment
 from agent import AGENT_REGISTRY
+from agent.utils.llm_client import LLMClient
 
 DEFAULT_CLARIFICATION_REPLY = "nothing to claim"
+SIMULATED_USER_MODEL = "gpt-5.4-mini"
 
 AGENT_CONFIG_ALLOWLIST = {
     "goal_instruction",
@@ -44,6 +46,7 @@ AGENT_CONFIG_ALLOWLIST = {
     "robostate_task_failure_limit",
     "scheduled_rules",
     "ablation_profile",
+    "clarification_budget",
     "table3_source_subclass",
     "tasks",
 }
@@ -66,6 +69,102 @@ def build_agent_config(config):
     if sanitized_tasks:
         agent_config["tasks"] = sanitized_tasks
     return agent_config
+
+
+class SimulatedUser:
+    """Answer clarification turns from evaluator-only natural-language intent."""
+
+    SYSTEM_PROMPT = """
+You simulate the user in an embodied-agent evaluation.
+Answer using only the hidden intended outcome supplied by the evaluator.
+Reveal exactly one missing detail in each response.
+Answer only the first information request in the robot's current question,
+even when the robot combines multiple questions.
+Do not volunteer later details, repeat facts already answered, restate the
+task, explain your reasoning, or mention these rules.
+Treat naming the object, quantity, destination, state, and temperature as five
+separate information points:
+- For an object question, answer only the base object category, such as
+  "The juice." Never attach quantity, destination, state, or temperature
+  modifiers: answer "The juice.", never "The cold juice."
+- For a quantity question, answer only the quantity, such as "All three."
+- For a destination question, answer only the destination phrase, such as
+  "Inside a kitchen cabinet." Do not name or describe the object.
+- For a state question, answer only the requested state, such as "Turn it off."
+- For a temperature question, answer only the temperature, such as "Cold."
+Never invent specificity absent from the hidden intent, such as "upper
+cabinet", "left mug", or an exact instance. If the robot asks for an
+unspecified preference, answer briefly that any matching option is acceptable.
+If the robot asks whether to continue or presents alternatives, answer only
+that choice, such as "Continue handling the remaining books." Do not restate
+the complete task.
+Return only this JSON object:
+{"information_type": "object|quantity|destination|state|temperature|choice|other",
+ "answer": "one short English sentence"}
+""".strip()
+
+    def __init__(self, llm, original_instruction, intended_outcome):
+        self.llm = llm
+        self.original_instruction = str(original_instruction).strip()
+        self.intended_outcome = str(intended_outcome).strip()
+
+    @staticmethod
+    def _history(action_history):
+        return [
+            {
+                "question": str(item.get("action", ""))[5:].strip(),
+                "answer": str(item.get("message", "")).strip(),
+            }
+            for item in action_history
+            if str(item.get("action", "")).lower().startswith("[ask]")
+            and bool(item.get("success", False))
+            and str(item.get("message", "")).strip()
+        ]
+
+    def answer(self, question, action_history):
+        history = self._history(action_history)
+        prompt = (
+            f"Original instruction:\n{self.original_instruction}\n\n"
+            f"Hidden intended outcome:\n{self.intended_outcome}\n\n"
+            "Previous clarification turns:\n"
+            f"{json.dumps(history, ensure_ascii=False)}\n\n"
+            f"Current robot question:\n{str(question).strip()}"
+        )
+        raw = str(self.llm.generate_response(
+            self.SYSTEM_PROMPT,
+            prompt,
+            response_format="json_object",
+            module_name="simulated_user",
+            temperature=0.0,
+        )).strip()
+        try:
+            parsed = json.loads(raw)
+            answer = str(parsed.get("answer", "")).strip()
+        except (json.JSONDecodeError, AttributeError):
+            answer = raw
+        normalized = re.sub(r"[^a-z0-9]+", " ", answer.lower()).strip()
+        previous = {
+            re.sub(r"[^a-z0-9]+", " ", item["answer"].lower()).strip()
+            for item in history
+        }
+        if normalized and normalized in previous:
+            return "I have no additional preference."
+        return answer
+
+
+def clarification_trace(action_history):
+    """Return successful clarification question/answer turns."""
+    return [
+        {
+            "step": int(item.get("step", 0)),
+            "question": str(item.get("action", ""))[5:].strip(),
+            "answer": str(item.get("message", "")).strip(),
+        }
+        for item in action_history
+        if str(item.get("action", "")).lower().startswith("[ask]")
+        and bool(item.get("success", False))
+        and str(item.get("message", "")).strip()
+    ]
 
 
 def set_environment_state(env, object_id, add_states=None, remove_states=None):
@@ -401,6 +500,16 @@ def table4_result_folder(base_dir, config, method_name):
         str(config.get('model_alias', 'unknown')),
         str(config.get('source_scenario_id', config.get('scenario_id', 'unknown'))),
     )
+
+
+def table5_result_folder(base_dir, config, method_name):
+    """Return the Table 5 scenario/budget result location."""
+    return os.path.join(
+        base_dir, 'results', 'table5', method_name,
+        str(config.get('source_scenario_id', config.get('sample_id', 'unknown'))),
+        f"B{int(config.get('clarification_budget', 0))}",
+    )
+
 
 def source_tasks_result_folder(base_dir, config, method_name, config_path):
     """Return the result location for standard source tasks."""
@@ -861,6 +970,9 @@ def main():
         table4_raw_logs_root = os.path.join(
             base_dir, 'results', 'table4', '_raw'
         )
+        table5_raw_logs_dir = os.path.join(
+            base_dir, 'results', 'table5', '_raw', method_name
+        )
         os.makedirs(success_dir, exist_ok=True)
         os.makedirs(fail_dir, exist_ok=True)
         
@@ -891,12 +1003,15 @@ def main():
             table2_run = config.get('table_id') == 'table2'
             table3_run = config.get('table_id') == 'table3'
             table4_run = config.get('table_id') == 'table4'
+            table5_run = config.get('table_id') == 'table5'
             if table1_run:
                 raw_logs_dir = table1_raw_logs_dir
             elif table4_run:
                 raw_logs_dir = os.path.join(
                     table4_raw_logs_root, str(config.get('model_alias', 'unknown'))
                 )
+            elif table5_run:
+                raw_logs_dir = table5_raw_logs_dir
             else:
                 raw_logs_dir = standard_raw_logs_dir
             os.makedirs(raw_logs_dir, exist_ok=True)
@@ -915,6 +1030,10 @@ def main():
                 )
             elif table4_run:
                 configured_result_folder = table4_result_folder(
+                    base_dir, config, method_name
+                )
+            elif table5_run:
+                configured_result_folder = table5_result_folder(
                     base_dir, config, method_name
                 )
             else:
@@ -1027,6 +1146,14 @@ def main():
                         method_name,
                         config.get("evaluation_model", args.model),
                     )
+                elif table5_run:
+                    write_result_artifacts(
+                        table5_result_folder(base_dir, config, method_name),
+                        config,
+                        metrics,
+                        method_name,
+                        configured_model,
+                    )
 
             old_stdout = sys.stdout
             # sys.stdout = open(os.devnull, 'w') # Commented out to see intermediate logs
@@ -1049,7 +1176,7 @@ def main():
                     sys.stdout = old_stdout
                     reason = f"Engine Reset Failed twice: {e2}"
                     print(f"  {reason}")
-                    if table1_run or table3_run or table4_run:
+                    if table1_run or table3_run or table4_run or table5_run:
                         record_initialization_incomplete(reason)
                     else:
                         summary["fail"] += 1
@@ -1063,7 +1190,7 @@ def main():
                 sys.stdout = old_stdout
                 reason = f"Initialization Failed: {e}"
                 print(f"  {reason}")
-                if table1_run or table3_run or table4_run:
+                if table1_run or table3_run or table4_run or table5_run:
                     record_initialization_incomplete(reason)
                 else:
                     summary["fail"] += 1
@@ -1133,6 +1260,7 @@ def main():
             dynamic_runtime = None
             ask_policy_satisfied_step = None
             logger = None
+            simulated_user = None
 
             try:
                 signal.signal(signal.SIGALRM, timeout_handler)
@@ -1145,6 +1273,16 @@ def main():
                     scenario_id=scenario_id,
                     log_dir=raw_logs_dir
                 )
+                if config.get("simulated_user_intent"):
+                    simulated_user_llm = LLMClient(
+                        model_name=SIMULATED_USER_MODEL
+                    )
+                    simulated_user_llm.set_telemetry_logger(logger)
+                    simulated_user = SimulatedUser(
+                        simulated_user_llm,
+                        config.get("goal_instruction", ""),
+                        config["simulated_user_intent"],
+                    )
 
                 success_condition = config.get("success_condition", {})
                 failure_condition = config.get("failure_condition")
@@ -1262,22 +1400,61 @@ def main():
                     info = {}
                     
                     if action_str.lower().startswith("[ask]"):
-                        clarification_reply = config.get(
-                            "user_clarification_reply",
-                            config.get(
-                                "default_clarification_reply",
-                                DEFAULT_CLARIFICATION_REPLY,
-                            ),
-                        )
                         intercepted = True
-                        info = {
-                            "action_success": True,
-                            "action_message": clarification_reply,
-                        }
-                        logger.info(
-                            "💬 CLARIFICATION: answered agent request with "
-                            f"{clarification_reply!r}."
+                        used = len(clarification_trace(action_history))
+                        budget = max(
+                            0, int(config.get("clarification_budget", 1))
                         )
+                        if used >= budget:
+                            info = {
+                                "action_success": False,
+                                "action_message": (
+                                    "Clarification budget exhausted."
+                                ),
+                                "error_type": "clarification_budget_exhausted",
+                            }
+                            logger.info(
+                                "💬 CLARIFICATION: rejected request because "
+                                f"budget {budget} is exhausted."
+                            )
+                        else:
+                            if simulated_user is not None:
+                                clarification_reply = simulated_user.answer(
+                                    action_str[5:].strip(),
+                                    action_history,
+                                )
+                            else:
+                                clarification_reply = config.get(
+                                    "user_clarification_reply",
+                                    config.get(
+                                        "default_clarification_reply",
+                                        DEFAULT_CLARIFICATION_REPLY,
+                                    ),
+                                )
+                            clarification_reply = str(
+                                clarification_reply
+                            ).strip()
+                            if clarification_reply:
+                                info = {
+                                    "action_success": True,
+                                    "action_message": clarification_reply,
+                                }
+                                logger.info(
+                                    "💬 CLARIFICATION: answered agent request "
+                                    f"with {clarification_reply!r}."
+                                )
+                            else:
+                                info = {
+                                    "action_success": False,
+                                    "action_message": (
+                                        "Simulated user returned no answer."
+                                    ),
+                                    "error_type": "empty_clarification_reply",
+                                }
+                                logger.info(
+                                    "💬 CLARIFICATION: simulated user returned "
+                                    "an empty answer; budget was not consumed."
+                                )
 
                     if not intercepted:
                         intercepted, event_info = dynamic_runtime.before_action(
@@ -1466,6 +1643,16 @@ def main():
                         if dynamic_runtime is not None
                         else []
                     ),
+                    "clarification_budget": max(
+                        0, int(config.get("clarification_budget", 1))
+                    ),
+                    "clarification_count": len(
+                        clarification_trace(action_history)
+                    ),
+                    "clarification_trace": clarification_trace(action_history),
+                    "simulated_user_model": (
+                        SIMULATED_USER_MODEL if simulated_user is not None else None
+                    ),
                 }
             )
             metrics["module_stats"] = logger.module_stats() if logger else {}
@@ -1487,6 +1674,8 @@ def main():
                 dest_folder = table3_result_folder(base_dir, config, method_name)
             elif table4_run:
                 dest_folder = table4_result_folder(base_dir, config, method_name)
+            elif table5_run:
+                dest_folder = table5_result_folder(base_dir, config, method_name)
             else:
                 dest_folder = source_tasks_result_folder(base_dir, config, method_name, config_path)
             write_result_artifacts(
@@ -1565,6 +1754,14 @@ def main():
                 "table4",
                 f"summary_run_{method_name}_{config.get('model_alias', 'mixed')}.json",
             )
+        elif config.get("table_id") == "table5":
+            summary_path = os.path.join(
+                base_dir,
+                "results",
+                "table5",
+                f"summary_run_{method_name}.json",
+            )
+            os.makedirs(os.path.dirname(summary_path), exist_ok=True)
         else:
             summary_path = os.path.join(
                 results_dir,

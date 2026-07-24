@@ -1,0 +1,122 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 3.0,
+    "ps_sum": 3,
+    "ps_count": 1,
+    "mean_completion_step": 3.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_08_B2",
+            "instruction": "If you see milk, bring over a cup of it at the right temperature.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "milk",
+                "relation": "HOLDS_RH",
+                "min_count": 1,
+                "destination_states": [
+                    "HOT"
+                ]
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        }
+    ],
+    "scenario_id": "T5_G2_08_B2",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_08",
+    "setting": "B2",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_08",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 3,
+    "execution_time_seconds": 18.94,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 2,
+    "clarification_count": 1,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "What temperature should the cup of milk be brought at?",
+            "answer": "Hot."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 6.114068,
+            "input_tokens": 2174,
+            "output_tokens": 631,
+            "reasoning_tokens": 0,
+            "total_tokens": 2805,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 4.633024,
+            "input_tokens": 10763,
+            "output_tokens": 338,
+            "reasoning_tokens": 0,
+            "total_tokens": 11101,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.00182,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.51072,
+            "input_tokens": 1423,
+            "output_tokens": 99,
+            "reasoning_tokens": 0,
+            "total_tokens": 1522,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 4.114747,
+            "input_tokens": 1382,
+            "output_tokens": 586,
+            "reasoning_tokens": 0,
+            "total_tokens": 1968,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 1.25465,
+            "input_tokens": 345,
+            "output_tokens": 5,
+            "reasoning_tokens": 0,
+            "total_tokens": 350,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

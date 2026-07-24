@@ -41,6 +41,7 @@ class LLMExecutor:
         action_history,
         scheduled_rules=None,
         allow_ask=True,
+        clarifications_remaining=0,
         task_context=None,
         planner_feedback=None,
     ):
@@ -69,7 +70,12 @@ class LLMExecutor:
         rules_str = "\n".join([f"- {r}" for r in active_rules]) if active_rules else "None"
         
         if allow_ask:
-            clarification_rule = "Clarification is still available once if genuinely required."
+            clarification_rule = (
+                f"{int(clarifications_remaining)} clarification response(s) remain. "
+                "Ask only one clarification question about one missing detail at "
+                "a time. Do not combine object, quantity, destination, state, or "
+                "temperature questions in one [ask]."
+            )
         elif not self.policy.parameter_binding:
             clarification_rule = (
                 "Parameter clarification is disabled by this ablation. The [ask] "
@@ -78,10 +84,9 @@ class LLMExecutor:
             )
         else:
             clarification_rule = (
-                "A clarification reply has already been received. The [ask] "
-                "action is now strictly forbidden for the rest of this "
-                "episode. Continue autonomously using physical actions or "
-                "[wait]."
+                "No clarification responses remain in this episode. The [ask] "
+                "action is strictly forbidden. Resolve any remaining ambiguity "
+                "autonomously and continue using physical actions or [wait]."
             )
         task_context_str = json.dumps(
             task_context or {}, ensure_ascii=False
@@ -114,10 +119,9 @@ class LLMExecutor:
                 )
             else:
                 system_prompt += (
-                    "\n\nEPISODE OVERRIDE (HIGHEST PRIORITY): A clarification "
-                    "reply has already been provided. You MUST NOT output [ask] "
-                    "again under any circumstances. Choose an autonomous physical "
-                    "action or [wait]."
+                    "\n\nEPISODE OVERRIDE (HIGHEST PRIORITY): The clarification "
+                    "budget is exhausted. You MUST NOT output [ask] under any "
+                    "circumstances. Choose an autonomous physical action or [wait]."
                 )
         
         try:

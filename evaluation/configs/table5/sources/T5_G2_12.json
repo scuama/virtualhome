@@ -1,0 +1,25 @@
+{
+  "environment_id": 3,
+  "goal_instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+  "simulated_user_intent": "Put both apples from the kitchen table inside the refrigerator.",
+  "initial_relations_override": [
+    {
+      "subject": "apple",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 2
+    },
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "success_condition": {
+    "target_class": "apple",
+    "destination_class": "fridge",
+    "relation": "INSIDE",
+    "min_count": 2
+  },
+  "max_steps": 45
+}

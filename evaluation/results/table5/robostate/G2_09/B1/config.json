@@ -1,0 +1,40 @@
+{
+    "environment_id": 0,
+    "goal_instruction": "If the book falls on the floor, please pick it up and put it back neatly.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "livingroom"
+        },
+        {
+            "subject": "book",
+            "relation": "ON",
+            "object": "floor",
+            "in_room": "livingroom",
+            "count": 3
+        }
+    ],
+    "success_condition": {
+        "target_class": "book",
+        "destination_class": "desk",
+        "relation": "ON",
+        "min_count": 3
+    },
+    "simulated_user_intent": "Put all three books from the living-room floor on the living-room desk.",
+    "max_steps": 60,
+    "scenario_id": "T5_G2_09_B1",
+    "source_scenario_id": "G2_09",
+    "source_config": "configs/source_tasks/g_class/G2_09.json",
+    "source_sha256": "a7a78d6da456dcb59a67286418a67e5fb025357e792baa64d2f2322c04e6559d",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_09",
+    "setting": "B1",
+    "clarification_budget": 1,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-structured-atomic-sim-user-v2",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 45.95
+}

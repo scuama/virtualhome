@@ -1,0 +1,103 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_07_B0",
+            "instruction": "If you see the mug on the table, put it where it belongs.",
+            "success_condition": {
+                "target_class": "mug",
+                "destination_class": "kitchencabinet",
+                "relation": "INSIDE",
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_07_B0",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_07",
+    "setting": "B0",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_07",
+    "framework_revision": "table5-structured-atomic-sim-user-v2",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent gave up (5 consecutive waits)",
+    "steps_executed": 14,
+    "execution_time_seconds": 38.97,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 0,
+    "clarification_count": 0,
+    "clarification_trace": [],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 3.507531,
+            "input_tokens": 1085,
+            "output_tokens": 391,
+            "reasoning_tokens": 0,
+            "total_tokens": 1476,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 30.716172,
+            "input_tokens": 78714,
+            "output_tokens": 2309,
+            "reasoning_tokens": 0,
+            "total_tokens": 81023,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.006549,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.749785,
+            "input_tokens": 1103,
+            "output_tokens": 112,
+            "reasoning_tokens": 0,
+            "total_tokens": 1215,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 1.759746,
+            "input_tokens": 1399,
+            "output_tokens": 90,
+            "reasoning_tokens": 0,
+            "total_tokens": 1489,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

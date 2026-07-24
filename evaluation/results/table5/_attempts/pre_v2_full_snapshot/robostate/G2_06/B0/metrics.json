@@ -1,0 +1,104 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 2.0,
+    "ps_sum": 2,
+    "ps_count": 1,
+    "mean_completion_step": 2.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_06_B0",
+            "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 2,
+            "completed": true,
+            "completion_step": 2
+        }
+    ],
+    "scenario_id": "T5_G2_06_B0",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_06",
+    "setting": "B0",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_06",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 2,
+    "execution_time_seconds": 15.08,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 0,
+    "clarification_count": 0,
+    "clarification_trace": [],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 4.08993,
+            "input_tokens": 1085,
+            "output_tokens": 362,
+            "reasoning_tokens": 0,
+            "total_tokens": 1447,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 4.811208,
+            "input_tokens": 10008,
+            "output_tokens": 296,
+            "reasoning_tokens": 0,
+            "total_tokens": 10304,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.000481,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.837891,
+            "input_tokens": 1051,
+            "output_tokens": 96,
+            "reasoning_tokens": 0,
+            "total_tokens": 1147,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 4.113813,
+            "input_tokens": 2608,
+            "output_tokens": 339,
+            "reasoning_tokens": 0,
+            "total_tokens": 2947,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

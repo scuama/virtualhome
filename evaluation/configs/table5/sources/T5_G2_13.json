@@ -1,0 +1,46 @@
+{
+  "environment_id": 4,
+  "goal_instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+  "simulated_user_intent": "Turn off the toaster and leave the coffee maker on.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "toaster",
+        "coffeemaker"
+      ],
+      "add_states": [
+        "ON"
+      ],
+      "remove_states": [
+        "OFF"
+      ]
+    }
+  ],
+  "success_condition": {
+    "mode": "AND",
+    "conditions": [
+      {
+        "target_class": "toaster",
+        "states": [
+          "OFF"
+        ],
+        "min_count": 1
+      },
+      {
+        "target_class": "coffeemaker",
+        "states": [
+          "ON"
+        ],
+        "min_count": 1
+      }
+    ]
+  },
+  "max_steps": 30
+}

@@ -1,0 +1,112 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_13_B1",
+            "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "toaster",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    {
+                        "target_class": "coffeemaker",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    }
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_13_B1",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_13",
+    "setting": "B1",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_13",
+    "framework_revision": "table5-structured-atomic-sim-user-v2",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 14.37,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 1,
+    "clarification_count": 1,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "Which appliance should I adjust: the toaster or the coffee maker?",
+            "answer": "The toaster."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 7.023591,
+            "input_tokens": 2175,
+            "output_tokens": 762,
+            "reasoning_tokens": 0,
+            "total_tokens": 2937,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.005514,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 3.562324,
+            "input_tokens": 2846,
+            "output_tokens": 311,
+            "reasoning_tokens": 0,
+            "total_tokens": 3157,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 1.468947,
+            "input_tokens": 410,
+            "output_tokens": 18,
+            "reasoning_tokens": 0,
+            "total_tokens": 428,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

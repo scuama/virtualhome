@@ -1,0 +1,43 @@
+{
+  "environment_id": 3,
+  "goal_instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+  "simulated_user_intent": "Put one mug from the kitchen table inside a kitchen cabinet.",
+  "initial_relations_override": [
+    {
+      "subject": "mug",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 3
+    },
+    {
+      "subject": "waterglass",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    },
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "success_condition": {
+    "target_class": "mug",
+    "destination_class": "kitchencabinet",
+    "relation": "INSIDE",
+    "min_count": 1
+  },
+  "max_steps": 45,
+  "scenario_id": "T5_G2_11_B1",
+  "source_scenario_id": "T5_G2_11",
+  "source_config": "configs/table5/sources/T5_G2_11.json",
+  "source_sha256": "3ab61326bd76e9112e442992eda6506894a8191a91f27993cb212cead12f7b26",
+  "table_id": "table5",
+  "experiment_axis": "clarification_budget",
+  "sample_id": "T5_G2_11",
+  "setting": "B1",
+  "clarification_budget": 1,
+  "evaluation_model": "gpt-5.4-mini",
+  "framework_revision": "table5-structured-atomic-sim-user-v2",
+  "single_run": true
+}

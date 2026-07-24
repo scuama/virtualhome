@@ -1,0 +1,124 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 8.0,
+    "ps_sum": 8,
+    "ps_count": 1,
+    "mean_completion_step": 8.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_11_B2",
+            "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+            "success_condition": {
+                "target_class": "mug",
+                "destination_class": "kitchencabinet",
+                "relation": "INSIDE",
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 8,
+            "completed": true,
+            "completion_step": 8
+        }
+    ],
+    "scenario_id": "T5_G2_11_B2",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_11",
+    "setting": "B2",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_11",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 8,
+    "execution_time_seconds": 31.97,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 2,
+    "clarification_count": 2,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "Which specific drinkware item should I move?",
+            "answer": "The mug."
+        },
+        {
+            "step": 1,
+            "question": "Where exactly should I put the mug?",
+            "answer": "Inside a kitchen cabinet."
+        }
+    ],
+    "simulated_user_model": "openai/gpt-4o-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 9.796732,
+            "input_tokens": 3261,
+            "output_tokens": 1019,
+            "reasoning_tokens": 0,
+            "total_tokens": 4280,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 12.671561,
+            "input_tokens": 30958,
+            "output_tokens": 992,
+            "reasoning_tokens": 0,
+            "total_tokens": 31950,
+            "call_count": 6,
+            "successful_calls": 6,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.0037,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 8,
+            "successful_calls": 8,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.234774,
+            "input_tokens": 1199,
+            "output_tokens": 77,
+            "reasoning_tokens": 0,
+            "total_tokens": 1276,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 1.808849,
+            "input_tokens": 1450,
+            "output_tokens": 145,
+            "reasoning_tokens": 0,
+            "total_tokens": 1595,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 3.384025,
+            "input_tokens": 569,
+            "output_tokens": 10,
+            "reasoning_tokens": 0,
+            "total_tokens": 579,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

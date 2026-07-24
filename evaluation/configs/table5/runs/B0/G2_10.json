@@ -1,0 +1,42 @@
+{
+  "environment_id": 0,
+  "goal_instruction": "If there is no one in the kitchen, make sure the stove is safe.",
+  "initial_relations_override": [
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "initial_states_override": [
+    {
+      "target_classes": [
+        "stove"
+      ],
+      "add_states": [
+        "ON"
+      ]
+    }
+  ],
+  "success_condition": {
+    "target_class": "stove",
+    "states": [
+      "OFF"
+    ],
+    "min_count": 1
+  },
+  "simulated_user_intent": "Turn off the stove.",
+  "max_steps": 45,
+  "scenario_id": "T5_G2_10_B0",
+  "source_scenario_id": "G2_10",
+  "source_config": "configs/source_tasks/g_class/G2_10.json",
+  "source_sha256": "07179317ea000eb0fc9a76ab850730fd6981b45077ca25ec18d07c91de962bbc",
+  "table_id": "table5",
+  "experiment_axis": "clarification_budget",
+  "sample_id": "G2_10",
+  "setting": "B0",
+  "clarification_budget": 0,
+  "evaluation_model": "gpt-5.4-mini",
+  "framework_revision": "table5-structured-atomic-sim-user-v2",
+  "single_run": true
+}

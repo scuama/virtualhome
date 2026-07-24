@@ -1,0 +1,119 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_11_B2",
+            "instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+            "success_condition": {
+                "target_class": "mug",
+                "destination_class": "kitchencabinet",
+                "relation": "INSIDE",
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_11_B2",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_11",
+    "setting": "B2",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_11",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 57.18,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 2,
+    "clarification_count": 1,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "What specific drinkware item should I put away?",
+            "answer": "Put the mug away."
+        }
+    ],
+    "simulated_user_model": "openai/gpt-4o-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 6.953704,
+            "input_tokens": 2018,
+            "output_tokens": 626,
+            "reasoning_tokens": 0,
+            "total_tokens": 2644,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 42.118026,
+            "input_tokens": 77384,
+            "output_tokens": 2397,
+            "reasoning_tokens": 0,
+            "total_tokens": 79781,
+            "call_count": 14,
+            "successful_calls": 14,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.009878,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.778655,
+            "input_tokens": 1178,
+            "output_tokens": 127,
+            "reasoning_tokens": 0,
+            "total_tokens": 1305,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.168852,
+            "input_tokens": 1451,
+            "output_tokens": 98,
+            "reasoning_tokens": 0,
+            "total_tokens": 1549,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 2.122408,
+            "input_tokens": 150,
+            "output_tokens": 6,
+            "reasoning_tokens": 0,
+            "total_tokens": 156,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

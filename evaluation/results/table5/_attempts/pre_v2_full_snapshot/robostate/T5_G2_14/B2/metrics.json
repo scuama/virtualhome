@@ -1,0 +1,127 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 3.0,
+    "ps_sum": 3,
+    "ps_count": 1,
+    "mean_completion_step": 3.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_14_B2",
+            "instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+            "success_condition": {
+                "target_class": "character",
+                "destination_class": "juice",
+                "relation": "HOLDS_RH|HOLDS_LH",
+                "destination_states": [
+                    "COLD"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 3,
+            "completed": true,
+            "completion_step": 3
+        }
+    ],
+    "scenario_id": "T5_G2_14_B2",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_14",
+    "setting": "B2",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_14",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 3,
+    "execution_time_seconds": 19.6,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 2,
+    "clarification_count": 2,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "Which drink should I bring?",
+            "answer": "The juice."
+        },
+        {
+            "step": 1,
+            "question": "What temperature should the juice be?",
+            "answer": "Cold."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 8.805904,
+            "input_tokens": 3266,
+            "output_tokens": 1050,
+            "reasoning_tokens": 0,
+            "total_tokens": 4316,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 1.995244,
+            "input_tokens": 5279,
+            "output_tokens": 132,
+            "reasoning_tokens": 0,
+            "total_tokens": 5411,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004698,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.770675,
+            "input_tokens": 1107,
+            "output_tokens": 117,
+            "reasoning_tokens": 0,
+            "total_tokens": 1224,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.141939,
+            "input_tokens": 1383,
+            "output_tokens": 139,
+            "reasoning_tokens": 0,
+            "total_tokens": 1522,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 2.081015,
+            "input_tokens": 706,
+            "output_tokens": 11,
+            "reasoning_tokens": 0,
+            "total_tokens": 717,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

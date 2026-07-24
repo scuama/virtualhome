@@ -93,7 +93,6 @@ class RoboStateAgent(BaseAgent):
                     ))
                     and clarification_question
                 ):
-                    task.clarification_asked = True
                     return self._return_action(
                         step,
                         f"[ask] {clarification_question}",
@@ -155,11 +154,29 @@ class RoboStateAgent(BaseAgent):
                     self.action_history,
                     config.get("scheduled_rules"),
                     allow_ask=self._allow_ask(task),
+                    clarifications_remaining=self._clarifications_remaining(),
                     task_context=self.task_manager.task_context(),
                     planner_feedback=task.planner_feedback,
                 )
             )
             candidate = self._normalize_action(candidate)
+            if (
+                str(candidate).strip().lower().startswith("[ask]")
+                and not self._allow_ask(task)
+            ):
+                self.logger.info(
+                    "Rejected clarification request because the episode "
+                    "clarification budget is exhausted."
+                )
+                self.task_manager.record_planner_rejection(
+                    task.task_id,
+                    candidate,
+                    "clarification budget exhausted",
+                )
+                self.task_manager.defer(
+                    task.task_id, step, "clarification budget exhausted"
+                )
+                continue
 
             loop = self.loop_detector.check(candidate, self.action_history)
             if loop.detected:
@@ -245,7 +262,7 @@ class RoboStateAgent(BaseAgent):
         )
 
     def _allow_ask(self, task: Optional[TaskState] = None) -> bool:
-        if task is not None and task.clarification_asked:
+        if self._clarifications_remaining() <= 0:
             return False
         if (
             self.table3_source_subclass == "G2"
@@ -253,6 +270,13 @@ class RoboStateAgent(BaseAgent):
         ):
             return False
         return True
+
+    def _clarifications_remaining(self) -> int:
+        return max(
+            0,
+            int(getattr(self, "clarification_budget", 1))
+            - int(getattr(self, "clarifications_used", 0)),
+        )
 
     def _initialize_episode(self, config: dict, goal: str) -> None:
         profile = config.get("ablation_profile", "full")
@@ -291,7 +315,10 @@ class RoboStateAgent(BaseAgent):
         self.memory_edges = {}
         self.memory_last_seen = {}
         self._observation_signatures = {}
-        self.clarification_received = False
+        self.clarification_budget = max(
+            0, int(config.get("clarification_budget", 1))
+        )
+        self.clarifications_used = 0
         self._processed_history_steps = set()
         self._processed_clarification_steps = set()
         self._issued_task_by_step = {}
@@ -427,7 +454,7 @@ class RoboStateAgent(BaseAgent):
             return
 
         self._processed_clarification_steps.add(history_step)
-        self.clarification_received = True
+        self.clarifications_used += 1
         clarification = str(entry.get("message", "")).strip()
         task_id = self._issued_task_by_step.get(history_step)
         task = self.task_manager.get(task_id) or self.task_manager.active_task
@@ -529,8 +556,6 @@ class RoboStateAgent(BaseAgent):
         reasoning: str = "",
     ) -> str:
         task_id = task.task_id if task else None
-        if task and str(action).strip().lower().startswith("[ask]"):
-            task.clarification_asked = True
         self._issued_task_by_step[int(step)] = task_id
         observed_items = self._get_observed_items(graph)
         self.last_decision = {

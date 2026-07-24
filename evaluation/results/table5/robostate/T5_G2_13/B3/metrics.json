@@ -1,0 +1,137 @@
+{
+    "task_total": 1,
+    "task_completed": 1,
+    "sr": 1.0,
+    "ps": 4.0,
+    "ps_sum": 4,
+    "ps_count": 1,
+    "mean_completion_step": 4.0,
+    "tasks": [
+        {
+            "task_id": "T5_G2_13_B3",
+            "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "toaster",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    {
+                        "target_class": "coffeemaker",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    }
+                ]
+            },
+            "currently_satisfied": true,
+            "ever_satisfied": true,
+            "first_satisfied_step": 4,
+            "completed": true,
+            "completion_step": 4
+        }
+    ],
+    "scenario_id": "T5_G2_13_B3",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_13",
+    "setting": "B3",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_13",
+    "framework_revision": "table5-structured-atomic-sim-user-v2",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": true,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Goal Reached",
+    "steps_executed": 4,
+    "execution_time_seconds": 22.56,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 3,
+    "clarification_count": 2,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "Which appliance should I adjust: the toaster or the coffee maker?",
+            "answer": "The toaster."
+        },
+        {
+            "step": 1,
+            "question": "What exact state should the toaster be adjusted to?",
+            "answer": "Turn it off."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 9.838618,
+            "input_tokens": 3259,
+            "output_tokens": 946,
+            "reasoning_tokens": 0,
+            "total_tokens": 4205,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 3.376799,
+            "input_tokens": 9157,
+            "output_tokens": 254,
+            "reasoning_tokens": 0,
+            "total_tokens": 9411,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.003023,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 4,
+            "successful_calls": 4,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 2.088705,
+            "input_tokens": 1144,
+            "output_tokens": 66,
+            "reasoning_tokens": 0,
+            "total_tokens": 1210,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 1.756018,
+            "input_tokens": 1404,
+            "output_tokens": 125,
+            "reasoning_tokens": 0,
+            "total_tokens": 1529,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 2.851829,
+            "input_tokens": 843,
+            "output_tokens": 37,
+            "reasoning_tokens": 0,
+            "total_tokens": 880,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        }
+    }
+}

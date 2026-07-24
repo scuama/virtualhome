@@ -1,0 +1,116 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_13_B0",
+            "instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+            "success_condition": {
+                "mode": "AND",
+                "conditions": [
+                    {
+                        "target_class": "toaster",
+                        "states": [
+                            "OFF"
+                        ],
+                        "min_count": 1
+                    },
+                    {
+                        "target_class": "coffeemaker",
+                        "states": [
+                            "ON"
+                        ],
+                        "min_count": 1
+                    }
+                ]
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_13_B0",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_13",
+    "setting": "B0",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "T5_G2_13",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 44.22,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 0,
+    "clarification_count": 0,
+    "clarification_trace": [],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 3.247247,
+            "input_tokens": 1088,
+            "output_tokens": 291,
+            "reasoning_tokens": 0,
+            "total_tokens": 1379,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "llm_executor": {
+            "duration_seconds": 35.360223,
+            "input_tokens": 75901,
+            "output_tokens": 2806,
+            "reasoning_tokens": 0,
+            "total_tokens": 78707,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004991,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "perception_filter": {
+            "duration_seconds": 1.658999,
+            "input_tokens": 1353,
+            "output_tokens": 76,
+            "reasoning_tokens": 0,
+            "total_tokens": 1429,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.418002,
+            "input_tokens": 1408,
+            "output_tokens": 304,
+            "reasoning_tokens": 0,
+            "total_tokens": 1712,
+            "call_count": 1,
+            "successful_calls": 1,
+            "failed_calls": 0
+        }
+    }
+}

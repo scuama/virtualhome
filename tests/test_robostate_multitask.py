@@ -692,7 +692,8 @@ class RoboStateAgentIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(action, "[ask] Which book do you mean?")
         self.assertIsNone(agent.task_manager.tasks[0].sdg)
-        self.assertTrue(agent.task_manager.tasks[0].clarification_asked)
+        self.assertEqual(agent.clarifications_used, 0)
+        self.assertEqual(agent._clarifications_remaining(), 1)
 
     def test_agent_switches_between_independent_task_plans(self):
         config = {

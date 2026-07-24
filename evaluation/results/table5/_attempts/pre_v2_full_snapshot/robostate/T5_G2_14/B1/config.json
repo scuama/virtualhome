@@ -1,0 +1,78 @@
+{
+    "environment_id": 2,
+    "goal_instruction": "If there are drinks on the kitchen table, bring me the appropriate one at the right temperature.",
+    "simulated_user_intent": "Bring me the cold juice from the kitchen table.",
+    "initial_relations_override": [
+        {
+            "subject": "milk",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        },
+        {
+            "subject": "juice",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 1
+        },
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "milk"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "HOT"
+            ],
+            "remove_states": [
+                "COLD"
+            ]
+        },
+        {
+            "target_classes": [
+                "juice"
+            ],
+            "instance_filter": {
+                "index": 0
+            },
+            "add_states": [
+                "COLD"
+            ],
+            "remove_states": [
+                "HOT"
+            ]
+        }
+    ],
+    "success_condition": {
+        "target_class": "character",
+        "destination_class": "juice",
+        "relation": "HOLDS_RH|HOLDS_LH",
+        "destination_states": [
+            "COLD"
+        ],
+        "min_count": 1
+    },
+    "max_steps": 30,
+    "scenario_id": "T5_G2_14_B1",
+    "source_scenario_id": "T5_G2_14",
+    "source_config": "configs/table5/sources/T5_G2_14.json",
+    "source_sha256": "c411f7b2491d71fb6932d62d6bc499e64d686aed4ad7006c16b8bbe04d99a7a8",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_14",
+    "setting": "B1",
+    "clarification_budget": 1,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 18.79
+}

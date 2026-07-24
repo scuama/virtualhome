@@ -88,7 +88,8 @@ class Table3PolicyTests(unittest.TestCase):
 
     def test_parameter_binding_ablation_blocks_g2_ask_only(self):
         agent = RoboStateAgent.__new__(RoboStateAgent)
-        agent.clarification_received = False
+        agent.clarification_budget = 1
+        agent.clarifications_used = 0
         agent.ablation_policy = get_ablation_policy("without_parameter_binding")
         agent.table3_source_subclass = "G2"
         self.assertFalse(agent._allow_ask())

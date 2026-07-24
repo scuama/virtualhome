@@ -1,0 +1,31 @@
+{
+  "environment_id": 3,
+  "goal_instruction": "If there is drinkware on the kitchen table, put the appropriate item where it belongs.",
+  "simulated_user_intent": "Put one mug from the kitchen table inside a kitchen cabinet.",
+  "initial_relations_override": [
+    {
+      "subject": "mug",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 3
+    },
+    {
+      "subject": "waterglass",
+      "relation": "ON",
+      "object": "kitchentable",
+      "count": 1
+    },
+    {
+      "subject": "character",
+      "relation": "INSIDE",
+      "object": "kitchen"
+    }
+  ],
+  "success_condition": {
+    "target_class": "mug",
+    "destination_class": "kitchencabinet",
+    "relation": "INSIDE",
+    "min_count": 1
+  },
+  "max_steps": 45
+}

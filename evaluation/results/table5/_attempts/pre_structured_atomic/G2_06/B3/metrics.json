@@ -1,0 +1,110 @@
+{
+    "task_total": 1,
+    "task_completed": 0,
+    "sr": 0.0,
+    "ps": null,
+    "ps_sum": 0,
+    "ps_count": 0,
+    "mean_completion_step": null,
+    "tasks": [
+        {
+            "task_id": "T5_G2_06_B3",
+            "instruction": "If the TV is on, adjust the table lamp to an appropriate setting.",
+            "success_condition": {
+                "target_class": "tablelamp",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            },
+            "currently_satisfied": false,
+            "ever_satisfied": false,
+            "first_satisfied_step": null,
+            "completed": false,
+            "completion_step": null
+        }
+    ],
+    "scenario_id": "T5_G2_06_B3",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "G2_06",
+    "setting": "B3",
+    "extension_type": null,
+    "ablation_profile": null,
+    "source_scenario_id": "G2_06",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "result_source": null,
+    "previous_attempt_path": null,
+    "method": "robostate",
+    "model": "gpt-5.4-mini",
+    "success": false,
+    "run_status": "complete",
+    "valid_for_aggregation": true,
+    "reason": "Agent stagnated (15 steps without progress)",
+    "steps_executed": 15,
+    "execution_time_seconds": 20.89,
+    "dynamic_event_counts": {},
+    "dynamic_event_trace": [],
+    "clarification_budget": 3,
+    "clarification_count": 3,
+    "clarification_trace": [
+        {
+            "step": 0,
+            "question": "What exact setting should the table lamp be adjusted to?",
+            "answer": "Turn it on."
+        },
+        {
+            "step": 1,
+            "question": "What exact setting should the table lamp be adjusted to?",
+            "answer": "Turn it on."
+        },
+        {
+            "step": 2,
+            "question": "What does “turn it on” refer to after turning on the table lamp?",
+            "answer": "The table lamp."
+        }
+    ],
+    "simulated_user_model": "gpt-5.4-mini",
+    "module_stats": {
+        "goal_reasoner": {
+            "duration_seconds": 11.195781,
+            "input_tokens": 4342,
+            "output_tokens": 1124,
+            "reasoning_tokens": 0,
+            "total_tokens": 5466,
+            "call_count": 4,
+            "successful_calls": 4,
+            "failed_calls": 0
+        },
+        "memory": {
+            "duration_seconds": 0.004763,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "reasoning_tokens": 0,
+            "total_tokens": 0,
+            "call_count": 15,
+            "successful_calls": 15,
+            "failed_calls": 0
+        },
+        "sdg_planner": {
+            "duration_seconds": 2.748911,
+            "input_tokens": 2602,
+            "output_tokens": 217,
+            "reasoning_tokens": 0,
+            "total_tokens": 2819,
+            "call_count": 2,
+            "successful_calls": 2,
+            "failed_calls": 0
+        },
+        "simulated_user": {
+            "duration_seconds": 3.316881,
+            "input_tokens": 1111,
+            "output_tokens": 21,
+            "reasoning_tokens": 0,
+            "total_tokens": 1132,
+            "call_count": 3,
+            "successful_calls": 3,
+            "failed_calls": 0
+        }
+    }
+}

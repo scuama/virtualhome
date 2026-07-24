@@ -1,0 +1,39 @@
+{
+    "environment_id": 3,
+    "goal_instruction": "If there are apples on the kitchen table, store the required number in the proper place.",
+    "simulated_user_intent": "Put both apples from the kitchen table inside the refrigerator.",
+    "initial_relations_override": [
+        {
+            "subject": "apple",
+            "relation": "ON",
+            "object": "kitchentable",
+            "count": 2
+        },
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "success_condition": {
+        "target_class": "apple",
+        "destination_class": "fridge",
+        "relation": "INSIDE",
+        "min_count": 2
+    },
+    "max_steps": 45,
+    "scenario_id": "T5_G2_12_B1",
+    "source_scenario_id": "T5_G2_12",
+    "source_config": "configs/table5/sources/T5_G2_12.json",
+    "source_sha256": "8e00356a209d16eae39e294d7b193b5f28452b58975fd2e1af39a9c1712e8aac",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_12",
+    "setting": "B1",
+    "clarification_budget": 1,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 35.49
+}

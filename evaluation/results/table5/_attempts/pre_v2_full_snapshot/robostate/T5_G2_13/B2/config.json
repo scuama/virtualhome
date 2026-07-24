@@ -1,0 +1,60 @@
+{
+    "environment_id": 4,
+    "goal_instruction": "If the toaster and coffee maker are on, adjust the appropriate appliance to the requested state.",
+    "simulated_user_intent": "Turn off the toaster and leave the coffee maker on.",
+    "initial_relations_override": [
+        {
+            "subject": "character",
+            "relation": "INSIDE",
+            "object": "kitchen"
+        }
+    ],
+    "initial_states_override": [
+        {
+            "target_classes": [
+                "toaster",
+                "coffeemaker"
+            ],
+            "add_states": [
+                "ON"
+            ],
+            "remove_states": [
+                "OFF"
+            ]
+        }
+    ],
+    "success_condition": {
+        "mode": "AND",
+        "conditions": [
+            {
+                "target_class": "toaster",
+                "states": [
+                    "OFF"
+                ],
+                "min_count": 1
+            },
+            {
+                "target_class": "coffeemaker",
+                "states": [
+                    "ON"
+                ],
+                "min_count": 1
+            }
+        ]
+    },
+    "max_steps": 30,
+    "scenario_id": "T5_G2_13_B2",
+    "source_scenario_id": "T5_G2_13",
+    "source_config": "configs/table5/sources/T5_G2_13.json",
+    "source_sha256": "defb9103bddccfe63ce72a96ce67c56b2e7bc902e3325634875bdf958fe1e105",
+    "table_id": "table5",
+    "experiment_axis": "clarification_budget",
+    "sample_id": "T5_G2_13",
+    "setting": "B2",
+    "clarification_budget": 2,
+    "evaluation_model": "gpt-5.4-mini",
+    "framework_revision": "table5-multiturn-sim-user-v1",
+    "single_run": true,
+    "evaluation_method": "robostate",
+    "execution_time_seconds": 20.81
+}
